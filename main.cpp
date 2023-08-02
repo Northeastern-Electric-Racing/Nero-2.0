@@ -1,6 +1,5 @@
 #include "home.h"
 #include "models/mock_model.h"
-
 #include <QApplication>
 #include <QLocale>
 #include <QTranslator>

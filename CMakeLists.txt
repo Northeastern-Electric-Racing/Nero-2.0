@@ -5,7 +5,6 @@ project(NERO VERSION 0.1 LANGUAGES CXX)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
-
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
@@ -22,16 +21,13 @@ set(PROJECT_SOURCES
         models/mock_model.h
         page.h
         home.h
-        dialog.h
         main.cpp
-        dialog.cpp
         home.cpp
         page.cpp
         models/model.cpp
         models/raspberry_model.cpp
         models/mock_model.cpp
         modes/debug_mode/debug_utils.cpp
-        dialog.ui
         ${TS_FILES}
 )
 
