@@ -13,7 +13,7 @@ Accept the open source licensing agreement
 
 Select the Default options for installing components
 - Deselect Qt Designer as we will not use that
-- Select Qt version 6.5.1 (Should be the one below the beta one) underneath qt tools
+- Select Qt version 6.5.2 (Should be the one below the beta one) underneath qt tools
 
 Select Next Until You start downloading Qt (Should be around 30 GB)
 
