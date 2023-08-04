@@ -1,5 +1,6 @@
 #ifndef RASPBERRY_MODEL_H
 #define RASPBERRY_MODEL_H
+#ifndef _WIN32
 
 #include "model.h"
 
@@ -74,5 +75,5 @@ private:
   void connectToIPC();
   void processData(const std::string &data);
 };
-
+#endif
 #endif // RASPBERRY_MODEL_H

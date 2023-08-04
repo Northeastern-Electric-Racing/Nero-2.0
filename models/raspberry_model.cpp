@@ -1,3 +1,4 @@
+#ifndef _WIN32
 #include "raspberry_model.h"
 #include <bitset>
 #include <cmath>
@@ -372,3 +373,4 @@ std::optional<float> RaspberryModel::getModeIndex() { return currentData[105]; }
 std::optional<float> RaspberryModel::getBurningCells() {
   return std::nullopt; // TODO: Implement Burning Cells
 }
+#endif
