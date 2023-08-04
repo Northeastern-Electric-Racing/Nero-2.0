@@ -20,7 +20,7 @@ MockModel::MockModel()
 }
 
 void MockModel::checkCan() {
-  int rng = arc4random() % 10001;
+  int rng = random() % 10001;
 
   if (rng < 5 && rng >= 0)
     mph += 1;
@@ -68,12 +68,12 @@ void MockModel::checkCan() {
     current -= 0.3;
 
   if (rng > 100 && rng < 105)
-    bmsFaults = arc4random() % 65536;
+    bmsFaults = random() % 65536;
   if (rng > 110 && rng < 115)
     bmsFaults = 0;
 
   if (rng > 120 && rng < 125)
-    mpuFaults = arc4random() % 65536;
+    mpuFaults = random() % 65536;
   if (rng > 130 && rng < 135)
     mpuFaults = 0;
 
@@ -83,10 +83,10 @@ void MockModel::checkCan() {
     maxCellVoltage -= 0.4;
 
   if (rng > 160 && rng < 165)
-    maxCellVoltageChipNumber = arc4random() % 9; // 8 chips
+    maxCellVoltageChipNumber = random() % 9; // 8 chips
 
   if (rng > 170 && rng < 175)
-    maxCellVoltageCellNumber = arc4random() % 23; // 22 thermistors
+    maxCellVoltageCellNumber = random() % 23; // 22 thermistors
 
   if (rng > 180 && rng < 185)
     maxCellTemp += 1;
@@ -94,10 +94,10 @@ void MockModel::checkCan() {
     maxCellTemp -= 1;
 
   if (rng > 200 && rng < 205)
-    maxCellTempChipNumber = arc4random() % 9;
+    maxCellTempChipNumber = random() % 9;
 
   if (rng > 210 && rng < 215)
-    maxCellTempCellNumber = arc4random() % 23;
+    maxCellTempCellNumber = random() % 23;
 
   if (rng > 220 && rng < 225)
     minCellVoltage += 0.4;
@@ -105,10 +105,10 @@ void MockModel::checkCan() {
     minCellVoltage -= 0.4;
 
   if (rng > 240 && rng < 245)
-    minCellVoltageChipNumber = arc4random() % 9;
+    minCellVoltageChipNumber = random() % 9;
 
   if (rng > 250 && rng < 255)
-    minCellVoltageCellNumber = arc4random() % 23;
+    minCellVoltageCellNumber = random() % 23;
 
   if (rng > 260 && rng < 265)
     minCellTemp += 1;
@@ -116,10 +116,10 @@ void MockModel::checkCan() {
     minCellTemp -= 1;
 
   if (rng > 280 && rng < 285)
-    minCellTempChipNumber = arc4random() % 9;
+    minCellTempChipNumber = random() % 9;
 
   if (rng > 290 && rng < 295)
-    minCellTempCellNumber = arc4random() % 23;
+    minCellTempCellNumber = random() % 23;
 
   if (rng > 300 && rng < 305)
     averageCellVoltage += 0.4;
@@ -167,7 +167,7 @@ void MockModel::checkCan() {
     gforceZ -= 0.1;
 
   if (rng > 480 && rng < 485)
-    sdCardStatus = arc4random() % 4;
+    sdCardStatus = random() % 4;
 
   if (rng > 490 && rng < 495)
     segment1Temp += 1;
