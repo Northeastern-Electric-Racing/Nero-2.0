@@ -1,4 +1,5 @@
 #include "home.h"
+#include "mainwindow.h"
 #include "models/mock_model.h"
 #include <QApplication>
 #include <QLocale>
@@ -16,11 +17,13 @@ int main(int argc, char *argv[]) {
       break;
     }
   }
+
   QFrame q;
   MockModel m;
   Home h(&q, &m);
 
-  h.show();
+  MainWindow main;
+  main.show();
 
   return a.exec();
 }

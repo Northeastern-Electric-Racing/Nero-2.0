@@ -19,12 +19,14 @@ set(PROJECT_SOURCES
         models/model.h
         models/raspberry_model.h
         models/mock_model.h
+        mainwindow.h
         page.h
         home.h
         main.cpp
         home.cpp
         page.cpp
         models/model.cpp
+        mainwindow.cpp
         models/raspberry_model.cpp
         models/mock_model.cpp
         modes/debug_mode/debug_utils.cpp
@@ -35,6 +37,9 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(NERO
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
+        mainwindow.h mainwindow.cpp mainwindow.ui
+
+
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET NERO APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
