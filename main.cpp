@@ -18,11 +18,20 @@ int main(int argc, char *argv[]) {
     }
   }
 
-  QFrame q;
-  MockModel m;
-  Home h(&q, &m);
-
   MainWindow main;
+  MockModel m;
+  QFrame *mainFrame = new QFrame(&main);
+  Home *h = new Home(mainFrame, &m);
+  h->setFrameShape(QFrame::Box);
+  h->setLineWidth(2);
+
+  QVBoxLayout *layout = new QVBoxLayout;
+  layout->addWidget(h);
+
+  QWidget *centralWidget = new QWidget(&main);
+  centralWidget->setLayout(layout);
+
+  main.setCentralWidget(centralWidget);
   main.show();
 
   return a.exec();

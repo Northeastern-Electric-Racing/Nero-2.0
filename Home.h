@@ -1,6 +1,7 @@
 #ifndef HOME_H
 #define HOME_H
 #include "page.h"
+#include "ui_home.h"
 #include <QFrame>
 #include <QHBoxLayout>
 #include <QLabel>
@@ -21,7 +22,11 @@ public:
   void updateMotorTemp(int motorTemp);
   void updateStateCharge(int stateCharge);
 
+public slots:
+  // Slot Logic
+
 private:
+  Ui::Home *home_ui;
   QLabel *mphValue;
   QLabel *kphValue;
   QLabel *statusValue;

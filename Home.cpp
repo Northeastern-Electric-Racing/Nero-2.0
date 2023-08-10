@@ -45,6 +45,8 @@ Home::Home(QFrame *parent, Model *model) : Page(parent, model, "Home") {
   layout->addWidget(stateChargeValue);
 
   setLayout(layout);
+
+  home_ui->setupUi(this);
 }
 
 void Home::updateSpeed(int mph, int kph) {

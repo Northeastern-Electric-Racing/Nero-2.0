@@ -19,14 +19,12 @@ set(PROJECT_SOURCES
         models/model.h
         models/raspberry_model.h
         models/mock_model.h
-        mainwindow.h
         page.h
         home.h
         main.cpp
         home.cpp
         page.cpp
         models/model.cpp
-        mainwindow.cpp
         models/raspberry_model.cpp
         models/mock_model.cpp
         modes/debug_mode/debug_utils.cpp
@@ -38,6 +36,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
         mainwindow.h mainwindow.cpp mainwindow.ui
+        home.ui
 
 
     )
