@@ -26,7 +26,7 @@ public slots:
   // Slot Logic
 
 private:
-  Ui::Home *home_ui;
+  Ui::Frame *home_ui;
   QLabel *mphValue;
   QLabel *kphValue;
   QLabel *statusValue;
