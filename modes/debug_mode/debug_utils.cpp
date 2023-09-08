@@ -1,9 +1,9 @@
 #include "debug_utils.h"
-#include "fault_statuses.h"
+#include "constants/fault_statuses.h"
 
 DebugPlotValue::DebugPlotValue(const QString &name, const QString &unit,
                                const QList<float> &data)
-    : name(name), unit(unit), data(data) {
+    : data(data), name(name), unit(unit) {
   // Constructor implementation
 }
 

@@ -1,38 +1,39 @@
-#include "home.h"
-#include "mainwindow.h"
-#include "models/mock_model.h"
-#include <QApplication>
+#include <QGuiApplication>
+#include <QQmlApplicationEngine>
+
 #include <QLocale>
+#include <QQmlContext>
 #include <QTranslator>
+#include <homecontroller.h>
 
 int main(int argc, char *argv[]) {
-  QApplication a(argc, argv);
+  QGuiApplication app(argc, argv);
 
   QTranslator translator;
   const QStringList uiLanguages = QLocale::system().uiLanguages();
   for (const QString &locale : uiLanguages) {
     const QString baseName = "NERO_" + QLocale(locale).name();
     if (translator.load(":/i18n/" + baseName)) {
-      a.installTranslator(&translator);
+      app.installTranslator(&translator);
       break;
     }
   }
 
-  MainWindow main;
-  MockModel m;
-  QFrame *mainFrame = new QFrame(&main);
-  Home *h = new Home(mainFrame, &m);
-  h->setFrameShape(QFrame::Box);
-  h->setLineWidth(2);
+  HomeController homeController;
 
-  QVBoxLayout *layout = new QVBoxLayout;
-  layout->addWidget(h);
+  QQmlApplicationEngine engine;
+  const QUrl url(u"qrc:/NERO/main.qml"_qs);
+  QObject::connect(
+      &engine, &QQmlApplicationEngine::objectCreated, &app,
+      [url](QObject *obj, const QUrl &objUrl) {
+        if (!obj && url == objUrl)
+          QCoreApplication::exit(-1);
+      },
+      Qt::QueuedConnection);
+  engine.load(url);
 
-  QWidget *centralWidget = new QWidget(&main);
-  centralWidget->setLayout(layout);
+  QQmlContext *rootContext = engine.rootContext();
+  rootContext->setContextProperty("homeController", &homeController);
 
-  main.setCentralWidget(centralWidget);
-  main.show();
-
-  return a.exec();
+  return app.exec();
 }
