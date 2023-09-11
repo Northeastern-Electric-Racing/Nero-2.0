@@ -9,6 +9,7 @@
 int main(int argc, char *argv[]) {
   QGuiApplication app(argc, argv);
 
+  // auto generated translator code
   QTranslator translator;
   const QStringList uiLanguages = QLocale::system().uiLanguages();
   for (const QString &locale : uiLanguages) {
@@ -19,8 +20,7 @@ int main(int argc, char *argv[]) {
     }
   }
 
-  HomeController homeController;
-
+  // auto generated gui setup code, loading qml from main.qml
   QQmlApplicationEngine engine;
   const QUrl url(u"qrc:/NERO/main.qml"_qs);
   QObject::connect(
@@ -31,6 +31,10 @@ int main(int argc, char *argv[]) {
       },
       Qt::QueuedConnection);
   engine.load(url);
+
+  // Connecting the controller to the qml context to allow the qml files to use
+  // this for signals and slots
+  HomeController homeController;
 
   QQmlContext *rootContext = engine.rootContext();
   rootContext->setContextProperty("homeController", &homeController);
