@@ -21,7 +21,7 @@ Clone This repository to a directory of your choosing
 
 Go into Qt Creator once its downloaded and select Open Project
 
-Select the CmMakeLists.txt File to open
+Select the .pro File to open
 
 It Should generate the project
 
