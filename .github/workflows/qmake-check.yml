@@ -16,10 +16,9 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Set up Qt environment
-          uses: qt/actions/setup@v3
-          with:
-          qt-version: '6.x'
+      - name: Install Qt (if not already installed)
+          run: |
+            sudo apt-get install qt6-default 
 
       - name: Build Application
         run: |
