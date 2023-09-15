@@ -18,7 +18,7 @@ jobs:
 
       - name: Install Qt
         run: |
-          sudo apt-get install qt6-default 
+          sudo apt-get install qt6-base-dev
 
       - name: Build Application
         run: |
