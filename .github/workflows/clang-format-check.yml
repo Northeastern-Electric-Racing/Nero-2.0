@@ -1,0 +1,36 @@
+name: Clang-Format Check
+
+on:
+  push:
+    branches:
+      - main 
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  clang-format-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Install Clang-Format
+      run: sudo apt-get install clang-format
+
+    - name: Check Clang-Format
+      run: |
+        if [[ -n $(git diff --name-only --diff-filter=ACMRTUXB "$GITHUB_BASE_REF") ]]; then
+          echo "Formatting files..."
+          git diff --name-only --diff-filter=ACMRTUXB "$GITHUB_BASE_REF" | xargs -I {} clang-format -i {}
+          git diff --exit-code --diff-filter=ACMRTUXB "$GITHUB_BASE_REF"
+        else
+          echo "No code changes found."
+        fi
+
+
+
+
+
+
