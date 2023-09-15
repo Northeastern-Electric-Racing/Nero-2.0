@@ -1,0 +1,27 @@
+name: Build and Test
+
+on:
+  push:
+    branches:
+      - main 
+  pull-request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest 
+    timeout-minutes: 10
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Set up Qt
+        uses: digital-mob/qt-installer-action@v1
+        with:
+          version: '6.2.0' 
+
+      - name: Build Application
+        run: |
+          qmake
+          make
