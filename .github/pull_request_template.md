@@ -41,7 +41,6 @@ Please request reviewers and ping on slack only after you've gone through this w
 - [ ] Screenshots of UI changes (see Screenshots section)
 - [ ] Remove any non-applicable sections of this template
 - [ ] Assign the PR to yourself
-- [ ] No `yarn.lock` changes (unless dependencies have changed)
 - [ ] Request reviewers & ping on Slack
 - [ ] PR is linked to the ticket (fill in the closes line below)
 
