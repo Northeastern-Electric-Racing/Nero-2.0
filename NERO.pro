@@ -1,15 +1,13 @@
 QT += quick
 
-SOURCES = $$files(*.cpp, true)
-HEADERS = $$files(*.h, true)
-#SOURCES += \
-#        controllers/*.cpp \
-#        homecontroller.cpp \
-#        main.cpp \
-#        models/mock_model.cpp \
-#        models/model.cpp \
-#        models/raspberry_model.cpp \
-#        modes/debug_mode/debug_utils.cpp
+SOURCES += \
+        controllers/chargingcontroller.cpp \
+        homecontroller.cpp \
+        main.cpp \
+        models/mock_model.cpp \
+        models/model.cpp \
+        models/raspberry_model.cpp \
+        modes/debug_mode/debug_utils.cpp
 
 resources.files = main.qml 
 resources.prefix = /$${TARGET}
@@ -31,11 +29,11 @@ qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
-#HEADERS += \
-#    controllers/*.h \
-#    homecontroller.h \
-#    constants/fault_statuses.h \
-#    models/mock_model.h \
-#    models/model.h \
-#    models/raspberry_model.h \
-#    modes/debug_mode/debug_utils.h
+HEADERS += \
+    controllers/chargingcontroller.h \
+    homecontroller.h \
+    constants/fault_statuses.h \
+    models/mock_model.h \
+    models/model.h \
+    models/raspberry_model.h \
+    modes/debug_mode/debug_utils.h
