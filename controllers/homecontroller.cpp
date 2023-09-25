@@ -5,8 +5,8 @@ homeController::homeController(QObject *parent)
     , m_speed(0)
     , m_status(false)
     , m_direction(true)
-    , m_packTemp(0)
-    , m_motorTemp(0)
+    , m_packTemp(0.0)
+    , m_motorTemp(0.0)
 {}
 
 int homeController::speed() const
@@ -51,12 +51,12 @@ void homeController::setDirection(bool direction)
 }
 
 
-int homeController::packTemp() const
+float homeController::packTemp() const
 {
     return m_packTemp;
 }
 
-void homeController::setPackTemp(int packTemp)
+void homeController::setPackTemp(float packTemp)
 {
     if (m_packTemp != packTemp) {
         m_packTemp = packTemp;
@@ -65,12 +65,12 @@ void homeController::setPackTemp(int packTemp)
 }
 
 
-int homeController::motorTemp() const
+float homeController::motorTemp() const
 {
     return m_motorTemp;
 }
 
-void homeController::setMotorTemp(int motorTemp)
+void homeController::setMotorTemp(float motorTemp)
 {
     if (m_motorTemp != motorTemp) {
         m_motorTemp = motorTemp;

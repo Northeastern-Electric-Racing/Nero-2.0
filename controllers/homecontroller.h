@@ -9,37 +9,37 @@ class homeController : public QObject
     Q_PROPERTY(int speed READ speed WRITE setSpeed NOTIFY speedChanged FINAL)
     Q_PROPERTY(boolean status READ status WRITE setStatus NOTIFY statusChanged FINAL)
     Q_PROPERTY(boolean direction READ direction WRITE setDirection NOTIFY directionChanged FINAL)
-    Q_PROPERTY(int packTemp READ packTemp WRITE setPackTemp NOTIFY packTempChanged FINAL)
-    Q_PROPERTY(int motorTemp READ motorTemp WRITE setMotorTemp NOTIFY motorTempChanged FINAL)
+    Q_PROPERTY(float packTemp READ packTemp WRITE setPackTemp NOTIFY packTempChanged FINAL)
+    Q_PROPERTY(float motorTemp READ motorTemp WRITE setMotorTemp NOTIFY motorTempChanged FINAL)
 
 public:
     explicit homeController(QObject *parent = nullptr);
     int speed() const;
     bool status() const;
     bool direction() const;
-    int packTemp() const;
-    int motorTemp() const;
+    float packTemp() const;
+    float motorTemp() const;
 
 signals:
     void speedChanged(int);
     void statusChanged(bool);
     void directionChanged(bool);
-    void packTempChanged(int);
-    void motorTempChanged(int);
+    void packTempChanged(float);
+    void motorTempChanged(float);
 
 public slots:
     void setSpeed(int);
     void setStatus(bool);
     void setDirection(bool);
-    void setPackTemp(int);
-    void setMotorTemp(int);
+    void setPackTemp(float);
+    void setMotorTemp(float);
 
 private:
     int m_speed;
     bool m_status;
     bool m_direction;
-    int m_packTemp;
-    int m_motorTemp;
+    float m_packTemp;
+    float m_motorTemp;
 };
 
 #endif // HOMECONTROLLER_H
