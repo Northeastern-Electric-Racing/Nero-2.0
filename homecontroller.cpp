@@ -1,5 +1,11 @@
 #include "homecontroller.h"
-#include "qdebug.h"
-HomeController::HomeController(QObject *parent) : QObject{parent} {}
 
-void HomeController::callMe() { qDebug() << "Clicked"; }
+homecontroller::homecontroller(QObject *parent)
+    : QObject{parent}
+    , m_speed(0)
+    , m_status(false)
+    , m_direction(false)
+    , m_
+{
+
+}
