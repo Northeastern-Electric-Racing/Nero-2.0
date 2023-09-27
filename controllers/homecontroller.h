@@ -7,8 +7,8 @@ class HomeController : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(int speed READ speed WRITE setSpeed NOTIFY speedChanged FINAL)
-    Q_PROPERTY(boolean status READ status WRITE setStatus NOTIFY statusChanged FINAL)
-    Q_PROPERTY(boolean direction READ direction WRITE setDirection NOTIFY directionChanged FINAL)
+    Q_PROPERTY(bool status READ status WRITE setStatus NOTIFY statusChanged FINAL)
+    Q_PROPERTY(bool direction READ direction WRITE setDirection NOTIFY directionChanged FINAL)
     Q_PROPERTY(float packTemp READ packTemp WRITE setPackTemp NOTIFY packTempChanged FINAL)
     Q_PROPERTY(float motorTemp READ motorTemp WRITE setMotorTemp NOTIFY motorTempChanged FINAL)
 
