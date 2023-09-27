@@ -69,18 +69,18 @@ public slots:
   void setPackTemp(qreal);
 
 private:
-  int m_charge;                   // charge percentage [0-100]
+  int m_charge;                   // charge percentage [0,100]
   bool m_burning;                 // burning cells?
-  qreal m_maxCellVoltage;           // V
+  qreal m_maxCellVoltage;           // Volts
   int m_maxCellVoltageChipNumber; // number
   int m_maxCellVoltageCellNumber; // number
-  qreal m_minCellVoltage;           // V
+  qreal m_minCellVoltage;           // Volts
   int m_minCellVoltageChipNumber; // number
   int m_minCellVoltageCellNumber; // number
-  qreal m_cellDelta;                // V
-  qreal m_packVoltage;              // V
-  qreal m_current;                  // A
-  qreal m_packTemp;                 // C
+  qreal m_cellDelta;                // Volts
+  qreal m_packVoltage;              // Volts
+  qreal m_current;                  // Amps
+  qreal m_packTemp;                 // Celsius
 };
 
 #endif // CHARGINGCONTROLLER_H
