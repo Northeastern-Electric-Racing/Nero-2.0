@@ -2,7 +2,7 @@ QT += quick
 
 SOURCES += \
         controllers/chargingcontroller.cpp \
-        homecontroller.cpp \
+        controllers/homecontroller.cpp \
         main.cpp \
         models/mock_model.cpp \
         models/model.cpp \
@@ -31,8 +31,8 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
     controllers/chargingcontroller.h \
-    homecontroller.h \
     constants/fault_statuses.h \
+    controllers/homecontroller.h \
     models/mock_model.h \
     models/model.h \
     models/raspberry_model.h \
