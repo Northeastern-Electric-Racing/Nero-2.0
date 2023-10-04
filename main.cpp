@@ -4,7 +4,7 @@
 #include <QLocale>
 #include <QQmlContext>
 #include <QTranslator>
-#include <homecontroller.h>
+#include <controllers/homecontroller.h>
 
 int main(int argc, char *argv[]) {
   QGuiApplication app(argc, argv);
