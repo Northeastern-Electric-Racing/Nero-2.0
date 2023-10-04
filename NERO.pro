@@ -7,7 +7,8 @@ SOURCES += \
         models/mock_model.cpp \
         models/model.cpp \
         models/raspberry_model.cpp \
-        modes/debug_mode/debug_utils.cpp
+        modes/debug_mode/debug_utils.cpp \
+        views/thermometerview.cpp
 
 resources.files = main.qml 
 resources.prefix = /$${TARGET}
@@ -36,4 +37,5 @@ HEADERS += \
     models/mock_model.h \
     models/model.h \
     models/raspberry_model.h \
-    modes/debug_mode/debug_utils.h
+    modes/debug_mode/debug_utils.h \
+    views/thermometerview.h
