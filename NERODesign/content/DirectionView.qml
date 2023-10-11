@@ -33,7 +33,7 @@ Item {
             id: rectangle1
             color: forward ? "transparent" : "Red"
             Layout.fillHeight: true
-            Layout.preferredWidth: parent.width / 2
+            Layout.preferredWidth: parent.width / 2 - 20
             border.color: forward ? "white" : "transparent"  // Outline color
             border.width: 5      // Outline width
             radius: 50          // Border radius to round the corners
