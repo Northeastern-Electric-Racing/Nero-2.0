@@ -1,5 +1,5 @@
 #include "debug_utils.h"
-#include "constants/fault_statuses.h"
+#include "../../constants/fault_statuses.h"
 
 DebugPlotValue::DebugPlotValue(const QString &name, const QString &unit,
                                const QList<float> &data)
