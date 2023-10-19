@@ -35,7 +35,7 @@ Item {
             id: valueText
             text: gauge.value
             anchors.centerIn: parent
-            anchors.verticalCenterOffset: -gauge.verticalPadding / 2
+            anchors.verticalCenterOffset: -gauge.verticalPadding / 4
             font.pointSize: parent.width / 4
             color: "white"
         }

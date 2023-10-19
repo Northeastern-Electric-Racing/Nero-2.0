@@ -14,7 +14,7 @@ Window {
 
     Spedometer {
         anchors.centerIn: parent
-        value: 50
+        value: 100
         width: 400
     }
 }
