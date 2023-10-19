@@ -4,6 +4,7 @@ import NERO
 import QtQuick.Layouts
 
 Item {
+    id: thermometer
     property int width: 1920
     property int height: 1080
     Rectangle {
