@@ -40,5 +40,4 @@ HEADERS += \
     modes/debug_mode/debug_utils.h \
     views/thermometerview.h
 
-DISTFILES += \
-    ThermometerComponent.qml
+DISTFILES +=
