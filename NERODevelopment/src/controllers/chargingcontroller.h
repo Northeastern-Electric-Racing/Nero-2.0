@@ -3,27 +3,35 @@
 
 #include <QObject>
 
-class ChargingController : public QObject
-{
+class ChargingController : public QObject {
   Q_OBJECT
   Q_PROPERTY(int charge READ charge WRITE setCharge NOTIFY chargeChanged FINAL)
-  Q_PROPERTY(bool burning READ burning WRITE setBurning NOTIFY burningChanged FINAL)
-  Q_PROPERTY(int maxCellVoltage READ maxCellVoltage WRITE setMaxCellVoltage NOTIFY
-		 maxCellVoltageChanged FINAL)
+  Q_PROPERTY(
+      bool burning READ burning WRITE setBurning NOTIFY burningChanged FINAL)
+  Q_PROPERTY(int maxCellVoltage READ maxCellVoltage WRITE setMaxCellVoltage
+                 NOTIFY maxCellVoltageChanged FINAL)
   Q_PROPERTY(int maxCellVoltageChipNumber READ maxCellVoltageChipNumber WRITE
-		 setMaxCellVoltageChipNumber NOTIFY maxCellVoltageChipNumberChanged FINAL)
+                 setMaxCellVoltageChipNumber NOTIFY
+                     maxCellVoltageChipNumberChanged FINAL)
   Q_PROPERTY(int maxCellVoltageCellNumber READ maxCellVoltageCellNumber WRITE
-		 setMaxCellVoltageCellNumber NOTIFY maxCellVoltageCellNumberChanged FINAL)
-  Q_PROPERTY(int minCellVoltage READ minCellVoltage WRITE setMinCellVoltage NOTIFY
-		 minCellVoltageChanged FINAL)
+                 setMaxCellVoltageCellNumber NOTIFY
+                     maxCellVoltageCellNumberChanged FINAL)
+  Q_PROPERTY(int minCellVoltage READ minCellVoltage WRITE setMinCellVoltage
+                 NOTIFY minCellVoltageChanged FINAL)
   Q_PROPERTY(int minCellVoltageChipNumber READ minCellVoltageChipNumber WRITE
-		 setMinCellVoltageChipNumber NOTIFY minCellVoltageChipNumberChanged FINAL)
+                 setMinCellVoltageChipNumber NOTIFY
+                     minCellVoltageChipNumberChanged FINAL)
   Q_PROPERTY(int minCellVoltageCellNumber READ minCellVoltageCellNumber WRITE
-		 setMinCellVoltageCellNumber NOTIFY minCellVoltageCellNumberChanged FINAL)
-  Q_PROPERTY(int cellDelta READ cellDelta WRITE setCellDelta NOTIFY cellDeltaChanged FINAL)
-  Q_PROPERTY(int packVoltage READ packVoltage WRITE setPackVoltage NOTIFY packVoltageChanged FINAL)
-  Q_PROPERTY(int current READ current WRITE setCurrent NOTIFY currentChanged FINAL)
-  Q_PROPERTY(int packTemp READ packTemp WRITE setPackTemp NOTIFY packTempChanged FINAL)
+                 setMinCellVoltageCellNumber NOTIFY
+                     minCellVoltageCellNumberChanged FINAL)
+  Q_PROPERTY(int cellDelta READ cellDelta WRITE setCellDelta NOTIFY
+                 cellDeltaChanged FINAL)
+  Q_PROPERTY(int packVoltage READ packVoltage WRITE setPackVoltage NOTIFY
+                 packVoltageChanged FINAL)
+  Q_PROPERTY(
+      int current READ current WRITE setCurrent NOTIFY currentChanged FINAL)
+  Q_PROPERTY(
+      int packTemp READ packTemp WRITE setPackTemp NOTIFY packTempChanged FINAL)
 
 public:
   explicit ChargingController(QObject *parent = nullptr);

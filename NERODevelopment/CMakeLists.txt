@@ -17,11 +17,13 @@ set(PROJECT_SOURCES
     src/controllers/chargingcontroller.h
     src/constants/fault_statuses.h
     src/controllers/homecontroller.h
+    src/controllers/efficiencycontroller.h
     src/models/mock_model.h
     src/models/model.h
     src/models/raspberry_model.h
     src/modes/debug_mode/debug_utils.h
     src/views/thermometercomponent.h
+    src/controllers/efficiencycontroller.cpp
     src/controllers/chargingcontroller.cpp
     src/controllers/homecontroller.cpp
     src/main.cpp
