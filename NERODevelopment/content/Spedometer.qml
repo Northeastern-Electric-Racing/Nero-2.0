@@ -5,47 +5,60 @@ Item {
     id: gauge
     property int value: 0
     property int maxValue: 100
-
+    property int verticalPadding: 100
+    property int horizontalPadding: 20
+    property int innerStrokeWidth: 10
+    property int outerStrokeWidth: 20
+    height: width / 2 + verticalPadding
     Shape {
         id: shape
         width: parent.width
         height: parent.height
         anchors.centerIn: parent
-        // multisample, decide based on your scene settings
-        layer.enabled: true
-        layer.samples: 4
 
         ShapePath {
             fillColor: "transparent"
             strokeColor: "white"
-            strokeWidth: 10
+            strokeWidth: gauge.innerStrokeWidth
 
-            startX: 10
-            startY: shape.height - 10
+            startX: gauge.horizontalPadding
+            startY: shape.height - gauge.verticalPadding
             PathArc {
-                relativeX: shape.width - 20
-                y: shape.height
+                relativeX: shape.width - (gauge.horizontalPadding * 2)
+                y: shape.height - gauge.verticalPadding
                 radiusX: 25
                 radiusY: 25
             }
+        }
+
+        Text {
+            id: valueText
+            text: gauge.value
+            anchors.centerIn: parent
+            anchors.verticalCenterOffset: -gauge.verticalPadding / 2
+            font.pointSize: parent.width / 4
+            color: "white"
         }
     }
 
     Canvas {
         id: ring
+        x: shape.x
+        y: shape.y
         width: parent.width
         height: parent.height
 
-        property real borderWidth: 10
-        property real ringRadius: (ring.width - borderWidth) / 2
-        property real startAngle: 3.14159265  // Start at the top
+        property real borderWidth: gauge.outerStrokeWidth
+        property real ringRadius: (ring.width - gauge.horizontalPadding * 2) / 2
+        property real pi: 3.141592653589793
+        property real startAngle: pi
 
         onPaint: {
             const context = getContext("2d");
             context.reset();
 
             // Calculate the end angle based on the value
-            const endAngle = ring.startAngle + (3.14159265 / (gauge.maxValue / gauge.value));
+            const endAngle = ring.startAngle + (ring.pi / (gauge.maxValue / gauge.value));
 
             // Draw the progress ring
             // Adjust gradient stops based on the value
@@ -53,16 +66,32 @@ Item {
             const startStop = 1 - gradientValue;
 
             const gradient = context.createLinearGradient(0, 0, ring.width, 0);
-            gradient.addColorStop(startStop, "yellow");
-            gradient.addColorStop(1, "green");
+            gradient.addColorStop(startStop, "#14FF00");
+            gradient.addColorStop(1, "#FFF500");
             context.fillStyle = gradient;
-            context.strokeStyle = gradient
+            context.strokeStyle = gradient;
 
             context.lineWidth = ring.borderWidth;
             context.beginPath();
-            context.arc(ring.width / 2, ring.height, ring.ringRadius, ring.startAngle, endAngle);
+            context.arc((ring.width / 2), ring.height - gauge.verticalPadding + (gauge.verticalPadding / 20), ring.ringRadius, ring.startAngle, endAngle);
             context.stroke();
         }
     }
 
+    Text {
+        id: minValueText
+        text: "0"
+        color: "white"
+        font.pointSize: gauge.verticalPadding / 2
+        anchors.bottom: parent.bottom
+    }
+
+    Text {
+        id: maxValueText
+        text: gauge.maxValue
+        font.pointSize: gauge.verticalPadding / 2
+        color: "white"
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+    }
 }

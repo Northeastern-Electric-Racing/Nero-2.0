@@ -6,10 +6,11 @@ qt6_add_qml_module(content
     URI "content"
     VERSION 1.0
     QML_FILES
-        ThermometerComponent.qml
         Spedometer.qml
         App.qml
-        Screen01.ui.qml
+        Thermometer.qml
+
+
     RESOURCES
         fonts/fonts.txt
 )
