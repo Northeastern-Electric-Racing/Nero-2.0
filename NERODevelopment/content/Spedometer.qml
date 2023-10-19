@@ -9,6 +9,7 @@ Item {
     property int horizontalPadding: 20
     property int innerStrokeWidth: 10
     property int outerStrokeWidth: 20
+    property int mainTextTopPadding: 0
     height: width / 2 + verticalPadding
     Shape {
         id: shape
@@ -17,6 +18,7 @@ Item {
         anchors.centerIn: parent
 
         ShapePath {
+            id: innerArc
             fillColor: "transparent"
             strokeColor: "white"
             strokeWidth: gauge.innerStrokeWidth
@@ -31,14 +33,19 @@ Item {
             }
         }
 
+
         Text {
             id: valueText
             text: gauge.value
-            anchors.centerIn: parent
-            anchors.verticalCenterOffset: -gauge.verticalPadding / 4
-            font.pointSize: parent.width / 4
+            anchors.horizontalCenter: parent.horizontalCenter
+            font.pointSize: gauge.width / 4
+            font.family: webFont.name
             color: "white"
+
+            anchors.bottom: shape.bottom
+            anchors.bottomMargin: gauge.verticalPadding / (3/2)
         }
+
     }
 
     Canvas {
@@ -67,13 +74,13 @@ Item {
 
             const gradient = context.createLinearGradient(0, 0, ring.width, 0);
             gradient.addColorStop(startStop, "#14FF00");
-            gradient.addColorStop(1, "#FFF500");
+            gradient.addColorStop(0.75, "#FFF500");
             context.fillStyle = gradient;
             context.strokeStyle = gradient;
 
             context.lineWidth = ring.borderWidth;
             context.beginPath();
-            context.arc((ring.width / 2), ring.height - gauge.verticalPadding + (gauge.verticalPadding / 20), ring.ringRadius, ring.startAngle, endAngle);
+            context.arc((ring.width / 2), ring.height - gauge.verticalPadding + (gauge.verticalPadding / 10), ring.ringRadius, ring.startAngle, endAngle);
             context.stroke();
         }
     }
@@ -82,8 +89,11 @@ Item {
         id: minValueText
         text: "0"
         color: "white"
+        font.family: webFont.name
         font.pointSize: gauge.verticalPadding / 2
         anchors.bottom: parent.bottom
+        anchors.left: parent.left
+        anchors.leftMargin: gauge.horizontalPadding / 2
     }
 
     Text {
@@ -91,6 +101,7 @@ Item {
         text: gauge.maxValue
         font.pointSize: gauge.verticalPadding / 2
         color: "white"
+        font.family: webFont.name
         anchors.right: parent.right
         anchors.bottom: parent.bottom
     }
