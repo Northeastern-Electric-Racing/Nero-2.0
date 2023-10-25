@@ -13,6 +13,11 @@ Window {
     visible: true
     title: "NERO"
 
+    FontLoader {
+            id: webFont
+            source: "fonts/Roboto-Black.ttf"
+        }
+
     Spedometer {
         id: spedometer
         anchors.centerIn: parent
