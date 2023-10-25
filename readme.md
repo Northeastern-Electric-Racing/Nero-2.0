@@ -12,7 +12,7 @@ Create a Qt account if you do not already have one.
 Accept the open source licensing agreement
 
 Select the Default options for installing components
-- Select Qt version 6.5.2 (Should be the one below the beta one) underneath qt tools
+- Select Qt version 6.5.3
 
 Select Next Until You start downloading Qt (Should be around 30 GB)
 
