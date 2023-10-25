@@ -40,11 +40,11 @@ void ChargingController::setBurning(bool burning)
   }
 }
 
-qreal ChargingController::maxCellVoltage() const
+int ChargingController::maxCellVoltage() const
 {
   return m_maxCellVoltage;
 }
-void ChargingController::setMaxCellVoltage(qreal volts)
+void ChargingController::setMaxCellVoltage(int volts)
 {
   if (volts != m_maxCellVoltage) {
     m_maxCellVoltage = volts;
@@ -76,11 +76,11 @@ void ChargingController::setMaxCellVoltageCellNumber(int num)
   }
 }
 
-qreal ChargingController::minCellVoltage() const
+int ChargingController::minCellVoltage() const
 {
   return m_minCellVoltage;
 }
-void ChargingController::setMinCellVoltage(qreal volts)
+void ChargingController::setMinCellVoltage(int volts)
 {
   if (volts != m_minCellVoltage) {
     m_minCellVoltage = volts;
@@ -112,11 +112,11 @@ void ChargingController::setMinCellVoltageCellNumber(int num)
   }
 }
 
-qreal ChargingController::cellDelta() const
+int ChargingController::cellDelta() const
 {
   return m_cellDelta;
 }
-void ChargingController::setCellDelta(qreal volts)
+void ChargingController::setCellDelta(int volts)
 {
   if (volts != m_cellDelta) {
     m_cellDelta = volts;
@@ -124,11 +124,11 @@ void ChargingController::setCellDelta(qreal volts)
   }
 }
 
-qreal ChargingController::packVoltage() const
+int ChargingController::packVoltage() const
 {
   return m_packVoltage;
 }
-void ChargingController::setPackVoltage(qreal volts)
+void ChargingController::setPackVoltage(int volts)
 {
   if (volts != m_packVoltage) {
     m_packVoltage = volts;
@@ -136,11 +136,11 @@ void ChargingController::setPackVoltage(qreal volts)
   }
 }
 
-qreal ChargingController::current() const
+int ChargingController::current() const
 {
   return m_current;
 }
-void ChargingController::setCurrent(qreal amps)
+void ChargingController::setCurrent(int amps)
 {
   if (amps != m_current) {
     m_current = amps;
@@ -148,11 +148,11 @@ void ChargingController::setCurrent(qreal amps)
   }
 }
 
-qreal ChargingController::packTemp() const
+int ChargingController::packTemp() const
 {
   return m_packTemp;
 }
-void ChargingController::setPackTemp(qreal degrees)
+void ChargingController::setPackTemp(int degrees)
 {
   if (degrees != m_packTemp) {
     m_packTemp = degrees;
