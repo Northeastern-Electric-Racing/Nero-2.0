@@ -3,6 +3,7 @@
 
 import QtQuick 6.5
 import NERO
+import QtQuick.Timeline 1.0
 
 Window {
     width: 800
@@ -13,11 +14,44 @@ Window {
     title: "NERO"
 
     Spedometer {
+        id: spedometer
         anchors.centerIn: parent
         value: 100
         width: 400
         verticalPadding: 50
         mainTextTopPadding: 10
+    }
+
+    Timeline {
+        id: spedometerTimeline
+        animations: [
+            TimelineAnimation {
+                id: spedometerAnimation
+                pingPong: true
+                running: true
+                loops: -1
+                duration: 5000
+                to: 5000
+                from: 0
+            }
+        ]
+        startFrame: 0
+        endFrame: 5000
+        enabled: true
+
+        KeyframeGroup {
+            target: spedometer
+            property: "value"
+            Keyframe {
+                value: 0
+                frame: 0
+            }
+
+            Keyframe {
+                value: 100
+                frame: 5000
+            }
+        }
     }
 
 }

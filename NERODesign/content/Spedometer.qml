@@ -60,6 +60,7 @@ Item {
         property real pi: 3.141592653589793
         property real startAngle: pi
 
+
         onPaint: {
             const context = getContext("2d");
             context.reset();
@@ -83,6 +84,10 @@ Item {
             context.arc((ring.width / 2), ring.height - gauge.verticalPadding + (gauge.verticalPadding / 10), ring.ringRadius, ring.startAngle, endAngle);
             context.stroke();
         }
+    }
+
+    onValueChanged: {
+        ring.requestPaint();
     }
 
     Text {
