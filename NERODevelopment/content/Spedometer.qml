@@ -70,10 +70,9 @@ Item {
             // Draw the progress ring
             // Adjust gradient stops based on the value
             const gradientValue = gauge.value / gauge.maxValue;
-            const startStop = 1 - gradientValue;
 
             const gradient = context.createLinearGradient(0, 0, ring.width, 0);
-            gradient.addColorStop(startStop, "#14FF00");
+            gradient.addColorStop(0, "#14FF00");
             gradient.addColorStop(0.75, "#FFF500");
             context.fillStyle = gradient;
             context.strokeStyle = gradient;

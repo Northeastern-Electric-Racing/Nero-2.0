@@ -16,7 +16,7 @@ Window {
     Spedometer {
         id: spedometer
         anchors.centerIn: parent
-        value: 100
+        value: 20
         width: 400
         verticalPadding: 50
         mainTextTopPadding: 10
