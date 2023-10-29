@@ -109,20 +109,6 @@ Window {
                 frame: 4988
             }
         }
-
-        KeyframeGroup {
-            target: pitScreen
-            property: "forward"
-            Keyframe {
-                value: true
-                frame: 0
-            }
-
-            Keyframe {
-                value: false
-                frame: 4988
-            }
-        }
     }
 
 }

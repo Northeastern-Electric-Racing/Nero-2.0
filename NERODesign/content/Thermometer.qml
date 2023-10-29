@@ -5,7 +5,17 @@ import QtQuick.Layouts
 Item {
     id: thermometer
     property int value: 0
-    width: 1920
+    property int horizontalPadding: width / 20
+    property int maxValue: 65
+    property int minValue: -15
+    property string color: value > maxValue - ((Math.abs(maxValue) + Math.abs(minValue)) / 5) ?
+                               "red" : value > maxValue - (((Math.abs(maxValue) + Math.abs(minValue)) / 5) * 2) ?
+                                   "orange" : value > maxValue - (((Math.abs(maxValue) + Math.abs(minValue)) / 5) * 3) ?
+                                       "green" : value > maxValue - (((Math.abs(maxValue) + Math.abs(minValue)) / 5) * 4) ?
+                                           "blue" : "purple"
+    width: 50
+    height: width
+
 
     Rectangle {
         id: rectangle
@@ -36,21 +46,21 @@ Item {
 
 
             Rectangle {
-                id: bottomGreenCircle
+                id: fillBottomCircle
                 anchors.centerIn: parent
                 width: parent.width * 0.9
                 height: parent.width * 0.9
                 radius: parent.width * 0.9
-                color: "#55FF00"
+                color: thermometer.color
             }
         }
 
         Rectangle {
-            id: greenRectangle
+            id: fillRectangle
             anchors.centerIn: parent
-            width: parent.width * 0.8
+            width: parent.width - (thermometer.horizontalPadding * 2)
             height: parent.height * 0.9
-            color: "#55FF00"
+            color: thermometer.color
         }
     }
 }

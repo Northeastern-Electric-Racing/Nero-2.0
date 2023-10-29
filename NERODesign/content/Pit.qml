@@ -44,28 +44,24 @@ Item {
 
                         Thermometer {
                             id: packTempThermometer
+                            value: pit.packTempValue
                             width: 50
                             height: 110
                         }
 
-                        Text {
+                        ValueText {
+                            id: packTempText
                             text: pit.packTempValue
                             anchors.horizontalCenter: parent.horizontalCenter
                             anchors.verticalCenter: parent.verticalCenter
-                            font.family: webFont.name
-                            font.pixelSize: 85
-                            color: "white"
                         }
 
                     }
 
-                    Text {
+                    LabelText {
                         text: 'PACK TEMP'
                         anchors.horizontalCenter: parent.horizontalCenter
                         anchors.top: packTempRow.bottom
-                        font.family: webFont.name
-                        font.pixelSize: 24
-                        color: "white"
                     }
 
                 }
@@ -75,23 +71,17 @@ Item {
                     width: parent.width / 2
                     height: parent.height
 
-                    Text {
+                    ValueText {
                         id: maxSpeedText
                         text: pit.maxSpeed
                         anchors.centerIn: parent
                         anchors.verticalCenterOffset: 5
-                        font.family: webFont.name
-                        font.pixelSize: 85
-                        color: "white"
                     }
 
-                    Text {
+                    LabelText {
                         text: "SPEED LIMIT"
                         anchors.top: maxSpeedText.bottom
                         anchors.horizontalCenter: parent.horizontalCenter
-                        font.family: webFont.name
-                        color: "white"
-                        font.pixelSize: 24
                     }
                 }
 
@@ -121,22 +111,16 @@ Item {
                         }
 
 
-                        Text {
+                        ValueText {
                             text: pit.stateOfChargePercentage
                             anchors.centerIn: parent
-                            font.family: webFont.name
-                            font.pixelSize: 85
-                            color: "white"
                         }
 
                     }
 
-                    Text {
+                    LabelText {
                         text: "CHARGE STATE"
                         anchors.horizontalCenter: parent.horizontalCenter
-                        font.family: webFont.name
-                        font.pixelSize: 24
-                        color: "white"
                     }
                 }
 
@@ -157,22 +141,16 @@ Item {
                             height: 110
                         }
 
-                        Text {
+                        ValueText {
                             text: pit.motorTempValue
                             anchors.centerIn: parent
-                            font.family: webFont.name
-                            font.pixelSize: 85
-                            color: "white"
                         }
 
                     }
 
-                    Text {
+                    LabelText {
                         text: "MOTOR TEMP"
                         anchors.horizontalCenter: parent.horizontalCenter
-                        font.family: webFont.name
-                        color: "white"
-                        font.pixelSize: 24
                     }
                 }
 
