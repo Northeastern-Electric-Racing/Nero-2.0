@@ -10,7 +10,9 @@ Item {
     property int innerStrokeWidth: 10
     property int outerStrokeWidth: 20
     property int mainTextTopPadding: 0
+    width: 300
     height: width / 2 + verticalPadding
+
     Shape {
         id: shape
         width: parent.width
