@@ -52,8 +52,8 @@ Item {
                         ValueText {
                             id: packTempText
                             text: pit.packTempValue
-                            anchors.horizontalCenter: parent.horizontalCenter
-                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.centerIn: parent
+                            anchors.horizontalCenterOffset: 25
                         }
 
                     }
@@ -114,6 +114,7 @@ Item {
                         ValueText {
                             text: pit.stateOfChargePercentage
                             anchors.centerIn: parent
+                            anchors.horizontalCenterOffset: 25
                         }
 
                     }
@@ -144,6 +145,7 @@ Item {
                         ValueText {
                             text: pit.motorTempValue
                             anchors.centerIn: parent
+                            anchors.horizontalCenterOffset: 25
                         }
 
                     }
