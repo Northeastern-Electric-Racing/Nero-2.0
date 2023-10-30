@@ -49,7 +49,7 @@ Window {
             }
 
             Keyframe {
-                value: 100
+                value: 5
                 frame: 5000
             }
         }

@@ -12,7 +12,6 @@ Item {
     property int maxSpeed: 5
     property int horizontalMargin: 10
     property bool forward: true
-
     property int horizontalIconSpacing: -55
     property int iconWidth: 40
     property int iconHeight: 90
@@ -188,6 +187,7 @@ Item {
                 width: 400
                 height: 300
                 value: pit.currentSpeed
+                maxValue: pit.maxSpeed
                 anchors.horizontalCenter: parent.horizontalCenter
                 verticalPadding: 50
             }
