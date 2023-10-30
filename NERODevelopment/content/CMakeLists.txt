@@ -9,7 +9,11 @@ qt6_add_qml_module(content
         Spedometer.qml
         App.qml
         Thermometer.qml
-
+        Battery.qml
+        Pit.qml
+        ValueText.qml
+        LabelText.qml
+        DirectionView.qml
 
     RESOURCES
         fonts/fonts.txt
