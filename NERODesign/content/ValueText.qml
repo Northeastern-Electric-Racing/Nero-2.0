@@ -3,9 +3,9 @@ import QtQuick.Controls 2.15
 
 
 Text {
-    anchors.centerIn: parent
     font.family: webFont.name
     font.pixelSize: 85
+    font.letterSpacing: -5
     color: "white"
 }
 

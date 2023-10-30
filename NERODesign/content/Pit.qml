@@ -13,6 +13,11 @@ Item {
     property int horizontalMargin: 10
     property bool forward: true
 
+    property int horizontalIconSpacing: -55
+    property int iconWidth: 40
+    property int iconHeight: 90
+    property int labelVerticalSpacing: 10
+
     Row {
         id: mainRow
         width: parent.width - horizontalMargin * 2
@@ -38,22 +43,25 @@ Item {
 
                     Row {
                         id: packTempRow
-                        height: 110
+                        height: pit.iconHeight
                         width: parent.width
                         anchors.verticalCenter: parent.verticalCenter
 
                         Thermometer {
                             id: packTempThermometer
                             value: pit.packTempValue
-                            width: 50
-                            height: 110
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            anchors.horizontalCenterOffset: pit.horizontalIconSpacing
+                            width: pit.iconWidth
+                            height: pit.iconHeight
                         }
 
                         ValueText {
                             id: packTempText
                             text: pit.packTempValue
-                            anchors.centerIn: parent
+                            anchors.horizontalCenter: parent.horizontalCenter
                             anchors.horizontalCenterOffset: 25
+                            anchors.baseline: parent.bottom
                         }
 
                     }
@@ -62,6 +70,7 @@ Item {
                         text: 'PACK TEMP'
                         anchors.horizontalCenter: parent.horizontalCenter
                         anchors.top: packTempRow.bottom
+                        anchors.topMargin: pit.labelVerticalSpacing
                     }
 
                 }
@@ -75,12 +84,13 @@ Item {
                         id: maxSpeedText
                         text: pit.maxSpeed
                         anchors.centerIn: parent
-                        anchors.verticalCenterOffset: 5
+                        anchors.verticalCenterOffset: 15
                     }
 
                     LabelText {
                         text: "SPEED LIMIT"
                         anchors.top: maxSpeedText.bottom
+                        anchors.topMargin: -pit.labelVerticalSpacing
                         anchors.horizontalCenter: parent.horizontalCenter
                     }
                 }
@@ -100,27 +110,32 @@ Item {
 
                     Row {
                         id: batteryRow
-                        height: 110
+                        height: pit.iconHeight
                         width: parent.width
 
                         Battery {
                             id: battery
-                            width: 50
-                            height: 110
+                            width: pit.iconWidth
+                            height: pit.iconHeight
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            anchors.horizontalCenterOffset: pit.horizontalIconSpacing
                             value: pit.stateOfChargePercentage
                         }
 
 
                         ValueText {
                             text: pit.stateOfChargePercentage
-                            anchors.centerIn: parent
+                            anchors.horizontalCenter: parent.horizontalCenter
                             anchors.horizontalCenterOffset: 25
+                            anchors.baseline: parent.bottom
                         }
 
                     }
 
                     LabelText {
                         text: "CHARGE STATE"
+                        anchors.top: batteryRow.bottom
+                        anchors.topMargin: pit.labelVerticalSpacing
                         anchors.horizontalCenter: parent.horizontalCenter
                     }
                 }
@@ -133,25 +148,30 @@ Item {
                     Row {
                         id: motorTempRow
                         width: parent.width
-                        height: 110
+                        height: pit.iconHeight
 
                         Thermometer {
                             id: motorTempThermometer
                             value: pit.motorTempValue
-                            width: 50
-                            height: 110
+                            width: pit.iconWidth
+                            height: pit.iconHeight
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            anchors.horizontalCenterOffset: pit.horizontalIconSpacing
                         }
 
                         ValueText {
                             text: pit.motorTempValue
-                            anchors.centerIn: parent
+                            anchors.horizontalCenter: parent.horizontalCenter
                             anchors.horizontalCenterOffset: 25
+                            anchors.baseline: parent.bottom
                         }
 
                     }
 
                     LabelText {
                         text: "MOTOR TEMP"
+                        anchors.top: motorTempRow.bottom
+                        anchors.topMargin: pit.labelVerticalSpacing
                         anchors.horizontalCenter: parent.horizontalCenter
                     }
                 }

@@ -11,7 +11,7 @@ Item {
     property string color: value > maxValue - ((Math.abs(maxValue) + Math.abs(minValue)) / 5) ?
                                "red" : value > maxValue - (((Math.abs(maxValue) + Math.abs(minValue)) / 5) * 2) ?
                                    "orange" : value > maxValue - (((Math.abs(maxValue) + Math.abs(minValue)) / 5) * 3) ?
-                                       "green" : value > maxValue - (((Math.abs(maxValue) + Math.abs(minValue)) / 5) * 4) ?
+                                       "#FFF500" : value > maxValue - (((Math.abs(maxValue) + Math.abs(minValue)) / 5) * 4) ?
                                            "blue" : "purple"
     width: 50
     height: width
