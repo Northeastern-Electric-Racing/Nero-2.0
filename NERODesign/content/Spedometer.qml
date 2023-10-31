@@ -1,16 +1,19 @@
-import QtQuick 6.5
+import QtQuick 2.11
 import QtQuick.Shapes 1.15
 
 Item {
     id: gauge
-    property int value: 0
-    property int maxValue: 100
+    property double value: 0
+    property double minValue: 0
+    property double maxValue: 100
     property int verticalPadding: 100
     property int horizontalPadding: 20
     property int innerStrokeWidth: 10
     property int outerStrokeWidth: 20
     property int mainTextTopPadding: 0
+    width: 300
     height: width / 2 + verticalPadding
+
     Shape {
         id: shape
         width: parent.width
@@ -36,7 +39,7 @@ Item {
 
         Text {
             id: valueText
-            text: gauge.value
+            text: Math.round(gauge.value)
             anchors.horizontalCenter: parent.horizontalCenter
             font.pointSize: gauge.width / 4
             font.family: webFont.name
@@ -48,30 +51,37 @@ Item {
 
     }
 
+    Behavior on value {
+
+        NumberAnimation {
+            duration: 100
+        }
+    }
+
+    onValueChanged: ring.requestPaint()
+
     Canvas {
         id: ring
         x: shape.x
         y: shape.y
         width: parent.width
         height: parent.height
+        antialiasing: true
 
+        property real centerX: ring.width / 2
+        property real centerY: ring.height - gauge.verticalPadding + (gauge.verticalPadding / 10)
         property real borderWidth: gauge.outerStrokeWidth
         property real ringRadius: (ring.width - gauge.horizontalPadding * 2) / 2
-        property real pi: 3.141592653589793
-        property real startAngle: pi
-
+        property real pi: Math.PI
+        property double startAngle: pi
+        property double endAngle: 2  * pi
+        property double step: gauge.value / (gauge.maxValue - gauge.minValue) * (endAngle - startAngle)
 
         onPaint: {
             const context = getContext("2d");
             context.reset();
 
-            // Calculate the end angle based on the value
-            const endAngle = ring.startAngle + (ring.pi / (gauge.maxValue / gauge.value));
-
             // Draw the progress ring
-            // Adjust gradient stops based on the value
-            const gradientValue = gauge.value / gauge.maxValue;
-
             const gradient = context.createLinearGradient(0, 0, ring.width, 0);
             gradient.addColorStop(0, "#14FF00");
             gradient.addColorStop(0.75, "#FFF500");
@@ -80,13 +90,11 @@ Item {
 
             context.lineWidth = ring.borderWidth;
             context.beginPath();
-            context.arc((ring.width / 2), ring.height - gauge.verticalPadding + (gauge.verticalPadding / 10), ring.ringRadius, ring.startAngle, endAngle);
+            context.clearRect(0, 0, ring.width, ring.height);
+            context.arc(ring.centerX, ring.centerY, ring.ringRadius,
+                        ring.startAngle, ring.startAngle + ring.step, false);
             context.stroke();
         }
-    }
-
-    onValueChanged: {
-        ring.requestPaint();
     }
 
     Text {
@@ -108,5 +116,6 @@ Item {
         font.family: webFont.name
         anchors.right: parent.right
         anchors.bottom: parent.bottom
+        anchors.rightMargin: gauge.horizontalPadding / 2
     }
 }

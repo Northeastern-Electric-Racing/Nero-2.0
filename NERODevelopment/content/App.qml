@@ -16,12 +16,6 @@ Window {
             source: "fonts/Roboto-Black.ttf"
         }
 
-    Spedometer {
-        anchors.centerIn: parent
-        value: 100
-        width: 400
-        verticalPadding: 50
-        mainTextTopPadding: 10
-    }
+    Pit {}
 }
 
