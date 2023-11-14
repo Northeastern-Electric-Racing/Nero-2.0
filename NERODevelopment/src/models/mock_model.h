@@ -7,7 +7,7 @@ class MockModel : public Model {
 public:
   MockModel();
 
-  void checkCan() override;
+  void connectToMQTT() override;
   std::optional<float> getMph() override;
   std::optional<float> getKph() override;
   std::optional<float> getStatus() override;

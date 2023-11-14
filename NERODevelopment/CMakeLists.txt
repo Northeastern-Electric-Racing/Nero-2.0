@@ -7,9 +7,8 @@ project(NEROApp LANGUAGES CXX)
 
 set(CMAKE_AUTOMOC ON)
 
-find_package(Qt6 6.2 REQUIRED COMPONENTS Core Gui Qml Quick)
 
-if (Qt6_VERSION VERSION_GREATER_EQUAL 6.3)
+if (Qt6_VERSION VERSION_GREATER_EQUAL 6.5)
     qt_standard_project_setup()
 endif()
 
@@ -33,7 +32,10 @@ set(PROJECT_SOURCES
     src/modes/debug_mode/debug_utils.cpp
     src/views/thermometercomponent.cpp)
 
-qt_add_executable(NEROApp ${PROJECT_SOURCES})
+find_package(Qt6 REQUIRED COMPONENTS Core Gui Qml Quick Network Mqtt)
+
+qt_add_executable(NEROApp ${PROJECT_SOURCES}
+    src/models/qmlmqttclient.h src/models/qmlmqttclient.cpp)
 
 qt_add_resources(NEROApp "configuration"
     PREFIX "/"
@@ -44,10 +46,13 @@ qt_add_resources(NEROApp "configuration"
 target_include_directories(${PROJECT_NAME} PUBLIC include)
 include_directories("src/models")
 
+
 target_link_libraries(NEROApp PRIVATE
     Qt6::Core
     Qt6::Gui
     Qt6::Qml
+    Qt::Network
+    Qt::Mqtt
     Qt6::Quick
 )
 

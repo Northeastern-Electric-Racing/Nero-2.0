@@ -20,7 +20,7 @@ public:
   explicit Model();
   virtual ~Model() {}
 
-  virtual void checkCan() = 0;
+  virtual void connectToMQTT() = 0;
   virtual std::optional<float> getPrecharge() = 0;
   virtual std::optional<float> getMph() = 0;
   virtual std::optional<float> getKph() = 0;

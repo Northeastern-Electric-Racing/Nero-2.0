@@ -20,7 +20,7 @@ MockModel::MockModel()
   updateData();
 }
 
-void MockModel::checkCan() {
+void MockModel::connectToMQTT() {
   int rng = rand() % 10001;
 
   if (rng < 5 && rng >= 0)

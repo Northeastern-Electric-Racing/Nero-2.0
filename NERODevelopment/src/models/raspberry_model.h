@@ -5,13 +5,13 @@
 #include "model.h"
 
 class RaspberryModel : public Model {
-
+  Q_OBJECT
 public:
   RaspberryModel();
   ~RaspberryModel();
 
   // Implementations of virtual functions from the Model class
-  void checkCan() override;
+  void connectToMQTT() override;
   std::optional<float> getPrecharge() override;
   std::optional<float> getMph() override;
   std::optional<float> getKph() override;
@@ -72,7 +72,6 @@ public:
   std::optional<float> getBmsPrefault() override;
 
 private:
-  void connectToIPC();
   void processData(const std::string &data);
 };
 #endif
