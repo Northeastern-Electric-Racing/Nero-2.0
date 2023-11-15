@@ -6,6 +6,36 @@ It is supposed to be strictly declarative and only uses a subset of QML. If you 
 this file manually, you might introduce QML code that is not supported by Qt Design Studio.
 Check out https://doc.qt.io/qtcreator/creator-quick-ui-forms.html for details on .ui.qml files.
 */
+
+/*
+import QtQuick 2.15
+import QtQuick.Controls 2.15
+import QtQuick.Studio.Components
+import QtQuick.Timeline 1.0
+
+Item {
+    id: item1
+    width: 1024
+    height: 768
+
+    Image {
+        id: microphonealt1svgrepocom
+        x: 700
+        y: 72
+        width: 324
+        height: 180
+        source: "images/microphone-alt-1-svgrepo-com.svg"
+        fillMode: Image.PreserveAspectFit
+    }
+
+}*/
+
+/*
+This is a UI file (.ui.qml) that is intended to be edited in Qt Design Studio only.
+It is supposed to be strictly declarative and only uses a subset of QML. If you edit
+this file manually, you might introduce QML code that is not supported by Qt Design Studio.
+Check out https://doc.qt.io/qtcreator/creator-quick-ui-forms.html for details on .ui.qml files.
+*/
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Studio.Components
@@ -15,16 +45,25 @@ Item {
     width: 1024
     height: 768
 
-    Rectangle {
-        id: rectangle1
-        x: parent.width/2
-        y: parent.height/2
-        width: 20
-        height: 70
-        color: "#55ff00"
-        border.color: "#55ff00"
+    ColorAnimation {
+        id: colorAnimation
+        target: rectangle2
+        property: "fillColor"
+        loops: -1
+        //alwaysRunToEnd: true
+        running: true
+        from: "#55ff00"
+        to: "black"
     }
 
+    RectangleItem {
+        id: rectangle2
+        anchors.fill: parent
+        strokeWidth: 0
+        strokeColor: "#ffffff"
+        fillColor: "#55ff00"
+        adjustBorderRadius: true
+    }
 
     /*
     Rectangle {
@@ -38,40 +77,6 @@ Item {
         border.width: 30
         color: "#00000000"
     }*/
-    ArcItem {
-        id: arc
-        x: parent.width/2.44
-        y: parent.height/4
-        width: 200
-        height: 200
-        end: 270
-        begin: 90
-        strokeWidth: 20
-        strokeColor: "#55ff00"
-        fillColor: "#00000000"
-    }
-
-    Rectangle {
-        id: rectangle2
-        x: parent.width/2.1
-        y: parent.height/1.7
-        width: 70
-        height: 20
-        color: "#55ff00"
-        border.color: "#55ff00"
-    }
-
-    Rectangle {
-        id: circle2
-        x: parent.width/2.2
-        y: parent.height/5
-        width: 110
-        height: 200
-        color: "#0055ff00"
-        radius: 200
-        border.color: "#55ff00"
-        border.width: 20
-    }
 }
 
 /*
