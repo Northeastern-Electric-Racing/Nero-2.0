@@ -3,6 +3,7 @@
 #include <QtMqtt/QMqttClient>
 #include <bitset>
 #include <cmath>
+#include <qmlmqttclient.h>
 #include <stdexcept>
 #include <sys/socket.h>
 #include <sys/types.h>
@@ -24,10 +25,14 @@ std::optional<float> RaspberryModel::getMpuFault() {
 }
 
 void RaspberryModel::connectToMQTT() {
-  std::string host = "http://localhost:1883";
-  QMqttClient *m_client = new QMqttClient();
-  m_client->setHostname("http://localhost");
-  m_client->setPort(8000);
+  QString host = "http://localhost";
+  qint16 port = 1338;
+
+  QmlMqttClient client = QmlMqttClient();
+  client.setHostname(host);
+  client.setPort(port);
+  client.connectToHost();
+  client.subscribe("/");
 }
 
 void RaspberryModel::processData(const std::string &data) {
