@@ -5,7 +5,7 @@
 #include "model.h"
 
 class RaspberryModel : public Model {
-  Q_OBJECT
+
 public:
   RaspberryModel();
   ~RaspberryModel();

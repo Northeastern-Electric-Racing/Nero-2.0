@@ -35,7 +35,7 @@ set(PROJECT_SOURCES
 find_package(Qt6 REQUIRED COMPONENTS Core Gui Qml Quick Network Mqtt)
 
 qt_add_executable(NEROApp ${PROJECT_SOURCES}
-    src/models/qmlmqttclient.h src/models/qmlmqttclient.cpp)
+    src/models/mqttclient.h src/models/mqttclient.cpp)
 
 qt_add_resources(NEROApp "configuration"
     PREFIX "/"
@@ -51,8 +51,8 @@ target_link_libraries(NEROApp PRIVATE
     Qt6::Core
     Qt6::Gui
     Qt6::Qml
-    Qt::Network
-    Qt::Mqtt
+    Qt6::Network
+    Qt6::Mqtt
     Qt6::Quick
 )
 

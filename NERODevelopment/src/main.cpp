@@ -4,6 +4,7 @@
 #include "app_environment.h"
 #include "import_qml_components_plugins.h"
 #include "import_qml_plugins.h"
+#include "raspberry_model.h"
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 
@@ -34,6 +35,9 @@ int main(int argc, char *argv[]) {
   if (engine.rootObjects().isEmpty()) {
     return -1;
   }
+
+  RaspberryModel model;
+  model.connectToMQTT();
 
   return app.exec();
 }

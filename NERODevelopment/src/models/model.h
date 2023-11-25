@@ -14,7 +14,8 @@ struct DataInfo {
 
 extern const std::map<int, DataInfo> DATA_IDS;
 
-class Model {
+class Model : public QObject {
+  Q_OBJECT
 
 public:
   explicit Model();
