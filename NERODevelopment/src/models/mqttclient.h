@@ -20,11 +20,14 @@ private slots:
 
   void brokerDisconnected();
 
-  void on_btn_Subcribe_clicked();
+  void subscribe();
+
+  void brokerConnected();
+
+  void receiveMessage(const QByteArray &message, const QMqttTopicName &topic);
 
 public slots:
   void updateMessage(const QMqttMessage &msg);
-  void updateStatus(QMqttSubscription::SubscriptionState state);
 
 private:
   QMqttClient *m_client = nullptr;
