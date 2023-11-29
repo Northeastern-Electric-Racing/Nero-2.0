@@ -16,6 +16,16 @@ Item {
     property int iconWidth: 40
     property int iconHeight: 90
     property int labelVerticalSpacing: 10
+    property bool isTalking: false
+
+    MicrophoneComponent {
+        id: microphoneComponent
+        anchors.right: pit.right
+        anchors.top: pit.top
+        width: 100
+        height: 70
+        isTalking: pit.isTalking
+    }
 
     Row {
         id: mainRow

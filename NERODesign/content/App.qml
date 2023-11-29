@@ -98,6 +98,19 @@ Window {
 
         KeyframeGroup {
             target: pitScreen
+            property: "isTalking"
+            Keyframe  {
+                value: true
+                frame: 0
+            }
+            Keyframe {
+                value: false
+                frame: 4988
+            }
+        }
+
+        KeyframeGroup {
+            target: pitScreen
             property: "stateOfChargePercentage"
             Keyframe {
                 value: 0
