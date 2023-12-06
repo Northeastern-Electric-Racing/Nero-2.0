@@ -3,11 +3,15 @@
 
 #include "model.h"
 
+/**
+ * @brief The MockModel class
+ * Mocks the data for development when not connected to Calypso
+ */
 class MockModel : public Model {
 public:
   MockModel();
 
-  void checkCan() override;
+  void connectToMQTT() override;
   std::optional<float> getMph() override;
   std::optional<float> getKph() override;
   std::optional<float> getStatus() override;

@@ -3,6 +3,10 @@
 
 #include <QObject>
 
+/**
+ * @brief The ChargingController class
+ * Controller for the Charging Screen.
+ */
 class ChargingController : public QObject {
   Q_OBJECT
   Q_PROPERTY(int charge READ charge WRITE setCharge NOTIFY chargeChanged FINAL)

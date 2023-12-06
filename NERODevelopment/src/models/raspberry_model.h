@@ -4,6 +4,10 @@
 
 #include "model.h"
 
+/**
+ * @brief The RaspberryModel class
+ * The Production Model that is used when running on the car
+ */
 class RaspberryModel : public Model {
 
 public:
@@ -11,7 +15,7 @@ public:
   ~RaspberryModel();
 
   // Implementations of virtual functions from the Model class
-  void checkCan() override;
+  void connectToMQTT() override;
   std::optional<float> getPrecharge() override;
   std::optional<float> getMph() override;
   std::optional<float> getKph() override;
@@ -72,7 +76,6 @@ public:
   std::optional<float> getBmsPrefault() override;
 
 private:
-  void connectToIPC();
   void processData(const std::string &data);
 };
 #endif

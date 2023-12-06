@@ -3,6 +3,10 @@
 
 #include <QObject>
 
+/**
+ * @brief The EfficiencyController class
+ * Controller for the efficiency view
+ */
 class EfficiencyController : public QObject {
   Q_OBJECT
   Q_PROPERTY(int currentMaxTorque READ currentMaxTorque WRITE

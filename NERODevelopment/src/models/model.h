@@ -14,13 +14,19 @@ struct DataInfo {
 
 extern const std::map<int, DataInfo> DATA_IDS;
 
-class Model {
+/**
+ * @brief The Model class
+ * Abstract Class For The mock model and raspberry pi
+ * Unimplementable
+ */
+class Model : public QObject {
+  Q_OBJECT
 
 public:
   explicit Model();
   virtual ~Model() {}
 
-  virtual void checkCan() = 0;
+  virtual void connectToMQTT() = 0;
   virtual std::optional<float> getPrecharge() = 0;
   virtual std::optional<float> getMph() = 0;
   virtual std::optional<float> getKph() = 0;

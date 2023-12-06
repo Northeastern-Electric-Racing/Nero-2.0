@@ -1,7 +1,9 @@
 #ifndef _WIN32
 #include "raspberry_model.h"
+#include <QtMqtt/QMqttClient>
 #include <bitset>
 #include <cmath>
+#include <mqttclient.h>
 #include <stdexcept>
 #include <sys/socket.h>
 #include <sys/types.h>
@@ -13,65 +15,15 @@ RaspberryModel::RaspberryModel() {
   currentData.resize(DATA_IDS.size());
   chdir("/home/ner/Desktop/Nero/");
   setenv("DISPLAY", ":0.0", 1);
-  std::thread(&RaspberryModel::connectToIPC, this).detach();
 }
 
 RaspberryModel::~RaspberryModel() {}
-
-void RaspberryModel::checkCan() {}
 
 std::optional<float> RaspberryModel::getMpuFault() {
   return std::nullopt; // TODO: Implement Mpu Faults
 }
 
-void RaspberryModel::connectToIPC() {
-  std::string socketPath = "/tmp/ipc.sock";
-  unlink(socketPath.c_str());
-
-  int fd = socket(AF_UNIX, SOCK_STREAM, 0);
-  if (fd < 0) {
-    perror("Failed to create socket");
-    return;
-  }
-
-  sockaddr_un addr{};
-  addr.sun_family = AF_UNIX;
-  strncpy(addr.sun_path, socketPath.c_str(), sizeof(addr.sun_path) - 1);
-
-  if (bind(fd, (struct sockaddr *)&addr, sizeof(addr)) < 0) {
-    perror("Failed to bind socket");
-    close(fd);
-    return;
-  }
-
-  if (listen(fd, 0) < 0) {
-    perror("Failed to listen on socket");
-    close(fd);
-    return;
-  }
-
-  system("/home/ner/Desktop/Ner_Processing/target/release/ner_processing &");
-
-  while (true) {
-    int conn = accept(fd, nullptr, nullptr);
-    if (conn < 0) {
-      perror("Failed to accept connection");
-      close(fd);
-      return;
-    }
-
-    char buffer[1024];
-    ssize_t bytesRead = recv(conn, buffer, sizeof(buffer) - 1, 0);
-    if (bytesRead > 0) {
-      buffer[bytesRead] = '\0';
-      std::string data(buffer);
-      processData(data);
-    }
-    close(conn);
-  }
-
-  close(fd);
-}
+void RaspberryModel::connectToMQTT() { MqttClient *client = new MqttClient(); }
 
 void RaspberryModel::processData(const std::string &data) {
   size_t start = 0;

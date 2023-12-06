@@ -7,9 +7,8 @@ project(NEROApp LANGUAGES CXX)
 
 set(CMAKE_AUTOMOC ON)
 
-find_package(Qt6 6.2 REQUIRED COMPONENTS Core Gui Qml Quick)
 
-if (Qt6_VERSION VERSION_GREATER_EQUAL 6.3)
+if (Qt6_VERSION VERSION_GREATER_EQUAL 6.5)
     qt_standard_project_setup()
 endif()
 
@@ -22,7 +21,7 @@ set(PROJECT_SOURCES
     src/models/model.h
     src/models/raspberry_model.h
     src/modes/debug_mode/debug_utils.h
-    src/views/thermometercomponent.h
+
     src/controllers/efficiencycontroller.cpp
     src/controllers/chargingcontroller.cpp
     src/controllers/homecontroller.cpp
@@ -31,9 +30,12 @@ set(PROJECT_SOURCES
     src/models/model.cpp
     src/models/raspberry_model.cpp
     src/modes/debug_mode/debug_utils.cpp
-    src/views/thermometercomponent.cpp)
+)
 
-qt_add_executable(NEROApp ${PROJECT_SOURCES})
+find_package(Qt6 REQUIRED COMPONENTS Core Gui Qml Quick Network Mqtt)
+
+qt_add_executable(NEROApp ${PROJECT_SOURCES}
+    src/models/mqttclient.h src/models/mqttclient.cpp)
 
 qt_add_resources(NEROApp "configuration"
     PREFIX "/"
@@ -44,10 +46,13 @@ qt_add_resources(NEROApp "configuration"
 target_include_directories(${PROJECT_NAME} PUBLIC include)
 include_directories("src/models")
 
+
 target_link_libraries(NEROApp PRIVATE
     Qt6::Core
     Qt6::Gui
     Qt6::Qml
+    Qt6::Network
+    Qt6::Mqtt
     Qt6::Quick
 )
 
