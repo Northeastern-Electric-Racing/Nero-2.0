@@ -3,6 +3,10 @@
 
 #include "model.h"
 
+/**
+ * @brief The MockModel class
+ * Mocks the data for development when not connected to Calypso
+ */
 class MockModel : public Model {
 public:
   MockModel();

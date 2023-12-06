@@ -3,6 +3,10 @@
 
 #include <QObject>
 
+/**
+ * @brief The HomeController class
+ * Controller for the home screen, aka pit and reverse.
+ */
 class HomeController : public QObject {
   Q_OBJECT
   Q_PROPERTY(int speed READ speed WRITE setSpeed NOTIFY speedChanged FINAL)

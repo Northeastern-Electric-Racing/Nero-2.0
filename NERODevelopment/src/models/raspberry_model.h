@@ -4,6 +4,10 @@
 
 #include "model.h"
 
+/**
+ * @brief The RaspberryModel class
+ * The Production Model that is used when running on the car
+ */
 class RaspberryModel : public Model {
 
 public:

@@ -14,6 +14,11 @@ struct DataInfo {
 
 extern const std::map<int, DataInfo> DATA_IDS;
 
+/**
+ * @brief The Model class
+ * Abstract Class For The mock model and raspberry pi
+ * Unimplementable
+ */
 class Model : public QObject {
   Q_OBJECT
 

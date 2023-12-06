@@ -21,7 +21,7 @@ set(PROJECT_SOURCES
     src/models/model.h
     src/models/raspberry_model.h
     src/modes/debug_mode/debug_utils.h
-    src/views/thermometercomponent.h
+
     src/controllers/efficiencycontroller.cpp
     src/controllers/chargingcontroller.cpp
     src/controllers/homecontroller.cpp
@@ -30,7 +30,7 @@ set(PROJECT_SOURCES
     src/models/model.cpp
     src/models/raspberry_model.cpp
     src/modes/debug_mode/debug_utils.cpp
-    src/views/thermometercomponent.cpp)
+)
 
 find_package(Qt6 REQUIRED COMPONENTS Core Gui Qml Quick Network Mqtt)
 
