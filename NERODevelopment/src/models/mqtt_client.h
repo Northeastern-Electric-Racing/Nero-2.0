@@ -22,6 +22,11 @@ public slots:
    */
   void setClientPort(int p);
 
+  /**
+   * @brief connectToHost connects to the server
+   */
+  void connectToHost();
+
 private slots:
 
   /**
@@ -57,18 +62,14 @@ private slots:
 public slots:
   /**
    * @brief updateMessage, debugs the message received
-   * @param msg, the message received from the broker
+   * @param msg, the message received from the subscription
    */
   void updateMessage(const QMqttMessage &msg);
 
 private:
   QMqttClient *m_client = nullptr;
   QMqttSubscription *m_sub = nullptr;
-
   QString hostname = "192.168.100.176";
-  //    QString username = "xxxx&xxxx";
-  //    QString password = "xxxxx";
-  //    QString clientid = "xxxx|securemode=x,signmethod=xxx,timestamp=xxx|";
   int port = 1883;
   qint8 QoS = 0;
   QString default_topic = "/#";

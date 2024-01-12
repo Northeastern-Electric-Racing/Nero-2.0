@@ -21,6 +21,7 @@ set(PROJECT_SOURCES
     src/models/model.h
     src/models/raspberry_model.h
     src/modes/debug_mode/debug_utils.h
+    src/utils/server_data.h
 
     src/controllers/efficiencycontroller.cpp
     src/controllers/chargingcontroller.cpp
@@ -30,12 +31,14 @@ set(PROJECT_SOURCES
     src/models/model.cpp
     src/models/raspberry_model.cpp
     src/modes/debug_mode/debug_utils.cpp
+    src/utils/server_data.cpp
 )
 
 find_package(Qt6 REQUIRED COMPONENTS Core Gui Qml Quick Network Mqtt)
 
 qt_add_executable(NEROApp ${PROJECT_SOURCES}
-    src/models/mqttclient.h src/models/mqttclient.cpp)
+    src/models/mqtt_client.h src/models/mqtt_client.cpp
+    src/utils/data_type_names.h)
 
 qt_add_resources(NEROApp "configuration"
     PREFIX "/"

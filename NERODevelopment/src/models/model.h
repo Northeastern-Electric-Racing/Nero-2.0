@@ -6,17 +6,11 @@
 #include <QMap>
 #include <QObject>
 #include <QVariant>
-
-struct DataInfo {
-  QString name;
-  QString units;
-};
-
-extern const std::map<int, DataInfo> DATA_IDS;
+#include <../utils/server_data.h>
 
 /**
  * @brief The Model class
- * Abstract Class For The mock model and raspberry pi
+ * Abstract Class For The mock model and raspberry pi model
  * Unimplementable
  */
 class Model : public QObject {
@@ -27,7 +21,6 @@ public:
   virtual ~Model() {}
 
   virtual void connectToMQTT() = 0;
-  virtual std::optional<float> getPrecharge() = 0;
   virtual std::optional<float> getMph() = 0;
   virtual std::optional<float> getKph() = 0;
   virtual std::optional<float> getStatus() = 0;
@@ -35,7 +28,6 @@ public:
   virtual std::optional<float> getPackTemp() = 0;
   virtual std::optional<float> getMotorTemp() = 0;
   virtual std::optional<float> getStateOfCharge() = 0;
-  virtual std::optional<float> getLvBattery() = 0;
   virtual std::optional<float> getCurrent() = 0;
   virtual std::optional<float> getBalancingCells() = 0;
   virtual std::optional<float> getPackVoltage() = 0;
@@ -67,13 +59,12 @@ public:
   virtual std::optional<float> getDcl() = 0;
   virtual std::optional<float> getCcl() = 0;
   virtual std::optional<float> getPackCurrent() = 0;
-  virtual std::optional<std::string> getForwardButtonPressed() = 0;
-  virtual std::optional<std::string> getBackwardButtonPressed() = 0;
-  virtual std::optional<std::string> getDebugPressed() = 0;
-  virtual std::optional<std::string> getRightButtonPressed() = 0;
-  virtual std::optional<std::string> getEnterButtonPressed() = 0;
-  virtual std::optional<std::string> getUpButtonPressed() = 0;
-  virtual std::optional<std::string> getDownButtonPressed() = 0;
+  virtual std::optional<QString> getForwardButtonPressed() = 0;
+  virtual std::optional<QString> getBackwardButtonPressed() = 0;
+  virtual std::optional<QString> getRightButtonPressed() = 0;
+  virtual std::optional<QString> getEnterButtonPressed() = 0;
+  virtual std::optional<QString> getUpButtonPressed() = 0;
+  virtual std::optional<QString> getDownButtonPressed() = 0;
   virtual std::optional<float> getModeIndex() = 0;
   virtual std::optional<float> getGForceX() = 0;
   virtual std::optional<float> getGForceY() = 0;
@@ -82,30 +73,27 @@ public:
   virtual std::optional<float> getSegment2Temp() = 0;
   virtual std::optional<float> getSegment3Temp() = 0;
   virtual std::optional<float> getSegment4Temp() = 0;
-  virtual std::optional<float> getSdCardStatus() = 0;
-  virtual std::optional<float> getVbat() = 0;
-  virtual std::optional<float> getBmsPrefault() = 0;
 
   QList<DebugTableRowValue> getDebugTableValues();
   void updatePackTempData();
-  void addPinnedData(int id);
-  void removePinnedData(int id);
+  void addPinnedData(QString id);
+  void removePinnedData(QString id);
   void updatePinnedData();
   void updateAverageCellTemps();
   void updateStateOfChargeDeltas();
-  std::optional<float> getById(int id);
+  std::optional<float> getById(QString id);
 
   int pageHeight;
   int pageWidth;
+  float prevSoc;
 
 protected:
-  QMap<int, DebugPlotValue> pinnedData;
-  QList<std::optional<float>> currentData;
-  QList<int> packTempData;
+  QMap<QString, DataInfo> currentData;
+  QMap<QString, DebugPlotValue> pinnedData;
+  QList<float> packTempData;
   QList<FaultInstance> faultInstances;
-  QList<int> averageCellTemps;
-  QList<int> stateOfChargeDeltas;
-  std::optional<float> prevSoc;
+  QList<float> averageCellTemps;
+  QList<float> stateOfChargeDeltas;
 };
 
 #endif // MODEL_H

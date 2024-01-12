@@ -1,6 +1,6 @@
 #include "mock_model.h"
 #include <math.h>
-
+#include <../utils/data_type_names.h>
 MockModel::MockModel()
     : mph(60), status(true), dir(true), packTemp(30), motorTemp(40),
       stateOfCharge(55), lvBattery(88), current(7.6), isBurning(0), isDebug(0),
@@ -11,12 +11,11 @@ MockModel::MockModel()
       minCellVoltageCellNumber(3), minCellTemp(25), minCellTempChipNumber(3),
       minCellTempCellNumber(4), averageCellVoltage(3.3), averageCellTemp(27),
       packVoltage(3.4), bmsState(0), packCurrent(4), dcl(280), ccl(300),
-      gforceX(0.5), gforceY(-1), gforceZ(0.5), sdCardStatus(4),
+      gforceX(0.5), gforceY(-1), gforceZ(0.5),
       segment1Temp(30), segment2Temp(50), segment3Temp(35), segment4Temp(15),
       motorPower(100), fanPower(100), torquePower(100), regenPower(1),
       modeIndex(0), stateOfChargeDelta(-1), inverterTemp(30), forward(0),
       backward(0), enter(0), up(0), down(0), right(0) {
-  this->currentData.resize(45);
   updateData();
 }
 
@@ -167,9 +166,6 @@ void MockModel::connectToMQTT() {
   if (rng > 470 && rng < 475)
     gforceZ -= 0.1;
 
-  if (rng > 480 && rng < 485)
-    sdCardStatus = rand() % 4;
-
   if (rng > 490 && rng < 495)
     segment1Temp += 1;
   if (rng > 500 && rng < 505)
@@ -200,51 +196,7 @@ void MockModel::connectToMQTT() {
   if (rng > 600 && rng < 605)
     inverterTemp -= 1;
 
-  currentData = {mph,
-                 status,
-                 dir,
-                 packTemp,
-                 motorTemp,
-                 stateOfCharge,
-                 lvBattery,
-                 current,
-                 bmsFaults,
-                 mpuFaults,
-                 modeIndex,
-                 maxCellVoltage,
-                 maxCellVoltageChipNumber,
-                 maxCellVoltageCellNumber,
-                 maxCellTemp,
-                 maxCellTempChipNumber,
-                 maxCellTempCellNumber,
-                 minCellVoltage,
-                 minCellVoltageChipNumber,
-                 minCellVoltageCellNumber,
-                 minCellTemp,
-                 minCellTempChipNumber,
-                 minCellTempCellNumber,
-                 averageCellVoltage,
-                 averageCellTemp,
-                 packVoltage,
-                 bmsState,
-                 packCurrent,
-                 dcl,
-                 ccl,
-                 gforceX,
-                 gforceY,
-                 gforceZ,
-                 sdCardStatus,
-                 segment1Temp,
-                 segment2Temp,
-                 segment3Temp,
-                 segment4Temp,
-                 motorPower,
-                 fanPower,
-                 torquePower,
-                 regenPower,
-                 isBurning,
-                 stateOfChargeDelta,
-                 inverterTemp};
+
 }
 
 std::optional<float> MockModel::getMph() { return mph; }
@@ -260,8 +212,6 @@ std::optional<float> MockModel::getPackTemp() { return packTemp; }
 std::optional<float> MockModel::getMotorTemp() { return motorTemp; }
 
 std::optional<float> MockModel::getStateOfCharge() { return stateOfCharge; }
-
-std::optional<float> MockModel::getLvBattery() { return lvBattery; }
 
 std::optional<float> MockModel::getCurrent() {
   return round(current * 10) / 10;
@@ -347,7 +297,6 @@ std::optional<float> MockModel::getGForceZ() {
   return round(gforceZ * 10) / 10;
 }
 
-std::optional<float> MockModel::getSdCardStatus() { return sdCardStatus; }
 
 std::optional<float> MockModel::getSegment1Temp() { return segment1Temp; }
 
@@ -369,19 +318,7 @@ std::optional<float> MockModel::getBurningCells() { return isBurning; }
 
 std::optional<float> MockModel::getInverterTemp() { return inverterTemp; }
 
-std::optional<float> MockModel::getPrecharge() {
-  return std::nullopt; // TODO: Implement Mock Precharge
-}
-
-std::optional<float> MockModel::getBmsPrefault() {
-  return std::nullopt; // TODO: Implement Mock BMS Default
-}
-
 std::optional<float> MockModel::getTractionControl() {
-  return std::nullopt; // TODO: Implement Mock Traction Control
-}
-
-std::optional<float> MockModel::getVbat() {
   return std::nullopt; // TODO: Implement Mock Traction Control
 }
 
@@ -393,77 +330,72 @@ std::optional<float> MockModel::getBalancingCells() {
   return std::nullopt; // TODO: Implement Mock balancing Cells
 }
 
-std::optional<std::string> MockModel::getForwardButtonPressed() {
-  return std::to_string(forward);
+std::optional<QString> MockModel::getForwardButtonPressed() {
+    return QString(QChar(forward));
 }
 
-std::optional<std::string> MockModel::getEnterButtonPressed() {
-  return std::to_string(enter);
+std::optional<QString> MockModel::getEnterButtonPressed() {
+    return QString(QChar(enter));
 }
 
-std::optional<std::string> MockModel::getUpButtonPressed() {
-  return std::to_string(up);
+std::optional<QString> MockModel::getUpButtonPressed() {
+    return QString(QChar(up));
 }
 
-std::optional<std::string> MockModel::getDownButtonPressed() {
-  return std::to_string(down);
+std::optional<QString> MockModel::getDownButtonPressed() {
+    return QString(QChar(down));
 }
 
-std::optional<std::string> MockModel::getBackwardButtonPressed() {
-  return std::to_string(backward);
+std::optional<QString> MockModel::getBackwardButtonPressed() {
+    return QString(QChar(backward));
 }
 
-std::optional<std::string> MockModel::getRightButtonPressed() {
-  return std::to_string(right);
-}
-
-std::optional<std::string> MockModel::getDebugPressed() {
-  return std::to_string(isDebug);
+std::optional<QString> MockModel::getRightButtonPressed() {
+    return QString(QChar(right));
 }
 
 void MockModel::updateData() {
-  currentData[0] = mph;
-  currentData[1] = status;
-  currentData[2] = dir;
-  currentData[3] = packTemp;
-  currentData[4] = motorTemp;
-  currentData[5] = stateOfCharge;
-  currentData[6] = lvBattery;
-  currentData[7] = current;
-  currentData[8] = bmsFaults;
-  currentData[9] = mpuFaults;
-  currentData[10] = modeIndex;
-  currentData[11] = maxCellVoltage;
-  currentData[12] = maxCellVoltageChipNumber;
-  currentData[13] = maxCellVoltageCellNumber;
-  currentData[14] = maxCellTemp;
-  currentData[15] = maxCellTempChipNumber;
-  currentData[16] = maxCellTempCellNumber;
-  currentData[17] = minCellVoltage;
-  currentData[18] = minCellVoltageChipNumber;
-  currentData[19] = minCellVoltageCellNumber;
-  currentData[20] = minCellTemp;
-  currentData[21] = minCellTempChipNumber;
-  currentData[22] = minCellTempCellNumber;
-  currentData[23] = averageCellVoltage;
-  currentData[24] = averageCellTemp;
-  currentData[25] = packVoltage;
-  currentData[26] = bmsState;
-  currentData[27] = packCurrent;
-  currentData[28] = dcl;
-  currentData[29] = ccl;
-  currentData[30] = gforceX;
-  currentData[31] = gforceY;
-  currentData[32] = gforceZ;
-  currentData[33] = sdCardStatus;
-  currentData[34] = segment1Temp;
-  currentData[35] = segment2Temp;
-  currentData[36] = segment3Temp;
-  currentData[37] = segment4Temp;
-  currentData[38] = motorPower;
-  currentData[39] = fanPower;
-  currentData[40] = torquePower;
-  currentData[41] = regenPower;
-  currentData[42] = isBurning;
-  currentData[43] = inverterTemp;
+    currentData.insert(MPH, DataInfo(MPH, "mph", mph));
+    currentData.insert(STATUS, DataInfo(STATUS, "", status));
+    currentData.insert(DIRECTION, DataInfo(DIRECTION, "", dir));
+    currentData.insert(PACKTEMP, DataInfo(PACKTEMP, "C", packTemp));
+    currentData.insert(MOTORTEMP, DataInfo(MOTORTEMP, "", motorTemp));
+    currentData.insert(STATEOFCHARGE, DataInfo(STATEOFCHARGE, "%", stateOfCharge));
+    currentData.insert(CURRENT, DataInfo(CURRENT, "A", current));
+    currentData.insert(BMSFAULT, DataInfo(BMSFAULT, "", bmsFaults));
+
+    currentData.insert(MPUFAULT, DataInfo(MPUFAULT, "", mpuFaults));
+    currentData.insert(MODEINDEX, DataInfo(MODEINDEX, "", modeIndex));
+    currentData.insert(MAXCELLVOLTAGE, DataInfo(MAXCELLVOLTAGE, "", maxCellVoltage));
+    currentData.insert(MAXCELLVOLTAGECHIP, DataInfo(MAXCELLVOLTAGECHIP, "", maxCellVoltageChipNumber));
+    currentData.insert(MAXCELLVOLTAGECELL, DataInfo(MAXCELLVOLTAGECELL, "", maxCellVoltageCellNumber));
+    currentData.insert(MAXCELLTEMP, DataInfo(MAXCELLTEMP, "", maxCellTemp));
+    currentData.insert(MAXCELLTEMPCHIP, DataInfo(MAXCELLTEMPCHIP, "", maxCellTempChipNumber));
+    currentData.insert(MAXCELLTEMPCELL, DataInfo(MAXCELLTEMPCELL, "", maxCellTempCellNumber));
+    currentData.insert(MINCELLVOLTAGE, DataInfo(MINCELLVOLTAGE, "", minCellVoltage));
+    currentData.insert(MINCELLVOLTAGECHIP, DataInfo(MINCELLVOLTAGECHIP, "", minCellVoltageChipNumber));
+    currentData.insert(MINCELLVOLTAGECELL, DataInfo(MINCELLVOLTAGECELL, "", minCellVoltageCellNumber));
+    currentData.insert(MINCELLTEMP, DataInfo(MINCELLTEMP, "", minCellTemp));
+    currentData.insert(MINCELLTEMPCHIP, DataInfo(MINCELLTEMPCHIP, "", minCellTempChipNumber));
+    currentData.insert(MINCELLTEMPCELL, DataInfo(MINCELLTEMPCELL, "", minCellTempCellNumber));
+    currentData.insert(AVECELLVOLTAGE, DataInfo(AVECELLVOLTAGE, "", averageCellVoltage));
+    currentData.insert(AVECELLTEMP, DataInfo(AVECELLTEMP, "", averageCellTemp));
+    currentData.insert(PACKVOLTAGE, DataInfo(PACKVOLTAGE, "", packVoltage));
+    currentData.insert(BMSSTATE, DataInfo(BMSSTATE, "", bmsState));
+    currentData.insert(CURRENT, DataInfo(CURRENT, "", packCurrent));
+    currentData.insert(DCL, DataInfo(DCL, "", dcl));
+    currentData.insert(CCL, DataInfo(CCL, "", ccl));
+    currentData.insert(GFORCEX, DataInfo(GFORCEX, "", gforceX));
+    currentData.insert(GFORCEY, DataInfo(GFORCEY, "", gforceY));
+    currentData.insert(GFORCEZ, DataInfo(GFORCEZ, "", gforceZ));
+    currentData.insert(SEGMENTTEMP1, DataInfo(SEGMENTTEMP1, "", segment1Temp));
+    currentData.insert(SEGMENTTEMP2, DataInfo(SEGMENTTEMP2, "", segment2Temp));
+    currentData.insert(SEGMENTTEMP3, DataInfo(SEGMENTTEMP4, "", segment3Temp));
+    currentData.insert(SEGMENTTEMP4, DataInfo(SEGMENTTEMP4, "", segment4Temp));
+    currentData.insert(MOTORPOWER, DataInfo(MOTORPOWER, "", motorPower));
+    currentData.insert(FANPOWER, DataInfo(FANPOWER, "", fanPower));
+    currentData.insert(TORQUEPOWER, DataInfo(TORQUEPOWER, "", torquePower));
+    currentData.insert(REGENPOWER, DataInfo(REGENPOWER, "", regenPower));
+    currentData.insert(BURNINGCELLS, DataInfo(BURNINGCELLS, "", isBurning));
+    currentData.insert(INVERTERTEMP, DataInfo(INVERTERTEMP, "", inverterTemp));
 }

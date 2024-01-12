@@ -30,15 +30,13 @@ FaultInstance::FaultInstance(int fault_decimal, int max_cell_temp,
   }
 }
 
-DebugTableRowValue::DebugTableRowValue(int id, const QString &name,
-                                       const QString &value,
+DebugTableRowValue::DebugTableRowValue(const QString &name,
+                                       const float &value,
                                        const QString &unit)
-    : m_id(id), m_name(name), m_value(value), m_unit(unit) {}
-
-int DebugTableRowValue::id() const { return m_id; }
+    : m_name(name), m_value(value), m_unit(unit) {}
 
 QString DebugTableRowValue::name() const { return m_name; }
 
-QString DebugTableRowValue::value() const { return m_value; }
+float DebugTableRowValue::value() const { return m_value; }
 
 QString DebugTableRowValue::unit() const { return m_unit; }
