@@ -1,5 +1,6 @@
 #ifndef _WIN32
 #include "raspberry_model.h"
+#include <../utils/data_type_names.h>
 #include <QtMqtt/QMqttClient>
 #include <bitset>
 #include <cmath>
@@ -8,7 +9,6 @@
 #include <sys/types.h>
 #include <sys/un.h>
 #include <unistd.h>
-#include <../utils/data_type_names.h>
 
 RaspberryModel::RaspberryModel() {
   chdir("/home/ner/Desktop/Nero/");
@@ -61,7 +61,9 @@ std::optional<float> RaspberryModel::getStateOfCharge() {
   return currentData[STATEOFCHARGE].value;
 }
 
-std::optional<float> RaspberryModel::getCurrent() { return currentData[CURRENT].value; }
+std::optional<float> RaspberryModel::getCurrent() {
+  return currentData[CURRENT].value;
+}
 
 std::optional<float> RaspberryModel::getMaxCellVoltage() {
   std::optional<float> voltage = currentData[MAXCELLVOLTAGE].value;
@@ -135,11 +137,17 @@ std::optional<float> RaspberryModel::getCellDelta() {
                     : std::nullopt;
 }
 
-std::optional<float> RaspberryModel::getPackVoltage() { return currentData[PACKVOLTAGE].value; }
+std::optional<float> RaspberryModel::getPackVoltage() {
+  return currentData[PACKVOLTAGE].value;
+}
 
-std::optional<float> RaspberryModel::getBmsState() { return currentData[BMSSTATE].value; }
+std::optional<float> RaspberryModel::getBmsState() {
+  return currentData[BMSSTATE].value;
+}
 
-std::optional<float> RaspberryModel::getPackCurrent() { return currentData[CURRENT].value; }
+std::optional<float> RaspberryModel::getPackCurrent() {
+  return currentData[CURRENT].value;
+}
 
 std::optional<float> RaspberryModel::getDcl() { return currentData[DCL].value; }
 
@@ -153,15 +161,21 @@ std::optional<float> RaspberryModel::getInverterTemp() {
   //   float averageTemp = (*moduleATemp + *moduleBTemp + *moduleCTemp) / 3;
   //   return std::optional<float>(std::round(averageTemp));
   // }
-    //TODO: WILL CHANGE WITH NEW INVERTER
+  // TODO: WILL CHANGE WITH NEW INVERTER
   return std::nullopt;
 }
 
-std::optional<float> RaspberryModel::getGForceX() { return currentData[GFORCEX].value; }
+std::optional<float> RaspberryModel::getGForceX() {
+  return currentData[GFORCEX].value;
+}
 
-std::optional<float> RaspberryModel::getGForceY() { return currentData[GFORCEY].value; }
+std::optional<float> RaspberryModel::getGForceY() {
+  return currentData[GFORCEY].value;
+}
 
-std::optional<float> RaspberryModel::getGForceZ() { return currentData[GFORCEZ].value; }
+std::optional<float> RaspberryModel::getGForceZ() {
+  return currentData[GFORCEZ].value;
+}
 
 std::optional<float> RaspberryModel::getBalancingCells() {
   return currentData[BALANCINGCELLS].value;
@@ -187,7 +201,9 @@ std::optional<float> RaspberryModel::getMotorPower() {
   return currentData[MOTORPOWER].value;
 }
 
-std::optional<float> RaspberryModel::getFanPower() { return currentData[FANPOWER].value; }
+std::optional<float> RaspberryModel::getFanPower() {
+  return currentData[FANPOWER].value;
+}
 
 std::optional<float> RaspberryModel::getTorquePower() {
   return currentData[TORQUEPOWER].value;
@@ -198,7 +214,7 @@ std::optional<float> RaspberryModel::getRegenPower() {
 }
 
 std::optional<float> RaspberryModel::getTractionControl() {
-    return currentData[TRACTIONCONTROL].value;
+  return currentData[TRACTIONCONTROL].value;
 }
 
 std::optional<float> RaspberryModel::getBmsFault() {
@@ -216,72 +232,72 @@ std::optional<float> RaspberryModel::getBmsFault() {
 }
 
 std::optional<QString> RaspberryModel::getForwardButtonPressed() {
-    std::optional<float> value = currentData[FORWARDBUTTON].value;
-    if (value) {
-        std::string binary = std::bitset<8>(static_cast<int>(*value)).to_string();
-        return binary.length() >= 7
-                   ? std::optional<QString>(QString(1, binary[6]))
-                   : std::nullopt;
-    }
-    return std::nullopt;
+  std::optional<float> value = currentData[FORWARDBUTTON].value;
+  if (value) {
+    std::string binary = std::bitset<8>(static_cast<int>(*value)).to_string();
+    return binary.length() >= 7 ? std::optional<QString>(QString(1, binary[6]))
+                                : std::nullopt;
+  }
+  return std::nullopt;
 }
 
 std::optional<QString> RaspberryModel::getBackwardButtonPressed() {
-    std::optional<float> value = currentData[BACKWARDBUTTON].value;
-    if (value) {
-        std::string binary = std::bitset<8>(static_cast<int>(*value)).to_string();
-        return binary.length() >= 8
-                   ? std::optional<QString>(QString(1, binary[7]))
-                   : std::nullopt;
-    }
-    return std::nullopt;
+  std::optional<float> value = currentData[BACKWARDBUTTON].value;
+  if (value) {
+    std::string binary = std::bitset<8>(static_cast<int>(*value)).to_string();
+    return binary.length() >= 8 ? std::optional<QString>(QString(1, binary[7]))
+                                : std::nullopt;
+  }
+  return std::nullopt;
 }
 
 std::optional<QString> RaspberryModel::getRightButtonPressed() {
-    std::optional<float> value = currentData[RIGHTBUTTON].value;
-    if (value) {
-        std::string binary = std::bitset<8>(static_cast<int>(*value)).to_string();
-        return binary.length() >= 2
-                   ? std::optional<QString>(QString(1, binary[1]))
-                   : std::nullopt;
-    }
-    return std::nullopt;
+  std::optional<float> value = currentData[RIGHTBUTTON].value;
+  if (value) {
+    std::string binary = std::bitset<8>(static_cast<int>(*value)).to_string();
+    return binary.length() >= 2 ? std::optional<QString>(QString(1, binary[1]))
+                                : std::nullopt;
+  }
+  return std::nullopt;
 }
 
 std::optional<QString> RaspberryModel::getEnterButtonPressed() {
-    std::optional<float> value = currentData[ENTERBUTTON].value;
-    if (value) {
-        std::string binary = std::bitset<8>(static_cast<int>(*value)).to_string();
-        return std::optional<QString>(QString(1, binary[0]));
-    }
-    return std::nullopt;
+  std::optional<float> value = currentData[ENTERBUTTON].value;
+  if (value) {
+    std::string binary = std::bitset<8>(static_cast<int>(*value)).to_string();
+    return std::optional<QString>(QString(1, binary[0]));
+  }
+  return std::nullopt;
 }
 
 std::optional<QString> RaspberryModel::getUpButtonPressed() {
-    std::optional<float> value = currentData[UPBUTTON].value;
-    if (value) {
-        std::string binary = std::bitset<8>(static_cast<int>(*value)).to_string();
-        return binary.length() >= 6
-                   ? std::optional<QString>(QString(1, binary[5]))
-                   : std::nullopt;
-    }
-    return std::nullopt;
+  std::optional<float> value = currentData[UPBUTTON].value;
+  if (value) {
+    std::string binary = std::bitset<8>(static_cast<int>(*value)).to_string();
+    return binary.length() >= 6 ? std::optional<QString>(QString(1, binary[5]))
+                                : std::nullopt;
+  }
+  return std::nullopt;
 }
 
 std::optional<QString> RaspberryModel::getDownButtonPressed() {
-    std::optional<float> value = currentData[DOWNBUTTON].value;
-    if (value) {
-        std::string binary = std::bitset<8>(static_cast<int>(*value)).to_string();
-        return binary.length() >= 5
-                   ? std::optional<QString>(QString(1, binary[4]))
-                   : std::nullopt;
-    }
-    return std::nullopt;
+  std::optional<float> value = currentData[DOWNBUTTON].value;
+  if (value) {
+    std::string binary = std::bitset<8>(static_cast<int>(*value)).to_string();
+    return binary.length() >= 5 ? std::optional<QString>(QString(1, binary[4]))
+                                : std::nullopt;
+  }
+  return std::nullopt;
 }
 
-std::optional<float> RaspberryModel::getModeIndex() { return currentData[MODEINDEX].value; }
+std::optional<float> RaspberryModel::getModeIndex() {
+  return currentData[MODEINDEX].value;
+}
 
 std::optional<float> RaspberryModel::getBurningCells() {
   return std::nullopt; // TODO: Implement Burning Cells
 }
+
+void RaspberryModel::updateCurrentData() { emit this->onCurrentDataChange(); }
+
 #endif

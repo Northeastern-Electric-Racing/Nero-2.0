@@ -9,6 +9,8 @@
  * The Production Model that is used when running on the car
  */
 class RaspberryModel : public Model {
+  Q_OBJECT
+  Q_INTERFACES(Model)
 
 public:
   RaspberryModel();
@@ -68,6 +70,9 @@ public:
   std::optional<float> getSegment2Temp() override;
   std::optional<float> getSegment3Temp() override;
   std::optional<float> getSegment4Temp() override;
+
+private slots:
+  void updateCurrentData() override;
 
 private:
   void processData(const std::string &data);

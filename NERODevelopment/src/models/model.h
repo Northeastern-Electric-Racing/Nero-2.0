@@ -2,11 +2,11 @@
 #define MODEL_H
 
 #include "../modes/debug_mode/debug_utils.h"
+#include <../utils/server_data.h>
 #include <QList>
 #include <QMap>
 #include <QObject>
 #include <QVariant>
-#include <../utils/server_data.h>
 
 /**
  * @brief The Model class
@@ -73,7 +73,6 @@ public:
   virtual std::optional<float> getSegment2Temp() = 0;
   virtual std::optional<float> getSegment3Temp() = 0;
   virtual std::optional<float> getSegment4Temp() = 0;
-
   QList<DebugTableRowValue> getDebugTableValues();
   void updatePackTempData();
   void addPinnedData(QString id);
@@ -87,6 +86,12 @@ public:
   int pageWidth;
   float prevSoc;
 
+signals:
+  void onCurrentDataChange();
+
+private slots:
+  virtual void updateCurrentData() = 0;
+
 protected:
   QMap<QString, DataInfo> currentData;
   QMap<QString, DebugPlotValue> pinnedData;
@@ -95,5 +100,8 @@ protected:
   QList<float> averageCellTemps;
   QList<float> stateOfChargeDeltas;
 };
+
+#define ModelInterfaceId "com.ner.model"
+Q_DECLARE_INTERFACE(Model, ModelInterfaceId);
 
 #endif // MODEL_H

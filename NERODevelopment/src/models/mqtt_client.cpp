@@ -74,6 +74,7 @@ void MqttClient::receiveMessage(const QByteArray &message,
 
     DataInfo dataInfo(topic.name(), serverData.unit, serverData.value);
 
+
 }
 
 void MqttClient::updateMessage(const QMqttMessage &msg) {

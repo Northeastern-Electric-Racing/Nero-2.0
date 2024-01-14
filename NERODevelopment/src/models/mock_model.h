@@ -1,6 +1,7 @@
 #ifndef MOCK_MODEL_H
 #define MOCK_MODEL_H
 
+#include "QTimer"
 #include "model.h"
 
 /**
@@ -8,6 +9,9 @@
  * Mocks the data for development when not connected to Calypso
  */
 class MockModel : public Model {
+  Q_OBJECT
+  Q_INTERFACES(Model)
+
 public:
   MockModel();
 
@@ -65,7 +69,11 @@ public:
   std::optional<float> getTractionControl() override;
   std::optional<float> getCellDelta() override;
 
+private slots:
+  void updateCurrentData() override;
+
 private:
+  QTimer *updateTimer;
   int mph;
   bool status;
   bool dir;
@@ -118,8 +126,6 @@ private:
   int up;
   int down;
   int right;
-
-  void updateData();
 };
 
 #endif // MOCK_MODEL_H

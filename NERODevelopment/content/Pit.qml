@@ -1,21 +1,17 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import HomeController 1.0
+import NERO
 
 Item {
     id: pit
 
-    HomeController {
-        id: controller
-    }
-
     width: 800
     height: 480
-    property int stateOfChargePercentage: controller.stateOfCharge()
-    property int packTempValue: controller.packTemp()
-    property int motorTempValue: controller.motorTemp()
-    property int currentSpeed: controller.speed()
-    property bool forward: controller.status()
+    property int stateOfChargePercentage: homeController.stateOfCharge
+    property int packTempValue: homeController.packTemp
+    property int motorTempValue: homeController.motorTemp
+    property int currentSpeed: homeController.speed
+    property bool forward: homeController.status
 
     property int maxSpeed: 5
     property int horizontalMargin: 10

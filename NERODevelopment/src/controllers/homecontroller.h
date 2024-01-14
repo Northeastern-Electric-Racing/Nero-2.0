@@ -1,6 +1,7 @@
 #ifndef HOMECONTROLLER_H
 #define HOMECONTROLLER_H
 
+#include <../models/mock_model.h>
 #include <QObject>
 
 /**
@@ -21,7 +22,7 @@ class HomeController : public QObject {
                  NOTIFY stateOfChargeChanged FINAL)
 
 public:
-  explicit HomeController(QObject *parent = nullptr);
+  explicit HomeController(Model *model, QObject *parent = nullptr);
   int speed() const;
   bool status() const;
   bool direction() const;
@@ -44,8 +45,10 @@ public slots:
   void setPackTemp(float);
   void setMotorTemp(float);
   void setStateOfCharge(float);
+  void currentDataDidChange();
 
 private:
+  Model *m_model;
   int m_speed;
   bool m_status;
   bool m_direction;

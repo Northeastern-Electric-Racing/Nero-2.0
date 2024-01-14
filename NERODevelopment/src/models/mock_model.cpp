@@ -1,6 +1,8 @@
 #include "mock_model.h"
-#include <math.h>
 #include <../utils/data_type_names.h>
+#include <QThread>
+#include <math.h>
+
 MockModel::MockModel()
     : mph(60), status(true), dir(true), packTemp(30), motorTemp(40),
       stateOfCharge(55), lvBattery(88), current(7.6), isBurning(0), isDebug(0),
@@ -11,12 +13,14 @@ MockModel::MockModel()
       minCellVoltageCellNumber(3), minCellTemp(25), minCellTempChipNumber(3),
       minCellTempCellNumber(4), averageCellVoltage(3.3), averageCellTemp(27),
       packVoltage(3.4), bmsState(0), packCurrent(4), dcl(280), ccl(300),
-      gforceX(0.5), gforceY(-1), gforceZ(0.5),
-      segment1Temp(30), segment2Temp(50), segment3Temp(35), segment4Temp(15),
-      motorPower(100), fanPower(100), torquePower(100), regenPower(1),
-      modeIndex(0), stateOfChargeDelta(-1), inverterTemp(30), forward(0),
-      backward(0), enter(0), up(0), down(0), right(0) {
-  updateData();
+      gforceX(0.5), gforceY(-1), gforceZ(0.5), segment1Temp(30),
+      segment2Temp(50), segment3Temp(35), segment4Temp(15), motorPower(100),
+      fanPower(100), torquePower(100), regenPower(1), modeIndex(0),
+      stateOfChargeDelta(-1), inverterTemp(30), forward(0), backward(0),
+      enter(0), up(0), down(0), right(0) {
+  this->updateTimer = new QTimer(this);
+  connect(updateTimer, &QTimer::timeout, this, &MockModel::connectToMQTT);
+  this->updateTimer->start(10);
 }
 
 void MockModel::connectToMQTT() {
@@ -196,7 +200,7 @@ void MockModel::connectToMQTT() {
   if (rng > 600 && rng < 605)
     inverterTemp -= 1;
 
-
+  this->updateCurrentData();
 }
 
 std::optional<float> MockModel::getMph() { return mph; }
@@ -297,7 +301,6 @@ std::optional<float> MockModel::getGForceZ() {
   return round(gforceZ * 10) / 10;
 }
 
-
 std::optional<float> MockModel::getSegment1Temp() { return segment1Temp; }
 
 std::optional<float> MockModel::getSegment2Temp() { return segment2Temp; }
@@ -331,71 +334,85 @@ std::optional<float> MockModel::getBalancingCells() {
 }
 
 std::optional<QString> MockModel::getForwardButtonPressed() {
-    return QString(QChar(forward));
+  return QString(QChar(forward));
 }
 
 std::optional<QString> MockModel::getEnterButtonPressed() {
-    return QString(QChar(enter));
+  return QString(QChar(enter));
 }
 
 std::optional<QString> MockModel::getUpButtonPressed() {
-    return QString(QChar(up));
+  return QString(QChar(up));
 }
 
 std::optional<QString> MockModel::getDownButtonPressed() {
-    return QString(QChar(down));
+  return QString(QChar(down));
 }
 
 std::optional<QString> MockModel::getBackwardButtonPressed() {
-    return QString(QChar(backward));
+  return QString(QChar(backward));
 }
 
 std::optional<QString> MockModel::getRightButtonPressed() {
-    return QString(QChar(right));
+  return QString(QChar(right));
 }
 
-void MockModel::updateData() {
-    currentData.insert(MPH, DataInfo(MPH, "mph", mph));
-    currentData.insert(STATUS, DataInfo(STATUS, "", status));
-    currentData.insert(DIRECTION, DataInfo(DIRECTION, "", dir));
-    currentData.insert(PACKTEMP, DataInfo(PACKTEMP, "C", packTemp));
-    currentData.insert(MOTORTEMP, DataInfo(MOTORTEMP, "", motorTemp));
-    currentData.insert(STATEOFCHARGE, DataInfo(STATEOFCHARGE, "%", stateOfCharge));
-    currentData.insert(CURRENT, DataInfo(CURRENT, "A", current));
-    currentData.insert(BMSFAULT, DataInfo(BMSFAULT, "", bmsFaults));
+void MockModel::updateCurrentData() {
+  currentData.insert(MPH, DataInfo(MPH, "mph", mph));
+  currentData.insert(STATUS, DataInfo(STATUS, "", status));
+  currentData.insert(DIRECTION, DataInfo(DIRECTION, "", dir));
+  currentData.insert(PACKTEMP, DataInfo(PACKTEMP, "C", packTemp));
+  currentData.insert(MOTORTEMP, DataInfo(MOTORTEMP, "", motorTemp));
+  currentData.insert(STATEOFCHARGE,
+                     DataInfo(STATEOFCHARGE, "%", stateOfCharge));
+  currentData.insert(CURRENT, DataInfo(CURRENT, "A", current));
+  currentData.insert(BMSFAULT, DataInfo(BMSFAULT, "", bmsFaults));
 
-    currentData.insert(MPUFAULT, DataInfo(MPUFAULT, "", mpuFaults));
-    currentData.insert(MODEINDEX, DataInfo(MODEINDEX, "", modeIndex));
-    currentData.insert(MAXCELLVOLTAGE, DataInfo(MAXCELLVOLTAGE, "", maxCellVoltage));
-    currentData.insert(MAXCELLVOLTAGECHIP, DataInfo(MAXCELLVOLTAGECHIP, "", maxCellVoltageChipNumber));
-    currentData.insert(MAXCELLVOLTAGECELL, DataInfo(MAXCELLVOLTAGECELL, "", maxCellVoltageCellNumber));
-    currentData.insert(MAXCELLTEMP, DataInfo(MAXCELLTEMP, "", maxCellTemp));
-    currentData.insert(MAXCELLTEMPCHIP, DataInfo(MAXCELLTEMPCHIP, "", maxCellTempChipNumber));
-    currentData.insert(MAXCELLTEMPCELL, DataInfo(MAXCELLTEMPCELL, "", maxCellTempCellNumber));
-    currentData.insert(MINCELLVOLTAGE, DataInfo(MINCELLVOLTAGE, "", minCellVoltage));
-    currentData.insert(MINCELLVOLTAGECHIP, DataInfo(MINCELLVOLTAGECHIP, "", minCellVoltageChipNumber));
-    currentData.insert(MINCELLVOLTAGECELL, DataInfo(MINCELLVOLTAGECELL, "", minCellVoltageCellNumber));
-    currentData.insert(MINCELLTEMP, DataInfo(MINCELLTEMP, "", minCellTemp));
-    currentData.insert(MINCELLTEMPCHIP, DataInfo(MINCELLTEMPCHIP, "", minCellTempChipNumber));
-    currentData.insert(MINCELLTEMPCELL, DataInfo(MINCELLTEMPCELL, "", minCellTempCellNumber));
-    currentData.insert(AVECELLVOLTAGE, DataInfo(AVECELLVOLTAGE, "", averageCellVoltage));
-    currentData.insert(AVECELLTEMP, DataInfo(AVECELLTEMP, "", averageCellTemp));
-    currentData.insert(PACKVOLTAGE, DataInfo(PACKVOLTAGE, "", packVoltage));
-    currentData.insert(BMSSTATE, DataInfo(BMSSTATE, "", bmsState));
-    currentData.insert(CURRENT, DataInfo(CURRENT, "", packCurrent));
-    currentData.insert(DCL, DataInfo(DCL, "", dcl));
-    currentData.insert(CCL, DataInfo(CCL, "", ccl));
-    currentData.insert(GFORCEX, DataInfo(GFORCEX, "", gforceX));
-    currentData.insert(GFORCEY, DataInfo(GFORCEY, "", gforceY));
-    currentData.insert(GFORCEZ, DataInfo(GFORCEZ, "", gforceZ));
-    currentData.insert(SEGMENTTEMP1, DataInfo(SEGMENTTEMP1, "", segment1Temp));
-    currentData.insert(SEGMENTTEMP2, DataInfo(SEGMENTTEMP2, "", segment2Temp));
-    currentData.insert(SEGMENTTEMP3, DataInfo(SEGMENTTEMP4, "", segment3Temp));
-    currentData.insert(SEGMENTTEMP4, DataInfo(SEGMENTTEMP4, "", segment4Temp));
-    currentData.insert(MOTORPOWER, DataInfo(MOTORPOWER, "", motorPower));
-    currentData.insert(FANPOWER, DataInfo(FANPOWER, "", fanPower));
-    currentData.insert(TORQUEPOWER, DataInfo(TORQUEPOWER, "", torquePower));
-    currentData.insert(REGENPOWER, DataInfo(REGENPOWER, "", regenPower));
-    currentData.insert(BURNINGCELLS, DataInfo(BURNINGCELLS, "", isBurning));
-    currentData.insert(INVERTERTEMP, DataInfo(INVERTERTEMP, "", inverterTemp));
+  currentData.insert(MPUFAULT, DataInfo(MPUFAULT, "", mpuFaults));
+  currentData.insert(MODEINDEX, DataInfo(MODEINDEX, "", modeIndex));
+  currentData.insert(MAXCELLVOLTAGE,
+                     DataInfo(MAXCELLVOLTAGE, "", maxCellVoltage));
+  currentData.insert(MAXCELLVOLTAGECHIP, DataInfo(MAXCELLVOLTAGECHIP, "",
+                                                  maxCellVoltageChipNumber));
+  currentData.insert(MAXCELLVOLTAGECELL, DataInfo(MAXCELLVOLTAGECELL, "",
+                                                  maxCellVoltageCellNumber));
+  currentData.insert(MAXCELLTEMP, DataInfo(MAXCELLTEMP, "", maxCellTemp));
+  currentData.insert(MAXCELLTEMPCHIP,
+                     DataInfo(MAXCELLTEMPCHIP, "", maxCellTempChipNumber));
+  currentData.insert(MAXCELLTEMPCELL,
+                     DataInfo(MAXCELLTEMPCELL, "", maxCellTempCellNumber));
+  currentData.insert(MINCELLVOLTAGE,
+                     DataInfo(MINCELLVOLTAGE, "", minCellVoltage));
+  currentData.insert(MINCELLVOLTAGECHIP, DataInfo(MINCELLVOLTAGECHIP, "",
+                                                  minCellVoltageChipNumber));
+  currentData.insert(MINCELLVOLTAGECELL, DataInfo(MINCELLVOLTAGECELL, "",
+                                                  minCellVoltageCellNumber));
+  currentData.insert(MINCELLTEMP, DataInfo(MINCELLTEMP, "", minCellTemp));
+  currentData.insert(MINCELLTEMPCHIP,
+                     DataInfo(MINCELLTEMPCHIP, "", minCellTempChipNumber));
+  currentData.insert(MINCELLTEMPCELL,
+                     DataInfo(MINCELLTEMPCELL, "", minCellTempCellNumber));
+  currentData.insert(AVECELLVOLTAGE,
+                     DataInfo(AVECELLVOLTAGE, "", averageCellVoltage));
+  currentData.insert(AVECELLTEMP, DataInfo(AVECELLTEMP, "", averageCellTemp));
+  currentData.insert(PACKVOLTAGE, DataInfo(PACKVOLTAGE, "", packVoltage));
+  currentData.insert(BMSSTATE, DataInfo(BMSSTATE, "", bmsState));
+  currentData.insert(CURRENT, DataInfo(CURRENT, "", packCurrent));
+  currentData.insert(DCL, DataInfo(DCL, "", dcl));
+  currentData.insert(CCL, DataInfo(CCL, "", ccl));
+  currentData.insert(GFORCEX, DataInfo(GFORCEX, "", gforceX));
+  currentData.insert(GFORCEY, DataInfo(GFORCEY, "", gforceY));
+  currentData.insert(GFORCEZ, DataInfo(GFORCEZ, "", gforceZ));
+  currentData.insert(SEGMENTTEMP1, DataInfo(SEGMENTTEMP1, "", segment1Temp));
+  currentData.insert(SEGMENTTEMP2, DataInfo(SEGMENTTEMP2, "", segment2Temp));
+  currentData.insert(SEGMENTTEMP3, DataInfo(SEGMENTTEMP4, "", segment3Temp));
+  currentData.insert(SEGMENTTEMP4, DataInfo(SEGMENTTEMP4, "", segment4Temp));
+  currentData.insert(MOTORPOWER, DataInfo(MOTORPOWER, "", motorPower));
+  currentData.insert(FANPOWER, DataInfo(FANPOWER, "", fanPower));
+  currentData.insert(TORQUEPOWER, DataInfo(TORQUEPOWER, "", torquePower));
+  currentData.insert(REGENPOWER, DataInfo(REGENPOWER, "", regenPower));
+  currentData.insert(BURNINGCELLS, DataInfo(BURNINGCELLS, "", isBurning));
+  currentData.insert(INVERTERTEMP, DataInfo(INVERTERTEMP, "", inverterTemp));
+
+  emit onCurrentDataChange();
 }
