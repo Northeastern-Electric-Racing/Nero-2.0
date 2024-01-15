@@ -1,11 +1,11 @@
 
 #include "mqtt_client.h"
 
+#include "../utils/server_data.h"
+#include <QJsonDocument>
 #include <QtCore/QDateTime>
 #include <QtMqtt/QMqttClient>
 #include <QtWidgets/QMessageBox>
-#include <../utils/server_data.h>
-#include <QJsonDocument>
 
 MqttClient::MqttClient(QObject *parent) : QObject(parent) {
   m_client = new QMqttClient();
@@ -63,24 +63,22 @@ void MqttClient::brokerConnected() {
 
 void MqttClient::receiveMessage(const QByteArray &message,
                                 const QMqttTopicName &topic) {
-    QJsonDocument jsonDocument = QJsonDocument::fromJson(message);
+  QJsonDocument jsonDocument = QJsonDocument::fromJson(message);
 
-    if (jsonDocument.isNull() || !jsonDocument.isObject()) {
-      qDebug() << "Error: Unable to parse JSON data.";
-        return;
-    }
+  if (jsonDocument.isNull() || !jsonDocument.isObject()) {
+    qDebug() << "Error: Unable to parse JSON data.";
+    return;
+  }
 
-    ServerData serverData(jsonDocument.object());
+  ServerData serverData(jsonDocument.object());
 
-    DataInfo dataInfo(topic.name(), serverData.unit, serverData.value);
-
-
+  DataInfo dataInfo(topic.name(), serverData.unit, serverData.value);
 }
 
 void MqttClient::updateMessage(const QMqttMessage &msg) {
-    const QString debug = QDateTime::currentDateTime().toString() +
-                            QLatin1String(" Received Topic: ") + msg.topic().name() +
-                            QLatin1String(" Message: ") + msg.payload() +
-                            QLatin1Char('\n');
-    qDebug() << debug;
+  const QString debug = QDateTime::currentDateTime().toString() +
+                        QLatin1String(" Received Topic: ") +
+                        msg.topic().name() + QLatin1String(" Message: ") +
+                        msg.payload() + QLatin1Char('\n');
+  qDebug() << debug;
 }

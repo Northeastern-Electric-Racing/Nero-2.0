@@ -2,7 +2,7 @@
 #define MODEL_H
 
 #include "../modes/debug_mode/debug_utils.h"
-#include <../utils/server_data.h>
+#include "../utils/server_data.h"
 #include <QList>
 #include <QMap>
 #include <QObject>

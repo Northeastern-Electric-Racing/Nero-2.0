@@ -1,7 +1,7 @@
 #ifndef HOMECONTROLLER_H
 #define HOMECONTROLLER_H
 
-#include <../models/mock_model.h>
+#include "../models/model.h"
 #include <QObject>
 
 /**

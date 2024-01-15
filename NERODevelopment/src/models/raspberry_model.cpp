@@ -1,10 +1,10 @@
 #ifndef _WIN32
 #include "raspberry_model.h"
-#include <../utils/data_type_names.h>
+#include "../utils/data_type_names.h"
+#include "mqtt_client.h"
 #include <QtMqtt/QMqttClient>
 #include <bitset>
 #include <cmath>
-#include <mqtt_client.h>
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <sys/un.h>

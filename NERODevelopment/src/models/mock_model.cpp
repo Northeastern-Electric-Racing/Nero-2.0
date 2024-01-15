@@ -1,5 +1,5 @@
 #include "mock_model.h"
-#include <../utils/data_type_names.h>
+#include "../utils/data_type_names.h"
 #include <QThread>
 #include <math.h>
 

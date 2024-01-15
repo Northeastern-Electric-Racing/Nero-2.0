@@ -57,7 +57,7 @@ qt_add_resources(NEROApp "configuration"
 )
 
 target_include_directories(${PROJECT_NAME} PUBLIC include)
-include_directories("src/models")
+include_directories("src/**")
 
 
 target_link_libraries(NEROApp PRIVATE
