@@ -5,8 +5,8 @@ import NERO
 Item {
     id: pit
 
-    width: 800
-    height: 480
+    width: parent.width
+    height: parent.height
     property int stateOfChargePercentage: homeController.stateOfCharge
     property int packTempValue: homeController.packTemp
     property int motorTempValue: homeController.motorTemp

@@ -4,7 +4,7 @@
 #include <math.h>
 
 MockModel::MockModel()
-    : mph(60), status(true), dir(true), packTemp(30), motorTemp(40),
+    : mph(3), status(true), dir(true), packTemp(30), motorTemp(40),
       stateOfCharge(55), lvBattery(88), current(7.6), isBurning(0), isDebug(0),
       bmsFaults(0), mpuFaults(0), maxCellVoltage(3.5),
       maxCellVoltageChipNumber(1), maxCellVoltageCellNumber(10),
