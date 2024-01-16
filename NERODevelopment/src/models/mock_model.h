@@ -1,13 +1,21 @@
 #ifndef MOCK_MODEL_H
 #define MOCK_MODEL_H
 
+#include "QTimer"
 #include "model.h"
 
+/**
+ * @brief The MockModel class
+ * Mocks the data for development when not connected to Calypso
+ */
 class MockModel : public Model {
+  Q_OBJECT
+  Q_INTERFACES(Model)
+
 public:
   MockModel();
 
-  void checkCan() override;
+  void connectToMQTT() override;
   std::optional<float> getMph() override;
   std::optional<float> getKph() override;
   std::optional<float> getStatus() override;
@@ -15,7 +23,6 @@ public:
   std::optional<float> getPackTemp() override;
   std::optional<float> getMotorTemp() override;
   std::optional<float> getStateOfCharge() override;
-  std::optional<float> getLvBattery() override;
   std::optional<float> getCurrent() override;
   std::optional<float> getBmsFault() override;
   std::optional<float> getMpuFault() override;
@@ -42,7 +49,6 @@ public:
   std::optional<float> getGForceX() override;
   std::optional<float> getGForceY() override;
   std::optional<float> getGForceZ() override;
-  std::optional<float> getSdCardStatus() override;
   std::optional<float> getSegment1Temp() override;
   std::optional<float> getSegment2Temp() override;
   std::optional<float> getSegment3Temp() override;
@@ -53,21 +59,21 @@ public:
   std::optional<float> getRegenPower() override;
   std::optional<float> getBurningCells() override;
   std::optional<float> getInverterTemp() override;
-  std::optional<float> getPrecharge() override;
-  std::optional<std::string> getForwardButtonPressed() override;
-  std::optional<std::string> getEnterButtonPressed() override;
-  std::optional<std::string> getUpButtonPressed() override;
-  std::optional<std::string> getDownButtonPressed() override;
-  std::optional<std::string> getBackwardButtonPressed() override;
-  std::optional<std::string> getRightButtonPressed() override;
-  std::optional<std::string> getDebugPressed() override;
-  std::optional<float> getVbat() override;
-  std::optional<float> getBmsPrefault() override;
+  std::optional<QString> getForwardButtonPressed() override;
+  std::optional<QString> getEnterButtonPressed() override;
+  std::optional<QString> getUpButtonPressed() override;
+  std::optional<QString> getDownButtonPressed() override;
+  std::optional<QString> getBackwardButtonPressed() override;
+  std::optional<QString> getRightButtonPressed() override;
   std::optional<float> getBalancingCells() override;
   std::optional<float> getTractionControl() override;
   std::optional<float> getCellDelta() override;
 
+private slots:
+  void updateCurrentData() override;
+
 private:
+  QTimer *updateTimer;
   int mph;
   bool status;
   bool dir;
@@ -120,8 +126,6 @@ private:
   int up;
   int down;
   int right;
-
-  void updateData();
 };
 
 #endif // MOCK_MODEL_H
