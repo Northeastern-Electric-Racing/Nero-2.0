@@ -4,19 +4,30 @@
 #include "app_environment.h"
 #include "import_qml_components_plugins.h"
 #include "import_qml_plugins.h"
+#include "src/models/mock_model.h"
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
+#include <QQmlContext>
+#include <QThread>
 
 #include "controllers/homecontroller.h"
 
 int main(int argc, char *argv[]) {
   set_qt_environment();
 
-  qmlRegisterType<HomeController>("HomeController", 1, 0, "HomeController");
-
   QGuiApplication app(argc, argv);
 
   QQmlApplicationEngine engine;
+
+  MockModel *model = new MockModel;
+  QThread *dataThread = new QThread;
+
+  model->moveToThread(dataThread);
+
+  HomeController homeController(model);
+
+  dataThread->start();
+
   const QUrl url(u"qrc:Main/main.qml"_qs);
   QObject::connect(
       &engine, &QQmlApplicationEngine::objectCreated, &app,
@@ -25,6 +36,11 @@ int main(int argc, char *argv[]) {
           QCoreApplication::exit(-1);
       },
       Qt::QueuedConnection);
+
+  engine.rootContext()->setContextProperty("model", model);
+  engine.rootContext()->setContextProperty("homeController", &homeController);
+
+  engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
 
   engine.addImportPath(QCoreApplication::applicationDirPath() + "/qml");
   engine.addImportPath(":/");
