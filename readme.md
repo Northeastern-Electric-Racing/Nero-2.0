@@ -23,7 +23,7 @@ Select Next Until You start downloading Qt (Should be around 30 GB)
 
 3 Exit QtCreator
 
-4 Go to C:\Qt\Src\6.5.3\build-qtmqtt-Desktop_Qt_6_5_3_MinGW_64_bit-Release
+4 Go to C:\Qt\6.5.3\Src\build-qtmqtt-Desktop_Qt_6_5_3_MinGW_64_bit-Release
 
 5 cmake --install . (see the point at the end)
 
