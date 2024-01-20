@@ -18,10 +18,15 @@ Select Next Until You start downloading Qt (Should be around 30 GB)
 
 ### Compiling QtMqtt for your Qt version
 1 load QtCreator -> Load Project c:\Qt\6.5.3\Src\QtMqtt\CMakeList.txt
+
 2 Build Release and Debug
+
 3 Exit QtCreator
+
 4 Go to C:\Qt\Src\6.5.3\build-qtmqtt-Desktop_Qt_6_5_3_MinGW_64_bit-Release
+
 5 cmake --install . (see the point at the end)
+
 Done
 
 #### Opening the Project
