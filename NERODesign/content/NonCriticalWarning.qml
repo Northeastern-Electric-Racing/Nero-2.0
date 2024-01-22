@@ -4,7 +4,7 @@ import QtQuick.Controls 2.15
 Item {
     property int dimension: 200
     property int numWarnings: 1
-    property boolean hide: true
+    property bool hide: false
 
 
     width: 300
