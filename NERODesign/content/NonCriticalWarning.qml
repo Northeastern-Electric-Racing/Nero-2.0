@@ -28,8 +28,6 @@ Item {
             font.pixelSize: 0.625 * parent.width
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
-            anchors.verticalCenterOffset: -4
-            anchors.horizontalCenterOffset: 0
             font.weight: Font.DemiBold
             anchors.centerIn: parent
         }
@@ -47,8 +45,6 @@ Item {
                 id: number
                 text: numWarnings
                 font.pixelSize: 0.75 * parent.width
-                anchors.verticalCenterOffset: -4
-                anchors.horizontalCenterOffset: 0
                 font.weight: Font.Bold
                 font.bold: false
                 anchors.centerIn: parent
