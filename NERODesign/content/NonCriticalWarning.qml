@@ -7,8 +7,8 @@ Item {
     property bool hide: false
 
 
-    width: 300
-    height: 300
+    width: dimension * 1.5
+    height: dimension * 1.5
 
     visible: !hide
 
@@ -23,10 +23,6 @@ Item {
 
         Text {
             id: exclamation
-            x: 943
-            y: 358
-            width: 190
-            height: 152
             color: "#ffffff"
             text: qsTr("!")
             font.pixelSize: 0.625 * parent.width
@@ -49,8 +45,6 @@ Item {
 
             Text {
                 id: number
-                x: 32
-                y: 42
                 text: numWarnings
                 font.pixelSize: 0.75 * parent.width
                 anchors.verticalCenterOffset: -4
