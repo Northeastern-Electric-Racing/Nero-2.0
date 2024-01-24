@@ -42,6 +42,11 @@ Select the kit for your respective desktop and press build and run
 
 We use clang-format for formatting our files
 
+Ensure that the Beautifier plugin is installed in your Qt Creator. You can check and install plugins by going to “Help” > “About Plugins” and then enabling the “Beautifier” plugin.
+
+Note: Enable the Beautifier plugin to use it. Since Qt Creator 10.0.0, the ClangFormat plugin is enabled by default. Select Preferences > C++ > Formatting mode > Disable to turn off ClangFormat if you enable Beautifier because combining them can lead to unexpected results.
+
+
 #### Mac
 
 brew install clang-format
