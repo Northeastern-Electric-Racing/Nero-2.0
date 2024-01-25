@@ -1,8 +1,8 @@
 #ifndef CHARGINGCONTROLLER_H
 #define CHARGINGCONTROLLER_H
 
-#include <QObject>
 
+#include <QObject>
 /**
  * @brief The ChargingController class
  * Controller for the Charging Screen.
