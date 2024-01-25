@@ -6,10 +6,12 @@ Item {
     id: detailDisplay
     width: 200
     height: 50
-    property string shutdownFlowTask: "Task"
-    property string status: "null"
-    property bool ok: false
-    property bool clear: true
+    property string shutdownFlowTask: "Task" //controller.task
+    property string status: "null" //controller.status
+    property bool ok: false //controller.ok
+    property bool clear: false //controller.clear
+    property bool taskHovered: false
+    property bool highlighted: false
 
     RowLayout {
         id: rowLayout
@@ -17,9 +19,31 @@ Item {
 
         Rectangle {
             id: task
-            color: "transparent" // Set the background color to transparent
-            Layout.preferredWidth: parent.width/2
+            color: {
+                if (taskHovered && highlighted) return "darkgrey";
+                else if (taskHovered) return "lightgrey";
+                else if (highlighted) return "lightgrey";
+                else return "transparent";
+            }
+            Layout.preferredWidth: parent.width / 2
             Layout.fillHeight: true
+            radius: 10
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {
+                    displayOffScreenDescriptionModal();
+                }
+
+                onEntered: {
+                    taskHovered = true;
+                }
+
+                onExited: {
+                    taskHovered = false;
+                }
+            }
+
             LabelText {
                 text: shutdownFlowTask
                 anchors.centerIn: parent
@@ -28,10 +52,8 @@ Item {
 
         Rectangle {
             id: flag
-            width: 75
-            height: 40
             color: clear ? "transparent" : (ok === true ? "green" : (ok === false ? "red" : "transparent"))
-            Layout.preferredWidth: parent.width/2
+            Layout.preferredWidth: parent.width / 2 - 10
             Layout.fillHeight: true
             radius: 10
             border.color: "#ffffff"
@@ -42,4 +64,6 @@ Item {
             }
         }
     }
+
+
 }
