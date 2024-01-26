@@ -33,7 +33,9 @@ set(PROJECT_SOURCES
     src/modes/debug_mode/debug_utils.cpp
     src/views/thermometercomponent.cpp)
 
-qt_add_executable(NEROApp ${PROJECT_SOURCES})
+qt_add_executable(NEROApp ${PROJECT_SOURCES}
+
+)
 
 qt_add_resources(NEROApp "configuration"
     PREFIX "/"
