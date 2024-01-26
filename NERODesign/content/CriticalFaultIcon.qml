@@ -4,15 +4,15 @@ import QtQuick.Shapes 1.15
 Item {
     id: critical
     property int dimension: 200
-    property int numWarnings: 3
+    property int numWarnings: 1
 
     width: dimension * 1.2
     height: dimension * 1.2
 
     Shape {
         id: shape
-        width: parent.width
-        height: parent.height
+        width: critical.width
+        height: critical.height
         anchors.centerIn: parent
 
         ShapePath {
@@ -24,30 +24,30 @@ Item {
             strokeWidth: 1
             capStyle: ShapePath.RoundCap
 
-            startX: 200/2
+            startX: (shape.width)/2
             startY: 0
 
-            PathLine { x: 0; y: 200 }
-            PathLine { x: 200; y: 200 }
-            PathLine { x: 200/2; y: 0 }
+            PathLine { x: 0; y: (shape.height) }
+            PathLine { x: (shape.width); y: (shape.height) }
+            PathLine { x: (shape.width)/2; y: 0 }
 
         }
 
         Text {
             id: text1
-            x: 200/2 -20
+            x: (shape.width)/2 -20
             y: 25
             color: "white"
             text: qsTr("!")
-            font.pixelSize: 150
+            font.pixelSize: .75 * shape.width
         }
 
         Rectangle {
             id: faultCircle
-            x: 115
-            y: 128
-            width: 100
-            height: 100
+            x: 131
+            y: 154
+            width: (critical.dimension/2) * 1.2
+            height: (critical.dimension/2) * 1.2
             radius: 100
 
             Text {
@@ -55,7 +55,7 @@ Item {
                 anchors.centerIn: parent
                 color: "black"
                 text: numWarnings
-                font.pixelSize: 0.75 * parent.width
+                font.pixelSize: 0.75 * faultCircle.width
             }
 
         }
