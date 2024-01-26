@@ -1,69 +1,78 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.0
-
-Item {
-    id: detailDisplay
-    width: 200
-    height: 50
+RowLayout {
+    id: rowLayout
+    anchors.fill: parent
     property string shutdownFlowTask: "Task" //controller.task
     property string status: "null" //controller.status
     property bool ok: false //controller.ok
     property bool clear: false //controller.clear
-    property bool taskHovered: false
-    property bool highlighted: false
+    property bool taskHovered: true
+    property bool highlight: false //controller.highlight
+    width: 200
+    height:50
 
-    RowLayout {
-        id: rowLayout
-        anchors.fill: parent
 
-        Rectangle {
-            id: task
-            color: {
-                if (taskHovered && highlighted) return "darkgrey";
-                else if (taskHovered) return "lightgrey";
-                else if (highlighted) return "lightgrey";
-                else return "transparent";
-            }
-            Layout.preferredWidth: parent.width / 2
-            Layout.fillHeight: true
+    Button {
+        id: dashId
+        width: parent.width / 2
+        height: parent.height
+        implicitWidth: parent.width / 2
+        implicitHeight: parent.height
+        flat: true
+        text: shutdownFlowTask
+        highlighted: true
+
+        property color colorNormal:  (highlight) ? "lightgrey" : "transparent"
+        property color colorHovered: (highlight) ? "darkgrey" : "lightgrey"
+        property color colorClicked: "transparent"
+
+
+        background: Rectangle{
+            id: bgColor
             radius: 10
-
-            MouseArea {
-                anchors.fill: parent
-                onClicked: {
-                    displayOffScreenDescriptionModal();
-                }
-
-                onEntered: {
-                    taskHovered = true;
-                }
-
-                onExited: {
-                    taskHovered = false;
-                }
-            }
-
-            LabelText {
-                text: shutdownFlowTask
+            color: internal.hoverColor
+        }
+        contentItem: Item {
+            id: buttonItem
+            visible: true
+            Text {
+                id: buttonText
+                text: dashId.text
                 anchors.centerIn: parent
+                color: "white"
             }
         }
 
-        Rectangle {
-            id: flag
-            color: clear ? "transparent" : (ok === true ? "green" : (ok === false ? "red" : "transparent"))
-            Layout.preferredWidth: parent.width / 2 - 10
-            Layout.fillHeight: true
-            radius: 10
-            border.color: "#ffffff"
-            LabelText {
-                color: "#000000"
-                text: status
-                anchors.centerIn: parent
-            }
+        QtObject{
+         id: internal
+
+         property var hoverColor: if(dashId.down){
+                                      dashId.down ? colorClicked : colorNormal
+                                  }else{
+                                      dashId.hovered ? colorHovered : colorNormal
+                                  }
+
         }
     }
 
 
+    Rectangle {
+        id: flag
+        color: clear ? "transparent" : (ok === true ? "green" : (ok === false ? "red" : "transparent"))
+        Layout.preferredWidth: parent.width / 2 - 5
+        Layout.fillHeight: true
+        radius: 10
+        border.color: "white"
+        LabelText {
+            visible: !clear
+            color: "black"
+            text: status
+            anchors.centerIn: parent
+        }
+    }
 }
+
+
+
