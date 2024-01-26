@@ -1,159 +1,110 @@
 #include "chargingcontroller.h"
 
 ChargingController::ChargingController(QObject *parent)
-    : QObject{parent}
-    , m_charge(0)
-    , m_burning(false)
-    , m_maxCellVoltage(0)
-    , m_maxCellVoltageChipNumber(0)
-    , m_maxCellVoltageCellNumber(0)
-    , m_minCellVoltage(0)
-    , m_minCellVoltageChipNumber(0)
-    , m_minCellVoltageCellNumber(0)
-    , m_cellDelta(0)
-    , m_packVoltage(0)
-    , m_current(0)
-    , m_packTemp(0)
-{}
+    : QObject{parent}, m_charge(0), m_burning(false), m_maxCellVoltage(0),
+      m_maxCellVoltageChipNumber(0), m_maxCellVoltageCellNumber(0),
+      m_minCellVoltage(0), m_minCellVoltageChipNumber(0),
+      m_minCellVoltageCellNumber(0), m_cellDelta(0), m_packVoltage(0),
+      m_current(0), m_packTemp(0) {}
 
-int ChargingController::charge() const
-{
-  return m_charge;
-}
-void ChargingController::setCharge(int charge)
-{
+int ChargingController::charge() const { return m_charge; }
+void ChargingController::setCharge(int charge) {
   if (charge != m_charge) {
     m_charge = charge;
     emit chargeChanged(charge);
   }
 }
 
-bool ChargingController::burning() const
-{
-  return m_burning;
-}
-void ChargingController::setBurning(bool burning)
-{
+bool ChargingController::burning() const { return m_burning; }
+void ChargingController::setBurning(bool burning) {
   if (burning != m_burning) {
     m_burning = burning;
     emit burningChanged(burning);
   }
 }
 
-int ChargingController::maxCellVoltage() const
-{
-  return m_maxCellVoltage;
-}
-void ChargingController::setMaxCellVoltage(int volts)
-{
+int ChargingController::maxCellVoltage() const { return m_maxCellVoltage; }
+void ChargingController::setMaxCellVoltage(int volts) {
   if (volts != m_maxCellVoltage) {
     m_maxCellVoltage = volts;
     emit maxCellVoltageChanged(volts);
   }
 }
 
-int ChargingController::maxCellVoltageChipNumber() const
-{
+int ChargingController::maxCellVoltageChipNumber() const {
   return m_maxCellVoltageChipNumber;
 }
-void ChargingController::setMaxCellVoltageChipNumber(int num)
-{
+void ChargingController::setMaxCellVoltageChipNumber(int num) {
   if (num != m_maxCellVoltageChipNumber) {
     m_maxCellVoltageChipNumber = num;
     emit maxCellVoltageChipNumberChanged(num);
   }
 }
 
-int ChargingController::maxCellVoltageCellNumber() const
-{
+int ChargingController::maxCellVoltageCellNumber() const {
   return m_maxCellVoltageCellNumber;
 }
-void ChargingController::setMaxCellVoltageCellNumber(int num)
-{
+void ChargingController::setMaxCellVoltageCellNumber(int num) {
   if (num != m_maxCellVoltageCellNumber) {
     m_maxCellVoltageCellNumber = num;
     emit maxCellVoltageCellNumberChanged(num);
   }
 }
 
-int ChargingController::minCellVoltage() const
-{
-  return m_minCellVoltage;
-}
-void ChargingController::setMinCellVoltage(int volts)
-{
+int ChargingController::minCellVoltage() const { return m_minCellVoltage; }
+void ChargingController::setMinCellVoltage(int volts) {
   if (volts != m_minCellVoltage) {
     m_minCellVoltage = volts;
     emit minCellVoltageChanged(volts);
   }
 }
 
-int ChargingController::minCellVoltageChipNumber() const
-{
+int ChargingController::minCellVoltageChipNumber() const {
   return m_minCellVoltageChipNumber;
 }
-void ChargingController::setMinCellVoltageChipNumber(int num)
-{
+void ChargingController::setMinCellVoltageChipNumber(int num) {
   if (num != m_minCellVoltageChipNumber) {
     m_minCellVoltageChipNumber = num;
     emit minCellVoltageChipNumberChanged(num);
   }
 }
 
-int ChargingController::minCellVoltageCellNumber() const
-{
+int ChargingController::minCellVoltageCellNumber() const {
   return m_minCellVoltageCellNumber;
 }
-void ChargingController::setMinCellVoltageCellNumber(int num)
-{
+void ChargingController::setMinCellVoltageCellNumber(int num) {
   if (num != m_minCellVoltageCellNumber) {
     m_minCellVoltageCellNumber = num;
     emit minCellVoltageCellNumberChanged(num);
   }
 }
 
-int ChargingController::cellDelta() const
-{
-  return m_cellDelta;
-}
-void ChargingController::setCellDelta(int volts)
-{
+int ChargingController::cellDelta() const { return m_cellDelta; }
+void ChargingController::setCellDelta(int volts) {
   if (volts != m_cellDelta) {
     m_cellDelta = volts;
     emit cellDeltaChanged(volts);
   }
 }
 
-int ChargingController::packVoltage() const
-{
-  return m_packVoltage;
-}
-void ChargingController::setPackVoltage(int volts)
-{
+int ChargingController::packVoltage() const { return m_packVoltage; }
+void ChargingController::setPackVoltage(int volts) {
   if (volts != m_packVoltage) {
     m_packVoltage = volts;
     emit packVoltageChanged(volts);
   }
 }
 
-int ChargingController::current() const
-{
-  return m_current;
-}
-void ChargingController::setCurrent(int amps)
-{
+int ChargingController::current() const { return m_current; }
+void ChargingController::setCurrent(int amps) {
   if (amps != m_current) {
     m_current = amps;
     emit currentChanged(amps);
   }
 }
 
-int ChargingController::packTemp() const
-{
-  return m_packTemp;
-}
-void ChargingController::setPackTemp(int degrees)
-{
+int ChargingController::packTemp() const { return m_packTemp; }
+void ChargingController::setPackTemp(int degrees) {
   if (degrees != m_packTemp) {
     m_packTemp = degrees;
     emit packTempChanged(degrees);

@@ -4,15 +4,20 @@
 
 #include "model.h"
 
+/**
+ * @brief The RaspberryModel class
+ * The Production Model that is used when running on the car
+ */
 class RaspberryModel : public Model {
+  Q_OBJECT
+  Q_INTERFACES(Model)
 
 public:
   RaspberryModel();
   ~RaspberryModel();
 
   // Implementations of virtual functions from the Model class
-  void checkCan() override;
-  std::optional<float> getPrecharge() override;
+  void connectToMQTT() override;
   std::optional<float> getMph() override;
   std::optional<float> getKph() override;
   std::optional<float> getStatus() override;
@@ -20,7 +25,6 @@ public:
   std::optional<float> getPackTemp() override;
   std::optional<float> getMotorTemp() override;
   std::optional<float> getStateOfCharge() override;
-  std::optional<float> getLvBattery() override;
   std::optional<float> getCurrent() override;
   std::optional<float> getBalancingCells() override;
   std::optional<float> getPackVoltage() override;
@@ -52,13 +56,12 @@ public:
   std::optional<float> getDcl() override;
   std::optional<float> getCcl() override;
   std::optional<float> getPackCurrent() override;
-  std::optional<std::string> getForwardButtonPressed() override;
-  std::optional<std::string> getBackwardButtonPressed() override;
-  std::optional<std::string> getDebugPressed() override;
-  std::optional<std::string> getRightButtonPressed() override;
-  std::optional<std::string> getEnterButtonPressed() override;
-  std::optional<std::string> getUpButtonPressed() override;
-  std::optional<std::string> getDownButtonPressed() override;
+  std::optional<QString> getForwardButtonPressed() override;
+  std::optional<QString> getBackwardButtonPressed() override;
+  std::optional<QString> getRightButtonPressed() override;
+  std::optional<QString> getEnterButtonPressed() override;
+  std::optional<QString> getUpButtonPressed() override;
+  std::optional<QString> getDownButtonPressed() override;
   std::optional<float> getModeIndex() override;
   std::optional<float> getGForceX() override;
   std::optional<float> getGForceY() override;
@@ -67,12 +70,11 @@ public:
   std::optional<float> getSegment2Temp() override;
   std::optional<float> getSegment3Temp() override;
   std::optional<float> getSegment4Temp() override;
-  std::optional<float> getSdCardStatus() override;
-  std::optional<float> getVbat() override;
-  std::optional<float> getBmsPrefault() override;
+
+private slots:
+  void updateCurrentData() override;
 
 private:
-  void connectToIPC();
   void processData(const std::string &data);
 };
 #endif

@@ -11,20 +11,18 @@
  * @param value the value being displayed
  * @param unit the unit of the value being displayed
  */
-class DebugTableRowValue {
+struct DebugTableRowValue {
 public:
-  DebugTableRowValue(int id, const QString &name, const QString &value,
+  DebugTableRowValue(const QString &name, const float &value,
                      const QString &unit);
 
-  int id() const;
   QString name() const;
-  QString value() const;
+  float value() const;
   QString unit() const;
 
 private:
-  int m_id;
   QString m_name;
-  QString m_value;
+  float m_value;
   QString m_unit;
 };
 
@@ -35,7 +33,7 @@ private:
  * @param unit the unit of the value to plot
  * @param data the list of data to display
  */
-class DebugPlotValue {
+struct DebugPlotValue {
 public:
   DebugPlotValue(const QString &name, const QString &unit,
                  const QList<float> &data);
@@ -58,7 +56,7 @@ public:
  * @param dcl the discharge current limit at the time of the fault
  * @param ccl the charge current limit at the time of the fault
  */
-class FaultInstance {
+struct FaultInstance {
 public:
   FaultInstance(int fault_decimal, int max_cell_temp, int max_cell_voltage,
                 int average_cell_temp, int average_cell_voltage,

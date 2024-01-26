@@ -1,8 +1,13 @@
 #ifndef HOMECONTROLLER_H
 #define HOMECONTROLLER_H
 
+#include "../models/model.h"
 #include <QObject>
 
+/**
+ * @brief The HomeController class
+ * Controller for the home screen, aka pit and reverse.
+ */
 class HomeController : public QObject {
   Q_OBJECT
   Q_PROPERTY(int speed READ speed WRITE setSpeed NOTIFY speedChanged FINAL)
@@ -17,7 +22,7 @@ class HomeController : public QObject {
                  NOTIFY stateOfChargeChanged FINAL)
 
 public:
-  explicit HomeController(QObject *parent = nullptr);
+  explicit HomeController(Model *model, QObject *parent = nullptr);
   int speed() const;
   bool status() const;
   bool direction() const;
@@ -40,8 +45,10 @@ public slots:
   void setPackTemp(float);
   void setMotorTemp(float);
   void setStateOfCharge(float);
+  void currentDataDidChange();
 
 private:
+  Model *m_model;
   int m_speed;
   bool m_status;
   bool m_direction;

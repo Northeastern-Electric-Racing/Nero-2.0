@@ -16,20 +16,36 @@ Select the Default options for installing components
 
 Select Next Until You start downloading Qt (Should be around 30 GB)
 
+### Compiling QtMqtt for your Qt version
+1 load QtCreator -> Load Project c:\Qt\6.5.3\Src\QtMqtt\CMakeList.txt
+
+2 Build Release and Debug
+
+3 Exit QtCreator
+
+4 Go to C:\Qt\6.5.3\Src\build-qtmqtt-Desktop_Qt_6_5_3_MinGW_64_bit-Release
+
+5 cmake --install . (see the point at the end)
+
+Done
+
 #### Opening the Project
 Clone This repository to a directory of your choosing
 
-Go into Qt Creator once its downloaded and select Open Project
+Select the cmakelists.txt file inside the NERO Development to open in qt creator
 
-Select the .pro File to open
-
-It Should generate the project
+It should generate the project
 
 Select the kit for your respective desktop and press build and run
 
 ### Installing Prettier
 
 We use clang-format for formatting our files
+
+Ensure that the Beautifier plugin is installed in your Qt Creator. You can check and install plugins by going to “Help” > “About Plugins” and then enabling the “Beautifier” plugin.
+
+Note: Enable the Beautifier plugin to use it. Since Qt Creator 10.0.0, the ClangFormat plugin is enabled by default. Select Preferences > C++ > Formatting mode > Disable to turn off ClangFormat if you enable Beautifier because combining them can lead to unexpected results.
+
 
 #### Mac
 
