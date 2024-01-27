@@ -1,6 +1,5 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import QtQuick.Layouts 1.0
 
 Item {
     id: detailDisplay
@@ -9,7 +8,6 @@ Item {
     property bool ok: true
     property bool clear: false
     property bool highlight: true
-    property bool displayModal: false
 
     width: 200
     height: 50
@@ -26,13 +24,6 @@ Item {
             width: parent.width / 2
             height: parent.height
             radius: 10
-
-            MouseArea {
-                anchors.fill: parent
-                onClicked: {
-                    detailDisplay.displayModal = true;
-                }
-            }
 
             LabelText {
                 id: taskText
