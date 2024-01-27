@@ -1,78 +1,64 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.0
-RowLayout {
-    id: rowLayout
-    anchors.fill: parent
-    property string shutdownFlowTask: "Task" //controller.task
-    property string status: "null" //controller.status
-    property bool ok: false //controller.ok
-    property bool clear: false //controller.clear
-    property bool taskHovered: true
-    property bool highlight: false //controller.highlight
+import QtQuick.Dialogs 1.3
+
+Item {
+    id: detailDisplay
+    property string shutdownFlowTask: "Task"
+    property string status: "null"
+    property bool ok: true
+    property bool clear: false
+    property bool highlight: true
+    property bool displayModal: false
+
     width: 200
-    height:50
+    height: 50
 
-
-    Button {
-        id: dashId
-        width: parent.width / 2
+    Row {
+        id: row
+        width: parent.width
         height: parent.height
-        implicitWidth: parent.width / 2
-        implicitHeight: parent.height
-        flat: true
-        text: shutdownFlowTask
-        highlighted: true
+        anchors.centerIn: parent
 
-        property color colorNormal:  (highlight) ? "lightgrey" : "transparent"
-        property color colorHovered: (highlight) ? "darkgrey" : "lightgrey"
-        property color colorClicked: "transparent"
-
-
-        background: Rectangle{
-            id: bgColor
+        Rectangle {
+            id: taskDisplay
+            color: highlight ? "lightgrey" : "transparent"
+            width: parent.width / 2
+            height: parent.height
             radius: 10
-            color: internal.hoverColor
-        }
-        contentItem: Item {
-            id: buttonItem
-            visible: true
-            Text {
-                id: buttonText
-                text: dashId.text
-                anchors.centerIn: parent
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {
+                    detailDisplay.displayModal = true;
+                }
+            }
+
+            LabelText {
+                id: taskText
                 color: "white"
+                text: detailDisplay.shutdownFlowTask
+                anchors.verticalCenterOffset: 3
+                anchors.horizontalCenterOffset: -26
+                anchors.centerIn: parent
             }
         }
 
-        QtObject{
-         id: internal
+        Rectangle {
+            id: statusDisplay
+            color: clear ? "transparent" : (ok === true ? "green" : (ok === false ? "red" : "transparent"))
+            width: parent.width / 2
+            height: parent.height
+            radius: 10
+            border.color: "white"
 
-         property var hoverColor: if(dashId.down){
-                                      dashId.down ? colorClicked : colorNormal
-                                  }else{
-                                      dashId.hovered ? colorHovered : colorNormal
-                                  }
-
-        }
-    }
-
-
-    Rectangle {
-        id: flag
-        color: clear ? "transparent" : (ok === true ? "green" : (ok === false ? "red" : "transparent"))
-        Layout.preferredWidth: parent.width / 2 - 5
-        Layout.fillHeight: true
-        radius: 10
-        border.color: "white"
-        LabelText {
-            visible: !clear
-            color: "black"
-            text: status
-            anchors.centerIn: parent
+            LabelText {
+                visible: !clear
+                color: "black"
+                text: detailDisplay.status
+                anchors.centerIn: parent
+            }
         }
     }
 }
-
-
-
