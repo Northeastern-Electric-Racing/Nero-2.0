@@ -1,7 +1,7 @@
 #ifndef ATTRIBUTENAMES_H
 #define ATTRIBUTENAMES_H
 
-#define SIDEBRBS "SideBRBs"
+#define SIDEBRBS "SIDEBRBS"
 #define BMS "BMS"
 #define BSPD "BSPD"
 #define MPU "MPU"

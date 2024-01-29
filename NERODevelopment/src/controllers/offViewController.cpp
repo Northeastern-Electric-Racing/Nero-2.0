@@ -1,4 +1,4 @@
-#include "offViewController.h"
+#include "offviewcontroller.h"
 
 OffViewController::OffViewController(OffViewModel *viewModel, QObject *parent)
     : QObject(parent), m_viewModel(viewModel)
@@ -18,6 +18,10 @@ void OffViewController::setAttributeStatus(const QString &name, AttributeStatus 
         m_attributeStatus[name] = status;
         emit attributeStatusChanged(m_attributeStatus);
     }
+}
+
+QMap<QString, AttributeStatus> OffViewController::getAttributeStatus() const {
+    return m_attributeStatus;
 }
 
 void OffViewController::updateAttributesFromModel()

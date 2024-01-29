@@ -2,9 +2,9 @@
 #define ATTRIBUTESTATUS_H
 
 enum class AttributeStatus {
-    GOOD,
-    FAULTED,
-    OFF
+    0,
+    1,
+    2
 };
 
 #endif // ATTRIBUTESTATUS_H
