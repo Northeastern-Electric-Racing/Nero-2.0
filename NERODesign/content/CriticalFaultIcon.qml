@@ -3,7 +3,7 @@ import QtQuick.Shapes 1.15
 
 Item {
     id: critical
-    property int dimension: 200
+    property int dimension: 20
     property int numWarnings: 1
 
     width: dimension * 1.2
@@ -35,8 +35,8 @@ Item {
 
         Text {
             id: text1
-            x: (shape.width)/2 -20
-            y: 25
+            x: (shape.width)/2 - font.pixelSize/8
+            y: (shape.height - (font.pixelSize * 1.2))
             color: "white"
             text: qsTr("!")
             font.pixelSize: .75 * shape.width
@@ -44,8 +44,8 @@ Item {
 
         Rectangle {
             id: faultCircle
-            x: 131
-            y: 154
+            x: text1.x + width/3
+            y: critical.height - height/1.5
             width: (critical.dimension/2) * 1.2
             height: (critical.dimension/2) * 1.2
             radius: 100
