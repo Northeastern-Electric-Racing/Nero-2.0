@@ -7,8 +7,6 @@
 #include "attributenames.h"
 #include "attributestatus.h"
 #include "offviewmodel.h"
-#include "chargingcontroller.h"
-#include "efficiencycontroller.h"
 
 class OffViewController : public QObject {
     Q_OBJECT
