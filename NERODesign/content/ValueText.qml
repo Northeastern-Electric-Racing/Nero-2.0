@@ -6,6 +6,6 @@ Text {
     font.family: webFont.name
     font.pixelSize: 85
     font.letterSpacing: -5
-    color: "BFBFBF"
+    color: "white"
 }
 
