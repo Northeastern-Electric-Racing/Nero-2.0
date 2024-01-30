@@ -48,9 +48,7 @@ set(PROJECT_SOURCES
 
 find_package(Qt6 REQUIRED COMPONENTS Core Gui Qml Quick Network Mqtt)
 
-qt_add_executable(NEROApp ${PROJECT_SOURCES}
-
-)
+qt_add_executable(NEROApp ${PROJECT_SOURCES})
 
 qt_add_resources(NEROApp "configuration"
     PREFIX "/"
@@ -87,5 +85,3 @@ install(TARGETS NEROApp
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
-
-
