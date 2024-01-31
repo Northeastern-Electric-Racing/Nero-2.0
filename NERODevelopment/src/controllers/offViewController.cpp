@@ -25,28 +25,28 @@ void OffViewController::setAttributeStatus(const QString &name, AttributeStatus 
 
 void OffViewController::updateAttributesFromModel() {
     for (const auto& attributeName : {SIDEBRBS, BMS, BSPD, MPU, BOTS, INERTIA, CPBRB, TSMS, HVDINTRLK, HVCNCTR}) {
-        setAttributeStatus(attributeName, m_attributeStatus[attributeName]);
+        setAttributeStatus(attributeName, *m_model->getAttributeStatus());
     }
 }
 
-int OffViewController::packTemp() const { return m_packTemp; }
-void OffViewController::setPackTemp(int degrees) {
+float OffViewController::packTemp() const { return m_packTemp; }
+void OffViewController::setPackTemp(float degrees) {
     if (degrees != m_packTemp) {
         m_packTemp = degrees;
         emit packTempChanged(degrees);
     }
 }
 
-qreal OffViewController::motorTemp() const { return m_motorTemp; }
-void OffViewController::setMotorTemp(qreal temp) {
+float OffViewController::motorTemp() const { return m_motorTemp; }
+void OffViewController::setMotorTemp(float temp) {
     if (temp != m_motorTemp) {
         m_motorTemp = temp;
         emit motorTempChanged(temp);
     }
 }
 
-int OffViewController::stateOfCharge() const { return m_stateOfCharge; }
-void OffViewController::setStateOfCharge(int charge) {
+float OffViewController::stateOfCharge() const { return m_stateOfCharge; }
+void OffViewController::setStateOfCharge(float charge) {
     if (charge != m_stateOfCharge) {
         m_stateOfCharge = charge;
         emit stateOfChargeChanged(charge);

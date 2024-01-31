@@ -7,8 +7,6 @@
 #include "attributenames.h"
 #include "attributestatus.h"
 #include "offviewmodel.h"
-#include "chargingcontroller.h"
-#include "efficiencycontroller.h"
 
 class OffViewController : public QObject {
     Q_OBJECT
@@ -21,31 +19,32 @@ class OffViewController : public QObject {
                    stateOfChargeChanged FINAL)                                              //QProperty for state of charge
 
 public:
-    explicit OffViewController(OffViewModel *viewModel, QObject *parent = nullptr);
+    explicit OffViewController(Model *model, QObject *parent = nullptr);
 
     QMap<QString, AttributeStatus> getAttributeStatus() const;
-    int packTemp() const;
-    qreal motorTemp() const;
-    int stateOfCharge() const;
+    float packTemp() const;
+    float motorTemp() const;
+    float stateOfCharge() const;
     void updateAttributesFromModel();
 
 signals:
     void attributeStatusChanged(const QMap<QString, AttributeStatus> &attributeStatus);
-    void packTempChanged(int);
-    void motorTempChanged(qreal);
-    void stateOfChargeChanged(int);
+    void packTempChanged(float);
+    void motorTempChanged(float);
+    void stateOfChargeChanged(float);
 
 public slots:
     void setAttributeStatus(const QString &name, AttributeStatus status);
-    void setPackTemp(int);
-    void setMotorTemp(qreal);
-    void setStateOfCharge(int);
+    void setPackTemp(float);
+    void setMotorTemp(float);
+    void setStateOfCharge(float);
 
 private:
+    Model *m_model;
     QMap<QString, AttributeStatus> m_attributeStatus;
-    int m_packTemp;
-    qreal m_motorTemp;
-    int m_stateOfCharge;
+    float m_packTemp;
+    float m_motorTemp;
+    float m_stateOfCharge;
 };
 
 #endif // OFFVIEWCONTROLLER_H
