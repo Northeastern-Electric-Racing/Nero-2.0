@@ -6,7 +6,6 @@
 #include <QString>
 #include "attributenames.h"
 #include "attributestatus.h"
-#include "../models/model.h"
 
 class OffViewController : public QObject {
     Q_OBJECT
