@@ -8,8 +8,6 @@ Item {
     property bool ok: true
     property bool clear: false
     property bool highlight: true
-
-    width: 200
     height: 50
 
     Row {
@@ -29,15 +27,13 @@ Item {
                 id: taskText
                 color: "white"
                 text: detailDisplay.shutdownFlowTask
-                anchors.verticalCenterOffset: 3
-                anchors.horizontalCenterOffset: -26
                 anchors.centerIn: parent
             }
         }
 
         Rectangle {
             id: statusDisplay
-            color: clear ? "transparent" : (ok === true ? "green" : (ok === false ? "red" : "transparent"))
+            color: clear ? "transparent" : (ok === true ? "#14FF00" : (ok === false ? "#FF0000" : "transparent"))
             width: parent.width / 2
             height: parent.height
             radius: 10
