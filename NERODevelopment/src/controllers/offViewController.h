@@ -6,17 +6,17 @@
 #include <QString>
 #include "attributenames.h"
 #include "attributestatus.h"
-#include "offviewmodel.h"
+#include "../models/model.h"
 
 class OffViewController : public QObject {
     Q_OBJECT
     Q_PROPERTY(QMap<QString, AttributeStatus> attributeStatus READ getAttributeStatus NOTIFY attributeStatusChanged)
     Q_PROPERTY(
-        int packTemp READ packTemp WRITE setPackTemp NOTIFY packTempChanged FINAL)          //QProperty for pack temp
-    Q_PROPERTY(qreal motorTemp READ motorTemp WRITE setMotorTemp NOTIFY                     //QProperty for motor temp
+        float packTemp READ packTemp WRITE setPackTemp NOTIFY packTempChanged FINAL)
+    Q_PROPERTY(float motorTemp READ motorTemp WRITE setMotorTemp NOTIFY
                    motorTempChanged FINAL)
-    Q_PROPERTY(int stateOfCharge READ stateOfCharge WRITE setStateOfCharge NOTIFY
-                   stateOfChargeChanged FINAL)                                              //QProperty for state of charge
+    Q_PROPERTY(float stateOfCharge READ stateOfCharge WRITE setStateOfCharge NOTIFY
+                   stateOfChargeChanged FINAL)
 
 public:
     explicit OffViewController(Model *model, QObject *parent = nullptr);
