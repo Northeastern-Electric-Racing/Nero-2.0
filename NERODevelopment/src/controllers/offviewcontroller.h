@@ -4,9 +4,9 @@
 #include <QObject>
 #include <QMap>
 #include <QString>
-#include "attributestatus.h"
 #include "../models/model.h"
 #include "../utils/data_type_names.h"
+#include "../utils/attributestatus.h"
 
 class OffViewController : public QObject {
     Q_OBJECT

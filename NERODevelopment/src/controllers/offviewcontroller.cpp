@@ -3,8 +3,8 @@
 OffViewController::OffViewController(Model *model, QObject *parent)
     : QObject{parent}, m_packTemp(0.0), m_motorTemp(0.0), m_stateOfCharge(0.0) {
     this->m_model = model;
-    connect(m_model, &Model::updateAttributesFromModel, this,
-            &OffViewController::updateAttributesFromModel);
+    connect(m_model, &Model::onCurrentDataChange, this,
+            &OffViewController::currentDataDidChange);
 }
 
 QMap<QString, AttributeStatus> OffViewController::getAttributeStatus() const { return m_attributeStatus; }
