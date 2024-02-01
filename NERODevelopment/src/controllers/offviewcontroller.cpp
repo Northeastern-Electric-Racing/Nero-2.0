@@ -23,6 +23,9 @@ void OffViewController::updateAttributesFromModel() {
         AttributeStatus status = attributeStatusMap.value(attributeName);
         setAttributeStatus(attributeName, status);
     }
+    setPackTemp(*m_model->getPackTemp());
+    setMotorTemp(*m_model->getMotorTemp());
+    setStateOfCharge(*m_model->getStateOfCharge());
 }
 
 float OffViewController::packTemp() const { return m_packTemp; }
