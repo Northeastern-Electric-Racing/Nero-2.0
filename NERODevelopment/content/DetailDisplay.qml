@@ -87,29 +87,3 @@ Rectangle {
         }
     }
 }
-                font.bold: false
-                font.family: "Roboto"
-                leftPadding: 10
-            }
-        }
-
-        Rectangle {
-            id: statusDisplay
-            color: clear ? "transparent" : (ok === true ? "#14FF00" : (ok === false ? "#FF0000" : "transparent"))
-            width: Math.max(parent.width * 0.4, statusText.implicitWidth + 20) // Ensure minimum width
-            height: parent.height
-            radius: 10
-            border.color: clear ? "white" : "transparent"
-            border.width: clear ? 3 : 0
-
-            LabelText {
-                id: statusText
-                visible: !clear
-                color: "black"
-                text: detailDisplay.status
-                font.family: "Roboto"
-                anchors.centerIn: parent
-            }
-        }
-    }
-}
