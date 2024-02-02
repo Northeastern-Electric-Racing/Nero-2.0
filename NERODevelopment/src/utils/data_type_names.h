@@ -52,5 +52,15 @@
 #define SEGMENTTEMP3 "segmenttemp3"
 #define SEGMENTTEMP4 "segmenttemp4"
 #define TORQUEPOWER "torquepower"
+#define SIDEBRBS "SIDEBRBS"
+#define BMS "BMS"
+#define BSPD "BSPD"
+#define MPU "MPU"
+#define BOTS "BOTS"
+#define INERTIA "INERTIA"
+#define CPBRB "CP BRB"
+#define TSMS "TSMS"
+#define HVDINTRLK "HVD INTRLK"
+#define HVCNCTR "HV CNCTR"
 
 #endif // DATATYPENAMES_H
