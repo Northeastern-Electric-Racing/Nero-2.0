@@ -18,6 +18,7 @@ set(PROJECT_SOURCES
     src/controllers/chargingcontroller.h
     src/controllers/homecontroller.h
     src/controllers/efficiencycontroller.h
+    src/controllers/headercontroller.h
 
     src/models/mock_model.h
     src/models/model.h
@@ -32,6 +33,7 @@ set(PROJECT_SOURCES
     src/controllers/efficiencycontroller.cpp
     src/controllers/chargingcontroller.cpp
     src/controllers/homecontroller.cpp
+    src/controllers/headercontroller.cpp
 
     src/models/mock_model.cpp
     src/models/model.cpp
