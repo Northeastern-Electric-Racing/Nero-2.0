@@ -1,11 +1,3 @@
-
-
-/*
-This is a UI file (.ui.qml) that is intended to be edited in Qt Design Studio only.
-It is supposed to be strictly declarative and only uses a subset of QML. If you edit
-this file manually, you might introduce QML code that is not supported by Qt Design Studio.
-Check out https://doc.qt.io/qtcreator/creator-quick-ui-forms.html for details on .ui.qml files.
-*/
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 
@@ -16,234 +8,234 @@ Item {
 
     LabelText {
         id: labelText
-        x: 33
-        y: 640
+        x: parent.width * 0.03
+        y: parent.height * 0.83
         color: "#ffffff"
         text: "Charge State"
-        font.pixelSize: 40
+        font.pixelSize: parent.width * 0.04
         font.bold: true
     }
 
     LabelText {
         id: labelText1
-        x: 53
-        y: 469
+        x: parent.width * 0.05
+        y: parent.height * 0.61
         color: "#ffffff"
         text: "Pack Temp"
-        font.pixelSize: 40
+        font.pixelSize: parent.width * 0.04
         font.bold: true
     }
 
     LabelText {
         id: labelText2
-        x: 36
-        y: 280
+        x: parent.width * 0.04
+        y: parent.height * 0.36
         color: "#fffefe"
         text: "Motor Temp"
-        font.pixelSize: 40
+        font.pixelSize: parent.width * 0.04
         font.bold: true
     }
 
     ValueText {
         id: valueText
-        x: 125
-        y: 150
+        x: parent.width * 0.12
+        y: parent.height * 0.19
         text: "0"
-        font.pixelSize: 120
+        font.pixelSize: parent.width * 0.12
         font.bold: true
     }
 
     ValueText {
         id: valueText1
-        x: 125
-        y: 330
-        width: 95
-        height: 114
+        x: parent.width * 0.12
+        y: parent.height * 0.43
+        width: parent.width * 0.09
+        height: parent.height * 0.15
         text: "0"
-        font.pixelSize: 120
-        font.pointSize: 120
+        font.pixelSize: parent.width * 0.12
+        font.pointSize: parent.width * 0.12
         font.bold: true
     }
 
     ValueText {
         id: valueText2
-        x: 125
-        y: 510
+        x: parent.width * 0.12
+        y: parent.height * 0.66
         text: "0"
-        font.pixelSize: 120
+        font.pixelSize: parent.width * 0.12
         font.bold: true
 
         LabelText {
             id: labelText6
-            x: 72
-            y: 61
-            width: 72
-            height: 79
-            color: "#ffffff"
+            x: parent.width * 1.2
+            y: parent.height * 0.25
+            width: parent.width * 0.5
+            height: parent.height * 0.5
+            color: "#fffefe"
             text: "%"
-            font.pixelSize: 60
+            font.pixelSize: 80
+            font.pointSize: parent.width * 0.5
             font.italic: false
             font.bold: true
         }
     }
 
-    DetailDisplay {
-        id: detailDisplay
-        x: 333
-        y: 196
-        width: 300
-        height: 50
-        shutdownFlowTask: "SIDE BRBs"
-        status: "CLEAR"
-    }
+        DetailDisplay {
+            id: detailDisplay
+            x: parent.width * 0.32
+            y: parent.height * 0.25
+            width: parent.width * 0.29
+            height: parent.height * 0.065
+            shutdownFlowTask: "SIDE BRBs"
+            status: "CLEAR"
+        }
 
-    DetailDisplay {
-        id: detailDisplay1
-        x: 333
-        y: 276
-        width: 300
-        height: 50
-        status: "CLEAR"
-        shutdownFlowTask: "BMS"
-    }
+        DetailDisplay {
+            id: detailDisplay1
+            x: parent.width * 0.32
+            y: parent.height * 0.35
+            width: parent.width * 0.29
+            height: parent.height * 0.065
+            shutdownFlowTask: "BMS"
+            status: "CLEAR"
+        }
 
-    DetailDisplay {
-        id: detailDisplay2
-        x: 333
-        y: 359
-        width: 300
-        height: 50
-        status: "CLEAR"
-        shutdownFlowTask: "IMD"
-    }
+        DetailDisplay {
+            id: detailDisplay2
+            x: parent.width * 0.32
+            y: parent.height * 0.45
+            width: parent.width * 0.29
+            height: parent.height * 0.065
+            shutdownFlowTask: "IMD"
+            status: "CLEAR"
+        }
 
-    DetailDisplay {
-        id: detailDisplay3
-        x: 333
-        y: 439
-        width: 300
-        height: 50
-        status: "CLEAR"
-        shutdownFlowTask: "BSPD"
+        DetailDisplay {
+            id: detailDisplay3
+            x: parent.width * 0.32
+            y: parent.height * 0.55
+            width: parent.width * 0.29
+            height: parent.height * 0.065
+            shutdownFlowTask: "BSPD"
+            status: "CLEAR"
+        }
 
         DetailDisplay {
             id: detailDisplay4
-            x: 0
-            y: 81
-            width: 300
-            height: 50
-            status: "CLEAR"
+            x: parent.width * 0.32
+            y: parent.height * 0.65
+            width: parent.width * 0.29
+            height: parent.height * 0.06
             shutdownFlowTask: "MPU"
+            status: "CLEAR"
         }
 
         DetailDisplay {
             id: detailDisplay5
-            x: 0
-            y: 171
-            width: 300
-            height: 50
-            status: "CLEAR"
+            x: parent.width * 0.32
+            y: parent.height * 0.75
+            width: parent.width * 0.29
+            height: parent.height * 0.06
             shutdownFlowTask: "BOTS"
+            status: "CLEAR"
         }
 
         DetailDisplay {
             id: detailDisplay6
-            x: 352
-            y: -243
-            width: 300
-            height: 50
-            status: "CLEAR"
+            x: parent.width * 0.32 + detailDisplay.width + 10
+            y: parent.height * 0.25
+            width: parent.width * 0.29
+            height: parent.height * 0.065
             shutdownFlowTask: "INERTIA"
+            status: "CLEAR"
         }
 
         DetailDisplay {
             id: detailDisplay7
-            x: 352
-            y: -163
-            width: 300
-            height: 50
-            status: "CLEAR"
+            x: parent.width * 0.32 + detailDisplay.width + 10
+            y: parent.height * 0.35
+            width: parent.width * 0.29
+            height: parent.height * 0.065
             shutdownFlowTask: "CP BRB"
+            status: "CLEAR"
         }
 
         DetailDisplay {
             id: detailDisplay8
-            x: 352
-            y: -80
-            width: 300
-            height: 50
-            status: "CLEAR"
+            x: parent.width * 0.32 + detailDisplay.width + 10
+            y: parent.height * 0.45
+            width: parent.width * 0.29
+            height: parent.height * 0.065
             shutdownFlowTask: "TSMS"
+            status: "CLEAR"
         }
 
         DetailDisplay {
             id: detailDisplay9
-            x: 352
-            y: 0
-            width: 300
-            height: 50
-            status: "CLEAR"
+            x: parent.width * 0.32 + detailDisplay.width + 10
+            y: parent.height * 0.55
+            width: parent.width * 0.29
+            height: parent.height * 0.065
             shutdownFlowTask: "HVD INTRLK"
+            status: "CLEAR"
         }
 
         DetailDisplay {
             id: detailDisplay10
-            x: 352
-            y: 81
-            width: 300
-            height: 50
-            status: "CLEAR"
+            x: parent.width * 0.32 + detailDisplay.width + 10
+            y: parent.height * 0.65
+            width: parent.width * 0.29
+            height: parent.height * 0.065
             shutdownFlowTask: "SIDE BRBs"
+            status: "CLEAR"
         }
-    }
-
     LabelText {
         id: labelText3
-        x: 171
-        y: 49
+        x: parent.width * 0.17
+        y: parent.height * 0.06
         color: "#ff0101"
         text: "CAR OFF"
-        font.pixelSize: 60
+        font.pixelSize: parent.width * 0.06
         font.bold: true
     }
 
     LabelText {
         id: labelText4
-        x: 453
-        y: -28
+        x: parent.width * 0.44
+        y: parent.height * -0.04
         color: "#ffffff"
         text: "-"
-        font.pixelSize: 150
+        font.pixelSize: parent.width * 0.15
         font.bold: true
     }
 
     LabelText {
         id: labelText5
-        x: 561
-        y: 49
+        x: parent.width * 0.55
+        y: parent.height * 0.06
         color: "#1cff00"
         text: "GLVMS ON"
-        font.pixelSize: 60
+        font.pixelSize: parent.width * 0.06
         font.bold: true
     }
 
     LabelText {
         id: labelText7
-        x: 200
-        y: 330
+        x: parent.width * 0.2
+        y: parent.height * 0.43
         color: "#fffbfb"
         text: "o"
-        font.pixelSize: 50
+        font.pixelSize: parent.width * 0.05
         font.bold: true
     }
 
     LabelText {
         id: labelText8
-        x: 200
-        y: 150
+        x: parent.width * 0.2
+        y: parent.height * 0.19
         color: "#fffbfb"
         text: "o"
-        font.pixelSize: 50
+        font.pixelSize: parent.width * 0.05
         font.bold: true
     }
 }
