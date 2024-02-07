@@ -7,6 +7,8 @@ Item {
     width: 800
     height: 480
 
+    property var topicList: ["topic1", "topic2", "topic3"]
+
     Rectangle {
         id: debugTableBackground
         width: parent.width
@@ -21,7 +23,7 @@ Item {
             Row {
                 id: headers
                 width: parent.width
-                height: parent.height * 0.06
+                height: parent.height * 0.1
                 anchors.rightMargin: 10
                 spacing: 10
 
@@ -39,21 +41,8 @@ Item {
                 }
 
                 Rectangle {
-                    id: id
-                    width: parent.width / 10
-                    height: parent.height
-                    color: "black"
-
-                    LabelText {
-                        id: idText
-                        color: "white"
-                        text: "ID"
-                    }
-                }
-
-                Rectangle {
                     id: name
-                    width: parent.width * 0.25
+                    width: parent.width / 4
                     height: parent.height
                     color: "black"
 
@@ -66,7 +55,7 @@ Item {
 
                 Rectangle {
                     id: value
-                    width: parent.width * 0.1
+                    width: parent.width / 4
                     height: parent.height
                     color: "black"
 
@@ -80,26 +69,55 @@ Item {
 
             Row {
                 width: parent.width
-                height: parent.height * 0.06
+                height: parent.height
                 spacing: 10
 
-                Rectangle {
+                Column {
                     width: parent.width / 2
                     height: parent.height
-                    color: "black"
-                    LabelText {
-                        color: "white"
-                        text: "Rectangle 1"
+                    Repeater {
+                        model: debugTable.topicList.length // Use the length of the topicList as the model count
+                        delegate:
+                            Rectangle {
+                                width: parent.width / 2 // Divide by 2 since we're in the first column
+                                height: parent.height * 0.07 // Height same as parent
+                                color: "black"
+
+                                LabelText {
+                                    color: "white"
+                                    text: debugTable.topicList[index] // Set text to the current topic
+                                }
+                            }
                     }
                 }
 
-                Rectangle {
+                Column {
                     width: parent.width / 2
                     height: parent.height
-                    color: "black"
-                    LabelText {
-                        color: "white"
-                        text: "Rectangle 2"
+                    Row {
+                        width: parent.width
+                        height: parent.height
+                        Rectangle {
+                            width: parent.width / 2 +10
+                            height: parent.height
+                            color: "black"
+
+                            LabelText {
+                                color: "white"
+                                text: "NAME"
+                            }
+                        }
+
+                        Rectangle {
+                            width: parent.width / 2
+                            height: parent.height
+                            color: "black"
+
+                            LabelText {
+                                color: "white"
+                                text: "VALUE"
+                            }
+                        }
                     }
                 }
             }
