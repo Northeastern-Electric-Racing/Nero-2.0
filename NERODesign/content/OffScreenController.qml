@@ -1,241 +1,303 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import QtQuick.Layouts 1.15
 
 Item {
     width: 1024
     height: 768
     visible: true
 
-    LabelText {
-        id: labelText
-        x: parent.width * 0.03
-        y: parent.height * 0.83
-        color: "#ffffff"
-        text: "Charge State"
-        font.pixelSize: parent.width * 0.04
-        font.bold: true
-    }
+    GridLayout {
+        id: gridLayout
+        x: parent.width * 0.3
+        y: parent.height * 0.15
+        width: parent.width * 0.65
+        height: parent.height * 0.8
+        rows: 6
+        columns: 2
+        columnSpacing: 10
+        rowSpacing: 10
 
-    LabelText {
-        id: labelText1
-        x: parent.width * 0.05
-        y: parent.height * 0.61
-        color: "#ffffff"
-        text: "Pack Temp"
-        font.pixelSize: parent.width * 0.04
-        font.bold: true
-    }
-
-    LabelText {
-        id: labelText2
-        x: parent.width * 0.04
-        y: parent.height * 0.36
-        color: "#fffefe"
-        text: "Motor Temp"
-        font.pixelSize: parent.width * 0.04
-        font.bold: true
-    }
-
-    ValueText {
-        id: valueText
-        x: parent.width * 0.12
-        y: parent.height * 0.19
-        text: "0"
-        font.pixelSize: parent.width * 0.12
-        font.bold: true
-    }
-
-    ValueText {
-        id: valueText1
-        x: parent.width * 0.12
-        y: parent.height * 0.43
-        width: parent.width * 0.09
-        height: parent.height * 0.15
-        text: "0"
-        font.pixelSize: parent.width * 0.12
-        font.pointSize: parent.width * 0.12
-        font.bold: true
-    }
-
-    ValueText {
-        id: valueText2
-        x: parent.width * 0.12
-        y: parent.height * 0.66
-        text: "0"
-        font.pixelSize: parent.width * 0.12
-        font.bold: true
-
-        LabelText {
-            id: labelText6
-            x: parent.width * 1.2
-            y: parent.height * 0.25
-            width: parent.width * 0.5
-            height: parent.height * 0.5
-            color: "#fffefe"
-            text: "%"
-            font.pixelSize: 80
-            font.pointSize: parent.width * 0.5
-            font.italic: false
-            font.bold: true
-        }
-    }
-
+        // DetailDisplay elements
         DetailDisplay {
-            id: detailDisplay
-            x: parent.width * 0.32
-            y: parent.height * 0.25
-            width: parent.width * 0.29
-            height: parent.height * 0.065
+            Layout.row: 0
+            Layout.column: 0
+            Layout.columnSpan: 1
+            Layout.rowSpan: 1
+            width: parent.width * 0.45
+            height: parent.height * 0.1
             shutdownFlowTask: "SIDE BRBs"
             status: "CLEAR"
         }
 
         DetailDisplay {
-            id: detailDisplay1
-            x: parent.width * 0.32
-            y: parent.height * 0.35
-            width: parent.width * 0.29
-            height: parent.height * 0.065
+            Layout.row: 1
+            Layout.column: 0
+            Layout.columnSpan: 1
+            Layout.rowSpan: 1
+            width: parent.width * 0.45
+            height: parent.height * 0.1
             shutdownFlowTask: "BMS"
             status: "CLEAR"
         }
 
         DetailDisplay {
-            id: detailDisplay2
-            x: parent.width * 0.32
-            y: parent.height * 0.45
-            width: parent.width * 0.29
-            height: parent.height * 0.065
+            Layout.row: 2
+            Layout.column: 0
+            Layout.columnSpan: 1
+            Layout.rowSpan: 1
+            width: parent.width * 0.45
+            height: parent.height * 0.1
             shutdownFlowTask: "IMD"
             status: "CLEAR"
         }
 
         DetailDisplay {
-            id: detailDisplay3
-            x: parent.width * 0.32
-            y: parent.height * 0.55
-            width: parent.width * 0.29
-            height: parent.height * 0.065
+            Layout.row: 3
+            Layout.column: 0
+            Layout.columnSpan: 1
+            Layout.rowSpan: 1
+            width: parent.width * 0.45
+            height: parent.height * 0.1
             shutdownFlowTask: "BSPD"
             status: "CLEAR"
         }
 
         DetailDisplay {
-            id: detailDisplay4
-            x: parent.width * 0.32
-            y: parent.height * 0.65
-            width: parent.width * 0.29
-            height: parent.height * 0.06
+            Layout.row: 4
+            Layout.column: 0
+            Layout.columnSpan: 1
+            Layout.rowSpan: 1
+            width: parent.width * 0.45
+            height: parent.height * 0.1
             shutdownFlowTask: "MPU"
             status: "CLEAR"
         }
 
         DetailDisplay {
-            id: detailDisplay5
-            x: parent.width * 0.32
-            y: parent.height * 0.75
-            width: parent.width * 0.29
-            height: parent.height * 0.06
+            Layout.row: 5
+            Layout.column: 0
+            Layout.columnSpan: 1
+            Layout.rowSpan: 1
+            width: parent.width * 0.45
+            height: parent.height * 0.1
             shutdownFlowTask: "BOTS"
             status: "CLEAR"
         }
 
         DetailDisplay {
-            id: detailDisplay6
-            x: parent.width * 0.32 + detailDisplay.width + 10
-            y: parent.height * 0.25
-            width: parent.width * 0.29
-            height: parent.height * 0.065
+            Layout.row: 0
+            Layout.column: 1
+            Layout.columnSpan: 1
+            Layout.rowSpan: 1
+            width: parent.width * 0.45
+            height: parent.height * 0.1
             shutdownFlowTask: "INERTIA"
             status: "CLEAR"
         }
 
         DetailDisplay {
-            id: detailDisplay7
-            x: parent.width * 0.32 + detailDisplay.width + 10
-            y: parent.height * 0.35
-            width: parent.width * 0.29
-            height: parent.height * 0.065
+            Layout.row: 0
+            Layout.column: 2
+            Layout.columnSpan: 1
+            Layout.rowSpan: 1
+            width: parent.width * 0.45
+            height: parent.height * 0.1
             shutdownFlowTask: "CP BRB"
             status: "CLEAR"
         }
 
         DetailDisplay {
-            id: detailDisplay8
-            x: parent.width * 0.32 + detailDisplay.width + 10
-            y: parent.height * 0.45
-            width: parent.width * 0.29
-            height: parent.height * 0.065
+            Layout.row: 0
+            Layout.column: 3
+            Layout.columnSpan: 1
+            Layout.rowSpan: 1
+            width: parent.width * 0.45
+            height: parent.height * 0.1
             shutdownFlowTask: "TSMS"
             status: "CLEAR"
         }
 
         DetailDisplay {
-            id: detailDisplay9
-            x: parent.width * 0.32 + detailDisplay.width + 10
-            y: parent.height * 0.55
-            width: parent.width * 0.29
-            height: parent.height * 0.065
+            Layout.row: 0
+            Layout.column: 4
+            Layout.columnSpan: 1
+            Layout.rowSpan: 1
+            width: parent.width * 0.45
+            height: parent.height * 0.1
             shutdownFlowTask: "HVD INTRLK"
             status: "CLEAR"
         }
 
         DetailDisplay {
-            id: detailDisplay10
-            x: parent.width * 0.32 + detailDisplay.width + 10
-            y: parent.height * 0.65
-            width: parent.width * 0.29
-            height: parent.height * 0.065
-            shutdownFlowTask: "SIDE BRBs"
+            Layout.row: 0
+            Layout.column: 5
+            Layout.columnSpan: 1
+            Layout.rowSpan: 1
+            width: parent.width * 0.45
+            height: parent.height * 0.1
+            shutdownFlowTask: "HVD CNCTR"
             status: "CLEAR"
         }
-    LabelText {
-        id: labelText3
-        x: parent.width * 0.17
-        y: parent.height * 0.06
-        color: "#ff0101"
-        text: "CAR OFF"
-        font.pixelSize: parent.width * 0.06
-        font.bold: true
     }
 
-    LabelText {
-        id: labelText4
-        x: parent.width * 0.44
-        y: parent.height * -0.04
-        color: "#ffffff"
-        text: "-"
-        font.pixelSize: parent.width * 0.15
-        font.bold: true
+    GridLayout {
+        id: valueGridLayout
+        x: parent.width * 0.1
+        y: parent.height * 0.01
+        width: parent.width * 0.8
+        height: parent.height * 0.2
+        rows: 1
+        columns: 4
+        columnSpacing: 10
+        rowSpacing: 10
+
+        LabelText {
+            text: "CAR OFF"
+            Layout.row: 0
+            Layout.column: 0
+            Layout.columnSpan: 2
+            color: "#ff0101"
+            font.pixelSize: parent.height * 0.5
+            font.bold: true
+        }
+
+        LabelText {
+            text: "-"
+            Layout.row: 0
+            Layout.column: 2
+            Layout.columnSpan: 2
+            color: "#ffffff"
+            font.pixelSize: parent.height * 0.5
+            font.bold: true
+        }
+
+        LabelText {
+            text: "GLVMS ON"
+            Layout.row: 0
+            Layout.column: 3
+            Layout.columnSpan: 2
+            color: "#1cff00"
+            font.pixelSize: parent.height * 0.5
+            font.bold: true
+            anchors.right: parent.right
+        }
     }
 
-    LabelText {
-        id: labelText5
-        x: parent.width * 0.55
-        y: parent.height * 0.06
-        color: "#1cff00"
-        text: "GLVMS ON"
-        font.pixelSize: parent.width * 0.06
-        font.bold: true
+    GridLayout {
+        id: labelGridLayout
+        x: parent.width * 0.05
+        y: parent.height * 0.2
+        width: parent.width * 0.4
+        height: parent.height * 0.9
+        rows: 3
+
+        LabelText {
+            text: "Charge State"
+            Layout.row: 2
+            Layout.column: 0
+            color: "#ffffff"
+            font.pixelSize: parent.width * 0.1
+            font.bold: true
+        }
+
+        LabelText {
+            text: "Pack Temp"
+            Layout.row: 1
+            Layout.column: 0
+            color: "#ffffff"
+            font.pixelSize: parent.width * 0.1
+            font.bold: true
+        }
+
+        LabelText {
+            text: "Motor Temp"
+            Layout.row: 0
+            Layout.column: 0
+            color: "#fffefe"
+            font.pixelSize: parent.width * 0.1
+            font.bold: true
+        }
     }
 
-    LabelText {
-        id: labelText7
-        x: parent.width * 0.2
-        y: parent.height * 0.43
-        color: "#fffbfb"
-        text: "o"
-        font.pixelSize: parent.width * 0.05
-        font.bold: true
+    GridLayout {
+        id: measurementGrid
+        x: parent.width * 0.007
+        y: parent.height * 0.15
+        width: parent.width * 0.4
+        height: parent.height * 0.78
+        rows: 6
+        columns: 2
+        columnSpacing: 1
+        rowSpacing: 0
+
+        LabelText {
+            text: "°"
+            Layout.row: 0
+            Layout.column: 0
+            color: "#fffbfb"
+            font.pixelSize: parent.width * 0.2
+            font.bold: true
+            Layout.alignment: Qt.AlignTop | Qt.AlignHCenter
+        }
+
+        LabelText {
+            text: "°"
+            Layout.row: 1
+            Layout.column: 0
+            color: "#fffbfb"
+            font.pixelSize: parent.width * 0.2
+            font.bold: true
+            Layout.alignment: Qt.AlignTop | Qt.AlignHCenter
+        }
+
+        LabelText {
+            text: "%"
+            Layout.row: 2
+            Layout.column: 0
+            color: "#fffbfb"
+            font.pixelSize: parent.width * 0.13
+            font.bold: true
+            Layout.alignment: Qt.AlignBottom | Qt.AlignHCenter
+        }
     }
 
-    LabelText {
-        id: labelText8
-        x: parent.width * 0.2
-        y: parent.height * 0.19
-        color: "#fffbfb"
-        text: "o"
-        font.pixelSize: parent.width * 0.05
-        font.bold: true
+    GridLayout {
+        id: numberGrid
+        x: -parent.width * 0.05
+        y: parent.height * 0.1
+        width: parent.width * 0.4
+        height: parent.height * 0.9
+        rows: 3
+
+        ValueText {
+            text: "0"
+            Layout.row: 0
+            Layout.column: 0
+            color: "#fffbfb"
+            font.pixelSize: parent.width * 0.3
+            font.bold: true
+            Layout.alignment: Qt.AlignHCenter
+        }
+
+        ValueText {
+            text: "0"
+            Layout.row: 1
+            Layout.column: 0
+            color: "#fffbfb"
+            font.pixelSize: parent.width * 0.3
+            font.bold: true
+            Layout.alignment: Qt.AlignHCenter
+        }
+
+        ValueText {
+            text: "0"
+            Layout.row: 2
+            Layout.column: 0
+            color: "#fffbfb"
+            font.pixelSize: parent.width * 0.3
+            font.bold: true
+            Layout.alignment: Qt.AlignHCenter
+        }
     }
 }
