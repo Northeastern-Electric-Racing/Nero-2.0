@@ -5,6 +5,7 @@ import Qt5Compat.GraphicalEffects
 Rectangle {
     id: modal
     property int dimension: 500
+    property int offset: (modal.width *.02)
     visible: false
     focus: true
 
@@ -34,7 +35,6 @@ Rectangle {
         clip: true
         Image {
             id: modalImage
-            source: ""
             width: parent.width - parent.border.width
             height: parent.height - parent.border.width
             anchors.centerIn: parent
@@ -56,22 +56,20 @@ Rectangle {
 
     Text {
         id: modalTitle
-        text: ""
         color: "black"
         font.pixelSize: dimension/5
         font.bold: true
         wrapMode: Text.WordWrap
-        width: (parent.width - modalTitle.x) - 20
-        x: (modalPic.x + modalPic.width) + 20
+        width: (parent.width - modalTitle.x) - modal.offset
+        x: (modalPic.x + modalPic.width) + (modal.offset)
     }
 
     Text {
         id: modalDescription
-        text: ""
         color: "black"
         font.pixelSize: dimension/11
         wrapMode: Text.WordWrap
-        width: (parent.width - modalDescription.x) - 20
+        width: (parent.width - modalDescription.x) - modal.offset
         x: modalTitle.x
         y: modalTitle.height
     }
@@ -84,8 +82,8 @@ Rectangle {
             color: "black"
             radius: 10
         }
-        x: (parent.width - width) -30
-        y: (parent.height - height) - 30
+        x: (parent.width - width) - modal.offset
+        y: (parent.height - height) - modal.offset
         text: "ACKNOWLEDGE"
         font.pixelSize: parent.height/15
         onClicked: closeModal()
