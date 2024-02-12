@@ -11,6 +11,7 @@
 #include <QThread>
 
 #include "controllers/homecontroller.h"
+#include "controllers/offviewcontroller.h"
 
 int main(int argc, char *argv[]) {
   set_qt_environment();
@@ -25,6 +26,7 @@ int main(int argc, char *argv[]) {
   model->moveToThread(dataThread);
 
   HomeController homeController(model);
+  OffViewController offViewController(model);
 
   dataThread->start();
 
@@ -39,6 +41,7 @@ int main(int argc, char *argv[]) {
 
   engine.rootContext()->setContextProperty("model", model);
   engine.rootContext()->setContextProperty("homeController", &homeController);
+  engine.rootContext()->setContextProperty("offViewController", &offViewController);
 
   engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
 
