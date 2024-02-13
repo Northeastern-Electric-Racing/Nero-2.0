@@ -6,7 +6,7 @@ Window {
     id: faultDialog
     property string faultName: "Oh snap!"
     property string faultMessage: "An error has occurred while creating an error report."
-    property int category: FaultCategory.NonCritical
+    property int category: FaultCategory.Critical
 
     enum FaultCategory {
         Critical,
