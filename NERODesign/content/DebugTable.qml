@@ -1,13 +1,18 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Particles
+import Qt.labs.qmlmodels
 
 Item {
     id: debugTable
     width: 800
     height: 480
 
-    property var topicList: ["topic1", "topic2", "topic3"]
+    property variant dataModel: [
+        ['topic1'],
+        ['topic2'],
+        ['topic3'],
+    ]
 
     Rectangle {
         id: debugTableBackground
@@ -68,56 +73,55 @@ Item {
             }
 
             Row {
+                id: topicContainer
                 width: parent.width
                 height: parent.height
                 spacing: 10
-
-                Column {
-                    width: parent.width / 2
+                Column{
+                    id: root
+                    width: parent.width /2
                     height: parent.height
-                    Repeater {
-                        model: debugTable.topicList.length // Use the length of the topicList as the model count
-                        delegate:
-                            Rectangle {
-                                width: parent.width / 2 // Divide by 2 since we're in the first column
-                                height: parent.height * 0.07 // Height same as parent
-                                color: "black"
 
-                                LabelText {
-                                    color: "white"
-                                    text: debugTable.topicList[index] // Set text to the current topic
+                    ListView { // data
+                        anchors{fill: parent;}
+
+                        model: debugTable.dataModel
+
+                        delegate: Item { // row
+                            width: root.width;  height: 50
+
+                            property int     row:     index
+                            property variant rowData: modelData
+
+                            Row {
+                                anchors.fill: parent
+
+                                Repeater {
+                                    model: rowData
+
+                                    delegate: Rectangle { // cell
+                                        width: root.width;  height: 50
+                                        color:'black'
+                                        Text {
+                                            text: modelData
+                                            anchors.verticalCenter: parent.verticalCenter
+                                            font.pixelSize: 0.06 * root.width
+                                            color:"white"
+                                        }
+                                    }
                                 }
                             }
+                        }
                     }
                 }
 
                 Column {
                     width: parent.width / 2
-                    height: parent.height
+                    height:  parent.height
                     Row {
                         width: parent.width
                         height: parent.height
-                        Rectangle {
-                            width: parent.width / 2 +10
-                            height: parent.height
-                            color: "black"
 
-                            LabelText {
-                                color: "white"
-                                text: "NAME"
-                            }
-                        }
-
-                        Rectangle {
-                            width: parent.width / 2
-                            height: parent.height
-                            color: "black"
-
-                            LabelText {
-                                color: "white"
-                                text: "VALUE"
-                            }
-                        }
                     }
                 }
             }
