@@ -1,5 +1,5 @@
 import QtQuick 2.15
-import QtQuick.Shapes 1.15
+import QtQuick.Shapes
 
 Item {
     id: critical
@@ -49,6 +49,8 @@ Item {
             width: (critical.dimension/2) * 1.2
             height: (critical.dimension/2) * 1.2
             radius: 100
+
+            visible: numWarnings > 0
 
             Text {
                 id: faultNum
