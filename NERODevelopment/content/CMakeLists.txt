@@ -15,6 +15,7 @@ qt6_add_qml_module(content
         LabelText.qml
         DirectionView.qml
         DetailDisplay.qml
+        DebugTable.qml
 
     RESOURCES
         fonts/fonts.txt

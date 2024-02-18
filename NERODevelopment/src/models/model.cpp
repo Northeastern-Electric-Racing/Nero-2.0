@@ -48,15 +48,19 @@ void Model::updateStateOfChargeDeltas() {
 }
 
 QList<DebugTableRowValue> Model::getDebugTableValues() {
-  QList<DebugTableRowValue> table;
-  for (DataInfo dataInfo : this->currentData.values()) {
+  QList<DebugTableRowValue> table = {};
+  for (auto it = this->currentData.begin(); it != this->currentData.end();
+       ++it) {
+    const DataInfo &dataInfo = it.value();
     QString name = dataInfo.topic;
     QString units = dataInfo.unit;
     float value = dataInfo.value;
+
     DebugTableRowValue row = {name, (std::round(value * 1000) / 1000), units};
 
-    table.emplace_back(row);
+    table.append(row);
   }
+
   return table;
 }
 

@@ -1,9 +1,9 @@
 #include "homecontroller.h"
 
 HomeController::HomeController(Model *model, QObject *parent)
-    : QObject{parent}, m_speed(0), m_status(false), m_direction(true),
-      m_packTemp(0.0), m_motorTemp(0.0), m_stateOfCharge(0.0) {
-  this->m_model = model;
+    : ButtonController{model, parent}, m_speed(0), m_status(false),
+      m_direction(true), m_packTemp(0.0), m_motorTemp(0.0),
+      m_stateOfCharge(0.0) {
   connect(m_model, &Model::onCurrentDataChange, this,
           &HomeController::currentDataDidChange);
 }

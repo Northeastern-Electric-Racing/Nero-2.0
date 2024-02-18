@@ -1,12 +1,12 @@
 #ifndef DATATYPENAMES_H
 #define DATATYPENAMES_H
 
-#define MPH "mph"
-#define KPH "kph"
+#define MPH "mc/speed/mph"
+#define KPH "mc/speed/kph"
 #define STATUS "status"
 #define DIRECTION "direction"
-#define PACKTEMP "packtemp"
-#define MOTORTEMP "motortemp"
+#define PACKTEMP "bms/temps/packtemp"
+#define MOTORTEMP "bms/temps/motortemp"
 #define STATEOFCHARGE "stateofcharge"
 #define CURRENT "current"
 #define BALANCINGCELLS "balancingcells"
@@ -62,5 +62,8 @@
 #define TSMS "TSMS"
 #define HVDINTRLK "HVD INTRLK"
 #define HVCNCTR "HV CNCTR"
+#define CRITICALFAULTS "CRITICAL FAULTS"
+#define NONCRITICALFAULTS "NON CRITICAL FAULTS"
+#define MICROPHONE "MICROPHONE"
 
 #endif // DATATYPENAMES_H

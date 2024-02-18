@@ -2,39 +2,15 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import Qt.labs.qmlmodels
 
+import NERO
+
 Item {
     id: debugTable
     width: 800
     height: 480
-    property variant topics: [
-        {
-            "topic": "cat",
-        },
-        {
-            "topic": "dog",
-        },
-        {
-            "topic": "bird",
-        }
-    ]
-    property variant values: [
-        {
-            "name": "joe",
-            "value": "joe",
-            "unit": "c"
 
-        },
-        {
-            "name": "dog",
-            "value": "mama",
-            "unit": "c"
-        },
-        {
-            "name": "bird",
-            "value": "balls",
-            "unit": "Schmeep"
-        }
-    ]
+    property variant topics: debugTableController.topics
+    property variant values: debugTableController.selectedValues
     property int rowHeight: 30
 
     Row {
@@ -49,11 +25,9 @@ Item {
         HorizontalHeaderView {
             id: topicsHeader
             anchors.left: parent.left
-            width: parent.width
             anchors.top: parent.top
             syncView: topicsTableView
             model: ["Topic"]
-            textRole: display
             clip: true
         }
 
@@ -74,7 +48,7 @@ Item {
             }
 
             delegate: Rectangle {
-                implicitWidth: parent.width
+                implicitWidth: topicsTableView.width
                 implicitHeight: debugTable.rowHeight
                 border.width: 1
 
@@ -95,10 +69,8 @@ Item {
             HorizontalHeaderView {
                 id: valuesHeader
                 anchors.left: parent.left
-                width: parent.width
                 anchors.top: parent.top
                 syncView: valuesTableView
-                textRole: display
                 model: ["Name", "Value", "Unit"]
                 clip: true
             }
