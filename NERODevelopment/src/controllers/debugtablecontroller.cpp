@@ -14,6 +14,39 @@ QList<QJsonObject> DebugTableController::selectedValues() const {
   return this->m_selectedValues;
 }
 
+int DebugTableController::selectedValuesIndex() const {
+  return this->m_selectedValuesIndex;
+}
+
+int DebugTableController::selectedTopicsIndex() const {
+  return this->m_selectedTopicsIndex;
+}
+
+bool DebugTableController::scrollingTopics() const {
+  return this->m_scrollingTopics;
+}
+
+void DebugTableController::setScrollingTopics(bool scrollingTopics) {
+  if (this->m_scrollingTopics != scrollingTopics) {
+    this->m_scrollingTopics = scrollingTopics;
+    emit this->scrollingTopicsChanged();
+  }
+}
+
+void DebugTableController::setSelectedValuesIndex(int index) {
+  if (this->m_selectedValuesIndex != index) {
+    this->m_selectedValuesIndex = index;
+    emit this->selectedValuesIndexChanged();
+  }
+}
+
+void DebugTableController::setSelectedTopicsIndex(int index) {
+  if (this->m_selectedTopicsIndex != index) {
+    this->m_selectedTopicsIndex = index;
+    emit this->selectedTopicsIndexChanged();
+  }
+}
+
 void DebugTableController::setSelectedValues(QList<QJsonObject> values) {
   this->m_selectedValues = values;
   emit this->selectedValuesChanged();
@@ -29,35 +62,40 @@ void DebugTableController::enterButtonPressed() {
 }
 
 void DebugTableController::downButtonPressed() {
-  if (this->scrollingTopics) {
-    if (this->selectedTopicIndex < this->m_topics.count() - 1) {
-      this->selectedTopicIndex++;
-    } else {
-      if (this->selectedValueIndex < this->m_selectedValues.count() - 1) {
-        this->selectedValueIndex++;
-      }
+  qDebug() << "pressed down arrow" << m_selectedTopicsIndex << m_scrollingTopics
+           << this->m_topics.length() << m_selectedValues.length()
+           << m_selectedValuesIndex;
+  if (this->m_scrollingTopics) {
+    if (this->m_selectedTopicsIndex < this->m_topics.length() - 1) {
+      this->setSelectedTopicsIndex(this->m_selectedTopicsIndex + 1);
+    }
+  } else {
+    if (this->m_selectedValuesIndex < this->m_selectedValues.length() - 1) {
+      this->setSelectedValuesIndex(this->m_selectedValuesIndex + 1);
     }
   }
 }
 
 void DebugTableController::upButtonPressed() {
-  if (this->scrollingTopics) {
-    if (this->selectedTopicIndex != 0) {
-      this->selectedTopicIndex--;
+  qDebug() << "pressed up arrow" << m_selectedTopicsIndex << m_scrollingTopics
+           << m_selectedValuesIndex;
+  if (this->m_scrollingTopics) {
+    if (this->m_selectedTopicsIndex != 0) {
+      this->setSelectedTopicsIndex(this->m_selectedTopicsIndex - 1);
     }
   } else {
-    if (this->selectedValueIndex != 0) {
-      this->selectedTopicIndex--;
+    if (this->m_selectedValuesIndex != 0) {
+      this->setSelectedValuesIndex(this->m_selectedValuesIndex - 1);
     }
   }
 }
 
 void DebugTableController::leftButtonPressed() {
-  this->scrollingTopics = false;
+  this->setScrollingTopics(true);
 }
 
 void DebugTableController::rightButtonPressed() {
-  this->scrollingTopics = true;
+  this->setScrollingTopics(false);
 }
 
 void DebugTableController::update() {
@@ -78,7 +116,7 @@ void DebugTableController::update() {
   if (topics.length() == 0)
     return;
 
-  QString selectedTopic = topics[this->selectedTopicIndex];
+  QString selectedTopic = topics[this->m_selectedTopicsIndex];
 
   QList<DebugTableRowValue> selectedValues = {};
 
@@ -92,7 +130,9 @@ void DebugTableController::update() {
   DebugTableRowTopics newTopics;
   newTopics.setTopics(topics);
   newSelectedValues.setDebugTableRowValues(selectedValues);
-  qDebug() << newTopics.json() << newSelectedValues.json();
+
+  // qDebug() << newTopics.json() << newSelectedValues.json();
+
   this->setTopics(newTopics.json());
   this->setSelectedValues(newSelectedValues.json());
 }

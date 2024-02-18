@@ -12,33 +12,49 @@ class DebugTableController : public ButtonController {
                  topicsChanged FINAL)
   Q_PROPERTY(QList<QJsonObject> selectedValues READ selectedValues WRITE
                  setSelectedValues NOTIFY selectedValuesChanged FINAL)
+  Q_PROPERTY(int selectedTopicsIndex READ selectedTopicsIndex WRITE
+                 setSelectedTopicsIndex NOTIFY selectedTopicsIndexChanged FINAL)
+  Q_PROPERTY(int selectedValuesIndex READ selectedValuesIndex WRITE
+                 setSelectedValuesIndex NOTIFY selectedValuesIndexChanged FINAL)
+  Q_PROPERTY(bool scrollingTopics READ scrollingTopics WRITE setScrollingTopics
+                 NOTIFY scrollingTopicsChanged FINAL)
 
 public:
   explicit DebugTableController(Model *model, QObject *parent = nullptr);
   QList<QJsonObject> topics() const;
   QList<QJsonObject> selectedValues() const;
+  int selectedValuesIndex() const;
+  int selectedTopicsIndex() const;
+  bool scrollingTopics() const;
 
 signals:
   void topicsChanged();
   void selectedValuesChanged();
+  void selectedValuesIndexChanged();
+  void selectedTopicsIndexChanged();
+  void scrollingTopicsChanged();
 
 public slots:
   void setTopics(QList<QJsonObject>);
   void setSelectedValues(QList<QJsonObject>);
+  void setSelectedValuesIndex(int);
+  void setSelectedTopicsIndex(int);
+  void setScrollingTopics(bool);
+
   void update();
 
-private:
   void downButtonPressed() override;
   void upButtonPressed() override;
   void leftButtonPressed() override;
   void rightButtonPressed() override;
   void enterButtonPressed() override;
 
+private:
   QList<QJsonObject> m_topics;
   QList<QJsonObject> m_selectedValues;
-  int selectedTopicIndex = 0;
-  bool scrollingTopics = true;
-  int selectedValueIndex = 0;
+  int m_selectedTopicsIndex = 0;
+  bool m_scrollingTopics = true;
+  int m_selectedValuesIndex = 0;
 };
 
 #endif // DEBUGTABLECONTROLLER_H

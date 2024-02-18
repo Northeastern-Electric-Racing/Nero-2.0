@@ -12,12 +12,13 @@ public:
 public slots:
   void buttonUpdate();
 
-protected:
   virtual void enterButtonPressed();
   virtual void upButtonPressed();
   virtual void downButtonPressed();
   virtual void rightButtonPressed();
   virtual void leftButtonPressed();
+
+protected:
   Model *m_model;
 };
 

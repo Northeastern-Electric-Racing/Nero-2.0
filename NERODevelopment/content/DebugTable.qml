@@ -11,7 +11,37 @@ Item {
 
     property variant topics: debugTableController.topics
     property variant values: debugTableController.selectedValues
+    property int selectedTopicIndex: debugTableController.selectedTopicsIndex
+    property int selectedValueIndex: debugTableController.selectedValuesIndex
+    property bool scrollingTopics: debugTableController.scrollingTopics
+
     property int rowHeight: 30
+
+    Keys.onPressed: (event) => {
+        switch (event.key) {
+                            case Qt.Key_Up:
+                            debugTableController.upButtonPressed();
+                            break;
+                            case Qt.Key_Left:
+                            debugTableController.leftButtonPressed();
+                            break;
+                            case Qt.Key_Right:
+                            debugTableController.rightButtonPressed();
+                            break;
+                            case Qt.Key_Down:
+                            debugTableController.downButtonPressed();
+                            break
+                            default:
+                            break;
+                        }
+    }
+
+    onSelectedTopicIndexChanged: {
+        console.log("selected topic index changed")
+        console.log(selectedTopicIndex);
+        console.log(selectedValueIndex)
+    }
+
 
     Row {
         anchors.fill: parent
@@ -50,7 +80,7 @@ Item {
             delegate: Rectangle {
                 implicitWidth: topicsTableView.width
                 implicitHeight: debugTable.rowHeight
-                border.width: 1
+                border.width: scrollingTopics && model.index === debugTable.selectedTopicIndex ? 5 : 1
 
                 Text {
                     text: display
@@ -97,7 +127,7 @@ Item {
                 delegate: Rectangle {
                     implicitWidth: parent.width / 3
                     implicitHeight: debugTable.rowHeight
-                    border.width: 1
+                    border.width: !scrollingTopics && model.index === debugTable.selectedValueIndex ? 5 : 1
 
                     Text {
                         anchors.centerIn: parent

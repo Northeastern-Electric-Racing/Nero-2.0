@@ -18,19 +18,19 @@ void ButtonController::leftButtonPressed() {}
 void ButtonController::rightButtonPressed() {}
 
 void ButtonController::buttonUpdate() {
-  if (this->m_model->getBackwardButtonPressed()) {
+  if (this->m_model->getBackwardButtonPressed() == 1) {
     this->leftButtonPressed();
   }
-  if (this->m_model->getDownButtonPressed()) {
+  if (this->m_model->getDownButtonPressed() == 1) {
     this->downButtonPressed();
   }
-  if (this->m_model->getEnterButtonPressed()) {
+  if (this->m_model->getEnterButtonPressed() == 1) {
     this->enterButtonPressed();
   }
-  if (this->m_model->getRightButtonPressed()) {
+  if (this->m_model->getRightButtonPressed() == 1) {
     this->rightButtonPressed();
   }
-  if (this->m_model->getDownButtonPressed()) {
+  if (this->m_model->getDownButtonPressed() == 1) {
     this->downButtonPressed();
   }
 }
