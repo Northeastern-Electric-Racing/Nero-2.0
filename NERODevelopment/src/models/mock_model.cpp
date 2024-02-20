@@ -23,6 +23,8 @@ MockModel::MockModel()
   this->updateTimer->start(10);
 }
 
+MockModel::~MockModel() {}
+
 void MockModel::connectToMQTT() {
   int rng = rand() % 10001;
 
@@ -200,6 +202,7 @@ void MockModel::connectToMQTT() {
   if (rng > 600 && rng < 605)
     inverterTemp -= 1;
 
+  qDebug("test");
   this->updateCurrentData();
 }
 
@@ -351,71 +354,134 @@ std::optional<int> MockModel::getNumberOfCriticalFaults() { return 0; }
 
 std::optional<int> MockModel::getNumberOfNonCriticalFaults() { return 0; }
 
+QVector<QString> MockModel::convertNumberToDataInfoValue(float value) {
+  return {QString::number(value)};
+}
 void MockModel::updateCurrentData() {
-  this->currentData.insert(MPH, DataInfo(MPH, "mph", mph));
-  this->currentData.insert(STATUS, DataInfo(STATUS, "", status));
-  this->currentData.insert(DIRECTION, DataInfo(DIRECTION, "", dir));
-  this->currentData.insert(PACKTEMP, DataInfo(PACKTEMP, "C", packTemp));
-  this->currentData.insert(MOTORTEMP, DataInfo(MOTORTEMP, "", motorTemp));
-  this->currentData.insert(STATEOFCHARGE,
-                           DataInfo(STATEOFCHARGE, "%", stateOfCharge));
-  this->currentData.insert(CURRENT, DataInfo(CURRENT, "A", current));
-  this->currentData.insert(BMSFAULT, DataInfo(BMSFAULT, "", bmsFaults));
+  this->currentData.insert(
+      MPH, DataInfo(MPH, "mph", convertNumberToDataInfoValue(mph)));
+  this->currentData.insert(
+      STATUS, DataInfo(STATUS, "", convertNumberToDataInfoValue(status)));
+  this->currentData.insert(
+      DIRECTION, DataInfo(DIRECTION, "", convertNumberToDataInfoValue(dir)));
+  this->currentData.insert(
+      PACKTEMP,
+      DataInfo(PACKTEMP, "C", convertNumberToDataInfoValue(packTemp)));
+  this->currentData.insert(
+      MOTORTEMP,
+      DataInfo(MOTORTEMP, "", convertNumberToDataInfoValue(motorTemp)));
+  this->currentData.insert(
+      STATEOFCHARGE, DataInfo(STATEOFCHARGE, "%",
+                              convertNumberToDataInfoValue(stateOfCharge)));
+  this->currentData.insert(
+      CURRENT, DataInfo(CURRENT, "A", convertNumberToDataInfoValue(current)));
+  this->currentData.insert(
+      BMSFAULT,
+      DataInfo(BMSFAULT, "", convertNumberToDataInfoValue(bmsFaults)));
 
-  this->currentData.insert(MPUFAULT, DataInfo(MPUFAULT, "", mpuFaults));
-  this->currentData.insert(MODEINDEX, DataInfo(MODEINDEX, "", modeIndex));
-  this->currentData.insert(MAXCELLVOLTAGE,
-                           DataInfo(MAXCELLVOLTAGE, "", maxCellVoltage));
+  this->currentData.insert(
+      MPUFAULT,
+      DataInfo(MPUFAULT, "", convertNumberToDataInfoValue(mpuFaults)));
+  this->currentData.insert(
+      MODEINDEX,
+      DataInfo(MODEINDEX, "", convertNumberToDataInfoValue(modeIndex)));
+  this->currentData.insert(
+      MAXCELLVOLTAGE, DataInfo(MAXCELLVOLTAGE, "",
+                               convertNumberToDataInfoValue(maxCellVoltage)));
   this->currentData.insert(
       MAXCELLVOLTAGECHIP,
-      DataInfo(MAXCELLVOLTAGECHIP, "", maxCellVoltageChipNumber));
+      DataInfo(MAXCELLVOLTAGECHIP, "",
+               convertNumberToDataInfoValue(maxCellVoltageCellNumber)));
   this->currentData.insert(
       MAXCELLVOLTAGECELL,
-      DataInfo(MAXCELLVOLTAGECELL, "", maxCellVoltageCellNumber));
-  this->currentData.insert(MAXCELLTEMP, DataInfo(MAXCELLTEMP, "", maxCellTemp));
+      DataInfo(MAXCELLVOLTAGECELL, "",
+               convertNumberToDataInfoValue(maxCellVoltageChipNumber)));
   this->currentData.insert(
-      MAXCELLTEMPCHIP, DataInfo(MAXCELLTEMPCHIP, "", maxCellTempChipNumber));
+      MAXCELLTEMP,
+      DataInfo(MAXCELLTEMP, "", convertNumberToDataInfoValue(maxCellTemp)));
   this->currentData.insert(
-      MAXCELLTEMPCELL, DataInfo(MAXCELLTEMPCELL, "", maxCellTempCellNumber));
-  this->currentData.insert(MINCELLVOLTAGE,
-                           DataInfo(MINCELLVOLTAGE, "", minCellVoltage));
+      MAXCELLTEMPCHIP,
+      DataInfo(MAXCELLTEMPCHIP, "",
+               convertNumberToDataInfoValue(maxCellTempChipNumber)));
+  this->currentData.insert(
+      MAXCELLTEMPCELL,
+      DataInfo(MAXCELLTEMPCELL, "",
+               convertNumberToDataInfoValue(maxCellTempCellNumber)));
+  this->currentData.insert(
+      MINCELLVOLTAGE, DataInfo(MINCELLVOLTAGE, "",
+                               convertNumberToDataInfoValue(minCellVoltage)));
   this->currentData.insert(
       MINCELLVOLTAGECHIP,
-      DataInfo(MINCELLVOLTAGECHIP, "", minCellVoltageChipNumber));
+      DataInfo(MINCELLVOLTAGECHIP, "",
+               convertNumberToDataInfoValue(minCellVoltageChipNumber)));
   this->currentData.insert(
       MINCELLVOLTAGECELL,
-      DataInfo(MINCELLVOLTAGECELL, "", minCellVoltageCellNumber));
-  this->currentData.insert(MINCELLTEMP, DataInfo(MINCELLTEMP, "", minCellTemp));
+      DataInfo(MINCELLVOLTAGECELL, "",
+               convertNumberToDataInfoValue(minCellVoltageCellNumber)));
   this->currentData.insert(
-      MINCELLTEMPCHIP, DataInfo(MINCELLTEMPCHIP, "", minCellTempChipNumber));
+      MINCELLTEMP,
+      DataInfo(MINCELLTEMP, "", convertNumberToDataInfoValue(minCellTemp)));
   this->currentData.insert(
-      MINCELLTEMPCELL, DataInfo(MINCELLTEMPCELL, "", minCellTempCellNumber));
-  this->currentData.insert(AVECELLVOLTAGE,
-                           DataInfo(AVECELLVOLTAGE, "", averageCellVoltage));
-  this->currentData.insert(AVECELLTEMP,
-                           DataInfo(AVECELLTEMP, "", averageCellTemp));
-  this->currentData.insert(PACKVOLTAGE, DataInfo(PACKVOLTAGE, "", packVoltage));
-  this->currentData.insert(BMSSTATE, DataInfo(BMSSTATE, "", bmsState));
-  this->currentData.insert(CURRENT, DataInfo(CURRENT, "", packCurrent));
-  this->currentData.insert(DCL, DataInfo(DCL, "", dcl));
-  this->currentData.insert(CCL, DataInfo(CCL, "", ccl));
-  this->currentData.insert(GFORCEX, DataInfo(GFORCEX, "", gforceX));
-  this->currentData.insert(GFORCEY, DataInfo(GFORCEY, "", gforceY));
-  this->currentData.insert(GFORCEZ, DataInfo(GFORCEZ, "", gforceZ));
-  this->currentData.insert(SEGMENTTEMP1,
-                           DataInfo(SEGMENTTEMP1, "", segment1Temp));
-  this->currentData.insert(SEGMENTTEMP2,
-                           DataInfo(SEGMENTTEMP2, "", segment2Temp));
-  this->currentData.insert(SEGMENTTEMP3,
-                           DataInfo(SEGMENTTEMP4, "", segment3Temp));
-  this->currentData.insert(SEGMENTTEMP4,
-                           DataInfo(SEGMENTTEMP4, "", segment4Temp));
-  this->currentData.insert(MOTORPOWER, DataInfo(MOTORPOWER, "", motorPower));
-  this->currentData.insert(FANPOWER, DataInfo(FANPOWER, "", fanPower));
-  this->currentData.insert(TORQUEPOWER, DataInfo(TORQUEPOWER, "", torquePower));
-  this->currentData.insert(REGENPOWER, DataInfo(REGENPOWER, "", regenPower));
-  this->currentData.insert(BURNINGCELLS, DataInfo(BURNINGCELLS, "", isBurning));
-  this->currentData.insert(INVERTERTEMP,
-                           DataInfo(INVERTERTEMP, "", inverterTemp));
+      MINCELLTEMPCHIP,
+      DataInfo(MINCELLTEMPCHIP, "",
+               convertNumberToDataInfoValue(minCellTempChipNumber)));
+  this->currentData.insert(
+      MINCELLTEMPCELL,
+      DataInfo(MINCELLTEMPCELL, "",
+               convertNumberToDataInfoValue(minCellTempCellNumber)));
+  this->currentData.insert(
+      AVECELLVOLTAGE,
+      DataInfo(AVECELLVOLTAGE, "",
+               convertNumberToDataInfoValue(averageCellVoltage)));
+  this->currentData.insert(
+      AVECELLTEMP,
+      DataInfo(AVECELLTEMP, "", convertNumberToDataInfoValue(averageCellTemp)));
+  this->currentData.insert(
+      PACKVOLTAGE,
+      DataInfo(PACKVOLTAGE, "", convertNumberToDataInfoValue(packVoltage)));
+  this->currentData.insert(
+      BMSSTATE, DataInfo(BMSSTATE, "", convertNumberToDataInfoValue(bmsState)));
+  this->currentData.insert(
+      CURRENT,
+      DataInfo(CURRENT, "", convertNumberToDataInfoValue(packCurrent)));
+  this->currentData.insert(
+      DCL, DataInfo(DCL, "", convertNumberToDataInfoValue(dcl)));
+  this->currentData.insert(
+      CCL, DataInfo(CCL, "", convertNumberToDataInfoValue(ccl)));
+  this->currentData.insert(
+      GFORCEX, DataInfo(GFORCEX, "", convertNumberToDataInfoValue(gforceX)));
+  this->currentData.insert(
+      GFORCEY, DataInfo(GFORCEY, "", convertNumberToDataInfoValue(gforceY)));
+  this->currentData.insert(
+      GFORCEZ, DataInfo(GFORCEZ, "", convertNumberToDataInfoValue(gforceZ)));
+  this->currentData.insert(
+      SEGMENTTEMP1,
+      DataInfo(SEGMENTTEMP1, "", convertNumberToDataInfoValue(segment1Temp)));
+  this->currentData.insert(
+      SEGMENTTEMP2,
+      DataInfo(SEGMENTTEMP2, "", convertNumberToDataInfoValue(segment2Temp)));
+  this->currentData.insert(
+      SEGMENTTEMP3,
+      DataInfo(SEGMENTTEMP4, "", convertNumberToDataInfoValue(segment3Temp)));
+  this->currentData.insert(
+      SEGMENTTEMP4,
+      DataInfo(SEGMENTTEMP4, "", convertNumberToDataInfoValue(segment4Temp)));
+  this->currentData.insert(
+      MOTORPOWER,
+      DataInfo(MOTORPOWER, "", convertNumberToDataInfoValue(motorPower)));
+  this->currentData.insert(
+      FANPOWER, DataInfo(FANPOWER, "", convertNumberToDataInfoValue(fanPower)));
+  this->currentData.insert(
+      TORQUEPOWER,
+      DataInfo(TORQUEPOWER, "", convertNumberToDataInfoValue(torquePower)));
+  this->currentData.insert(
+      REGENPOWER,
+      DataInfo(REGENPOWER, "", convertNumberToDataInfoValue(regenPower)));
+  this->currentData.insert(
+      BURNINGCELLS,
+      DataInfo(BURNINGCELLS, "", convertNumberToDataInfoValue(isBurning)));
+  this->currentData.insert(
+      INVERTERTEMP,
+      DataInfo(INVERTERTEMP, "", convertNumberToDataInfoValue(inverterTemp)));
   emit onCurrentDataChange();
 }

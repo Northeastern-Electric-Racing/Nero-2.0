@@ -3,6 +3,7 @@
 #ifndef _WIN32
 
 #include "model.h"
+#include <serverdata.qpb.h>
 
 /**
  * @brief The RaspberryModel class
@@ -76,6 +77,7 @@ public:
 
 private slots:
   void updateCurrentData() override;
+  void receiveServerData(const serverdata::ServerData, const QString topic);
 
 private:
   void processData(const std::string &data);

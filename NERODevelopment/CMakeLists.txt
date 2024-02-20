@@ -21,6 +21,7 @@ set(PROJECT_SOURCES
     src/controllers/headercontroller.h
     src/controllers/debugtablecontroller.h
     src/controllers/offviewcontroller.h
+    src/controllers/buttoncontroller.h
 
     src/models/mock_model.h
     src/models/model.h
@@ -38,12 +39,12 @@ set(PROJECT_SOURCES
     src/controllers/headercontroller.cpp
     src/controllers/debugtablecontroller.cpp
     src/controllers/offviewcontroller.cpp
+    src/controllers/buttoncontroller.cpp
 
     src/models/mock_model.cpp
     src/models/model.cpp
     src/models/raspberry_model.cpp
     src/models/mqtt_client.cpp
-
 
     src/modes/debug_mode/debug_utils.cpp
 
@@ -52,15 +53,19 @@ set(PROJECT_SOURCES
     src/main.cpp
 )
 
-find_package(Qt6 REQUIRED COMPONENTS Core Gui Qml Quick Network Mqtt)
+find_package(Qt6 REQUIRED COMPONENTS Core Gui Qml Quick Network Mqtt Protobuf)
 
-qt_add_executable(NEROApp ${PROJECT_SOURCES}
-    src/controllers/buttoncontroller.h src/controllers/buttoncontroller.cpp)
+qt_add_executable(NEROApp ${PROJECT_SOURCES})
 
 qt_add_resources(NEROApp "configuration"
     PREFIX "/"
     FILES
         qtquickcontrols2.conf
+)
+
+qt_add_protobuf(NEROApp
+    PROTO_FILES
+    src/proto/serverdata/serverdata.proto
 )
 
 target_include_directories(${PROJECT_NAME} PUBLIC include)
@@ -74,6 +79,7 @@ target_link_libraries(NEROApp PRIVATE
     Qt6::Network
     Qt6::Mqtt
     Qt6::Quick
+    Qt6::Protobuf
 )
 
 if (BUILD_QDS_COMPONENTS)
