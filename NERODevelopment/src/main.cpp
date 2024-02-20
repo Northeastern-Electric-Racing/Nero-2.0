@@ -25,6 +25,7 @@ int main(int argc, char *argv[]) {
   model->moveToThread(dataThread);
 
   HomeController homeController(model);
+  HeaderController headerController(model);
 
   dataThread->start();
 
