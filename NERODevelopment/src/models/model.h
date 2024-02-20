@@ -5,6 +5,7 @@
 #include "../utils/server_data.h"
 #include <QList>
 #include <QMap>
+#include <QMutex>
 #include <QObject>
 #include <QVariant>
 
@@ -59,12 +60,12 @@ public:
   virtual std::optional<float> getDcl() = 0;
   virtual std::optional<float> getCcl() = 0;
   virtual std::optional<float> getPackCurrent() = 0;
-  virtual std::optional<QString> getForwardButtonPressed() = 0;
-  virtual std::optional<QString> getBackwardButtonPressed() = 0;
-  virtual std::optional<QString> getRightButtonPressed() = 0;
-  virtual std::optional<QString> getEnterButtonPressed() = 0;
-  virtual std::optional<QString> getUpButtonPressed() = 0;
-  virtual std::optional<QString> getDownButtonPressed() = 0;
+  virtual std::optional<bool> getForwardButtonPressed() = 0;
+  virtual std::optional<bool> getBackwardButtonPressed() = 0;
+  virtual std::optional<bool> getRightButtonPressed() = 0;
+  virtual std::optional<bool> getEnterButtonPressed() = 0;
+  virtual std::optional<bool> getUpButtonPressed() = 0;
+  virtual std::optional<bool> getDownButtonPressed() = 0;
   virtual std::optional<float> getModeIndex() = 0;
   virtual std::optional<float> getGForceX() = 0;
   virtual std::optional<float> getGForceY() = 0;
@@ -73,6 +74,10 @@ public:
   virtual std::optional<float> getSegment2Temp() = 0;
   virtual std::optional<float> getSegment3Temp() = 0;
   virtual std::optional<float> getSegment4Temp() = 0;
+  virtual std::optional<bool> getIsTalking() = 0;
+  virtual std::optional<int> getNumberOfCriticalFaults() = 0;
+  virtual std::optional<int> getNumberOfNonCriticalFaults() = 0;
+
   QList<DebugTableRowValue> getDebugTableValues();
   void updatePackTempData();
   void addPinnedData(QString id);

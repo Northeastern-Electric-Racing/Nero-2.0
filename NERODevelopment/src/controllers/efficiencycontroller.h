@@ -1,13 +1,14 @@
 #ifndef EFFICIENCYCONTROLLER_H
 #define EFFICIENCYCONTROLLER_H
 
+#include "buttoncontroller.h"
 #include <QObject>
 
 /**
  * @brief The EfficiencyController class
  * Controller for the efficiency view
  */
-class EfficiencyController : public QObject {
+class EfficiencyController : public ButtonController {
   Q_OBJECT
   Q_PROPERTY(int currentMaxTorque READ currentMaxTorque WRITE
                  setCurrentMaxTorque NOTIFY currentMaxTorqueChanged FINAL)
@@ -30,7 +31,7 @@ class EfficiencyController : public QObject {
                  setStateOfChargeDelta NOTIFY stateOfChargeDeltaChanged FINAL)
 
 public:
-  explicit EfficiencyController(QObject *parent = nullptr);
+  explicit EfficiencyController(Model *model, QObject *parent = nullptr);
   int currentMaxTorque() const;
   int currentRegenStrength() const;
   QVector<qreal> packSegments() const;

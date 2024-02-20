@@ -40,6 +40,7 @@ Item {
             width: dimension / 2
             height: dimension / 2
             color: "#ffffff"
+            visible: numWarnings > 0
 
             Text {
                 id: number
