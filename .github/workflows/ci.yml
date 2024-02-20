@@ -23,7 +23,7 @@ jobs:
  
     # Here we call CMake manually, there are solutions for that in the Marketplace: https://github.com/marketplace/actions/run-cmake
     - name: Debug
-      run: ls ../Qt && ls ../Qt/6.5.3 && ls ../Qt/6.5.3/Src && ls ../Qt/6.5.3/Src/QtMqtt
+      run: ls ../Qt && ls ../Qt/6.5.3 && ls ../Qt/6.5.3/gcc_64 && ls ../Qt/6.5.3/gcc_64/Src
     - name: Configure Mqtt
       run: cmake -S ../Qt/6.5.3/Src/QtMqtt -B build -G "Ninja Multi-Config" -DCMAKE_BUILD_TYPE=RELEASE
     - name: Install Mqtt
