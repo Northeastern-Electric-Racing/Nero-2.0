@@ -17,17 +17,11 @@ jobs:
       uses: jurplel/install-qt-action@v3
       with:
         version: '6.5.3'
+        modules: 'qtmqtt qtnetwork qtprotobuf'
     - uses: ilammy/msvc-dev-cmd@v1 # This action essentially calls vcvarsall.bat for the latest VS in the runner for x64
     - uses: actions/checkout@v3    # Actually check out the sources. GH Actions can run for events that may not require
                                    # sources (e.g. when someone comments on an issue)
- 
     # Here we call CMake manually, there are solutions for that in the Marketplace: https://github.com/marketplace/actions/run-cmake
-    - name: Debug
-      run: ls ../Qt && ls ../Qt/6.5.3 && ls ../Qt/6.5.3/gcc_64 && ls ../Qt/6.5.3/gcc_64/Src
-    - name: Configure Mqtt
-      run: cmake -S ../Qt/6.5.3/Src/QtMqtt -B build -G "Ninja Multi-Config" -DCMAKE_BUILD_TYPE=RELEASE
-    - name: Install Mqtt
-      run: cmake --install build
     - name: Build
       # We don't need to set up the environment variable for CMake to see Qt because the install-qt-action
       # sets up the necessary variables automatically
