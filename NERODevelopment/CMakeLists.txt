@@ -18,6 +18,8 @@ set(PROJECT_SOURCES
     src/controllers/chargingcontroller.h
     src/controllers/homecontroller.h
     src/controllers/efficiencycontroller.h
+    src/controllers/headercontroller.h
+    src/controllers/offviewcontroller.h
 
     src/models/mock_model.h
     src/models/model.h
@@ -28,16 +30,22 @@ set(PROJECT_SOURCES
 
     src/utils/data_type_names.h
     src/utils/server_data.h
+    src/utils/attributestatus.h
+
+    src/app_environment.h
+    src/import_qml_components_plugins.h
+    src/import_qml_plugins.h
 
     src/controllers/efficiencycontroller.cpp
     src/controllers/chargingcontroller.cpp
     src/controllers/homecontroller.cpp
+    src/controllers/headercontroller.cpp
+    src/controllers/offviewcontroller.cpp
 
     src/models/mock_model.cpp
     src/models/model.cpp
     src/models/raspberry_model.cpp
     src/models/mqtt_client.cpp
-
 
     src/modes/debug_mode/debug_utils.cpp
 
