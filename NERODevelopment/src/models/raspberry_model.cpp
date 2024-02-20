@@ -231,61 +231,56 @@ std::optional<float> RaspberryModel::getBmsFault() {
   return faultStatus;
 }
 
-std::optional<QString> RaspberryModel::getForwardButtonPressed() {
+std::optional<bool> RaspberryModel::getForwardButtonPressed() {
   std::optional<float> value = currentData[FORWARDBUTTON].value;
   if (value) {
     std::string binary = std::bitset<8>(static_cast<int>(*value)).to_string();
-    return binary.length() >= 7 ? std::optional<QString>(QString(1, binary[6]))
-                                : std::nullopt;
+    return binary.length() >= 7 ? binary[6] : false;
   }
   return std::nullopt;
 }
 
-std::optional<QString> RaspberryModel::getBackwardButtonPressed() {
+std::optional<bool> RaspberryModel::getBackwardButtonPressed() {
   std::optional<float> value = currentData[BACKWARDBUTTON].value;
   if (value) {
     std::string binary = std::bitset<8>(static_cast<int>(*value)).to_string();
-    return binary.length() >= 8 ? std::optional<QString>(QString(1, binary[7]))
-                                : std::nullopt;
+    return binary.length() >= 8 ? binary[7] == 1 : false;
   }
   return std::nullopt;
 }
 
-std::optional<QString> RaspberryModel::getRightButtonPressed() {
+std::optional<bool> RaspberryModel::getRightButtonPressed() {
   std::optional<float> value = currentData[RIGHTBUTTON].value;
   if (value) {
     std::string binary = std::bitset<8>(static_cast<int>(*value)).to_string();
-    return binary.length() >= 2 ? std::optional<QString>(QString(1, binary[1]))
-                                : std::nullopt;
+    return binary.length() >= 2 ? binary[1] == 1 : false;
   }
   return std::nullopt;
 }
 
-std::optional<QString> RaspberryModel::getEnterButtonPressed() {
+std::optional<bool> RaspberryModel::getEnterButtonPressed() {
   std::optional<float> value = currentData[ENTERBUTTON].value;
   if (value) {
     std::string binary = std::bitset<8>(static_cast<int>(*value)).to_string();
-    return std::optional<QString>(QString(1, binary[0]));
+    return binary[0] == 1;
   }
   return std::nullopt;
 }
 
-std::optional<QString> RaspberryModel::getUpButtonPressed() {
+std::optional<bool> RaspberryModel::getUpButtonPressed() {
   std::optional<float> value = currentData[UPBUTTON].value;
   if (value) {
     std::string binary = std::bitset<8>(static_cast<int>(*value)).to_string();
-    return binary.length() >= 6 ? std::optional<QString>(QString(1, binary[5]))
-                                : std::nullopt;
+    return binary.length() >= 6 ? binary[5] == 1 : false;
   }
   return std::nullopt;
 }
 
-std::optional<QString> RaspberryModel::getDownButtonPressed() {
+std::optional<bool> RaspberryModel::getDownButtonPressed() {
   std::optional<float> value = currentData[DOWNBUTTON].value;
   if (value) {
     std::string binary = std::bitset<8>(static_cast<int>(*value)).to_string();
-    return binary.length() >= 5 ? std::optional<QString>(QString(1, binary[4]))
-                                : std::nullopt;
+    return binary.length() >= 5 ? binary[4] == 1 : false;
   }
   return std::nullopt;
 }
@@ -299,5 +294,40 @@ std::optional<float> RaspberryModel::getBurningCells() {
 }
 
 void RaspberryModel::updateCurrentData() { emit this->onCurrentDataChange(); }
+
+std::optional<bool> RaspberryModel::getIsTalking() {
+  std::optional<float> value = this->getById(MICROPHONE);
+  if (value && value > 0) {
+    return true;
+  }
+  return false;
+}
+
+std::optional<int> RaspberryModel::getNumberOfCriticalFaults() {
+  std::optional<float> value = this->getById(CRITICALFAULTS);
+  if (value) {
+    return this->totalNumberOfOnesIn(*value);
+  }
+  return std::nullopt;
+}
+
+std::optional<int> RaspberryModel::getNumberOfNonCriticalFaults() {
+  std::optional<float> value = this->getById(NONCRITICALFAULTS);
+  if (value) {
+    return this->totalNumberOfOnesIn(*value);
+  }
+  return std::nullopt;
+}
+
+int RaspberryModel::totalNumberOfOnesIn(float value) {
+  int total = 0;
+  std::string binary = std::bitset<8>(static_cast<int>(value)).to_string();
+  for (int num : binary) {
+    if (num == 1) {
+      total++;
+    }
+  }
+  return total;
+}
 
 #endif

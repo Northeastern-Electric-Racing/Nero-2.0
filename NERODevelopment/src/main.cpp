@@ -2,6 +2,8 @@
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
 
 #include "app_environment.h"
+#include "controllers/debugtablecontroller.h"
+#include "controllers/homecontroller.h"
 #include "import_qml_components_plugins.h"
 #include "import_qml_plugins.h"
 #include "src/models/mock_model.h"
@@ -9,8 +11,6 @@
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include <QThread>
-
-#include "controllers/homecontroller.h"
 
 int main(int argc, char *argv[]) {
   set_qt_environment();
@@ -25,6 +25,7 @@ int main(int argc, char *argv[]) {
   model->moveToThread(dataThread);
 
   HomeController homeController(model);
+  DebugTableController tableController(model);
 
   dataThread->start();
 
@@ -39,6 +40,8 @@ int main(int argc, char *argv[]) {
 
   engine.rootContext()->setContextProperty("model", model);
   engine.rootContext()->setContextProperty("homeController", &homeController);
+  engine.rootContext()->setContextProperty("debugTableController",
+                                           &tableController);
 
   engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
 

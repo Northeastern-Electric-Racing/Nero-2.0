@@ -59,15 +59,18 @@ public:
   std::optional<float> getRegenPower() override;
   std::optional<float> getBurningCells() override;
   std::optional<float> getInverterTemp() override;
-  std::optional<QString> getForwardButtonPressed() override;
-  std::optional<QString> getEnterButtonPressed() override;
-  std::optional<QString> getUpButtonPressed() override;
-  std::optional<QString> getDownButtonPressed() override;
-  std::optional<QString> getBackwardButtonPressed() override;
-  std::optional<QString> getRightButtonPressed() override;
+  std::optional<bool> getForwardButtonPressed() override;
+  std::optional<bool> getEnterButtonPressed() override;
+  std::optional<bool> getUpButtonPressed() override;
+  std::optional<bool> getDownButtonPressed() override;
+  std::optional<bool> getBackwardButtonPressed() override;
+  std::optional<bool> getRightButtonPressed() override;
   std::optional<float> getBalancingCells() override;
   std::optional<float> getTractionControl() override;
   std::optional<float> getCellDelta() override;
+  std::optional<bool> getIsTalking() override;
+  std::optional<int> getNumberOfCriticalFaults() override;
+  std::optional<int> getNumberOfNonCriticalFaults() override;
 
 private slots:
   void updateCurrentData() override;

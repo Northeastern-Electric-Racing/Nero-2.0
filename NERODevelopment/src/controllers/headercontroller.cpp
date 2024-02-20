@@ -40,7 +40,7 @@ void HeaderController::setIsTalking(bool isTalking) {
 }
 
 void HeaderController::currentDataDidChange() {
-  setNumCriticalWarnings(*m_model->getNumCriticalWarnings());
-  setNumNonCriticalWarnings(*m_model->getNumNonCriticalWarnings());
+  setNumCriticalWarnings(*m_model->getNumberOfCriticalFaults());
+  setNumNonCriticalWarnings(*m_model->getNumberOfNonCriticalFaults());
   setIsTalking(*m_model->getIsTalking());
 }

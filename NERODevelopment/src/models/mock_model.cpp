@@ -333,86 +333,89 @@ std::optional<float> MockModel::getBalancingCells() {
   return std::nullopt; // TODO: Implement Mock balancing Cells
 }
 
-std::optional<QString> MockModel::getForwardButtonPressed() {
-  return QString(QChar(forward));
-}
+std::optional<bool> MockModel::getForwardButtonPressed() { return 0; }
 
-std::optional<QString> MockModel::getEnterButtonPressed() {
-  return QString(QChar(enter));
-}
+std::optional<bool> MockModel::getEnterButtonPressed() { return 0; }
 
-std::optional<QString> MockModel::getUpButtonPressed() {
-  return QString(QChar(up));
-}
+std::optional<bool> MockModel::getUpButtonPressed() { return 0; }
 
-std::optional<QString> MockModel::getDownButtonPressed() {
-  return QString(QChar(down));
-}
+std::optional<bool> MockModel::getDownButtonPressed() { return 0; }
 
-std::optional<QString> MockModel::getBackwardButtonPressed() {
-  return QString(QChar(backward));
-}
+std::optional<bool> MockModel::getBackwardButtonPressed() { return 0; }
 
-std::optional<QString> MockModel::getRightButtonPressed() {
-  return QString(QChar(right));
-}
+std::optional<bool> MockModel::getRightButtonPressed() { return 0; }
+
+std::optional<bool> MockModel::getIsTalking() { return 0; }
+
+std::optional<int> MockModel::getNumberOfCriticalFaults() { return 0; }
+
+std::optional<int> MockModel::getNumberOfNonCriticalFaults() { return 0; }
 
 void MockModel::updateCurrentData() {
-  currentData.insert(MPH, DataInfo(MPH, "mph", mph));
-  currentData.insert(STATUS, DataInfo(STATUS, "", status));
-  currentData.insert(DIRECTION, DataInfo(DIRECTION, "", dir));
-  currentData.insert(PACKTEMP, DataInfo(PACKTEMP, "C", packTemp));
-  currentData.insert(MOTORTEMP, DataInfo(MOTORTEMP, "", motorTemp));
-  currentData.insert(STATEOFCHARGE,
-                     DataInfo(STATEOFCHARGE, "%", stateOfCharge));
-  currentData.insert(CURRENT, DataInfo(CURRENT, "A", current));
-  currentData.insert(BMSFAULT, DataInfo(BMSFAULT, "", bmsFaults));
+  this->currentData.insert(MPH, DataInfo(MPH, "mph", mph));
+  this->currentData.insert(STATUS, DataInfo(STATUS, "", status));
+  this->currentData.insert(DIRECTION, DataInfo(DIRECTION, "", dir));
+  this->currentData.insert(PACKTEMP, DataInfo(PACKTEMP, "C", packTemp));
+  this->currentData.insert(MOTORTEMP, DataInfo(MOTORTEMP, "", motorTemp));
+  this->currentData.insert(STATEOFCHARGE,
+                           DataInfo(STATEOFCHARGE, "%", stateOfCharge));
+  this->currentData.insert(CURRENT, DataInfo(CURRENT, "A", current));
+  this->currentData.insert(BMSFAULT, DataInfo(BMSFAULT, "", bmsFaults));
 
-  currentData.insert(MPUFAULT, DataInfo(MPUFAULT, "", mpuFaults));
-  currentData.insert(MODEINDEX, DataInfo(MODEINDEX, "", modeIndex));
-  currentData.insert(MAXCELLVOLTAGE,
-                     DataInfo(MAXCELLVOLTAGE, "", maxCellVoltage));
-  currentData.insert(MAXCELLVOLTAGECHIP, DataInfo(MAXCELLVOLTAGECHIP, "",
-                                                  maxCellVoltageChipNumber));
-  currentData.insert(MAXCELLVOLTAGECELL, DataInfo(MAXCELLVOLTAGECELL, "",
-                                                  maxCellVoltageCellNumber));
-  currentData.insert(MAXCELLTEMP, DataInfo(MAXCELLTEMP, "", maxCellTemp));
-  currentData.insert(MAXCELLTEMPCHIP,
-                     DataInfo(MAXCELLTEMPCHIP, "", maxCellTempChipNumber));
-  currentData.insert(MAXCELLTEMPCELL,
-                     DataInfo(MAXCELLTEMPCELL, "", maxCellTempCellNumber));
-  currentData.insert(MINCELLVOLTAGE,
-                     DataInfo(MINCELLVOLTAGE, "", minCellVoltage));
-  currentData.insert(MINCELLVOLTAGECHIP, DataInfo(MINCELLVOLTAGECHIP, "",
-                                                  minCellVoltageChipNumber));
-  currentData.insert(MINCELLVOLTAGECELL, DataInfo(MINCELLVOLTAGECELL, "",
-                                                  minCellVoltageCellNumber));
-  currentData.insert(MINCELLTEMP, DataInfo(MINCELLTEMP, "", minCellTemp));
-  currentData.insert(MINCELLTEMPCHIP,
-                     DataInfo(MINCELLTEMPCHIP, "", minCellTempChipNumber));
-  currentData.insert(MINCELLTEMPCELL,
-                     DataInfo(MINCELLTEMPCELL, "", minCellTempCellNumber));
-  currentData.insert(AVECELLVOLTAGE,
-                     DataInfo(AVECELLVOLTAGE, "", averageCellVoltage));
-  currentData.insert(AVECELLTEMP, DataInfo(AVECELLTEMP, "", averageCellTemp));
-  currentData.insert(PACKVOLTAGE, DataInfo(PACKVOLTAGE, "", packVoltage));
-  currentData.insert(BMSSTATE, DataInfo(BMSSTATE, "", bmsState));
-  currentData.insert(CURRENT, DataInfo(CURRENT, "", packCurrent));
-  currentData.insert(DCL, DataInfo(DCL, "", dcl));
-  currentData.insert(CCL, DataInfo(CCL, "", ccl));
-  currentData.insert(GFORCEX, DataInfo(GFORCEX, "", gforceX));
-  currentData.insert(GFORCEY, DataInfo(GFORCEY, "", gforceY));
-  currentData.insert(GFORCEZ, DataInfo(GFORCEZ, "", gforceZ));
-  currentData.insert(SEGMENTTEMP1, DataInfo(SEGMENTTEMP1, "", segment1Temp));
-  currentData.insert(SEGMENTTEMP2, DataInfo(SEGMENTTEMP2, "", segment2Temp));
-  currentData.insert(SEGMENTTEMP3, DataInfo(SEGMENTTEMP4, "", segment3Temp));
-  currentData.insert(SEGMENTTEMP4, DataInfo(SEGMENTTEMP4, "", segment4Temp));
-  currentData.insert(MOTORPOWER, DataInfo(MOTORPOWER, "", motorPower));
-  currentData.insert(FANPOWER, DataInfo(FANPOWER, "", fanPower));
-  currentData.insert(TORQUEPOWER, DataInfo(TORQUEPOWER, "", torquePower));
-  currentData.insert(REGENPOWER, DataInfo(REGENPOWER, "", regenPower));
-  currentData.insert(BURNINGCELLS, DataInfo(BURNINGCELLS, "", isBurning));
-  currentData.insert(INVERTERTEMP, DataInfo(INVERTERTEMP, "", inverterTemp));
-
+  this->currentData.insert(MPUFAULT, DataInfo(MPUFAULT, "", mpuFaults));
+  this->currentData.insert(MODEINDEX, DataInfo(MODEINDEX, "", modeIndex));
+  this->currentData.insert(MAXCELLVOLTAGE,
+                           DataInfo(MAXCELLVOLTAGE, "", maxCellVoltage));
+  this->currentData.insert(
+      MAXCELLVOLTAGECHIP,
+      DataInfo(MAXCELLVOLTAGECHIP, "", maxCellVoltageChipNumber));
+  this->currentData.insert(
+      MAXCELLVOLTAGECELL,
+      DataInfo(MAXCELLVOLTAGECELL, "", maxCellVoltageCellNumber));
+  this->currentData.insert(MAXCELLTEMP, DataInfo(MAXCELLTEMP, "", maxCellTemp));
+  this->currentData.insert(
+      MAXCELLTEMPCHIP, DataInfo(MAXCELLTEMPCHIP, "", maxCellTempChipNumber));
+  this->currentData.insert(
+      MAXCELLTEMPCELL, DataInfo(MAXCELLTEMPCELL, "", maxCellTempCellNumber));
+  this->currentData.insert(MINCELLVOLTAGE,
+                           DataInfo(MINCELLVOLTAGE, "", minCellVoltage));
+  this->currentData.insert(
+      MINCELLVOLTAGECHIP,
+      DataInfo(MINCELLVOLTAGECHIP, "", minCellVoltageChipNumber));
+  this->currentData.insert(
+      MINCELLVOLTAGECELL,
+      DataInfo(MINCELLVOLTAGECELL, "", minCellVoltageCellNumber));
+  this->currentData.insert(MINCELLTEMP, DataInfo(MINCELLTEMP, "", minCellTemp));
+  this->currentData.insert(
+      MINCELLTEMPCHIP, DataInfo(MINCELLTEMPCHIP, "", minCellTempChipNumber));
+  this->currentData.insert(
+      MINCELLTEMPCELL, DataInfo(MINCELLTEMPCELL, "", minCellTempCellNumber));
+  this->currentData.insert(AVECELLVOLTAGE,
+                           DataInfo(AVECELLVOLTAGE, "", averageCellVoltage));
+  this->currentData.insert(AVECELLTEMP,
+                           DataInfo(AVECELLTEMP, "", averageCellTemp));
+  this->currentData.insert(PACKVOLTAGE, DataInfo(PACKVOLTAGE, "", packVoltage));
+  this->currentData.insert(BMSSTATE, DataInfo(BMSSTATE, "", bmsState));
+  this->currentData.insert(CURRENT, DataInfo(CURRENT, "", packCurrent));
+  this->currentData.insert(DCL, DataInfo(DCL, "", dcl));
+  this->currentData.insert(CCL, DataInfo(CCL, "", ccl));
+  this->currentData.insert(GFORCEX, DataInfo(GFORCEX, "", gforceX));
+  this->currentData.insert(GFORCEY, DataInfo(GFORCEY, "", gforceY));
+  this->currentData.insert(GFORCEZ, DataInfo(GFORCEZ, "", gforceZ));
+  this->currentData.insert(SEGMENTTEMP1,
+                           DataInfo(SEGMENTTEMP1, "", segment1Temp));
+  this->currentData.insert(SEGMENTTEMP2,
+                           DataInfo(SEGMENTTEMP2, "", segment2Temp));
+  this->currentData.insert(SEGMENTTEMP3,
+                           DataInfo(SEGMENTTEMP4, "", segment3Temp));
+  this->currentData.insert(SEGMENTTEMP4,
+                           DataInfo(SEGMENTTEMP4, "", segment4Temp));
+  this->currentData.insert(MOTORPOWER, DataInfo(MOTORPOWER, "", motorPower));
+  this->currentData.insert(FANPOWER, DataInfo(FANPOWER, "", fanPower));
+  this->currentData.insert(TORQUEPOWER, DataInfo(TORQUEPOWER, "", torquePower));
+  this->currentData.insert(REGENPOWER, DataInfo(REGENPOWER, "", regenPower));
+  this->currentData.insert(BURNINGCELLS, DataInfo(BURNINGCELLS, "", isBurning));
+  this->currentData.insert(INVERTERTEMP,
+                           DataInfo(INVERTERTEMP, "", inverterTemp));
   emit onCurrentDataChange();
 }
