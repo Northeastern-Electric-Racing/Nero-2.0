@@ -1,19 +1,8 @@
 #ifndef SERVER_DATA_H
 #define SERVER_DATA_H
 
-#include <QJsonObject>
 #include <QString>
-
-// struct ServerData {
-// private:
-//    void fromJson(const QJsonObject &json);
-
-// public:
-//     QString unit;
-//     float value;
-
-//     ServerData(const QJsonObject &json);
-// };
+#include <QVector>
 
 struct DataInfo {
   QString topic;
