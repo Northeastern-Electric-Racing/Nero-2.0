@@ -26,6 +26,10 @@ jobs:
                                    # sources (e.g. when someone comments on an issue)
  
     # Here we call CMake manually, there are solutions for that in the Marketplace: https://github.com/marketplace/actions/run-cmake
+    - name: Configure Mqtt
+      run: cmake -S $QT_ROOT_DIR\6.5.3\Src\QtMqtt -B build -G "Ninja Multi-Config" -DCMAKE_BUILD_TYPE=RELEASE
+    - name: Install Mqtt
+      run: cmake --install build
     - name: Build
       # We don't need to set up the environment variable for CMake to see Qt because the install-qt-action
       # sets up the necessary variables automatically
