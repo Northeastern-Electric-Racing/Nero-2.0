@@ -6,17 +6,13 @@ jobs:
     name: "Build and test"
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest] # we build on GitHub-provided Windows and Linux images
+        os: [ubuntu-latest] # we build on GitHub-provided Linux images
     runs-on: ${{ matrix.os }} # use value from the matrix
     steps:
     - name: Install dependencies (linux)
       run: sudo apt install ninja-build
       # conditional, runs this step only on the Ubuntu runner
       if: matrix.os == 'ubuntu-latest' 
-    - name: Install Ninja (windows)    # Ninja is not available in GitHub-provided images,
-                                       # see https://github.com/actions/runner-images/issues/514
-      run: choco install ninja         # So let's install it through Chocolatey
-      if: matrix.os == 'windows-latest'
     - name: Install Qt
       uses: jurplel/install-qt-action@v3
       with:
@@ -27,7 +23,7 @@ jobs:
  
     # Here we call CMake manually, there are solutions for that in the Marketplace: https://github.com/marketplace/actions/run-cmake
     - name: Configure Mqtt
-      run: cmake -S $QT_ROOT_DIR\6.5.3\Src\QtMqtt -B build -G "Ninja Multi-Config" -DCMAKE_BUILD_TYPE=RELEASE
+      run: cmake -S $QT_ROOT_DIR/6.5.3/Src/QtMqtt -B build -G "Ninja Multi-Config" -DCMAKE_BUILD_TYPE=RELEASE
     - name: Install Mqtt
       run: cmake --install build
     - name: Build
