@@ -73,18 +73,6 @@ void MqttClient::receiveMessage(const QByteArray &message,
   } else {
     qDebug() << "Failed to decode server message";
   }
-
-  //                    QJsonDocument jsonDocument =
-  //     QJsonDocument::fromJson(message);
-
-  // if (jsonDocument.isNull() || !jsonDocument.isObject()) {
-  //   qDebug() << "Error: Unable to parse JSON data.";
-  //   return;
-  // }
-
-  // ServerData serverData(jsonDocument.object());
-
-  // DataInfo dataInfo(topic.name(), serverData.unit, serverData.value);
 }
 
 void MqttClient::updateMessage(const QMqttMessage &msg) {

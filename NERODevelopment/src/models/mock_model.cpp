@@ -202,7 +202,6 @@ void MockModel::connectToMQTT() {
   if (rng > 600 && rng < 605)
     inverterTemp -= 1;
 
-  qDebug("test");
   this->updateCurrentData();
 }
 
