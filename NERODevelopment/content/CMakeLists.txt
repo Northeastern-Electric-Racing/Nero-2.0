@@ -16,6 +16,7 @@ qt6_add_qml_module(content
         DirectionView.qml
         DetailDisplay.qml
         OffScreen.qml
+        DebugTable.qml
 
     RESOURCES
         fonts/fonts.txt

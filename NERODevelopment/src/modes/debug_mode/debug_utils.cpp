@@ -30,8 +30,8 @@ FaultInstance::FaultInstance(int fault_decimal, int max_cell_temp,
   }
 }
 
-DebugTableRowValue::DebugTableRowValue(const QString &name,
-                                       const float &value,
+/*DEBUG TABLE ROW VALUE*/
+DebugTableRowValue::DebugTableRowValue(const QString &name, const float &value,
                                        const QString &unit)
     : m_name(name), m_value(value), m_unit(unit) {}
 
@@ -40,3 +40,51 @@ QString DebugTableRowValue::name() const { return m_name; }
 float DebugTableRowValue::value() const { return m_value; }
 
 QString DebugTableRowValue::unit() const { return m_unit; }
+
+QJsonObject DebugTableRowValue::json() const {
+  QJsonObject object;
+  object["name"] = this->m_name;
+  object["value"] = this->m_value;
+  object["unit"] = this->m_unit;
+
+  return object;
+}
+
+/*DEBUG TABLE ROW TOPICS*/
+DebugTableRowTopics::DebugTableRowTopics() { this->m_topics = {}; }
+void DebugTableRowTopics::setTopics(const QVector<QString> topics) {
+  this->m_topics = topics;
+}
+
+QList<QJsonObject> DebugTableRowTopics::json() const {
+  QList<QJsonObject> jsonArray;
+  for (const QString &topic : this->m_topics) {
+    QJsonObject topicObject;
+    topicObject["topic"] = topic;
+    jsonArray.append(topicObject);
+  }
+
+  return jsonArray;
+}
+
+QVector<QString> DebugTableRowTopics::topics() const { return this->m_topics; }
+
+/*DEBUG TABLE ROW VALUES*/
+DebugTableRowValues::DebugTableRowValues() { this->m_values = {}; }
+
+void DebugTableRowValues::setDebugTableRowValues(
+    const QVector<DebugTableRowValue> values) {
+  this->m_values = values;
+}
+
+QList<QJsonObject> DebugTableRowValues::json() const {
+  QList<QJsonObject> jsonArray;
+  for (const DebugTableRowValue &row : this->m_values) {
+    jsonArray.append(row.json());
+  }
+  return jsonArray;
+}
+
+QVector<DebugTableRowValue> DebugTableRowValues::values() const {
+  return this->m_values;
+}

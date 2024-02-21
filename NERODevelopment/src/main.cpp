@@ -2,6 +2,8 @@
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
 
 #include "app_environment.h"
+#include "controllers/debugtablecontroller.h"
+#include "controllers/homecontroller.h"
 #include "import_qml_components_plugins.h"
 #include "import_qml_plugins.h"
 #include "src/models/mock_model.h"
@@ -27,6 +29,7 @@ int main(int argc, char *argv[]) {
 
   HomeController homeController(model);
   OffViewController offViewController(model);
+  DebugTableController tableController(model);
 
   dataThread->start();
 
@@ -42,6 +45,8 @@ int main(int argc, char *argv[]) {
   engine.rootContext()->setContextProperty("model", model);
   engine.rootContext()->setContextProperty("homeController", &homeController);
   engine.rootContext()->setContextProperty("offViewController", &offViewController);
+  engine.rootContext()->setContextProperty("debugTableController",
+                                           &tableController);
 
   engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
 

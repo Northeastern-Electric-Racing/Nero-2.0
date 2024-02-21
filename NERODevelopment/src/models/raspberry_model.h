@@ -3,6 +3,7 @@
 #ifndef _WIN32
 
 #include "model.h"
+#include <serverdata.qpb.h>
 
 /**
  * @brief The RaspberryModel class
@@ -56,12 +57,12 @@ public:
   std::optional<float> getDcl() override;
   std::optional<float> getCcl() override;
   std::optional<float> getPackCurrent() override;
-  std::optional<QString> getForwardButtonPressed() override;
-  std::optional<QString> getBackwardButtonPressed() override;
-  std::optional<QString> getRightButtonPressed() override;
-  std::optional<QString> getEnterButtonPressed() override;
-  std::optional<QString> getUpButtonPressed() override;
-  std::optional<QString> getDownButtonPressed() override;
+  std::optional<bool> getForwardButtonPressed() override;
+  std::optional<bool> getBackwardButtonPressed() override;
+  std::optional<bool> getRightButtonPressed() override;
+  std::optional<bool> getEnterButtonPressed() override;
+  std::optional<bool> getUpButtonPressed() override;
+  std::optional<bool> getDownButtonPressed() override;
   std::optional<float> getModeIndex() override;
   std::optional<float> getGForceX() override;
   std::optional<float> getGForceY() override;
@@ -70,12 +71,17 @@ public:
   std::optional<float> getSegment2Temp() override;
   std::optional<float> getSegment3Temp() override;
   std::optional<float> getSegment4Temp() override;
+  std::optional<bool> getIsTalking() override;
+  std::optional<int> getNumberOfCriticalFaults() override;
+  std::optional<int> getNumberOfNonCriticalFaults() override;
 
 private slots:
   void updateCurrentData() override;
+  void receiveServerData(const serverdata::ServerData, const QString topic);
 
 private:
   void processData(const std::string &data);
+  int totalNumberOfOnesIn(float value);
 };
 #endif
 #endif // RASPBERRY_MODEL_H
