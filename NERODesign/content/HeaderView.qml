@@ -8,33 +8,28 @@ Item {
 
     MicrophoneComponent {
         id: microphoneComponent
-        width: 100
-        height: 100
+        width: 70
+        height: 70
         anchors.right: parent.right
-        anchors.top: parent.top
+        anchors.top: parent.topRight
     }
 
     NonCriticalWarning {
         id: nonCriticalWarning
-        width: 100
-        height: 100
-        anchors.right: parent.right
-        anchors.verticalCenterOffset: -84
-        anchors.verticalCenter: parent.verticalCenter
+        width: 70
+        height: 70
+        anchors.left: parent.left
+        anchors.top: parent.topLeft
         dimension: 70
 
     }
 
     CriticalFaultIcon {
         id: criticalFaultIcon
-        x: 700
-        y: 230
         width: 70
         height: 70
-        anchors.right: parent.right
-        anchors.rightMargin: 15
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.verticalCenterOffset: 15
+        anchors.left: nonCriticalWarning.right
+        anchors.top: parent.top
     }
 
 }
