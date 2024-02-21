@@ -13,9 +13,13 @@ void Model::updatePackTempData() {
 
 void Model::addPinnedData(QString id) {
   DataInfo value = this->currentData[id];
+  bool success;
+  float parsedValue = value.values[0].toFloat(&success);
 
-  pinnedData.insert(
-      id, DebugPlotValue(value.topic, value.unit, QList<float>(value.value)));
+  if (success) {
+    pinnedData.insert(
+        id, DebugPlotValue(value.topic, value.unit, QList<float>(parsedValue)));
+  }
 }
 
 void Model::removePinnedData(QString id) { pinnedData.remove(id); }
@@ -25,7 +29,7 @@ void Model::updatePinnedData() {
     if (pinnedData.find(id).value().data.size() >= 600) {
       pinnedData.find(id).value().data.pop_back();
     }
-    pinnedData.find(id).value().data.prepend(this->currentData[id].value);
+    pinnedData.find(id).value().data.prepend(*this->getById(id));
   }
 }
 
@@ -54,7 +58,7 @@ QList<DebugTableRowValue> Model::getDebugTableValues() {
     const DataInfo &dataInfo = it.value();
     QString name = dataInfo.topic;
     QString units = dataInfo.unit;
-    float value = dataInfo.value;
+    float value = dataInfo.values[0].toFloat();
 
     DebugTableRowValue row = {name, (std::round(value * 1000) / 1000), units};
 
@@ -65,5 +69,11 @@ QList<DebugTableRowValue> Model::getDebugTableValues() {
 }
 
 std::optional<float> Model::getById(QString id) {
-  return this->currentData[id].value;
+  bool ok;
+  float value = this->currentData.value(id, DataInfo()).values[0].toFloat(&ok);
+  if (ok && value != -9999) {
+    return value;
+  } else {
+    return std::nullopt;
+  }
 }

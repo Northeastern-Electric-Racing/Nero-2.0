@@ -36,13 +36,6 @@ Item {
                         }
     }
 
-    onSelectedTopicIndexChanged: {
-        console.log("selected topic index changed")
-        console.log(selectedTopicIndex);
-        console.log(selectedValueIndex)
-    }
-
-
     Row {
         anchors.fill: parent
         spacing: 1
