@@ -40,6 +40,7 @@ int main(int argc, char *argv[]) {
 
   engine.rootContext()->setContextProperty("model", model);
   engine.rootContext()->setContextProperty("homeController", &homeController);
+  engine.rootContext()->setContextProperty("headerController", &headerController);
 
   engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
 
