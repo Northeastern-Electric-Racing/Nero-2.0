@@ -2,11 +2,15 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 
+import NERO
+
 Item {
     id: offScreen
     width: parent.width
     height: parent.width
     visible: true
+    focus: true
+
     property string sideBrbStatus: offViewController.attributeStatusMap[""]
     property string bmsStatus: offViewConotroller.attributeStatusMap[""]
     property string imdStatus: offViewController.attributeStatusMap[""]
@@ -22,9 +26,42 @@ Item {
     property double motorTemp: offViewContrller.motorTemp
     property double stateOfCharge: offViewController.stateOfCharge
 
-    property int selectedFlowIndex: 0
+    property int selectedFlowIndex: offViewController.selectedFlowIndex
 
-    property bool didSelect: false
+    property bool didSelect: offViewController.didSelect
+
+    Keys.onPressed: event => {
+                        switch (event.key) {
+                            case Qt.Key_Up:
+                            offViewController.upButtonPressed()
+                            break
+                            case Qt.Key_Left:
+                            offViewController.leftButtonPressed()
+                            break
+                            case Qt.Key_Right:
+                            offViewController.rightButtonPressed()
+                            break
+                            case Qt.Key_Down:
+                            offViewController.downButtonPressed()
+                            break
+                            case Qt.Key_Return:
+                            offViewController.enterButtonPressed()
+                            break
+                            default:
+                            break
+                        }
+                    }
+
+    onDidSelectChanged: {
+        console.log("didChange")
+        if (offScreen.didSelect) {
+            descriptionModal.openModal(offViewController.selectedName,
+                                       offViewController.selectedDescription,
+                                       offViewController.selectedUrl)
+        } else {
+            descriptionModal.closeModal()
+        }
+    }
 
     RowLayout {
         id: offHeader
@@ -114,6 +151,7 @@ Item {
             Layout.row: 0
             Layout.column: 0
             shutdownFlowTask: "SIDE BRBs"
+            highlight: offScreen.selectedFlowIndex == 0
             status: offScreen.sideBrbStatus
         }
 
@@ -122,6 +160,7 @@ Item {
             Layout.column: 0
             shutdownFlowTask: "BMS"
             status: offScreen.bmsStatus
+            highlight: offScreen.selectedFlowIndex == 1
         }
 
         DetailDisplay {
@@ -129,6 +168,7 @@ Item {
             Layout.column: 0
             shutdownFlowTask: "IMD"
             status: offScreen.imdStatus
+            highlight: offScreen.selectedFlowIndex == 2
         }
 
         DetailDisplay {
@@ -136,6 +176,7 @@ Item {
             Layout.column: 0
             shutdownFlowTask: "BSPD"
             status: offScreen.bspdStatus
+            highlight: offScreen.selectedFlowIndex == 3
         }
 
         DetailDisplay {
@@ -143,6 +184,7 @@ Item {
             Layout.column: 0
             shutdownFlowTask: "MPU"
             status: offScreen.bspdStatus
+            highlight: offScreen.selectedFlowIndex == 4
         }
 
         DetailDisplay {
@@ -150,6 +192,7 @@ Item {
             Layout.column: 0
             shutdownFlowTask: "BOTS"
             status: offScreen.botsStatus
+            highlight: offScreen.selectedFlowIndex == 5
         }
 
         DetailDisplay {
@@ -157,6 +200,7 @@ Item {
             Layout.column: 1
             shutdownFlowTask: "INERTIA"
             status: offScreen.inertiaStatus
+            highlight: offScreen.selectedFlowIndex == 6
         }
 
         DetailDisplay {
@@ -164,6 +208,7 @@ Item {
             Layout.column: 2
             shutdownFlowTask: "CP BRB"
             status: offScreen.cockPitBrbStatus
+            highlight: offScreen.selectedFlowIndex == 7
         }
 
         DetailDisplay {
@@ -171,6 +216,7 @@ Item {
             Layout.column: 3
             shutdownFlowTask: "TSMS"
             status: offScreen.tsmsStatus
+            highlight: offScreen.selectedFlowIndex == 8
         }
 
         DetailDisplay {
@@ -178,6 +224,7 @@ Item {
             Layout.column: 4
             shutdownFlowTask: "HVD INTRLK"
             status: offScreen.hvdInterlockStatus
+            highlight: offScreen.selectedFlowIndex == 9
         }
 
         DetailDisplay {
@@ -185,6 +232,15 @@ Item {
             Layout.column: 5
             shutdownFlowTask: "HVD CNCTR"
             status: offScreen.hvdConnectorStatus
+            highlight: offScreen.selectedFlowIndex == 10
         }
+    }
+
+    DescriptionModal {
+        id: descriptionModal
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.verticalCenterOffset: -parent.height / 7
+        dimension: 300
     }
 }
