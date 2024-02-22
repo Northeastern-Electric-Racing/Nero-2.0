@@ -21,4 +21,8 @@ qt6_add_qml_module(content
     RESOURCES
         fonts/fonts.txt
         fonts/Roboto-Black.ttf
+        QML_FILES ThermometerValueComponent.qml
+        QML_FILES BatteryValueComponent.qml
+        QML_FILES Spacer.qml
+        QML_FILES ValueDisplay.qml
 )
