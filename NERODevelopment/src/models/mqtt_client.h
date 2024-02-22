@@ -1,8 +1,10 @@
 #ifndef MQTTCLIENT_H
 #define MQTTCLIENT_H
 
+#include <QProtobufSerializer>
 #include <QTcpSocket>
 #include <QtMqtt/QMqttClient>
+#include <serverdata.qpb.h>
 
 /**
  * @brief The MqttClient class, wraps the native QMqtt client to functions we
@@ -26,6 +28,18 @@ public slots:
    * @brief connectToHost connects to the server
    */
   void connectToHost();
+
+  /**
+   * @brief updateMessage, debugs the message received
+   * @param msg, the message received from the subscription
+   */
+  void updateMessage(const QMqttMessage &msg);
+
+signals:
+  /**
+   * @brief emitServerData, Emits the parsed server data object from protobuf
+   */
+  void emitServerData(const serverdata::ServerData, const QString);
 
 private slots:
 
@@ -59,19 +73,13 @@ private slots:
    */
   void receiveMessage(const QByteArray &message, const QMqttTopicName &topic);
 
-public slots:
-  /**
-   * @brief updateMessage, debugs the message received
-   * @param msg, the message received from the subscription
-   */
-  void updateMessage(const QMqttMessage &msg);
-
 private:
-  QMqttClient *m_client = nullptr;
-  QMqttSubscription *m_sub = nullptr;
+  QMqttClient *m_client;
+  QMqttSubscription *m_sub;
   QString hostname = "192.168.100.176";
   int port = 1883;
   qint8 QoS = 0;
   QString default_topic = "/#";
+  QProtobufSerializer m_serializer;
 };
 #endif // MQTTCLIENT_H

@@ -16,7 +16,7 @@ Window {
             source: "fonts/Roboto-Black.ttf"
         }
 
-    // Pit {}
-    DebugTable {}
+    Pit {}
+    // DebugTable {}
 }
 
