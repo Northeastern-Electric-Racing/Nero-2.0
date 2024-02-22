@@ -3,8 +3,13 @@ import QtQuick.Controls 2.15
 import NERO
 
 Item {
+    id: header
     width: 800
     height: 100
+
+    property int numCriticalWarnings: 0
+    property int numNonCriticalWarnings: 0
+    property bool isTalking: false
 
     MicrophoneComponent {
         id: microphoneComponent
