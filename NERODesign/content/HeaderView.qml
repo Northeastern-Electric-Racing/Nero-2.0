@@ -28,13 +28,13 @@ Item {
     CriticalFaultIcon {
         id: criticalFaultIcon
         //dimension: 45
-        width: 70
-        height: 70
+        //width: 70
+        //height: 70
         visible: true
         anchors.left: nonCriticalWarning.right
         anchors.top: parent.top
         anchors.topMargin: criticalFaultIcon.height / 10
-        dimension: 20
+        dimension: 70
     }
 
 }

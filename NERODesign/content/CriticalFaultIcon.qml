@@ -50,6 +50,8 @@ Item {
             height: (critical.dimension/2) * 1.2
             radius: 100
 
+            visible: numWarnings > 0
+
             Text {
                 id: faultNum
                 anchors.centerIn: parent
