@@ -2,13 +2,14 @@
 #define HOMECONTROLLER_H
 
 #include "../models/model.h"
+#include "buttoncontroller.h"
 #include <QObject>
 
 /**
  * @brief The HomeController class
  * Controller for the home screen, aka pit and reverse.
  */
-class HomeController : public QObject {
+class HomeController : public ButtonController {
   Q_OBJECT
   Q_PROPERTY(int speed READ speed WRITE setSpeed NOTIFY speedChanged FINAL)
   Q_PROPERTY(bool status READ status WRITE setStatus NOTIFY statusChanged FINAL)
@@ -48,7 +49,6 @@ public slots:
   void currentDataDidChange();
 
 private:
-  Model *m_model;
   int m_speed;
   bool m_status;
   bool m_direction;

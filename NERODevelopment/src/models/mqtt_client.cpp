@@ -1,11 +1,11 @@
 
 #include "mqtt_client.h"
 
-#include "../utils/server_data.h"
 #include <QJsonDocument>
 #include <QtCore/QDateTime>
 #include <QtMqtt/QMqttClient>
 #include <QtWidgets/QMessageBox>
+#include <serverdata.qpb.h>
 
 MqttClient::MqttClient(QObject *parent) : QObject(parent) {
   m_client = new QMqttClient();
@@ -63,16 +63,16 @@ void MqttClient::brokerConnected() {
 
 void MqttClient::receiveMessage(const QByteArray &message,
                                 const QMqttTopicName &topic) {
-  QJsonDocument jsonDocument = QJsonDocument::fromJson(message);
 
-  if (jsonDocument.isNull() || !jsonDocument.isObject()) {
-    qDebug() << "Error: Unable to parse JSON data.";
-    return;
+  serverdata::ServerData serverData;
+
+  bool success = m_serializer.deserialize(&serverData, message);
+
+  if (success) {
+    emit emitServerData(serverData, topic.name());
+  } else {
+    qDebug() << "Failed to decode server message";
   }
-
-  ServerData serverData(jsonDocument.object());
-
-  DataInfo dataInfo(topic.name(), serverData.unit, serverData.value);
 }
 
 void MqttClient::updateMessage(const QMqttMessage &msg) {

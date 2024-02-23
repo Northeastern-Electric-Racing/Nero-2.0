@@ -17,5 +17,6 @@ Window {
         }
 
     Pit {}
+    // DebugTable {}
 }
 

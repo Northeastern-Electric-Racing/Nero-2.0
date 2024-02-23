@@ -1,8 +1,23 @@
 #ifndef DEBUG_UTILS_H
 #define DEBUG_UTILS_H
 
+#include <QJsonArray>
+#include <QJsonObject>
 #include <QList>
 #include <QString>
+
+struct DebugTableRowTopics {
+public:
+  DebugTableRowTopics();
+
+  void setTopics(const QVector<QString>);
+
+  QList<QJsonObject> json() const;
+  QVector<QString> topics() const;
+
+private:
+  QVector<QString> m_topics;
+};
 
 /**
  * @brief The DebugTableRowValue class
@@ -19,11 +34,24 @@ public:
   QString name() const;
   float value() const;
   QString unit() const;
+  QJsonObject json() const;
 
 private:
   QString m_name;
   float m_value;
   QString m_unit;
+};
+
+struct DebugTableRowValues {
+public:
+  DebugTableRowValues();
+
+  void setDebugTableRowValues(const QVector<DebugTableRowValue> values);
+  QList<QJsonObject> json() const;
+  QVector<DebugTableRowValue> values() const;
+
+private:
+  QVector<DebugTableRowValue> m_values;
 };
 
 /**
