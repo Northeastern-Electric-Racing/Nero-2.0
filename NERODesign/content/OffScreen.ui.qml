@@ -4,7 +4,7 @@ import QtQuick.Layouts
 
 import NERO
 
-Rectangle {
+Item {
     id: pit
     anchors.fill: parent
     property int stateOfChargePercentage: homeController.stateOfCharge
@@ -19,9 +19,6 @@ Rectangle {
     property int iconWidth: 40
     property int iconHeight: 90
     property int labelVerticalSpacing: 10
-    width: 800
-    height: 480
-    color: 'black'
 
     RowLayout {
         id: mainRow
@@ -36,10 +33,8 @@ Rectangle {
             columns: 2
 
             ThermometerValueComponent {
-                id: packTempThermometer
                 Layout.row: 0
                 Layout.column: 0
-                width: 100
                 iconWidth: pit.iconWidth
                 iconHeight: pit.iconHeight
                 horizontalIconSpacing: pit.horizontalIconSpacing
@@ -51,7 +46,8 @@ Rectangle {
             ColumnLayout {
                 Layout.row: 0
                 Layout.column: 1
-                Layout.alignment: Qt.AlignBottom
+                Spacer {}
+
                 ValueText {
                     text: pit.maxSpeed
                     Layout.alignment: Qt.AlignHCenter
@@ -61,24 +57,24 @@ Rectangle {
                     text: "SPEED LIMIT"
                     Layout.alignment: Qt.AlignHCenter
                 }
+
+                Spacer {}
             }
 
             BatteryValueComponent {
                 Layout.row: 1
                 Layout.column: 0
-                width: 125
                 Layout.alignment: Qt.AlignTop
                 iconWidth: pit.iconWidth
                 iconHeight: pit.iconHeight
+                horizontalIconSpacing: pit.horizontalIconSpacing
+                labelVerticalSpacing: pit.labelVerticalSpacing
                 batteryValue: pit.stateOfChargePercentage
             }
 
             ThermometerValueComponent {
                 Layout.row: 1
                 Layout.column: 1
-                width: 100
-                height: 100
-                Layout.alignment: Qt.AlignTop
                 iconWidth: pit.iconWidth
                 iconHeight: pit.iconHeight
                 horizontalIconSpacing: pit.horizontalIconSpacing

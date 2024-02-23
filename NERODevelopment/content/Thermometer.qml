@@ -8,59 +8,56 @@ Item {
     property int horizontalPadding: width / 20
     property int maxValue: 65
     property int minValue: -15
-    property string color: value > maxValue - ((Math.abs(maxValue) + Math.abs(minValue)) / 5) ?
-                               "red" : value > maxValue - (((Math.abs(maxValue) + Math.abs(minValue)) / 5) * 2) ?
-                                   "orange" : value > maxValue - (((Math.abs(maxValue) + Math.abs(minValue)) / 5) * 3) ?
-                                       "#FFF500" : value > maxValue - (((Math.abs(maxValue) + Math.abs(minValue)) / 5) * 4) ?
-                                           "blue" : "purple"
-    width: 50
-    height: width
-
+    property string color: value > maxValue - ((Math.abs(maxValue) + Math.abs(
+                                                    minValue)) / 5) ? "red" : value > maxValue - (((Math.abs(maxValue) + Math.abs(minValue)) / 5) * 2) ? "orange" : value > maxValue - (((Math.abs(maxValue) + Math.abs(minValue)) / 5) * 3) ? "#FFF500" : value > maxValue - (((Math.abs(maxValue) + Math.abs(minValue)) / 5) * 4) ? "blue" : "purple"
+    height: 300
+    width: height
 
     Rectangle {
-        id: rectangle
-        anchors.centerIn: parent
-        width: parent.width * (35/100)
-        height: width * 2.85
+        id: topSemiCircle
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.top: parent.top
+        width: parent.width / 4
+        height: parent.width / 4
+        radius: parent.width / 4
+        color: "white"
+    }
+
+    Rectangle {
+        id: outerRectangle
+        anchors.top: topSemiCircle.verticalCenter
+        anchors.bottom: bottomOuterCircle.verticalCenter
+        anchors.horizontalCenter: parent.horizontalCenter
+        width: parent.width / 4
+        height: parent.height / 2
+        color: "white"
+    }
+
+    Rectangle {
+        id: bottomOuterCircle
+        anchors.horizontalCenter: parent.horizontalCenter
+        y: parent.height / 2
+        width: thermometer.width / 2
+        height: thermometer.width / 2
+        radius: thermometer.width / 2
         color: "white"
 
         Rectangle {
-            id: topSemiCircle
-            x: 0
-            y: parent.height * (-18/100)
-            width: parent.width
-            height: parent.width
-            radius: parent.width
-            color: "white"
-        }
-
-        Rectangle {
-            id: bottomOuterCircle
-            x: -parent.width / (3 / 2)
-            y: parent.height * 8 / 10
-            width: parent.width + thermometer.width / 2
-            height: parent.width + thermometer.width / 2
-            radius: parent.width + thermometer.width / 2
-            color: "white"
-
-
-
-            Rectangle {
-                id: fillBottomCircle
-                anchors.centerIn: parent
-                width: parent.width * 0.9
-                height: parent.width * 0.9
-                radius: parent.width * 0.9
-                color: thermometer.color
-            }
-        }
-
-        Rectangle {
-            id: fillRectangle
+            id: fillBottomCircle
             anchors.centerIn: parent
-            width: parent.width - (thermometer.horizontalPadding * 2)
-            height: parent.height * 0.9
+            width: parent.width * 0.8
+            height: parent.height * 0.8
+            radius: parent.radius
             color: thermometer.color
         }
+    }
+
+    Rectangle {
+        id: fillRectangle
+        anchors.fill: outerRectangle
+
+        anchors.leftMargin: thermometer.horizontalPadding
+        anchors.rightMargin: thermometer.horizontalPadding
+        color: thermometer.color
     }
 }

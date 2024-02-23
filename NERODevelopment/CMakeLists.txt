@@ -17,6 +17,7 @@ set(PROJECT_SOURCES
 
     src/controllers/chargingcontroller.h
     src/controllers/homecontroller.h
+    src/controllers/offviewcontroller.h
     src/controllers/efficiencycontroller.h
     src/controllers/headercontroller.h
     src/controllers/debugtablecontroller.h
@@ -55,7 +56,9 @@ set(PROJECT_SOURCES
 
 find_package(Qt6 REQUIRED COMPONENTS Core Gui Qml Quick Network Mqtt Protobuf)
 
-qt_add_executable(NEROApp ${PROJECT_SOURCES})
+qt_add_executable(NEROApp ${PROJECT_SOURCES}
+    src/utils/descriptioninfo.h src/utils/descriptioninfo.cpp
+)
 
 qt_add_resources(NEROApp "configuration"
     PREFIX "/"

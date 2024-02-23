@@ -15,9 +15,15 @@ qt6_add_qml_module(content
         LabelText.qml
         DirectionView.qml
         DetailDisplay.qml
+        OffScreen.qml
         DebugTable.qml
 
     RESOURCES
         fonts/fonts.txt
         fonts/Roboto-Black.ttf
+        QML_FILES ThermometerValueComponent.qml
+        QML_FILES BatteryValueComponent.qml
+        QML_FILES Spacer.qml
+        QML_FILES ValueDisplay.qml
+        QML_FILES DescriptionModal.qml
 )
