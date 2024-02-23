@@ -27,7 +27,6 @@ Item {
         anchors.top: parent.top
         dimension: 45
         anchors.leftMargin: nonCriticalWarning.width / 10
-        anchors.topMargin: nonCriticalWarning.height / 10
     }
 
     CriticalFaultIcon {
