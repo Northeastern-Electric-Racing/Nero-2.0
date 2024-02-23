@@ -25,11 +25,8 @@ int main(int argc, char *argv[]) {
   model->moveToThread(dataThread);
 
   HomeController homeController(model);
-<<<<<<< HEAD
   HeaderController headerController(model);
-=======
   DebugTableController tableController(model);
->>>>>>> d7883ab716d8874701ad2f9790aaef41d77c74a5
 
   dataThread->start();
 
@@ -44,12 +41,9 @@ int main(int argc, char *argv[]) {
 
   engine.rootContext()->setContextProperty("model", model);
   engine.rootContext()->setContextProperty("homeController", &homeController);
-<<<<<<< HEAD
   engine.rootContext()->setContextProperty("headerController", &headerController);
-=======
   engine.rootContext()->setContextProperty("debugTableController",
                                            &tableController);
->>>>>>> d7883ab716d8874701ad2f9790aaef41d77c74a5
 
   engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
 

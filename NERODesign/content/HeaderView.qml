@@ -27,27 +27,16 @@ Item {
         anchors.top: parent.top
         dimension: 45
         anchors.leftMargin: nonCriticalWarning.width / 10
-<<<<<<< HEAD
         anchors.topMargin: nonCriticalWarning.height / 10
-=======
->>>>>>> d7883ab716d8874701ad2f9790aaef41d77c74a5
     }
 
     CriticalFaultIcon {
         id: criticalFaultIcon
-        //dimension: 45
-        //width: 70
-        //height: 70
         visible: true
         anchors.left: nonCriticalWarning.right
         anchors.top: parent.top
-<<<<<<< HEAD
-        anchors.topMargin: criticalFaultIcon.height / 10
-        dimension: 70
-=======
         anchors.topMargin: criticalFaultIcon.height / 5
         dimension: 40
->>>>>>> d7883ab716d8874701ad2f9790aaef41d77c74a5
     }
 
 }
