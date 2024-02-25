@@ -2,6 +2,7 @@
 ### Do not change
 
 qt_add_library(content STATIC)
+
 qt6_add_qml_module(content
     URI "content"
     VERSION 1.0
@@ -17,13 +18,15 @@ qt6_add_qml_module(content
         DetailDisplay.qml
         OffScreen.qml
         DebugTable.qml
+        ThermometerValueComponent.qml
+        BatteryValueComponent.qml
+        Spacer.qml
+        ValueDisplay.qml
+        DescriptionModal.qml
+        NavigationController.qml
+        HomeMenuItem.qml
 
     RESOURCES
         fonts/fonts.txt
         fonts/Roboto-Black.ttf
-        QML_FILES ThermometerValueComponent.qml
-        QML_FILES BatteryValueComponent.qml
-        QML_FILES Spacer.qml
-        QML_FILES ValueDisplay.qml
-        QML_FILES DescriptionModal.qml
 )

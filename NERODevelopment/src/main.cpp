@@ -13,6 +13,7 @@
 #include <QThread>
 
 #include "controllers/homecontroller.h"
+#include "controllers/navigationcontroller.h"
 #include "controllers/offviewcontroller.h"
 
 int main(int argc, char *argv[]) {
@@ -30,6 +31,7 @@ int main(int argc, char *argv[]) {
   HomeController homeController(model);
   OffViewController offViewController(model);
   DebugTableController tableController(model);
+  NavigationController navigationController(model);
 
   dataThread->start();
 
@@ -44,9 +46,12 @@ int main(int argc, char *argv[]) {
 
   engine.rootContext()->setContextProperty("model", model);
   engine.rootContext()->setContextProperty("homeController", &homeController);
-  engine.rootContext()->setContextProperty("offViewController", &offViewController);
+  engine.rootContext()->setContextProperty("offViewController",
+                                           &offViewController);
   engine.rootContext()->setContextProperty("debugTableController",
                                            &tableController);
+  engine.rootContext()->setContextProperty("navigationController",
+                                           &navigationController);
 
   engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
 

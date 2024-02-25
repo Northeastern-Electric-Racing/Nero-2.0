@@ -43,6 +43,7 @@
 #define ENTERBUTTON "rightbutton"
 #define UPBUTTON "upbutton"
 #define DOWNBUTTON "downbutton"
+#define HOMEBUTTON "homebutton"
 #define MODEINDEX "modeindex"
 #define GFORCEX "gforcex"
 #define GFORCEY "gforcey"
