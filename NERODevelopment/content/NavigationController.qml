@@ -62,6 +62,11 @@ Item {
             highlighted: selectedPageIndex === 2
             text: "Debug"
         }
+
+        HomeMenuItem {
+            highlighted: selectedPageIndex === 3
+            text: "Flappy Bird"
+        }
     }
 
     OffScreen {
@@ -77,5 +82,10 @@ Item {
     DebugTable {
         visible: selectedPageIndex === 2 && isSelected
         focus: selectedPageIndex === 2 && isSelected
+    }
+
+    FlappyBird {
+        visible: selectedPageIndex === 3 && isSelected
+        focus: selectedPageIndex === 3 && isSelected
     }
 }
