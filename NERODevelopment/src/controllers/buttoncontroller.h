@@ -17,6 +17,7 @@ public slots:
   virtual void downButtonPressed();
   virtual void rightButtonPressed();
   virtual void leftButtonPressed();
+  virtual void homeButtonPressed();
 
 protected:
   Model *m_model;

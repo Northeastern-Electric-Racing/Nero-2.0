@@ -63,6 +63,7 @@ public:
   std::optional<bool> getEnterButtonPressed() override;
   std::optional<bool> getUpButtonPressed() override;
   std::optional<bool> getDownButtonPressed() override;
+  std::optional<bool> getHomeButtonPressed() override;
   std::optional<float> getModeIndex() override;
   std::optional<float> getGForceX() override;
   std::optional<float> getGForceY() override;

@@ -17,6 +17,8 @@ void ButtonController::leftButtonPressed() {}
 
 void ButtonController::rightButtonPressed() {}
 
+void ButtonController::homeButtonPressed() {}
+
 void ButtonController::buttonUpdate() {
   if (this->m_model->getBackwardButtonPressed() == 1) {
     this->leftButtonPressed();
@@ -32,5 +34,8 @@ void ButtonController::buttonUpdate() {
   }
   if (this->m_model->getDownButtonPressed() == 1) {
     this->downButtonPressed();
+  }
+  if (this->m_model->getHomeButtonPressed() == 1) {
+    this->homeButtonPressed();
   }
 }
