@@ -34,13 +34,8 @@ Item {
                         }
                     }
 
-    ValueText {
-        text: "DEBUG"
-        anchors.centerIn: parent
-    }
-
     Column {
-        visible: !isSelected
+        visible: true
         anchors.fill: parent
         anchors.leftMargin: 8
         anchors.rightMargin: 8
