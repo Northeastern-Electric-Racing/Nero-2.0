@@ -63,7 +63,6 @@ void MqttClient::brokerConnected() {
 
 void MqttClient::receiveMessage(const QByteArray &message,
                                 const QMqttTopicName &topic) {
-
   serverdata::ServerData serverData;
 
   bool success = m_serializer.deserialize(&serverData, message);
