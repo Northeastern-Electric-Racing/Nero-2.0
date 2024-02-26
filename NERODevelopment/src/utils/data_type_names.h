@@ -7,7 +7,7 @@
 #define DIRECTION "direction"
 #define PACKTEMP "bms/temps/packtemp"
 #define MOTORTEMP "bms/temps/motortemp"
-#define STATEOFCHARGE "stateofcharge"
+#define STATEOFCHARGE "BMS/Pack/SOC"
 #define CURRENT "current"
 #define BALANCINGCELLS "balancingcells"
 #define PACKVOLTAGE "packvoltage"
