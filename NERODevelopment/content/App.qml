@@ -15,6 +15,8 @@ Window {
         source: "fonts/Roboto-Black.ttf"
     }
 
-    Pit {}
-    // NavigationController {}
+    NavigationController {
+        height: 480
+        width: 800
+    }
 }
