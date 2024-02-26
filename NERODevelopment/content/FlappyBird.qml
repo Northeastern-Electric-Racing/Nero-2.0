@@ -23,10 +23,13 @@ Item {
     property bool gameOver: true
     property int score: 0
     property bool jump: false
+    property int birdHitBox: 20
+    property int pipeHeight: 300
+    property int minPipeOpening: 100
 
     Timer {
         function isGameOver() {
-            return yBallValue > parent.height || yBallValue < 0 || (xBallValue + 50 > xWall1 && xBallValue < xWall1 + 50 && (yBallValue < wall1.y + 250 || yBallValue + 50 > wall11.y)) || (xBallValue + 50 > xWall2 && xBallValue < xWall2 + 50 && (yBallValue < wall21.y + 250 || yBallValue + 50 > wall22.y)) || (xBallValue + 50 > xWall3 && xBallValue < xWall3 + 50 && (yBallValue < wall31.y + 250 || yBallValue + 50 > wall32.y))
+            return yBallValue > parent.height || yBallValue < 0 || (xBallValue + birdHitBox > xWall1 && xBallValue < xWall1 + birdHitBox && (yBallValue < wall1.y + pipeHeight || yBallValue + birdHitBox > wall11.y)) || (xBallValue + birdHitBox > xWall2 && xBallValue < xWall2 + birdHitBox && (yBallValue < wall21.y + pipeHeight || yBallValue + birdHitBox > wall22.y)) || (xBallValue + birdHitBox > xWall3 && xBallValue < xWall3 + birdHitBox && (yBallValue < wall31.y + pipeHeight || yBallValue + birdHitBox > wall32.y))
         }
 
         interval: 50
@@ -44,17 +47,32 @@ Item {
             if (xWall1 < 0) {
                 xWall1 = parent.width
                 wall1.y = -100 - Math.round(Math.random() * 100)
-                wall11.y = 250 + Math.round(Math.random() * 100)
+                const secondVal = 250 + Math.round(Math.random() * 100)
+                if (secondVal - (wall1.y + pipeHeight) < minPipeOpening) {
+                    wall11.y = wall1.y + pipeHeight + minPipeOpening
+                } else {
+                    wall11.y = secondVal
+                }
             }
             if (xWall2 < 0) {
                 xWall2 = parent.width
                 wall21.y = -100 - Math.round(Math.random() * 100)
-                wall22.y = 250 + Math.round(Math.random() * 100)
+                const secondVal = 250 + Math.round(Math.random() * 100)
+                if (secondVal - (wall21.y + pipeHeight) < minPipeOpening) {
+                    wall22.y = wall21.y + pipeHeight + minPipeOpening
+                } else {
+                    wall22.y = secondVal
+                }
             }
             if (xWall3 < 0) {
                 xWall3 = parent.width
                 wall31.y = -100 - Math.round(Math.random() * 100)
-                wall32.y = 250 + Math.round(Math.random() * 100)
+                const secondVal = 250 + Math.round(Math.random() * 100)
+                if (secondVal - (wall31.y + pipeHeight) < minPipeOpening) {
+                    wall32.y = wall31.y + pipeHeight + minPipeOpening
+                } else {
+                    wall32.y = secondVal
+                }
             }
 
             if (xWall1 === xBallValue || xWall2 === xBallValue
@@ -79,7 +97,7 @@ Item {
     Image {
         id: wall1
         x: xWall1 + 20
-        y: -100 - Math.round(Math.random() * 100)
+        y: -150
         source: pipeSrc
         rotation: 180
     }
@@ -87,13 +105,13 @@ Item {
     Image {
         id: wall11
         x: xWall1
-        y: 250 + Math.round(Math.random() * 100)
+        y: 300
         source: pipeSrc
     }
     Image {
         id: wall21
         x: xWall2 + 20
-        y: -100 - Math.round(Math.random() * 100)
+        y: -175
         source: pipeSrc
         rotation: 180
     }
@@ -101,7 +119,7 @@ Item {
     Image {
         id: wall22
         x: xWall2
-        y: 250 + Math.round(Math.random() * 100)
+        y: 300
         source: pipeSrc
     }
 
@@ -125,6 +143,9 @@ Item {
             flappyBird.gameOver = false
             flappyBird.score = 0
             flappyBird.yBallValue = 250
+            flappyBird.xWall1 = 450
+            flappyBird.xWall2 = 650
+            flappyBird.xWall3 = 800
             return
         }
 
@@ -162,6 +183,7 @@ Item {
         id: scoreText
         text: "Score: " + flappyBird.score
         anchors.right: parent.right
+        anchors.rightMargin: 8
         visible: true
     }
 }
