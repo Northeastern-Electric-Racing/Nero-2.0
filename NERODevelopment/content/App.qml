@@ -15,8 +15,5 @@ Window {
         source: "fonts/Roboto-Black.ttf"
     }
 
-    NavigationController {
-        height: 480
-        width: 800
-    }
+    NavigationController {}
 }

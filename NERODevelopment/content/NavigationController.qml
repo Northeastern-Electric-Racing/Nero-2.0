@@ -5,7 +5,6 @@ Item {
     id: navigation
     anchors.fill: parent
     focus: !isSelected
-    visible: true
     property int selectedPageIndex: navigationController.selectedPageIndex
     property bool isSelected: navigationController.isSelected
 
