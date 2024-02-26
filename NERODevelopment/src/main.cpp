@@ -29,7 +29,7 @@ int main(int argc, char *argv[]) {
   Model *model;
 
   if (osName == "raspberrypi-sta") {
-    model = new MockModel;
+    model = new RaspberryModel;
     model->connectToMQTT();
   } else {
     model = new MockModel;
