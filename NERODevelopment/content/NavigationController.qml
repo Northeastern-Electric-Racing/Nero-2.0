@@ -4,7 +4,7 @@ import NERO
 Item {
     id: navigation
     anchors.fill: parent
-    focus: !isSelected
+    focus: true
     visible: true
     property int selectedPageIndex: navigationController.selectedPageIndex
     property bool isSelected: navigationController.isSelected
