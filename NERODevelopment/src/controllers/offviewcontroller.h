@@ -80,8 +80,8 @@ private:
   float m_packTemp;
   float m_motorTemp;
   float m_stateOfCharge;
-  int m_selectedFlowIndex;
-  bool m_didSelect;
+  int m_selectedFlowIndex = 0;
+  bool m_didSelect = 0;
   QString m_selectedName;
   QString m_selectedDescription;
   QString m_selectedUrl;

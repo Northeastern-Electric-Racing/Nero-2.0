@@ -80,5 +80,6 @@ void MqttClient::updateMessage(const QMqttMessage &msg) {
                         QLatin1String(" Received Topic: ") +
                         msg.topic().name() + QLatin1String(" Message: ") +
                         msg.payload() + QLatin1Char('\n');
+  this->receiveMessage(msg.payload(), msg.topic().name());
   qDebug() << debug;
 }
