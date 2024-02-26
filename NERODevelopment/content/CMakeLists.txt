@@ -32,4 +32,5 @@ qt6_add_qml_module(content
         fonts/Roboto-Black.ttf
         images/bg.png
         images/pipe.png
+        images/flappy-bird.png
 )

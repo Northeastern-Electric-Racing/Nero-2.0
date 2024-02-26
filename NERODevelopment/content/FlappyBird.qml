@@ -6,10 +6,10 @@ import QtQuick.Window 2.2
 Item {
     id: flappyBird
     anchors.fill: parent
-    focus: true
+    focus: flappyBird.isFocused
     visible: true
-    width: 800
-    height: 480
+
+    property bool isFocused: false
 
     property int xBallValue: 150
     property int yBallValue: 250
@@ -19,30 +19,53 @@ Item {
     property int xWall3: 600
     property string pipeSrc: "qrc:/content/images/pipe.png"
     property string backgroundSrc: "qrc:/content/images/bg.png"
+    property string birdSrc: "qrc:/content/images/flappy-bird.png"
+    property bool gameOver: true
+    property int score: 0
+    property bool jump: false
 
     Timer {
+        function isGameOver() {
+            return yBallValue > parent.height || yBallValue < 0 || (xBallValue + 50 > xWall1 && xBallValue < xWall1 + 50 && (yBallValue < wall1.y + 250 || yBallValue + 50 > wall11.y)) || (xBallValue + 50 > xWall2 && xBallValue < xWall2 + 50 && (yBallValue < wall21.y + 250 || yBallValue + 50 > wall22.y)) || (xBallValue + 50 > xWall3 && xBallValue < xWall3 + 50 && (yBallValue < wall31.y + 250 || yBallValue + 50 > wall32.y))
+        }
+
         interval: 50
-        running: true
+        running: flappyBird.focus
         repeat: true
         onTriggered: {
+            if (flappyBird.gameOver) {
+                return
+            }
+
             time.text = Date().toString()
-            if (yBallValue > parent.height) {
-                console.log("game over")
+            if (isGameOver()) {
+                flappyBird.gameOver = true
             }
             if (xWall1 < 0) {
                 xWall1 = parent.width
+                wall1.y = -100 - Math.round(Math.random() * 100)
+                wall11.y = 250 + Math.round(Math.random() * 100)
             }
             if (xWall2 < 0) {
                 xWall2 = parent.width
+                wall21.y = -100 - Math.round(Math.random() * 100)
+                wall22.y = 250 + Math.round(Math.random() * 100)
             }
             if (xWall3 < 0) {
                 xWall3 = parent.width
+                wall31.y = -100 - Math.round(Math.random() * 100)
+                wall32.y = 250 + Math.round(Math.random() * 100)
             }
 
-            yBallValue += 2
-            xWall1 -= 8
-            xWall2 -= 8
-            xWall3 -= 8
+            if (xWall1 === xBallValue || xWall2 === xBallValue
+                    || xWall3 === xBallValue) {
+                score++
+            }
+
+            yBallValue += 8
+            xWall1 -= 10
+            xWall2 -= 10
+            xWall3 -= 10
         }
     }
 
@@ -56,7 +79,7 @@ Item {
     Image {
         id: wall1
         x: xWall1 + 20
-        y: -150
+        y: -100 - Math.round(Math.random() * 100)
         source: pipeSrc
         rotation: 180
     }
@@ -64,13 +87,13 @@ Item {
     Image {
         id: wall11
         x: xWall1
-        y: 300
+        y: 250 + Math.round(Math.random() * 100)
         source: pipeSrc
     }
     Image {
         id: wall21
         x: xWall2 + 20
-        y: -140
+        y: -100 - Math.round(Math.random() * 100)
         source: pipeSrc
         rotation: 180
     }
@@ -78,7 +101,7 @@ Item {
     Image {
         id: wall22
         x: xWall2
-        y: 300
+        y: 250 + Math.round(Math.random() * 100)
         source: pipeSrc
     }
 
@@ -96,21 +119,49 @@ Item {
         y: 300
         source: pipeSrc
     }
+
     Keys.onSpacePressed: {
-        yBallValue -= 20
+        if (flappyBird.gameOver) {
+            flappyBird.gameOver = false
+            flappyBird.score = 0
+            flappyBird.yBallValue = 250
+            return
+        }
+
+        jumpAnimation.running = true
+    }
+
+    NumberAnimation on yBallValue {
+        id: jumpAnimation
+        to: yBallValue - 80
+        duration: 100
     }
 
     Text {
         id: time
     }
 
-    Rectangle {
+    Image {
         id: ball
         x: xBallValue
         y: yBallValue
         width: 50
         height: 50
-        radius: 25
-        color: "red"
+        source: flappyBird.birdSrc
+    }
+
+    Text {
+        id: gameOverText
+        visible: flappyBird.gameOver
+        anchors.centerIn: parent
+        color: "Red"
+        text: "Game Over (Hit Enter to play again)"
+    }
+
+    Text {
+        id: scoreText
+        text: "Score: " + flappyBird.score
+        anchors.right: parent.right
+        visible: true
     }
 }

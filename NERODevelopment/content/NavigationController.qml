@@ -86,6 +86,6 @@ Item {
 
     FlappyBird {
         visible: selectedPageIndex === 3 && isSelected
-        focus: selectedPageIndex === 3 && isSelected
+        isFocused: selectedPageIndex === 3 && isSelected
     }
 }
