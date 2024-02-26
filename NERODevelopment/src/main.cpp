@@ -29,10 +29,10 @@ int main(int argc, char *argv[]) {
   Model *model;
 
   if (osName == "raspberrypi-sta") {
-    model = new RaspberryModel;
+    model = new MockModel;
     model->connectToMQTT();
   } else {
-    model = new RaspberryModel;
+    model = new MockModel;
   }
 
   QThread *dataThread = new QThread;
