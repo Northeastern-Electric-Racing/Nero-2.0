@@ -30,8 +30,9 @@ int main(int argc, char *argv[]) {
 
   if (osName == "raspberrypi-sta") {
     model = new RaspberryModel;
+    model->connectToMQTT();
   } else {
-    model = new MockModel;
+    model = new RaspberryModel;
   }
 
   QThread *dataThread = new QThread;
@@ -54,7 +55,6 @@ int main(int argc, char *argv[]) {
       },
       Qt::QueuedConnection);
 
-  engine.rootContext()->setContextProperty("model", model);
   engine.rootContext()->setContextProperty("homeController", &homeController);
   engine.rootContext()->setContextProperty("offViewController",
                                            &offViewController);
