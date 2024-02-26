@@ -12,7 +12,7 @@ Item {
     focus: true
 
     property string sideBrbStatus: offViewController.attributeStatusMap[""]
-    property string bmsStatus: offViewConotroller.attributeStatusMap[""]
+    property string bmsStatus: offViewController.attributeStatusMap[""]
     property string imdStatus: offViewController.attributeStatusMap[""]
     property string bspdStatus: offViewController.attributeStatusMap[""]
     property string botsStatus: offViewController.attributeStatusMap[""]
@@ -23,7 +23,7 @@ Item {
     property string hvdConnector: offViewController.attributeStatusMap[""]
 
     property double packTemp: offViewController.packTemp
-    property double motorTemp: offViewContrller.motorTemp
+    property double motorTemp: offViewController.motorTemp
     property double stateOfCharge: offViewController.stateOfCharge
 
     property int selectedFlowIndex: offViewController.selectedFlowIndex
@@ -53,7 +53,6 @@ Item {
                     }
 
     onDidSelectChanged: {
-        console.log("didChange")
         if (offScreen.didSelect) {
             descriptionModal.openModal(offViewController.selectedName,
                                        offViewController.selectedDescription,

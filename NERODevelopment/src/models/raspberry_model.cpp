@@ -10,10 +10,7 @@
 #include <sys/un.h>
 #include <unistd.h>
 
-RaspberryModel::RaspberryModel() {
-  chdir("/home/ner/Desktop/Nero/");
-  setenv("DISPLAY", ":0.0", 1);
-}
+RaspberryModel::RaspberryModel() {}
 
 RaspberryModel::~RaspberryModel() {}
 

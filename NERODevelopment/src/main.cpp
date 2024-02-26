@@ -7,6 +7,7 @@
 #include "import_qml_components_plugins.h"
 #include "import_qml_plugins.h"
 #include "src/models/mock_model.h"
+#include "src/models/raspberry_model.h"
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
@@ -23,7 +24,16 @@ int main(int argc, char *argv[]) {
 
   QQmlApplicationEngine engine;
 
-  MockModel *model = new MockModel;
+  QString osName = QSysInfo::machineHostName();
+
+  Model *model;
+
+  if (osName == "raspberrypi-sta") {
+    model = new RaspberryModel;
+  } else {
+    model = new MockModel;
+  }
+
   QThread *dataThread = new QThread;
 
   model->moveToThread(dataThread);
