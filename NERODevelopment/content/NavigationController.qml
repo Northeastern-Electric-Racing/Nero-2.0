@@ -4,7 +4,7 @@ import NERO
 Item {
     id: navigation
     anchors.fill: parent
-    focus: true
+    focus: !isSelected
     visible: true
     property int selectedPageIndex: navigationController.selectedPageIndex
     property bool isSelected: navigationController.isSelected
@@ -35,7 +35,7 @@ Item {
                     }
 
     Column {
-        visible: true
+        visible: !navigation.isSelected
         anchors.fill: parent
         anchors.leftMargin: 8
         anchors.rightMargin: 8
