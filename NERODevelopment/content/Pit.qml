@@ -19,8 +19,6 @@ Rectangle {
     property int iconWidth: 40
     property int iconHeight: 90
     property int labelVerticalSpacing: 10
-    width: 800
-    height: 480
     color: 'black'
 
     RowLayout {

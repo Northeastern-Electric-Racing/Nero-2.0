@@ -30,8 +30,8 @@ public slots:
   void homeButtonPressed() override;
 
 private:
-  bool m_isSelected;
-  int m_selectedPageIndex;
+  bool m_isSelected = false;
+  int m_selectedPageIndex = 0;
   int m_numPages = 4;
 };
 

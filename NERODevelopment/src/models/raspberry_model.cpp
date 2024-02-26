@@ -28,6 +28,7 @@ void RaspberryModel::connectToMQTT() {
 void RaspberryModel::receiveServerData(const serverdata::ServerData data,
                                        const QString topic) {
   this->currentData[topic] = DataInfo(topic, data.unit(), data.values());
+  emit this->onCurrentDataChange();
 }
 
 std::optional<float> RaspberryModel::getMph() {

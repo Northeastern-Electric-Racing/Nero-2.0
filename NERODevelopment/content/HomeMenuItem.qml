@@ -6,7 +6,7 @@ Rectangle {
     color: 'transparent'
     border.width: highlighted ? 2 : 1
 
-    border.color: highlighted ? "lightsteelblue" : "transparent"
+    border.color: highlighted ? "white" : "transparent"
     height: label.implicitHeight
     width: parent.width
 
