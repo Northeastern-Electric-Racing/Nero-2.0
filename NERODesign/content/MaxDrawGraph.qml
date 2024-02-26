@@ -27,7 +27,7 @@ Rectangle {
             ctx.beginPath()
             ctx.arc(centerX, centerY, radius, startAngle, endAngle, false)
             ctx.strokeStyle = '#14f804'
-            ctx.lineWidth = 12 / 200 * background.dimension
+            ctx.lineWidth = 0.06 * background.dimension
             ctx.stroke()
         }
     }
@@ -37,17 +37,17 @@ Rectangle {
         anchors.centerIn: parent
         LabelText {
             text: value.toString()
-            font.pixelSize: 50 / 200 * background.dimension
+            font.pixelSize: 0.25 * background.dimension
             font.bold: true
             color: "white"
         }
 
         LabelText {
             text: "A"
-            font.pixelSize: 30 / 200 * background.dimension
+            font.pixelSize: 0.15 * background.dimension
             font.bold: true
             color: "white"
-            Layout.topMargin: 12 / 200 * background.dimension
+            Layout.topMargin: 0.06 * background.dimension
         }
     }
 
