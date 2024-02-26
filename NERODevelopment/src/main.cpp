@@ -3,6 +3,7 @@
 
 #include "app_environment.h"
 #include "controllers/debugtablecontroller.h"
+#include "controllers/flappybirdcontroller.h"
 #include "controllers/homecontroller.h"
 #include "import_qml_components_plugins.h"
 #include "import_qml_plugins.h"
@@ -43,6 +44,7 @@ int main(int argc, char *argv[]) {
   OffViewController offViewController(model);
   DebugTableController tableController(model);
   NavigationController navigationController(model);
+  FlappyBirdController FlappyBirdController(model);
 
   dataThread->start();
 
@@ -62,6 +64,8 @@ int main(int argc, char *argv[]) {
                                            &tableController);
   engine.rootContext()->setContextProperty("navigationController",
                                            &navigationController);
+  engine.rootContext()->setContextProperty("flappyBirdController",
+                                           &FlappyBirdController);
 
   engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
 

@@ -35,6 +35,13 @@ public slots:
    */
   void updateMessage(const QMqttMessage &msg);
 
+  /**
+   * @brief sendMessage, Sends a message over the mqtt server with the NERO
+   * topic and then the passed following topic path.
+   * @param msg, the message to send
+   */
+  void sendMessage(const QString msg, const QString topic);
+
 signals:
   /**
    * @brief emitServerData, Emits the parsed server data object from protobuf

@@ -64,6 +64,11 @@ Item {
 
         HomeMenuItem {
             highlighted: selectedPageIndex === 3
+            text: "Configuration"
+        }
+
+        HomeMenuItem {
+            highlighted: selectedPageIndex === 4
             text: "Flappy Bird"
         }
     }
@@ -83,8 +88,13 @@ Item {
         focus: selectedPageIndex === 2 && isSelected
     }
 
-    FlappyBird {
+    Configuration {
         visible: selectedPageIndex === 3 && isSelected
-        isFocused: selectedPageIndex === 3 && isSelected
+        focus: selectedPageIndex === 3 && isSelected
+    }
+
+    FlappyBird {
+        visible: selectedPageIndex === 4 && isSelected
+        isFocused: selectedPageIndex === 4 && isSelected
     }
 }

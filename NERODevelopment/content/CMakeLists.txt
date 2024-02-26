@@ -33,4 +33,5 @@ qt6_add_qml_module(content
         images/bg.png
         images/pipe.png
         images/flappy-bird.png
+        QML_FILES Configuration.qml
 )

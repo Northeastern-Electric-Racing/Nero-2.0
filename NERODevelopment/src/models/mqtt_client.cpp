@@ -81,3 +81,11 @@ void MqttClient::updateMessage(const QMqttMessage &msg) {
                         msg.payload() + QLatin1Char('\n');
   qDebug() << debug;
 }
+
+void MqttClient::sendMessage(const QString msg, const QString topic) {
+  serverdata::ServerData serverData;
+  serverData.setUnit("");
+  serverData.setValues({msg});
+  QByteArray data = serverData.serialize(&this->m_serializer);
+  m_client->publish("NERO/" + topic, data);
+}
