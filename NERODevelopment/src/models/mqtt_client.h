@@ -40,7 +40,7 @@ public slots:
    * topic and then the passed following topic path.
    * @param msg, the message to send
    */
-  void sendMessage(const QString msg, const QString topic);
+  void sendMessage(const QString topic, const QString msg);
 
 signals:
   /**

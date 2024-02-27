@@ -82,7 +82,7 @@ void MqttClient::updateMessage(const QMqttMessage &msg) {
   qDebug() << debug;
 }
 
-void MqttClient::sendMessage(const QString msg, const QString topic) {
+void MqttClient::sendMessage(const QString topic, const QString msg) {
   serverdata::ServerData serverData;
   serverData.setUnit("");
   serverData.setValues({msg});
