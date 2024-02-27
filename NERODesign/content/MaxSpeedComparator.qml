@@ -49,7 +49,7 @@ Rectangle {
             }
             GradientStop {
                 position: 1.0 // End of gradient relative to parent's height
-                color: "green"
+                color: "#55FF00"
             }
         }
         transformOrigin: Item.BottomLeft
