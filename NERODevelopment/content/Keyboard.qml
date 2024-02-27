@@ -1,5 +1,6 @@
 import QtQuick 2.15
 import QtQuick.Controls
+import NERO
 
 Item {
     id: root
@@ -22,24 +23,26 @@ Item {
     property bool symbols: false
     property double columns: 10
     property double rows: 5
-    property int selectedIndex: 0
+    property int selectedIndex: keyboardViewController.selectedIndex
+    property bool isKeySelected: keyboardViewController.selectedKey
     property int numKeys: 44
 
     Keys.onPressed: event => {
-                        console.log(selectedIndex)
                         switch (event.key) {
                             case Qt.Key_Up:
-                            selectedIndex = Math.max(0, selectedIndex - columns)
+                            keyboardViewController.upButtonPressed()
                             break
                             case Qt.Key_Down:
-                            selectedIndex = Math.min(numKeys,
-                                                     selectedIndex + columns)
+                            keyboardViewController.downButtonPressed()
                             break
                             case Qt.Key_Left:
-                            selectedIndex = Math.max(0, selectedIndex - 1)
+                            keyboardViewController.leftButtonPressed()
                             break
                             case Qt.Key_Right:
-                            selectedIndex = Math.min(numKeys, selectedIndex + 1)
+                            keyboardViewController.rightButtonPressed()
+                            break
+                            case Qt.Key_Return:
+                            keyboardViewController.enterButtonPressed()
                             break
                         }
                     }
@@ -161,13 +164,15 @@ Item {
                             width: modelData.width * keyboard.width / columns - rowSpacing
                             height: keyboard.height / rows - columnSpacing
                             highlighted: root.selectedIndex === index
-                            focus: root.selectedIndex === index
+                            property bool isKeySelected: root.isKeySelected
 
                             onClicked: root.clicked(text)
 
-                            Keys.onReturnPressed: {
-                                clicked()
-                                event.accepted = true
+                            onIsKeySelectedChanged: {
+                                if (root.isKeySelected && highlighted) {
+                                    clicked()
+                                    event.accepted = true
+                                }
                             }
                         }
                     }
@@ -227,15 +232,16 @@ Item {
                                                                            ) : modelData.text
                             width: modelData.width * keyboard.width / columns - rowSpacing
                             height: keyboard.height / rows - columnSpacing
-
                             highlighted: root.selectedIndex === index + root.columns
-                            focus: root.selectedIndex === index + root.columns
-
                             onClicked: root.clicked(text)
 
-                            Keys.onReturnPressed: {
-                                clicked()
-                                event.accepted = true
+                            property bool isKeySelected: root.isKeySelected
+
+                            onIsKeySelectedChanged: {
+                                if (root.isKeySelected && highlighted) {
+                                    clicked()
+                                    event.accepted = true
+                                }
                             }
                         }
                     }
@@ -298,13 +304,15 @@ Item {
                             width: modelData.width * keyboard.width / columns - rowSpacing
                             height: keyboard.height / rows - columnSpacing
                             highlighted: root.selectedIndex === index + 2 * root.columns
-                            focus: root.selectedIndex === index + 2 * root.columns
+                            property bool isKeySelected: root.isKeySelected
 
                             onClicked: root.clicked(text)
 
-                            Keys.onReturnPressed: {
-                                clicked()
-                                event.accepted = true
+                            onIsKeySelectedChanged: {
+                                if (root.isKeySelected && highlighted) {
+                                    clicked()
+                                    event.accepted = true
+                                }
                             }
                         }
                     }
@@ -361,13 +369,15 @@ Item {
                             width: modelData.width * keyboard.width / columns - rowSpacing
                             height: keyboard.height / rows - columnSpacing
                             highlighted: root.selectedIndex === index + 3 * root.columns + 1
-                            focus: root.selectedIndex === index + 3 * root.columns + 1
+                            property bool isKeySelected: root.isKeySelected
 
                             onClicked: root.clicked(text)
 
-                            Keys.onReturnPressed: {
-                                clicked()
-                                event.accepted = true
+                            onIsKeySelectedChanged: {
+                                if (root.isKeySelected && highlighted) {
+                                    clicked()
+                                    event.accepted = true
+                                }
                             }
                         }
                     }
@@ -402,13 +412,15 @@ Item {
                             width: modelData.width * keyboard.width / columns - rowSpacing
                             height: keyboard.height / rows - columnSpacing
                             highlighted: root.selectedIndex === index + 4 * root.columns
-                            focus: root.selectedIndex === index + 4 * root.columns
+                            property bool isKeySelected: root.isKeySelected
 
                             onClicked: root.clicked(text)
 
-                            Keys.onReturnPressed: {
-                                clicked()
-                                event.accepted = true
+                            onIsKeySelectedChanged: {
+                                if (root.isKeySelected && highlighted) {
+                                    clicked()
+                                    event.accepted = true
+                                }
                             }
                         }
                     }
@@ -418,33 +430,34 @@ Item {
     }
 
     signal clicked(string text)
-    onClicked: {
-        if (text == '\u2190') {
-            // LEFTWARDS ARROW (backspace)
-            var position = textInput.cursorPosition
-            textInput.text = textInput.text.substring(
-                        0,
-                        textInput.cursorPosition - 1) + textInput.text.substring(
-                        textInput.cursorPosition, textInput.text.length)
-            textInput.cursorPosition = position - 1
-        } else if (text == '\u2191')
-            shift = !shift // UPWARDS ARROW (shift)
-        else if (text == '@#')
-            symbols = true
-        else if (text == 'AB')
-            symbols = false
-        else if (text == '\u21B5')
-            accepted(textInput.text) // DOWNWARDS ARROW WITH CORNER LEFTWARDS (enter)
-        else {
-            // insert text
-            var position = textInput.cursorPosition
-            textInput.text = textInput.text.substring(
-                        0,
-                        textInput.cursorPosition) + text + textInput.text.substring(
-                        textInput.cursorPosition, textInput.text.length)
-            textInput.cursorPosition = position + 1
+    onClicked: text => {
+                   if (text === '\u2190') {
+                       // LEFTWARDS ARROW (backspace)
+                       var position = textInput.cursorPosition
+                       textInput.text = textInput.text.substring(
+                           0,
+                           textInput.cursorPosition - 1) + textInput.text.substring(
+                           textInput.cursorPosition, textInput.text.length)
+                       textInput.cursorPosition = position - 1
+                   } else if (text === '\u2191')
+                   shift = !shift // UPWARDS ARROW (shift)
+                   else if (text === '@#')
+                   symbols = true
+                   else if (text === 'AB')
+                   symbols = false
+                   else if (text === '\u21B5')
+                   accepted(
+                       textInput.text) // DOWNWARDS ARROW WITH CORNER LEFTWARDS (enter)
+                   else {
+                       // insert text
+                       var position = textInput.cursorPosition
+                       textInput.text = textInput.text.substring(
+                           0,
+                           textInput.cursorPosition) + text + textInput.text.substring(
+                           textInput.cursorPosition, textInput.text.length)
+                       textInput.cursorPosition = position + 1
 
-            shift = false // momentary
-        }
-    }
+                       shift = false // momentary
+                   }
+               }
 }

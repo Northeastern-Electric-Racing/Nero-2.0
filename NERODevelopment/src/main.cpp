@@ -2,9 +2,13 @@
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
 
 #include "app_environment.h"
+#include "controllers/configurationcontroller.h"
 #include "controllers/debugtablecontroller.h"
 #include "controllers/flappybirdcontroller.h"
 #include "controllers/homecontroller.h"
+#include "controllers/keyboardcontroller.h"
+#include "controllers/navigationcontroller.h"
+#include "controllers/offviewcontroller.h"
 #include "import_qml_components_plugins.h"
 #include "import_qml_plugins.h"
 #include "src/models/mock_model.h"
@@ -13,10 +17,6 @@
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include <QThread>
-
-#include "controllers/homecontroller.h"
-#include "controllers/navigationcontroller.h"
-#include "controllers/offviewcontroller.h"
 
 int main(int argc, char *argv[]) {
   set_qt_environment();
@@ -44,7 +44,9 @@ int main(int argc, char *argv[]) {
   OffViewController offViewController(model);
   DebugTableController tableController(model);
   NavigationController navigationController(model);
-  FlappyBirdController FlappyBirdController(model);
+  FlappyBirdController flappyBirdController(model);
+  ConfigurationController configurationController(model);
+  KeyboardController keyboardController(model);
 
   dataThread->start();
 
@@ -65,7 +67,11 @@ int main(int argc, char *argv[]) {
   engine.rootContext()->setContextProperty("navigationController",
                                            &navigationController);
   engine.rootContext()->setContextProperty("flappyBirdController",
-                                           &FlappyBirdController);
+                                           &flappyBirdController);
+  engine.rootContext()->setContextProperty("configurationController",
+                                           &configurationController);
+  engine.rootContext()->setContextProperty("keyboardViewController",
+                                           &keyboardController);
 
   engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
 
