@@ -34,4 +34,7 @@ qt6_add_qml_module(content
         images/pipe.png
         images/flappy-bird.png
         QML_FILES Configuration.qml
+        QML_FILES Keyboard.qml
+        QML_FILES KeyboardController.qml
+        QML_FILES KeyboardInput.qml
 )

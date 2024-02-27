@@ -43,6 +43,7 @@ Item {
             anchors.top: parent.top
             anchors.bottom: parent.bottom
             width: parent.width / 4
+            color: 'black'
 
             HorizontalHeaderView {
                 id: topicsHeader
@@ -74,9 +75,11 @@ Item {
                     implicitWidth: topicsTableView.width
                     implicitHeight: debugTable.rowHeight
                     border.width: scrollingTopics
-                                  && model.index === debugTable.selectedTopicIndex ? 5 : 1
+                                  && model.index === debugTable.selectedTopicIndex ? 3 : 1
+                    color: 'black'
+                    border.color: 'white'
 
-                    Text {
+                    LabelText {
                         text: display
                         anchors.centerIn: parent
                     }
@@ -88,6 +91,7 @@ Item {
             anchors.top: parent.top
             anchors.bottom: parent.bottom
             width: parent.width * 3 / 4
+            color: 'black'
 
             HorizontalHeaderView {
                 id: valuesHeader
@@ -125,9 +129,11 @@ Item {
                     implicitWidth: parent.width / 3
                     implicitHeight: debugTable.rowHeight
                     border.width: !scrollingTopics
-                                  && model.index === debugTable.selectedValueIndex ? 5 : 1
+                                  && model.index === debugTable.selectedValueIndex ? 3 : 1
+                    color: 'black'
+                    border.color: 'white'
 
-                    Text {
+                    LabelText {
                         anchors.centerIn: parent
                         text: display
                     }
