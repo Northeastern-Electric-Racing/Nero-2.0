@@ -12,6 +12,8 @@ Item {
     property int selectedConfigurationIndex: configurationController.selectedConfigurationIndex
     property bool isKeyboardSelected: configurationController.isKeyboardSelected
     property int inputHeight: 70
+    property bool isFocused: false
+    focus: isFocused
 
     Keys.onPressed: event => {
                         switch (event.key) {
@@ -26,6 +28,18 @@ Item {
                             break
                         }
                     }
+
+    onVisibleChanged: {
+        if (visible) {
+            isFocused = false
+            isFocused = true
+        }
+    }
+
+    onIsFocusedChanged: {
+        focus = isFocused
+        console.log("setting focus to", isFocused, focus)
+    }
 
     ValueText {
         id: title
@@ -46,7 +60,8 @@ Item {
             label: "Enter Driver"
             onAccepted: {
                 configuration.driverText = text
-                configuration.focus = true
+                configuration.isFocused = false
+                configuration.isFocused = true
                 configurationController.setDriverName(text)
                 configurationController.setIsKeyboardSelected(false)
             }
@@ -69,7 +84,8 @@ Item {
             label: "Enter Location"
             onAccepted: {
                 configuration.locationText = text
-                configuration.focus = true
+                configuration.isFocused = false
+                configuration.isFocused = true
                 configurationController.setLocationName(text)
                 configurationController.setIsKeyboardSelected(false)
             }
@@ -91,7 +107,8 @@ Item {
             label: "Enter System"
             onAccepted: {
                 configuration.systemText = text
-                configuration.focus = true
+                configuration.isFocused = false
+                configuration.isFocused = true
                 configurationController.setSystemName(text)
                 configurationController.setIsKeyboardSelected(false)
             }

@@ -27,7 +27,6 @@ Item {
                             break
                             case Qt.Key_Return:
                             if (!this.isSelected) {
-                                console.log("changing")
                                 navigationController.enterButtonPressed()
                             }
                         }
@@ -90,7 +89,7 @@ Item {
 
     Configuration {
         visible: selectedPageIndex === 3 && isSelected
-        focus: selectedPageIndex === 3 && isSelected
+        isFocused: selectedPageIndex === 3 && isSelected
     }
 
     FlappyBird {
