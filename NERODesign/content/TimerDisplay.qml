@@ -3,8 +3,8 @@ import QtQuick.Controls 2.15
 import QtQuick.Layouts 2.15
 
 Item {
-    property int width: 500
-    property int height: 400
+    width: 500
+    height: 400
 
     GridLayout {
         width: parent.width
