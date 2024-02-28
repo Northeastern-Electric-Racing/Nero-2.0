@@ -27,7 +27,6 @@ Item {
                             break
                             case Qt.Key_Return:
                             if (!this.isSelected) {
-                                console.log("changing")
                                 navigationController.enterButtonPressed()
                             }
                         }
@@ -61,6 +60,16 @@ Item {
             highlighted: selectedPageIndex === 2
             text: "Debug"
         }
+
+        HomeMenuItem {
+            highlighted: selectedPageIndex === 3
+            text: "Configuration"
+        }
+
+        HomeMenuItem {
+            highlighted: selectedPageIndex === 4
+            text: "Flappy Bird"
+        }
     }
 
     OffScreen {
@@ -76,5 +85,15 @@ Item {
     DebugTable {
         visible: selectedPageIndex === 2 && isSelected
         focus: selectedPageIndex === 2 && isSelected
+    }
+
+    Configuration {
+        visible: selectedPageIndex === 3 && isSelected
+        isFocused: selectedPageIndex === 3 && isSelected
+    }
+
+    FlappyBird {
+        visible: selectedPageIndex === 4 && isSelected
+        isFocused: selectedPageIndex === 4 && isSelected
     }
 }

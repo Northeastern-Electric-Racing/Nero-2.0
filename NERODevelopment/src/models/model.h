@@ -78,6 +78,7 @@ public:
   virtual std::optional<bool> getIsTalking() = 0;
   virtual std::optional<int> getNumberOfCriticalFaults() = 0;
   virtual std::optional<int> getNumberOfNonCriticalFaults() = 0;
+  virtual void sendMessage(QString topic, QString message) = 0;
 
   QList<DebugTableRowValue> getDebugTableValues();
   void updatePackTempData();

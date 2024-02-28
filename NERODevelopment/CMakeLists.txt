@@ -24,6 +24,9 @@ set(PROJECT_SOURCES
     src/controllers/offviewcontroller.h
     src/controllers/buttoncontroller.h
     src/controllers/navigationcontroller.h
+    src/controllers/flappybirdcontroller.h
+    src/controllers/keyboardcontroller.h
+    src/controllers/configurationcontroller.h
 
     src/models/mock_model.h
     src/models/model.h
@@ -44,6 +47,9 @@ set(PROJECT_SOURCES
     src/controllers/offviewcontroller.cpp
     src/controllers/buttoncontroller.cpp
     src/controllers/navigationcontroller.cpp
+    src/controllers/flappybirdcontroller.cpp
+    src/controllers/keyboardcontroller.cpp
+    src/controllers/configurationcontroller.cpp
 
     src/models/mock_model.cpp
     src/models/model.cpp

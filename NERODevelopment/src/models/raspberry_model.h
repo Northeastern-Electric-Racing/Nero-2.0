@@ -3,8 +3,8 @@
 #ifndef _WIN32
 
 #include "model.h"
+#include "mqtt_client.h"
 #include <serverdata.qpb.h>
-
 /**
  * @brief The RaspberryModel class
  * The Production Model that is used when running on the car
@@ -75,6 +75,7 @@ public:
   std::optional<bool> getIsTalking() override;
   std::optional<int> getNumberOfCriticalFaults() override;
   std::optional<int> getNumberOfNonCriticalFaults() override;
+  void sendMessage(const QString topic, const QString message) override;
 
 private slots:
   void updateCurrentData() override;
@@ -83,6 +84,7 @@ private slots:
 private:
   void processData(const std::string &data);
   int totalNumberOfOnesIn(float value);
+  MqttClient *m_client;
 };
 #endif
 #endif // RASPBERRY_MODEL_H

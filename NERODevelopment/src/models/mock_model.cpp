@@ -355,8 +355,15 @@ std::optional<int> MockModel::getNumberOfCriticalFaults() { return 0; }
 
 std::optional<int> MockModel::getNumberOfNonCriticalFaults() { return 0; }
 
+void MockModel::sendMessage(QString topic, QString message) {
+  qDebug() << "Sending Message: " << topic << " " << message;
+}
+
 QVector<QString> MockModel::convertNumberToDataInfoValue(float value) {
-  return {QString::number(value)};
+  // qDebug() << value;
+  QVector<QString> val = {QString::number(value)};
+  // qDebug() << val;
+  return val;
 }
 void MockModel::updateCurrentData() {
   this->currentData.insert(

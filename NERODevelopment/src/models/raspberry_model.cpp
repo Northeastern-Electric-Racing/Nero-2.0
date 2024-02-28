@@ -23,6 +23,11 @@ void RaspberryModel::connectToMQTT() {
   connect(client, &MqttClient::emitServerData, this,
           &RaspberryModel::receiveServerData);
   client->connectToHost();
+  this->m_client = client;
+}
+
+void RaspberryModel::sendMessage(const QString topic, const QString message) {
+  this->m_client->sendMessage(topic, message);
 }
 
 void RaspberryModel::receiveServerData(const serverdata::ServerData data,

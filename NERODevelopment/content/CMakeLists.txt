@@ -25,8 +25,16 @@ qt6_add_qml_module(content
         DescriptionModal.qml
         NavigationController.qml
         HomeMenuItem.qml
+        FlappyBird.qml
+        KeyboardInput.qml
+        Keyboard.qml
+        KeyboardController.qml
+        Configuration.qml
 
     RESOURCES
         fonts/fonts.txt
         fonts/Roboto-Black.ttf
+        images/bg.png
+        images/pipe.png
+        images/flappy-bird.png
 )
