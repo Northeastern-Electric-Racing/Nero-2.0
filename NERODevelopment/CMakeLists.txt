@@ -24,6 +24,9 @@ set(PROJECT_SOURCES
     src/controllers/offviewcontroller.h
     src/controllers/buttoncontroller.h
     src/controllers/navigationcontroller.h
+    src/controllers/flappybirdcontroller.h
+    src/controllers/keyboardcontroller.h
+    src/controllers/configurationcontroller.h
 
     src/models/mock_model.h
     src/models/model.h
@@ -44,6 +47,9 @@ set(PROJECT_SOURCES
     src/controllers/offviewcontroller.cpp
     src/controllers/buttoncontroller.cpp
     src/controllers/navigationcontroller.cpp
+    src/controllers/flappybirdcontroller.cpp
+    src/controllers/keyboardcontroller.cpp
+    src/controllers/configurationcontroller.cpp
 
     src/models/mock_model.cpp
     src/models/model.cpp
@@ -60,10 +66,7 @@ set(PROJECT_SOURCES
 
 find_package(Qt6 REQUIRED COMPONENTS Core Gui Qml Quick Network Mqtt Protobuf)
 
-qt_add_executable(NEROApp ${PROJECT_SOURCES}
-    src/controllers/flappybirdcontroller.h src/controllers/flappybirdcontroller.cpp
-    src/controllers/keyboardcontroller.h src/controllers/keyboardcontroller.cpp
-    src/controllers/configurationcontroller.h src/controllers/configurationcontroller.cpp)
+qt_add_executable(NEROApp ${PROJECT_SOURCES})
 
 qt_add_resources(NEROApp "configuration"
     PREFIX "/"

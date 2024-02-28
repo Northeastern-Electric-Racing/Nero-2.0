@@ -26,6 +26,10 @@ qt6_add_qml_module(content
         NavigationController.qml
         HomeMenuItem.qml
         FlappyBird.qml
+        KeyboardInput.qml
+        Keyboard.qml
+        KeyboardController.qml
+        Configuration.qml
 
     RESOURCES
         fonts/fonts.txt
@@ -33,8 +37,4 @@ qt6_add_qml_module(content
         images/bg.png
         images/pipe.png
         images/flappy-bird.png
-        QML_FILES Configuration.qml
-        QML_FILES Keyboard.qml
-        QML_FILES KeyboardController.qml
-        QML_FILES KeyboardInput.qml
 )
