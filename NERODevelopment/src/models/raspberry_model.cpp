@@ -10,10 +10,7 @@
 #include <sys/un.h>
 #include <unistd.h>
 
-RaspberryModel::RaspberryModel() {
-  chdir("/home/ner/Desktop/Nero/");
-  setenv("DISPLAY", ":0.0", 1);
-}
+RaspberryModel::RaspberryModel() {}
 
 RaspberryModel::~RaspberryModel() {}
 
@@ -26,11 +23,17 @@ void RaspberryModel::connectToMQTT() {
   connect(client, &MqttClient::emitServerData, this,
           &RaspberryModel::receiveServerData);
   client->connectToHost();
+  this->m_client = client;
+}
+
+void RaspberryModel::sendMessage(const QString topic, const QString message) {
+  this->m_client->sendMessage(topic, message);
 }
 
 void RaspberryModel::receiveServerData(const serverdata::ServerData data,
                                        const QString topic) {
   this->currentData[topic] = DataInfo(topic, data.unit(), data.values());
+  emit this->onCurrentDataChange();
 }
 
 std::optional<float> RaspberryModel::getMph() {
@@ -288,6 +291,15 @@ std::optional<bool> RaspberryModel::getDownButtonPressed() {
   if (value) {
     std::string binary = std::bitset<8>(static_cast<int>(*value)).to_string();
     return binary.length() >= 5 ? binary[4] == 1 : false;
+  }
+  return std::nullopt;
+}
+
+std::optional<bool> RaspberryModel::getHomeButtonPressed() {
+  std::optional<float> value = this->getById(HOMEBUTTON);
+  if (value) {
+    std::string binary = std::bitset<8>(static_cast<int>(*value)).to_string();
+    return binary.length() >= 1 ? binary[1] == 1 : false;
   }
   return std::nullopt;
 }

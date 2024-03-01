@@ -1,209 +1,115 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import QtQuick.Layouts
 
-Item {
+import NERO
+
+Rectangle {
     id: pit
-    width: 800
-    height: 480
-    property int stateOfChargePercentage: 0
-    property int packTempValue: 0
-    property int motorTempValue: 0
-    property int currentSpeed: 0
+    anchors.fill: parent
+    property int stateOfChargePercentage: homeController.stateOfCharge
+    property int packTempValue: homeController.packTemp
+    property int motorTempValue: homeController.motorTemp
+    property int currentSpeed: homeController.speed
+    property bool forward: homeController.status
+
     property int maxSpeed: 5
     property int horizontalMargin: 10
-    property bool forward: true
     property int horizontalIconSpacing: -55
     property int iconWidth: 40
     property int iconHeight: 90
     property int labelVerticalSpacing: 10
-    property bool isTalking: false
+    width: 800
+    height: 480
+    color: 'black'
 
-    Row {
+    RowLayout {
         id: mainRow
-        width: parent.width - horizontalMargin * 2
-        height: parent.height
-        anchors.centerIn: parent
+        anchors.fill: parent
+        anchors.leftMargin: horizontalMargin
+        anchors.rightMargin: horizontalMargin
 
-        Column {
-            id: leftCol
-            spacing: 10
-            width: parent.width / 2
-            height: parent.height
+        GridLayout {
+            Layout.preferredWidth: parent.width / 2
+            Layout.preferredHeight: parent.height
+            rows: 2
+            columns: 2
 
-            Row {
-                id: topRow
-                width: parent.width
-                height: parent.height / 2
-
-                Column {
-                    id: packTempColumn
-                    width: parent.width / 2
-                    height: parent.height
-                    anchors.verticalCenter: parent.verticalCenter
-
-                    Row {
-                        id: packTempRow
-                        height: pit.iconHeight
-                        width: parent.width
-                        anchors.verticalCenter: parent.verticalCenter
-
-                        Thermometer {
-                            id: packTempThermometer
-                            value: pit.packTempValue
-                            anchors.horizontalCenter: parent.horizontalCenter
-                            anchors.horizontalCenterOffset: pit.horizontalIconSpacing
-                            width: pit.iconWidth
-                            height: pit.iconHeight
-                        }
-
-                        ValueText {
-                            id: packTempText
-                            text: pit.packTempValue
-                            anchors.horizontalCenter: parent.horizontalCenter
-                            anchors.horizontalCenterOffset: 25
-                            anchors.baseline: parent.bottom
-                        }
-
-                    }
-
-                    LabelText {
-                        text: 'PACK TEMP'
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        anchors.top: packTempRow.bottom
-                        anchors.topMargin: pit.labelVerticalSpacing
-                    }
-
-                }
-
-                Column {
-                    id: speedLimitCol
-                    width: parent.width / 2
-                    height: parent.height
-
-                    ValueText {
-                        id: maxSpeedText
-                        text: pit.maxSpeed
-                        anchors.centerIn: parent
-                        anchors.verticalCenterOffset: 15
-                    }
-
-                    LabelText {
-                        text: "SPEED LIMIT"
-                        anchors.top: maxSpeedText.bottom
-                        anchors.topMargin: -pit.labelVerticalSpacing
-                        anchors.horizontalCenter: parent.horizontalCenter
-                    }
-                }
-
+            ThermometerValueComponent {
+                id: packTempThermometer
+                Layout.row: 0
+                Layout.column: 0
+                width: 100
+                iconWidth: pit.iconWidth
+                iconHeight: pit.iconHeight
+                horizontalIconSpacing: pit.horizontalIconSpacing
+                labelVerticalSpacing: pit.labelVerticalSpacing
+                thermometerValue: pit.packTempValue
+                title: "PACK TEMP"
             }
 
-            Row {
-                id: bottomRow
-                height: parent.height / 2
-                width: parent.width
-
-
-                Column {
-                    id: batteryColumn
-                    width: parent.width / 2
-                    height: parent.height
-
-                    Row {
-                        id: batteryRow
-                        height: pit.iconHeight
-                        width: parent.width
-
-                        Battery {
-                            id: battery
-                            width: pit.iconWidth
-                            height: pit.iconHeight
-                            anchors.horizontalCenter: parent.horizontalCenter
-                            anchors.horizontalCenterOffset: pit.horizontalIconSpacing
-                            value: pit.stateOfChargePercentage
-                        }
-
-
-                        ValueText {
-                            text: pit.stateOfChargePercentage
-                            anchors.horizontalCenter: parent.horizontalCenter
-                            anchors.horizontalCenterOffset: 25
-                            anchors.baseline: parent.bottom
-                        }
-
-                    }
-
-                    LabelText {
-                        text: "CHARGE STATE"
-                        anchors.top: batteryRow.bottom
-                        anchors.topMargin: pit.labelVerticalSpacing
-                        anchors.horizontalCenter: parent.horizontalCenter
-                    }
+            ColumnLayout {
+                Layout.row: 0
+                Layout.column: 1
+                Layout.alignment: Qt.AlignBottom
+                ValueText {
+                    text: pit.maxSpeed
+                    Layout.alignment: Qt.AlignHCenter
                 }
 
-                Column {
-                    id: motorTempColumn
-                    height: parent.height
-                    width: parent.width / 2
-
-                    Row {
-                        id: motorTempRow
-                        width: parent.width
-                        height: pit.iconHeight
-
-                        Thermometer {
-                            id: motorTempThermometer
-                            value: pit.motorTempValue
-                            width: pit.iconWidth
-                            height: pit.iconHeight
-                            anchors.horizontalCenter: parent.horizontalCenter
-                            anchors.horizontalCenterOffset: pit.horizontalIconSpacing
-                        }
-
-                        ValueText {
-                            text: pit.motorTempValue
-                            anchors.horizontalCenter: parent.horizontalCenter
-                            anchors.horizontalCenterOffset: 25
-                            anchors.baseline: parent.bottom
-                        }
-
-                    }
-
-                    LabelText {
-                        text: "MOTOR TEMP"
-                        anchors.top: motorTempRow.bottom
-                        anchors.topMargin: pit.labelVerticalSpacing
-                        anchors.horizontalCenter: parent.horizontalCenter
-                    }
+                LabelText {
+                    text: "SPEED LIMIT"
+                    Layout.alignment: Qt.AlignHCenter
                 }
+            }
 
+            BatteryValueComponent {
+                Layout.row: 1
+                Layout.column: 0
+                width: 125
+                Layout.alignment: Qt.AlignTop
+                iconWidth: pit.iconWidth
+                iconHeight: pit.iconHeight
+                batteryValue: pit.stateOfChargePercentage
+            }
+
+            ThermometerValueComponent {
+                Layout.row: 1
+                Layout.column: 1
+                width: 100
+                height: 100
+                Layout.alignment: Qt.AlignTop
+                iconWidth: pit.iconWidth
+                iconHeight: pit.iconHeight
+                horizontalIconSpacing: pit.horizontalIconSpacing
+                labelVerticalSpacing: pit.labelVerticalSpacing
+                thermometerValue: pit.motorTempValue
+                title: "MOTOR TEMP"
             }
         }
 
-        Column {
-            id: rightColumn
-            anchors.verticalCenter: parent.verticalCenter
+        ColumnLayout {
+            Layout.preferredHeight: parent.height
+            Layout.preferredWidth: parent.width / 2
 
             Spedometer {
                 id: spedometer
-                width: 400
-                height: 300
+                Layout.preferredWidth: 400
+                Layout.preferredHeight: 300
                 value: pit.currentSpeed
                 maxValue: pit.maxSpeed
-                anchors.horizontalCenter: parent.horizontalCenter
                 verticalPadding: 50
+                Layout.alignment: Qt.AlignHCenter
             }
 
             DirectionView {
                 id: directionView
                 forward: forward
-                anchors.horizontalCenter: parent.horizontalCenter
-                width: 300
-                height: 100
+                Layout.preferredWidth: 300
+                Layout.preferredHeight: 100
                 radius: 10
+                Layout.alignment: Qt.AlignHCenter
             }
         }
-
     }
-
-
 }

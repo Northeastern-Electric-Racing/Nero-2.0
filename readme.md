@@ -16,6 +16,22 @@ Select the Default options for installing components
 
 Select Next Until You start downloading Qt (Should be around 30 GB)
 
+### Install protobuf for your machine
+
+#### Mac Os
+
+`brew install protobuf@3`
+
+`brew link --overwrite protobuf@3`
+
+#### Linux
+
+`sudo apt update`
+
+`sudo apt install protobuf-compiler`
+
+`protoc`
+
 ### Compiling QtMqtt for your Qt version
 1 load QtCreator -> Load Project c:\Qt\6.5.3\Src\QtMqtt\CMakeList.txt
 

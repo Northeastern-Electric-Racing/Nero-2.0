@@ -68,6 +68,7 @@ void DebugTableController::downButtonPressed() {
   if (this->m_scrollingTopics) {
     if (this->m_selectedTopicsIndex < this->m_topics.length() - 1) {
       this->setSelectedTopicsIndex(this->m_selectedTopicsIndex + 1);
+      this->update();
     }
   } else {
     if (this->m_selectedValuesIndex < this->m_selectedValues.length() - 1) {
@@ -82,6 +83,7 @@ void DebugTableController::upButtonPressed() {
   if (this->m_scrollingTopics) {
     if (this->m_selectedTopicsIndex != 0) {
       this->setSelectedTopicsIndex(this->m_selectedTopicsIndex - 1);
+      this->update();
     }
   } else {
     if (this->m_selectedValuesIndex != 0) {

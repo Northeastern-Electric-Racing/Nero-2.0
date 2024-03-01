@@ -2,11 +2,17 @@
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
 
 #include "app_environment.h"
+#include "controllers/configurationcontroller.h"
 #include "controllers/debugtablecontroller.h"
+#include "controllers/flappybirdcontroller.h"
 #include "controllers/homecontroller.h"
+#include "controllers/keyboardcontroller.h"
+#include "controllers/navigationcontroller.h"
+#include "controllers/offviewcontroller.h"
 #include "import_qml_components_plugins.h"
 #include "import_qml_plugins.h"
 #include "src/models/mock_model.h"
+#include "src/models/raspberry_model.h"
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
@@ -19,14 +25,29 @@ int main(int argc, char *argv[]) {
 
   QQmlApplicationEngine engine;
 
-  MockModel *model = new MockModel;
+  QString osName = QSysInfo::machineHostName();
+
+  Model *model;
+
+  if (osName == "raspberrypi-sta") {
+    model = new RaspberryModel;
+    model->connectToMQTT();
+  } else {
+    model = new MockModel;
+  }
+
   QThread *dataThread = new QThread;
 
   model->moveToThread(dataThread);
 
   HomeController homeController(model);
   HeaderController headerController(model);
+  OffViewController offViewController(model);
   DebugTableController tableController(model);
+  NavigationController navigationController(model);
+  FlappyBirdController flappyBirdController(model);
+  ConfigurationController configurationController(model);
+  KeyboardController keyboardController(model);
 
   dataThread->start();
 
@@ -39,12 +60,21 @@ int main(int argc, char *argv[]) {
       },
       Qt::QueuedConnection);
 
-  engine.rootContext()->setContextProperty("model", model);
   engine.rootContext()->setContextProperty("homeController", &homeController);
   engine.rootContext()->setContextProperty("headerController",
                                            &headerController);
+  engine.rootContext()->setContextProperty("offViewController",
+                                           &offViewController);
   engine.rootContext()->setContextProperty("debugTableController",
                                            &tableController);
+  engine.rootContext()->setContextProperty("navigationController",
+                                           &navigationController);
+  engine.rootContext()->setContextProperty("flappyBirdController",
+                                           &flappyBirdController);
+  engine.rootContext()->setContextProperty("configurationController",
+                                           &configurationController);
+  engine.rootContext()->setContextProperty("keyboardViewController",
+                                           &keyboardController);
 
   engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
 

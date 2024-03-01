@@ -66,6 +66,7 @@ public:
   virtual std::optional<bool> getEnterButtonPressed() = 0;
   virtual std::optional<bool> getUpButtonPressed() = 0;
   virtual std::optional<bool> getDownButtonPressed() = 0;
+  virtual std::optional<bool> getHomeButtonPressed() = 0;
   virtual std::optional<float> getModeIndex() = 0;
   virtual std::optional<float> getGForceX() = 0;
   virtual std::optional<float> getGForceY() = 0;
@@ -77,6 +78,7 @@ public:
   virtual std::optional<bool> getIsTalking() = 0;
   virtual std::optional<int> getNumberOfCriticalFaults() = 0;
   virtual std::optional<int> getNumberOfNonCriticalFaults() = 0;
+  virtual void sendMessage(QString topic, QString message) = 0;
 
   QList<DebugTableRowValue> getDebugTableValues();
   void updatePackTempData();

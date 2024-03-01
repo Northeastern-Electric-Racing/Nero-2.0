@@ -66,12 +66,14 @@ public:
   std::optional<bool> getDownButtonPressed() override;
   std::optional<bool> getBackwardButtonPressed() override;
   std::optional<bool> getRightButtonPressed() override;
+  std::optional<bool> getHomeButtonPressed() override;
   std::optional<float> getBalancingCells() override;
   std::optional<float> getTractionControl() override;
   std::optional<float> getCellDelta() override;
   std::optional<bool> getIsTalking() override;
   std::optional<int> getNumberOfCriticalFaults() override;
   std::optional<int> getNumberOfNonCriticalFaults() override;
+  void sendMessage(const QString topic, const QString message) override;
 
 private slots:
   void updateCurrentData() override;

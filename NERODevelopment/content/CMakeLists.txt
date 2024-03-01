@@ -2,6 +2,7 @@
 ### Do not change
 
 qt_add_library(content STATIC)
+
 qt6_add_qml_module(content
     URI "content"
     VERSION 1.0
@@ -15,9 +16,25 @@ qt6_add_qml_module(content
         LabelText.qml
         DirectionView.qml
         DetailDisplay.qml
+        OffScreen.qml
         DebugTable.qml
+        ThermometerValueComponent.qml
+        BatteryValueComponent.qml
+        Spacer.qml
+        ValueDisplay.qml
+        DescriptionModal.qml
+        NavigationController.qml
+        HomeMenuItem.qml
+        FlappyBird.qml
+        KeyboardInput.qml
+        Keyboard.qml
+        KeyboardController.qml
+        Configuration.qml
 
     RESOURCES
         fonts/fonts.txt
         fonts/Roboto-Black.ttf
+        images/bg.png
+        images/pipe.png
+        images/flappy-bird.png
 )

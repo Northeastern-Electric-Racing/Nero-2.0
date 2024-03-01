@@ -35,6 +35,13 @@ public slots:
    */
   void updateMessage(const QMqttMessage &msg);
 
+  /**
+   * @brief sendMessage, Sends a message over the mqtt server with the NERO
+   * topic and then the passed following topic path.
+   * @param msg, the message to send
+   */
+  void sendMessage(const QString topic, const QString msg);
+
 signals:
   /**
    * @brief emitServerData, Emits the parsed server data object from protobuf
@@ -76,10 +83,10 @@ private slots:
 private:
   QMqttClient *m_client;
   QMqttSubscription *m_sub;
-  QString hostname = "192.168.100.176";
+  QString hostname = "localhost";
   int port = 1883;
   qint8 QoS = 0;
-  QString default_topic = "/#";
+  QString default_topic = "#";
   QProtobufSerializer m_serializer;
 };
 #endif // MQTTCLIENT_H

@@ -39,10 +39,7 @@ Rectangle {
             height: parent.height - parent.border.width
             anchors.centerIn: parent
             fillMode: Image.PreserveAspectCrop
-            layer.enabled: true
-            layer.effect: OpacityMask {
-                maskSource: mask
-            }
+
         }
 
         Rectangle {
