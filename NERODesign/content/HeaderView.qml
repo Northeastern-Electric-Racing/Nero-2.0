@@ -1,6 +1,5 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import NERO
 
 Item {
     id: header
@@ -37,5 +36,4 @@ Item {
         anchors.topMargin: criticalFaultIcon.height / 5
         dimension: 40
     }
-
 }

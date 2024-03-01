@@ -5,6 +5,7 @@
 #include "controllers/configurationcontroller.h"
 #include "controllers/debugtablecontroller.h"
 #include "controllers/flappybirdcontroller.h"
+#include "controllers/headercontroller.h"
 #include "controllers/homecontroller.h"
 #include "controllers/keyboardcontroller.h"
 #include "controllers/navigationcontroller.h"

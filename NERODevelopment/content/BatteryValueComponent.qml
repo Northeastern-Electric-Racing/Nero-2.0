@@ -19,9 +19,8 @@ Rectangle {
 
             Battery {
                 id: battery
-                Layout.fillWidth: true
                 Layout.fillHeight: true
-
+                width: 55
                 value: batteryValue
             }
 

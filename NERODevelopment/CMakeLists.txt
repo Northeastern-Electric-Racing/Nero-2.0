@@ -20,10 +20,7 @@ set(PROJECT_SOURCES
     src/controllers/offviewcontroller.h
     src/controllers/efficiencycontroller.h
     src/controllers/headercontroller.h
-<<<<<<< HEAD
-=======
     src/controllers/debugtablecontroller.h
->>>>>>> 757716dfe0f8169c537e8b1f45ff3996fe52081b
     src/controllers/offviewcontroller.h
     src/controllers/buttoncontroller.h
     src/controllers/navigationcontroller.h
