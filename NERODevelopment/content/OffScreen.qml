@@ -203,32 +203,32 @@ Item {
         }
 
         DetailDisplay {
-            Layout.row: 0
-            Layout.column: 2
+            Layout.row: 1
+            Layout.column: 1
             shutdownFlowTask: "CP BRB"
             status: offScreen.cockPitBrbStatus
             highlight: offScreen.selectedFlowIndex == 7
         }
 
         DetailDisplay {
-            Layout.row: 0
-            Layout.column: 3
+            Layout.row: 2
+            Layout.column: 1
             shutdownFlowTask: "TSMS"
             status: offScreen.tsmsStatus
             highlight: offScreen.selectedFlowIndex == 8
         }
 
         DetailDisplay {
-            Layout.row: 0
-            Layout.column: 4
+            Layout.row: 3
+            Layout.column: 1
             shutdownFlowTask: "HVD INTRLK"
             status: offScreen.hvdInterlockStatus
             highlight: offScreen.selectedFlowIndex == 9
         }
 
         DetailDisplay {
-            Layout.row: 0
-            Layout.column: 5
+            Layout.row: 4
+            Layout.column: 1
             shutdownFlowTask: "HVD CNCTR"
             status: offScreen.hvdConnectorStatus
             highlight: offScreen.selectedFlowIndex == 10
@@ -241,5 +241,12 @@ Item {
         anchors.verticalCenter: parent.verticalCenter
         anchors.verticalCenterOffset: -parent.height / 7
         dimension: 300
+    }
+
+    HeaderView {
+        height: 100
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.right: parent.right
     }
 }

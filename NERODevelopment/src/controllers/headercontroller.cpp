@@ -11,7 +11,6 @@ HeaderController::HeaderController(Model *model, QObject *parent)
 int HeaderController::numCriticalWarnings() const {
   return m_numCriticalWarnings;
 }
-
 void HeaderController::setNumCriticalWarnings(int numCriticalWarnings) {
   if (m_numCriticalWarnings != numCriticalWarnings) {
     m_numCriticalWarnings = numCriticalWarnings;
@@ -22,11 +21,10 @@ void HeaderController::setNumCriticalWarnings(int numCriticalWarnings) {
 int HeaderController::numNonCriticalWarnings() const {
   return m_numNonCriticalWarnings;
 }
-
 void HeaderController::setNumNonCriticalWarnings(int numNonCriticalWarnings) {
   if (m_numNonCriticalWarnings != numNonCriticalWarnings) {
     m_numNonCriticalWarnings = numNonCriticalWarnings;
-    emit numCriticalWarningsChanged(numNonCriticalWarnings);
+    emit numNonCriticalWarningsChanged(numNonCriticalWarnings);
   }
 }
 

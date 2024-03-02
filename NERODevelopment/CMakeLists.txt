@@ -37,6 +37,7 @@ set(PROJECT_SOURCES
 
     src/utils/data_type_names.h
     src/utils/server_data.h
+    src/utils/attributestatus.h
     src/utils/descriptioninfo.h
 
     src/controllers/efficiencycontroller.cpp

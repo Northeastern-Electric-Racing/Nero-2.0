@@ -349,11 +349,11 @@ std::optional<bool> MockModel::getRightButtonPressed() { return 0; }
 
 std::optional<bool> MockModel::getHomeButtonPressed() { return 0; }
 
-std::optional<bool> MockModel::getIsTalking() { return 0; }
+std::optional<bool> MockModel::getIsTalking() { return true; }
 
-std::optional<int> MockModel::getNumberOfCriticalFaults() { return 0; }
+std::optional<int> MockModel::getNumberOfCriticalFaults() { return 1; }
 
-std::optional<int> MockModel::getNumberOfNonCriticalFaults() { return 0; }
+std::optional<int> MockModel::getNumberOfNonCriticalFaults() { return 1; }
 
 void MockModel::sendMessage(QString topic, QString message) {
   qDebug() << "Sending Message: " << topic << " " << message;

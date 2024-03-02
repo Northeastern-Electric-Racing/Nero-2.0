@@ -5,6 +5,7 @@
 #include "controllers/configurationcontroller.h"
 #include "controllers/debugtablecontroller.h"
 #include "controllers/flappybirdcontroller.h"
+#include "controllers/headercontroller.h"
 #include "controllers/homecontroller.h"
 #include "controllers/keyboardcontroller.h"
 #include "controllers/navigationcontroller.h"
@@ -41,6 +42,7 @@ int main(int argc, char *argv[]) {
   model->moveToThread(dataThread);
 
   HomeController homeController(model);
+  HeaderController headerController(model);
   OffViewController offViewController(model);
   DebugTableController tableController(model);
   NavigationController navigationController(model);
@@ -60,6 +62,8 @@ int main(int argc, char *argv[]) {
       Qt::QueuedConnection);
 
   engine.rootContext()->setContextProperty("homeController", &homeController);
+  engine.rootContext()->setContextProperty("headerController",
+                                           &headerController);
   engine.rootContext()->setContextProperty("offViewController",
                                            &offViewController);
   engine.rootContext()->setContextProperty("debugTableController",
