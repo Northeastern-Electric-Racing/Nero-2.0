@@ -1,31 +1,63 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 
-
 Item {
     id: runInfo
-        width: 200
-        height: 50
+
+    property int dimension: 200
+    width: dimension
+    height: dimension / 4
 
     property string backgroundColor: "white"
     property string label: ""
     property string value: ""
+    property int topRadius: 0
+    property int radius: 0
+    property bool isTop: false
+    property bool isBottom: false
 
 
     Rectangle {
-        height: parent.height
-        width: parent.width
-        color: backgroundColor
+        id: bottomRect
+        visible: runInfo.isTop
+        width: runInfo.width
+        height: runInfo.radius
+        color: runInfo.backgroundColor
 
         anchors {
-            left: parent.left
-            top: parent.top
+            left: runInfo.left
+            bottom: runInfo.bottom
+        }
+     }
+
+    Rectangle {
+        id: topRect
+        visible: runInfo.isBottom
+        width: runInfo.width
+        height: runInfo.radius
+        color: runInfo.backgroundColor
+
+        anchors {
+            left: runInfo.left
+            top: runInfo.top
+        }
+    }
+
+    Rectangle {
+        height: runInfo.height
+        width: runInfo.width
+        color: backgroundColor
+        radius: runInfo.radius
+
+        anchors {
+            left: runInfo.left
+            top: runInfo.top
         }
 
         Rectangle {
             id: rightBlackRectangle
-            width: parent.width / 4
-            height: parent.height * 0.8
+            width: runInfo.width / 4
+            height: runInfo.height * 0.8
             color: "black"
 
             x: parent.width * 0.7
@@ -35,20 +67,19 @@ Item {
         LabelText {
             id: labelText
             text: label
-            x: 10
-            y: 10
-            font.pixelSize: parent.width * 0.1
+            x: runInfo.width * 0.05
+            y: runInfo.height * 0.2
+            font.pixelSize: runInfo.dimension * 0.08
             color: "black"
         }
 
         ValueText {
             id: valueText
             text: value
-            x: parent.width * 0.8
-            y: parent.height * 0.15
-            font.pixelSize: parent.width * 0.1
+            x: runInfo.width * 0.78
+            y: runInfo.height * 0.08
+            font.pixelSize: runInfo.dimension * 0.15
             color: "white"
         }
-
     }
 }
