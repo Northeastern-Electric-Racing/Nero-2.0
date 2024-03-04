@@ -4,15 +4,15 @@ import QtQuick.Layouts 2.15
 
 Item {
     id: timerDisplay
-    property int dimension: 500
+    property int widthValue: 500
+    property int heightValue: 400
 
-    width: dimension
-    height: dimension * 0.8
+    width: widthValue
+    height: heightValue
 
-    GridLayout {
-        width: parent.width
-        height: parent.height
-        columns: 1
+    ColumnLayout {
+        width: timerDisplay.width
+        height: timerDisplay.height
 
         anchors {
             top: parent.top
@@ -23,14 +23,14 @@ Item {
             Layout.row: 0
             Layout.column: 0
             Layout.columnSpan: 1
-            Layout.rowSpan: 1
             Layout.fillWidth: true
             Layout.fillHeight: true
             backgroundColor: "#14ff00"
-            dimension: timerDisplay.dimension
+            widthValue: timerDisplay.width
+            heightValue: timerDisplay.height / 3.3
             label: "CURRENT RUN"
             value: "0"
-            radius: timerDisplay.dimension / 20
+            radius: timerDisplay.width / 20
             isTop: true
         }
 
@@ -38,11 +38,11 @@ Item {
             Layout.row: 1
             Layout.column: 0
             Layout.columnSpan: 1
-            Layout.rowSpan: 1
             Layout.fillWidth: true
             Layout.fillHeight: true
             backgroundColor: "#ffffff"
-            dimension: timerDisplay.dimension
+            widthValue: timerDisplay.width
+            heightValue: timerDisplay.height / 3.3
             label: "LAST RUN"
             value: "0"
         }
@@ -51,14 +51,14 @@ Item {
             Layout.row: 2
             Layout.column: 0
             Layout.columnSpan: 1
-            Layout.rowSpan: 1
             Layout.fillWidth: true
             Layout.fillHeight: true
             backgroundColor: "#ad00ff"
-            dimension: timerDisplay.dimension
+            widthValue: timerDisplay.width
+            heightValue: timerDisplay.height / 3.3
             label: "FASTEST RUN"
             value: "0"
-            radius: timerDisplay.dimension / 20
+            radius: timerDisplay.width / 20
             isBottom: true
         }
     }

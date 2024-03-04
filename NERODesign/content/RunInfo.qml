@@ -4,9 +4,11 @@ import QtQuick.Controls 2.15
 Item {
     id: runInfo
 
-    property int dimension: 200
-    width: dimension
-    height: dimension / 4
+    property int widthValue: 200
+    property int heightValue: 40
+
+    width: widthValue
+    height: heightValue
 
     property string backgroundColor: "white"
     property string label: ""
@@ -68,18 +70,20 @@ Item {
             id: labelText
             text: label
             x: runInfo.width * 0.05
-            y: runInfo.height * 0.2
-            font.pixelSize: runInfo.dimension * 0.08
+            y: runInfo.height * 0.3
+            font.pixelSize: runInfo.height * 0.3
             color: "black"
+            font.bold: true
         }
 
         ValueText {
             id: valueText
             text: value
             x: runInfo.width * 0.78
-            y: runInfo.height * 0.08
-            font.pixelSize: runInfo.dimension * 0.15
+            y: runInfo.height * 0.05
+            font.pixelSize: runInfo.height * 0.65
             color: "white"
+            font.bold: true
         }
     }
 }
