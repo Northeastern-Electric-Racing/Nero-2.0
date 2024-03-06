@@ -70,8 +70,8 @@ Item {
             id: labelText
             text: label
             x: runInfo.width * 0.05
-            y: runInfo.height * 0.3
-            font.pixelSize: runInfo.height * 0.3
+            y: runInfo.height * 0.6 - font.pixelSize
+            font.pixelSize: Math.min(runInfo.height * 0.6, runInfo.width * 0.08)
             color: "black"
             font.bold: true
         }
@@ -79,9 +79,9 @@ Item {
         ValueText {
             id: valueText
             text: value
-            x: runInfo.width * 0.78
+            x: runInfo.width * 0.76
             y: runInfo.height * 0.05
-            font.pixelSize: runInfo.height * 0.65
+            font.pixelSize: runInfo.height * 0.6
             color: "white"
             font.bold: true
         }
