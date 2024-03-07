@@ -64,25 +64,28 @@ Item {
 
             x: parent.width * 0.7
             y: parent.height / 10
+
+            ValueText {
+                id: valueText
+                text: value
+                font.pixelSize: rightBlackRectangle.height * 0.8
+                x: rightBlackRectangle.width * 0.5 - rightBlackRectangle.height / 4.5
+                y: rightBlackRectangle.height * -0.1
+                color: "white"
+                font.bold: true
+            }
         }
 
         LabelText {
             id: labelText
             text: label
             x: runInfo.width * 0.05
-            y: runInfo.height * 0.6 - font.pixelSize
+            y: runInfo.isTop ? runInfo.height * 0.6 - font.pixelSize + topRect.height * 0.1
+                             : (runInfo.isBottom ? runInfo.height * 0.6
+                                                   - font.pixelSize + bottomRect.height * 0.15
+                                                 : runInfo.height * 0.6 - font.pixelSize )
             font.pixelSize: Math.min(runInfo.height * 0.6, runInfo.width * 0.08)
             color: "black"
-            font.bold: true
-        }
-
-        ValueText {
-            id: valueText
-            text: value
-            x: runInfo.width * 0.76
-            y: runInfo.height * 0.05
-            font.pixelSize: runInfo.height * 0.6
-            color: "white"
             font.bold: true
         }
     }

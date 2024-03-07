@@ -30,7 +30,7 @@ Item {
             heightValue: timerDisplay.height / 3.3
             label: "CURRENT RUN"
             value: "0"
-            radius: timerDisplay.width / 20
+            radius: Math.min(timerDisplay.height / 7, timerDisplay.width / 20)
             isTop: true
         }
 
@@ -58,7 +58,7 @@ Item {
             heightValue: timerDisplay.height / 3.3
             label: "FASTEST RUN"
             value: "0"
-            radius: timerDisplay.width / 20
+            radius: Math.min(timerDisplay.height / 7, timerDisplay.width / 20)
             isBottom: true
         }
     }
