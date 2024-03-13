@@ -35,11 +35,11 @@ int main(int argc, char *argv[]) {
     model->connectToMQTT();
   } else {
     model = new MockModel;
+    QThread *dataThread = new QThread;
+
+    model->moveToThread(dataThread);
+    dataThread->start();
   }
-
-  QThread *dataThread = new QThread;
-
-  model->moveToThread(dataThread);
 
   HomeController homeController(model);
   HeaderController headerController(model);
@@ -49,8 +49,6 @@ int main(int argc, char *argv[]) {
   FlappyBirdController flappyBirdController(model);
   ConfigurationController configurationController(model);
   KeyboardController keyboardController(model);
-
-  dataThread->start();
 
   const QUrl url(u"qrc:Main/main.qml"_qs);
   QObject::connect(

@@ -1,4 +1,5 @@
 #include "model.h"
+#include "QVector"
 
 Model::Model() : prevSoc(0), pageHeight(480), pageWidth(800) {}
 
@@ -60,7 +61,7 @@ QList<DebugTableRowValue> Model::getDebugTableValues() {
     QString units = dataInfo.unit;
     float value = dataInfo.values[0].toFloat();
 
-    DebugTableRowValue row = {name, (std::round(value * 1000) / 1000), units};
+    DebugTableRowValue row = {name, (std::round(value)), units};
 
     table.append(row);
   }
