@@ -36,6 +36,11 @@ void NavigationController::upButtonPressed() {
   }
 }
 
-void NavigationController::enterButtonPressed() { this->setIsSelected(true); }
+void NavigationController::enterButtonPressed() {
+  if (this->m_selectedPageIndex == this->m_numPages - 1) {
+    exit(0);
+  }
+  this->setIsSelected(true);
+}
 
 void NavigationController::homeButtonPressed() { this->setIsSelected(false); }

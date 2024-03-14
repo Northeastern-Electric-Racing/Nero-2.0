@@ -4,10 +4,10 @@ import QtQuick.Layouts
 Rectangle {
     property int thermometerValue: 0
     property string title: "MOTOR TEMP"
-    property int iconHeight: 90
-    property int iconWidth: 40
-    property int horizontalIconSpacing: -55
-    property int labelVerticalSpacing: 10
+    property int iconHeight: parent.width * 0.9
+    property int iconWidth: parent.width * 0.9
+    property int horizontalIconSpacing: -parent.width * 0.1
+    property int labelVerticalSpacing: parent.height * 0.1
 
     color: 'black'
 
@@ -22,17 +22,17 @@ Rectangle {
             Layout.fillWidth: true
 
             Layout.alignment: Qt.AlignCenter
-            spacing: -15
+            spacing: -labelVerticalSpacing
 
             Thermometer {
                 id: motorTempThermometer
                 value: thermometerValue
-                height: 100
+                height: iconHeight
             }
 
             ValueText {
                 text: thermometerValue
-                Layout.preferredWidth: 100
+                Layout.preferredWidth: iconWidth
             }
         }
 
