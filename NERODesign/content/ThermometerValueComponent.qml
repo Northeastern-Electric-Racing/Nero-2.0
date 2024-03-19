@@ -5,8 +5,8 @@ Rectangle {
     id: thermometerComponent
     property int thermometerValue: 0
     property string title: "MOTOR TEMP"
-    property int horizontalIconSpacing: -parent.width * 0.1
-    property int labelVerticalSpacing: parent.height * 0.1
+    property int horizontalIconSpacing: -width * 0.1
+    property int labelVerticalSpacing: height * 0.1
 
     anchors.fill: parent
     color: 'black'
@@ -28,6 +28,7 @@ Rectangle {
                 value: thermometerValue
                 height: parent.height
                 anchors.top: parent.top
+                anchors.topMargin: labelVerticalSpacing
                 anchors.right: parent.horizontalCenter
                 width: thermometerComponent.width / 2
             }
@@ -37,6 +38,7 @@ Rectangle {
                 font.pixelSize: 0.5 * thermometerComponent.width
                 anchors.left: thermometer.right
                 anchors.top: parent.top
+                anchors.topMargin: labelVerticalSpacing
             }
         }
 

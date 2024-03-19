@@ -2,38 +2,54 @@ import QtQuick 2.15
 import QtQuick.Layouts
 
 Rectangle {
-    property int iconHeight: 90
-    property int iconWidth: 50
-    property int batteryValue: 50
-    property string title: "CHARGE STATE"
+    id: batteryComponent
+    property int batteryValue: 0
+    property string title: "MOTOR TEMP"
+    property int horizontalIconSpacing: -width * 0.1
+    property int labelVerticalSpacing: height * 0.1
 
-    ColumnLayout {
+    anchors.fill: parent
+    color: 'black'
+
+    Rectangle {
         id: batteryColumn
         anchors.fill: parent
+        color: 'transparent'
 
-        RowLayout {
+        Rectangle {
             id: batteryRow
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-            Layout.alignment: Qt.AlignCenter
+            anchors.top: parent.top
+            anchors.horizontalCenter: parent.horizontalCenter
+            height: batteryComponent.height * 0.6
+            color: 'transparent'
 
             Battery {
                 id: battery
-                Layout.fillHeight: true
-                width: 55
                 value: batteryValue
+                height: parent.height
+                anchors.top: parent.top
+                anchors.topMargin: labelVerticalSpacing
+                anchors.right: parent.horizontalCenter
+                anchors.rightMargin: batteryComponent.horizontalIconSpacing
+                width: batteryComponent.width / 2
             }
 
             ValueText {
-                Layout.preferredWidth: 100
                 text: batteryValue
+                font.pixelSize: 0.5 * batteryComponent.width
+                anchors.left: battery.right
+                anchors.top: parent.top
+                anchors.topMargin: batteryComponent.labelVerticalSpacing
             }
         }
 
         LabelText {
+            anchors.top: batteryRow.bottom
+            anchors.bottom: parent.bottom
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.topMargin: batteryComponent.labelVerticalSpacing
             text: title
-            Layout.fillHeight: true
-            Layout.alignment: Qt.AlignCenter
+            font.pixelSize: 0.15 * parent.width
         }
     }
 }
