@@ -23,57 +23,103 @@ Rectangle {
     height: 480
     width: 800
 
-    RowLayout {
+    Rectangle {
         id: mainRow
         anchors.fill: parent
-        anchors.leftMargin: horizontalMargin
-        anchors.rightMargin: horizontalMargin
+        anchors.leftMargin: 12
+        anchors.rightMargin: 8
+        anchors.topMargin: 0
+        anchors.bottomMargin: 0
+        color: "transparent"
 
         Rectangle {
             id: coreInfo
             anchors.left: parent.left
             anchors.top: parent.top
+            anchors.topMargin: 100
+            anchors.bottomMargin: 20
             anchors.bottom: parent.bottom
             width: parent.width / 2
+            color: "transparent"
 
-            ThermometerValueComponent {
-                id: packTempThermometer
-                width: 100
-                height: 100
-                thermometerValue: pit.packTempValue
-                title: "PACK TEMP"
-            }
+            Rectangle {
+                id: topRow
+                anchors.top: parent.top
+                anchors.right: parent.right
+                anchors.left: parent.left
+                height: parent.height / 2
+                color: "transparent"
 
-            ColumnLayout {
-                ValueText {
-                    text: pit.maxSpeed
-                    Layout.alignment: Qt.AlignHCenter
+                ThermometerValueComponent {
+                    id: packTempThermometer
+                    anchors.left: parent.left
+                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
+                    width: parent.width / 2
+
+                    thermometerValue: pit.packTempValue
+                    title: "PACK TEMP"
                 }
 
-                LabelText {
-                    text: "SPEED LIMIT"
-                    Layout.alignment: Qt.AlignHCenter
+                ColumnLayout {
+                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
+                    anchors.right: parent.right
+                    anchors.bottomMargin: 19
+                    anchors.topMargin: 18
+                    width: parent.width / 2
+
+                    ValueText {
+                        text: pit.maxSpeed
+                        Layout.alignment: Qt.AlignHCenter
+                        font.pixelSize: 0.6 * parent.height
+                    }
+
+                    LabelText {
+                        text: "SPEED LIMIT"
+                        Layout.alignment: Qt.AlignHCenter
+                        font.pixelSize: 0.15 * parent.width
+                    }
                 }
             }
+            Rectangle {
+                id: bottomRow
+                anchors.top: topRow.bottom
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.bottom: parent.bottom
+                color: "transparent"
 
-            BatteryValueComponent {
-                width: 100
-                height: 100
-                Layout.alignment: Qt.AlignTop
-                batteryValue: pit.stateOfChargePercentage
-            }
+                BatteryValueComponent {
+                    id: battery
+                    anchors.top: parent.top
+                    anchors.left: parent.left
+                    anchors.bottom: parent.bottom
+                    anchors.bottomMargin: 22
 
-            ThermometerValueComponent {
-                width: 100
-                height: 100
-                thermometerValue: pit.motorTempValue
-                title: "MOTOR TEMP"
+                    width: parent.width / 2
+                    title: "PACK SOC"
+                    batteryValue: pit.stateOfChargePercentage
+                }
+
+                ThermometerValueComponent {
+                    anchors.top: parent.top
+                    anchors.left: battery.right
+                    anchors.right: parent.right
+                    anchors.bottom: parent.bottom
+
+                    thermometerValue: pit.motorTempValue
+                    title: "MOTOR TEMP"
+                }
             }
         }
 
         ColumnLayout {
-            Layout.preferredHeight: parent.height
-            Layout.preferredWidth: parent.width / 2
+            id: spedometerColumn
+            anchors.left: coreInfo.right
+            anchors.right: parent.right
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
 
             Spedometer {
                 id: spedometer

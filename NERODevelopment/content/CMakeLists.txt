@@ -42,4 +42,5 @@ qt6_add_qml_module(content
         images/pipe.png
         images/flappy-bird.png
         images/microphone.svg
+        QML_FILES Lightning.qml
 )
