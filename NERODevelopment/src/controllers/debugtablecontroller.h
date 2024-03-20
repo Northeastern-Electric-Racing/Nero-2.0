@@ -56,7 +56,7 @@ private:
   bool m_scrollingTopics = true;
   int m_selectedValuesIndex = 0;
   int m_refresh_rate = 500;
-  int m_last_refresh = 0;
+  qint64 m_last_refresh = 0;
 };
 
 #endif // DEBUGTABLECONTROLLER_H

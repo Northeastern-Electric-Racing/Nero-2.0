@@ -107,7 +107,9 @@ void DebugTableController::update() {
     return;
   }
   this->m_last_refresh = QDateTime::currentMSecsSinceEpoch();
-
+  qDebug() << "updating debug table"
+           << this->m_last_refresh + this->m_refresh_rate
+           << QDateTime::currentMSecsSinceEpoch();
   QSet<QString> topicsSet = {};
   QList<QString> topics = {};
   QList<DebugTableRowValue> rows = this->m_model->getDebugTableValues();
