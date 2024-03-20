@@ -1,7 +1,7 @@
 #include "debugtablecontroller.h"
 
 DebugTableController::DebugTableController(Model *model, QObject *parent)
-    : ButtonController{model, parent} {
+    : ButtonController{model, 2, parent} {
   connect(model, &Model::onCurrentDataChange, this,
           &DebugTableController::update);
 }
@@ -78,8 +78,6 @@ void DebugTableController::downButtonPressed() {
 }
 
 void DebugTableController::upButtonPressed() {
-  qDebug() << "pressed up arrow" << m_selectedTopicsIndex << m_scrollingTopics
-           << m_selectedValuesIndex;
   if (this->m_scrollingTopics) {
     if (this->m_selectedTopicsIndex != 0) {
       this->setSelectedTopicsIndex(this->m_selectedTopicsIndex - 1);
@@ -101,10 +99,22 @@ void DebugTableController::rightButtonPressed() {
 }
 
 void DebugTableController::update() {
+  if (this->m_pageIndex != this->m_model->currentPageIndex) {
+    return;
+  }
+  if (this->m_last_refresh + this->m_refresh_rate >
+      QDateTime::currentMSecsSinceEpoch()) {
+    return;
+  }
+  this->m_last_refresh = QDateTime::currentMSecsSinceEpoch();
+  qDebug() << "updating debug table"
+           << this->m_last_refresh + this->m_refresh_rate
+           << QDateTime::currentMSecsSinceEpoch();
   QSet<QString> topicsSet = {};
   QList<QString> topics = {};
-  for (const DebugTableRowValue &key : this->m_model->getDebugTableValues()) {
-    QVector<QString> split = key.name().split("/");
+  QList<DebugTableRowValue> rows = this->m_model->getDebugTableValues();
+  for (const DebugTableRowValue &row : rows) {
+    QVector<QString> split = row.name().split("/");
 
     if (split.length() > 1) {
 
@@ -122,9 +132,9 @@ void DebugTableController::update() {
 
   QList<DebugTableRowValue> selectedValues = {};
 
-  for (const DebugTableRowValue &key : this->m_model->getDebugTableValues()) {
-    if (key.name().contains(selectedTopic)) {
-      selectedValues.append(key);
+  for (const DebugTableRowValue &row : rows) {
+    if (row.name().contains(selectedTopic)) {
+      selectedValues.append(row);
     }
   }
 

@@ -2,7 +2,7 @@
 #include "../utils/data_type_names.h"
 
 OffViewController::OffViewController(Model *model, QObject *parent)
-    : ButtonController{model, parent}, m_packTemp(0.0), m_motorTemp(0.0),
+    : ButtonController{model, 0, parent}, m_packTemp(0.0), m_motorTemp(0.0),
       m_stateOfCharge(0.0) {
   connect(m_model, &Model::onCurrentDataChange, this,
           &OffViewController::update);

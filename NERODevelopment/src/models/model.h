@@ -86,12 +86,11 @@ public:
   void removePinnedData(QString id);
   void updatePinnedData();
   void updateAverageCellTemps();
-  void updateStateOfChargeDeltas();
   std::optional<float> getById(QString id);
 
   int pageHeight;
   int pageWidth;
-  float prevSoc;
+  int currentPageIndex = -1;
 
 signals:
   void onCurrentDataChange();
@@ -105,7 +104,6 @@ protected:
   QList<float> packTempData;
   QList<FaultInstance> faultInstances;
   QList<float> averageCellTemps;
-  QList<float> stateOfChargeDeltas;
 };
 
 #define ModelInterfaceId "com.ner.model"

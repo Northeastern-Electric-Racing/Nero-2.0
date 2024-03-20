@@ -1,7 +1,7 @@
 #include "navigationcontroller.h"
 
 NavigationController::NavigationController(Model *model, QObject *parent)
-    : ButtonController{model, parent} {}
+    : ButtonController{model, -1, parent} {}
 
 int NavigationController::selectedPageIndex() const {
   return this->m_selectedPageIndex;
@@ -40,7 +40,11 @@ void NavigationController::enterButtonPressed() {
   if (this->m_selectedPageIndex == this->m_numPages - 1) {
     exit(0);
   }
+  this->m_model->currentPageIndex = this->m_selectedPageIndex;
   this->setIsSelected(true);
 }
 
-void NavigationController::homeButtonPressed() { this->setIsSelected(false); }
+void NavigationController::homeButtonPressed() {
+  this->m_model->currentPageIndex = -1;
+  this->setIsSelected(false);
+}

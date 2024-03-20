@@ -41,7 +41,10 @@ void MqttClient::updateLogStateChange() {
   qDebug() << content << " " << m_client->state();
 }
 
-void MqttClient::brokerDisconnected() { qDebug("Disconnected"); }
+void MqttClient::brokerDisconnected() {
+  qDebug("Disconnected");
+  this->connectToHost();
+}
 
 void MqttClient::setClientPort(int p) { m_client->setPort(p); }
 
