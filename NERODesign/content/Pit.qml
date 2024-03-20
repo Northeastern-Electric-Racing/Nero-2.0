@@ -19,8 +19,6 @@ Rectangle {
     property int iconWidth: 40
     property int iconHeight: 90
     property int labelVerticalSpacing: 10
-    width: 800
-    height: 480
     color: 'black'
 
     RowLayout {
@@ -40,8 +38,7 @@ Rectangle {
                 Layout.row: 0
                 Layout.column: 0
                 width: 100
-                iconWidth: pit.iconWidth
-                iconHeight: pit.iconHeight
+                height: 100
                 horizontalIconSpacing: pit.horizontalIconSpacing
                 labelVerticalSpacing: pit.labelVerticalSpacing
                 thermometerValue: pit.packTempValue
@@ -68,8 +65,6 @@ Rectangle {
                 Layout.column: 0
                 width: 125
                 Layout.alignment: Qt.AlignTop
-                iconWidth: pit.iconWidth
-                iconHeight: pit.iconHeight
                 batteryValue: pit.stateOfChargePercentage
             }
 
@@ -79,8 +74,6 @@ Rectangle {
                 width: 100
                 height: 100
                 Layout.alignment: Qt.AlignTop
-                iconWidth: pit.iconWidth
-                iconHeight: pit.iconHeight
                 horizontalIconSpacing: pit.horizontalIconSpacing
                 labelVerticalSpacing: pit.labelVerticalSpacing
                 thermometerValue: pit.motorTempValue
@@ -111,5 +104,13 @@ Rectangle {
                 Layout.alignment: Qt.AlignHCenter
             }
         }
+    }
+
+    HeaderView {
+        id: headerView
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.right: parent.right
+        height: 100
     }
 }
