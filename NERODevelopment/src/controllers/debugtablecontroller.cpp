@@ -78,8 +78,6 @@ void DebugTableController::downButtonPressed() {
 }
 
 void DebugTableController::upButtonPressed() {
-  qDebug() << "pressed up arrow" << m_selectedTopicsIndex << m_scrollingTopics
-           << m_selectedValuesIndex;
   if (this->m_scrollingTopics) {
     if (this->m_selectedTopicsIndex != 0) {
       this->setSelectedTopicsIndex(this->m_selectedTopicsIndex - 1);
@@ -126,11 +124,11 @@ void DebugTableController::update() {
 
   QList<DebugTableRowValue> selectedValues = {};
 
-  for (const DebugTableRowValue &row : rows) {
-    if (row.name().contains(selectedTopic)) {
-      selectedValues.append(row);
-    }
-  }
+  // for (const DebugTableRowValue &row : rows) {
+  //   if (row.name().contains(selectedTopic)) {
+  //     selectedValues.append(row);
+  //   }
+  // }
 
   DebugTableRowValues newSelectedValues;
   DebugTableRowTopics newTopics;
