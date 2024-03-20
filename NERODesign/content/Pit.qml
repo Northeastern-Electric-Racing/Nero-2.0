@@ -20,6 +20,8 @@ Rectangle {
     property int iconHeight: 90
     property int labelVerticalSpacing: 10
     color: 'black'
+    height: 480
+    width: 800
 
     RowLayout {
         id: mainRow
@@ -27,28 +29,17 @@ Rectangle {
         anchors.leftMargin: horizontalMargin
         anchors.rightMargin: horizontalMargin
 
-        GridLayout {
-            Layout.preferredWidth: parent.width / 2
-            Layout.preferredHeight: parent.height
-            rows: 2
-            columns: 2
+        Rectangle {
 
             ThermometerValueComponent {
                 id: packTempThermometer
-                Layout.row: 0
-                Layout.column: 0
                 width: 100
                 height: 100
-                horizontalIconSpacing: pit.horizontalIconSpacing
-                labelVerticalSpacing: pit.labelVerticalSpacing
                 thermometerValue: pit.packTempValue
                 title: "PACK TEMP"
             }
 
             ColumnLayout {
-                Layout.row: 0
-                Layout.column: 1
-                Layout.alignment: Qt.AlignBottom
                 ValueText {
                     text: pit.maxSpeed
                     Layout.alignment: Qt.AlignHCenter
@@ -61,21 +52,15 @@ Rectangle {
             }
 
             BatteryValueComponent {
-                Layout.row: 1
-                Layout.column: 0
-                width: 125
+                width: 100
+                height: 100
                 Layout.alignment: Qt.AlignTop
                 batteryValue: pit.stateOfChargePercentage
             }
 
             ThermometerValueComponent {
-                Layout.row: 1
-                Layout.column: 1
                 width: 100
                 height: 100
-                Layout.alignment: Qt.AlignTop
-                horizontalIconSpacing: pit.horizontalIconSpacing
-                labelVerticalSpacing: pit.labelVerticalSpacing
                 thermometerValue: pit.motorTempValue
                 title: "MOTOR TEMP"
             }

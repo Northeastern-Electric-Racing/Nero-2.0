@@ -104,19 +104,19 @@ void DebugTableController::update() {
   qDebug() << "Updating Table";
   QSet<QString> topicsSet = {};
   QList<QString> topics = {};
-  // for (const DebugTableRowValue &key : this->m_model->getDebugTableValues())
-  // {
-  //   QVector<QString> split = key.name().split("/");
+  QList<DebugTableRowValue> rows = this->m_model->getDebugTableValues();
+  for (const DebugTableRowValue &row : rows) {
+    QVector<QString> split = row.name().split("/");
 
-  //   if (split.length() > 1) {
+    if (split.length() > 1) {
 
-  //     QString topic = split[0] + "/" + split[1];
-  //     if (!topicsSet.contains(topic)) {
-  //       topicsSet.insert(topic);
-  //       topics.append(topic);
-  //     }
-  //   }
-  // }
+      QString topic = split[0] + "/" + split[1];
+      if (!topicsSet.contains(topic)) {
+        topicsSet.insert(topic);
+        topics.append(topic);
+      }
+    }
+  }
   if (topics.length() == 0)
     return;
 
@@ -124,12 +124,11 @@ void DebugTableController::update() {
 
   QList<DebugTableRowValue> selectedValues = {};
 
-  // for (const DebugTableRowValue &key : this->m_model->getDebugTableValues())
-  // {
-  //   if (key.name().contains(selectedTopic)) {
-  //     selectedValues.append(key);
-  //   }
-  // }
+  for (const DebugTableRowValue &row : rows) {
+    if (row.name().contains(selectedTopic)) {
+      selectedValues.append(row);
+    }
+  }
 
   DebugTableRowValues newSelectedValues;
   DebugTableRowTopics newTopics;
