@@ -1,7 +1,7 @@
 #include "debugtablecontroller.h"
 
 DebugTableController::DebugTableController(Model *model, QObject *parent)
-    : ButtonController{model, parent} {
+    : ButtonController{model, 2, parent} {
   connect(model, &Model::onCurrentDataChange, this,
           &DebugTableController::update);
 }
@@ -101,7 +101,9 @@ void DebugTableController::rightButtonPressed() {
 }
 
 void DebugTableController::update() {
-  qDebug() << "Updating Table";
+  if (this->m_pageIndex != this->m_model->currentPageIndex) {
+    return;
+  }
   QSet<QString> topicsSet = {};
   QList<QString> topics = {};
   QList<DebugTableRowValue> rows = this->m_model->getDebugTableValues();

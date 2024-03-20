@@ -30,6 +30,11 @@ Rectangle {
         anchors.rightMargin: horizontalMargin
 
         Rectangle {
+            id: coreInfo
+            anchors.left: parent.left
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            width: parent.width / 2
 
             ThermometerValueComponent {
                 id: packTempThermometer
