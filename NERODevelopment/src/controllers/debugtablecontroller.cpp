@@ -102,6 +102,12 @@ void DebugTableController::update() {
   if (this->m_pageIndex != this->m_model->currentPageIndex) {
     return;
   }
+  if (this->m_last_refresh + this->m_refresh_rate >
+      QDateTime::currentMSecsSinceEpoch()) {
+    return;
+  }
+  this->m_last_refresh = QDateTime::currentMSecsSinceEpoch();
+
   QSet<QString> topicsSet = {};
   QList<QString> topics = {};
   QList<DebugTableRowValue> rows = this->m_model->getDebugTableValues();
@@ -124,11 +130,11 @@ void DebugTableController::update() {
 
   QList<DebugTableRowValue> selectedValues = {};
 
-  // for (const DebugTableRowValue &row : rows) {
-  //   if (row.name().contains(selectedTopic)) {
-  //     selectedValues.append(row);
-  //   }
-  // }
+  for (const DebugTableRowValue &row : rows) {
+    if (row.name().contains(selectedTopic)) {
+      selectedValues.append(row);
+    }
+  }
 
   DebugTableRowValues newSelectedValues;
   DebugTableRowTopics newTopics;
