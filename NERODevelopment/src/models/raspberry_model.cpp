@@ -338,6 +338,19 @@ std::optional<int> RaspberryModel::getNumberOfNonCriticalFaults() {
   return std::nullopt;
 }
 
+std::optional<float> RaspberryModel::getFastestTime() {
+  return this->getById(FASTESTTIME);
+}
+
+std::optional<float> RaspberryModel::getLastTime() {
+  return this->getById(LASTTIME);
+}
+
+std::optional<float> RaspberryModel::getMaxSpeed() {
+  return this->getById(MAXSPEED);
+}
+
+
 int RaspberryModel::totalNumberOfOnesIn(float value) {
   int total = 0;
   std::string binary = std::bitset<8>(static_cast<int>(value)).to_string();

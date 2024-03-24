@@ -66,7 +66,9 @@ set(PROJECT_SOURCES
 
 find_package(Qt6 REQUIRED COMPONENTS Core Gui Qml Quick Network Mqtt Protobuf)
 
-qt_add_executable(NEROApp ${PROJECT_SOURCES})
+qt_add_executable(NEROApp ${PROJECT_SOURCES}
+    src/controllers/speedcontroller.h
+    src/controllers/speedcontroller.cpp)
 
 qt_add_resources(NEROApp "configuration"
     PREFIX "/"

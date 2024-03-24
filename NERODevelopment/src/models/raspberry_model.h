@@ -75,6 +75,10 @@ public:
   std::optional<bool> getIsTalking() override;
   std::optional<int> getNumberOfCriticalFaults() override;
   std::optional<int> getNumberOfNonCriticalFaults() override;
+  std::optional<float> getFastestTime() override;
+  std::optional<float> getLastTime() override;
+  std::optional<float> getMaxSpeed() override;
+
   void sendMessage(const QString topic, const QString message) override;
 
 private slots:
