@@ -18,7 +18,9 @@ void ButtonController::leftButtonPressed() {}
 
 void ButtonController::rightButtonPressed() {}
 
-void ButtonController::homeButtonPressed() {}
+void ButtonController::homeButtonPressed() {
+  this->m_model->currentPageIndex = -1;
+}
 
 void ButtonController::buttonUpdate() {
   qDebug() << "Button Pressed" << this->m_model->currentPageIndex;
