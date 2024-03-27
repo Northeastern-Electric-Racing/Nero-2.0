@@ -32,6 +32,7 @@ void RaspberryModel::sendMessage(const QString topic, const QString message) {
 
 void RaspberryModel::receiveServerData(const serverdata::ServerData data,
                                        const QString topic) {
+  qDebug() << "Topic: " << topic << "Data" << data.values();
   this->currentData[topic] = DataInfo(topic, data.unit(), data.values());
   emit this->onCurrentDataChange();
 }
