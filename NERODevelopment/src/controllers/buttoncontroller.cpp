@@ -52,6 +52,9 @@ void ButtonController::buttonUpdate() {
     if (this->m_model->getUpButtonPressed() == 1) {
       this->upButtonPressed();
     }
+    if (this->m_model->getForwardButtonPressed() == 1) {
+      this->rightButtonPressed();
+    }
     if (this->m_model->getHomeButtonPressed() == 1) {
       this->homeButtonPressed();
     }
