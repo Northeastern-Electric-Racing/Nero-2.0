@@ -21,6 +21,8 @@ void ButtonController::rightButtonPressed() {}
 void ButtonController::homeButtonPressed() {}
 
 void ButtonController::buttonUpdate() {
+  qDebug() << "Button Pressed" << this->m_model->currentPageIndex;
+
   if (this->m_pageIndex == this->m_model->currentPageIndex) {
     if (this->m_model->getBackwardButtonPressed() == 1) {
       this->leftButtonPressed();
