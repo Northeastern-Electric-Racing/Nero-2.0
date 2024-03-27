@@ -247,6 +247,7 @@ std::optional<bool> RaspberryModel::getForwardButtonPressed() {
 
   if (value) {
     std::string binary = std::bitset<8>(static_cast<int>(*value)).to_string();
+    qDebug() << "Binary" << binary;
     return binary.length() >= 7 ? binary[6] : false;
   }
   return std::nullopt;

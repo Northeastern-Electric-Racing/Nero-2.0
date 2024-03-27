@@ -24,17 +24,16 @@ void ButtonController::homeButtonPressed() {
 }
 
 void ButtonController::buttonUpdate() {
-
   if (this->m_pageIndex == this->m_model->currentPageIndex) {
-    qDebug() << "Button Pressed"
-             << this->m_model->getBackwardButtonPressed().value_or(0)
-             << this->m_model->getDownButtonPressed().value_or(0)
-             << this->m_model->getEnterButtonPressed().value_or(0)
-             << this->m_model->getRightButtonPressed().value_or(0)
-             << this->m_model->getUpButtonPressed().value_or(0)
-             << this->m_model->getHomeButtonPressed().value_or(0)
-             << this->m_model->getForwardButtonPressed().value_or(0)
-             << this->m_model->currentPageIndex;
+    // qDebug() << "Button Pressed"
+    //          << this->m_model->getBackwardButtonPressed().value_or(0)
+    //          << this->m_model->getDownButtonPressed().value_or(0)
+    //          << this->m_model->getEnterButtonPressed().value_or(0)
+    //          << this->m_model->getRightButtonPressed().value_or(0)
+    //          << this->m_model->getUpButtonPressed().value_or(0)
+    //          << this->m_model->getHomeButtonPressed().value_or(0)
+    //          << this->m_model->getForwardButtonPressed().value_or(0)
+    //          << this->m_model->currentPageIndex;
     if (this->m_model->getBackwardButtonPressed() == 1) {
       this->leftButtonPressed();
     }
