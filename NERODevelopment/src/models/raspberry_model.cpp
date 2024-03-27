@@ -263,7 +263,7 @@ std::optional<bool> RaspberryModel::getRightButtonPressed() {
   std::optional<float> value = this->getById(RIGHTBUTTON);
   if (value) {
     std::string binary = std::bitset<8>(static_cast<int>(*value)).to_string();
-    return binary.length() >= 2 ? binary[1] == 1 : false;
+    return binary.length() >= 3 ? binary[2] == 1 : false;
   }
   return std::nullopt;
 }
@@ -299,7 +299,7 @@ std::optional<bool> RaspberryModel::getHomeButtonPressed() {
   std::optional<float> value = this->getById(HOMEBUTTON);
   if (value) {
     std::string binary = std::bitset<8>(static_cast<int>(*value)).to_string();
-    return binary.length() >= 1 ? binary[1] == 1 : false;
+    return binary.length() >= 2 ? binary[1] == 1 : false;
   }
   return std::nullopt;
 }
