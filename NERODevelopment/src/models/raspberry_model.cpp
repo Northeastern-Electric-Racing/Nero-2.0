@@ -32,7 +32,7 @@ void RaspberryModel::sendMessage(const QString topic, const QString message) {
 
 void RaspberryModel::receiveServerData(const serverdata::ServerData data,
                                        const QString topic) {
-  qDebug() << "Topic: " << topic << "Data" << data.values();
+  // qDebug() << "Topic: " << topic << "Data" << data.values();
   this->currentData[topic] = DataInfo(topic, data.unit(), data.values());
   emit this->onCurrentDataChange();
 }
@@ -244,6 +244,7 @@ std::optional<float> RaspberryModel::getBmsFault() {
 
 std::optional<bool> RaspberryModel::getForwardButtonPressed() {
   std::optional<float> value = this->getById(FORWARDBUTTON);
+
   if (value) {
     std::string binary = std::bitset<8>(static_cast<int>(*value)).to_string();
     return binary.length() >= 7 ? binary[6] : false;
