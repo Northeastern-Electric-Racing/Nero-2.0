@@ -34,28 +34,28 @@ void ButtonController::buttonUpdate() {
              << this->m_model->getHomeButtonPressed().value_or(-1)
              << this->m_model->getForwardButtonPressed().value_or(-1)
              << this->m_model->currentPageIndex;
-    if (this->m_model->getBackwardButtonPressed() == 1) {
+    if (this->m_model->getBackwardButtonPressed()) {
       this->leftButtonPressed();
     }
-    if (this->m_model->getDownButtonPressed() == 1) {
+    if (this->m_model->getDownButtonPressed()) {
       this->downButtonPressed();
     }
-    if (this->m_model->getEnterButtonPressed() == 1) {
+    if (this->m_model->getEnterButtonPressed()) {
       this->enterButtonPressed();
     }
-    if (this->m_model->getRightButtonPressed() == 1) {
+    if (this->m_model->getRightButtonPressed()) {
       this->rightButtonPressed();
     }
-    if (this->m_model->getDownButtonPressed() == 1) {
+    if (this->m_model->getDownButtonPressed()) {
       this->downButtonPressed();
     }
-    if (this->m_model->getUpButtonPressed() == 1) {
+    if (this->m_model->getUpButtonPressed()) {
       this->upButtonPressed();
     }
-    if (this->m_model->getForwardButtonPressed() == 1) {
+    if (this->m_model->getForwardButtonPressed()) {
       this->rightButtonPressed();
     }
-    if (this->m_model->getHomeButtonPressed() == 1) {
+    if (this->m_model->getHomeButtonPressed()) {
       this->homeButtonPressed();
     }
   }
