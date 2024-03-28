@@ -23,6 +23,13 @@ public slots:
 protected:
   Model *m_model;
   int m_pageIndex;
+  int m_enterButtonDebounce = 0;
+  int m_upButtonDebounce = 0;
+  int m_downButtonDebounce = 0;
+  int m_rightButtonDebounce = 0;
+  int m_leftButtonDebounce = 0;
+  int m_homeButtonDebounce = 0;
+  int m_debounceOffset = 100;
 };
 
 #endif // BUTTONCONTROLLER_H
