@@ -11,16 +11,21 @@ Item {
 
     HeaderView {
         id: headerView
-        x: 0
-        y: 0
+        anchors {
+            top: speedMode.top
+            horizontalCenter: speedMode.horizontalCenter
+        }
         width: speedMode.width
         height: speedMode.height * 0.15
     }
 
     LabelText {
         id: labelText
-        x: speedMode.width * 0.15
-        y: speedMode.height * 0.01
+        anchors {
+            top: speedMode.top
+            horizontalCenter: speedMode.horizontalCenter
+
+        }
         width: speedMode.width * 0.7
         height: speedMode.height * 0.12
         text: "TRACTION CONTROL - ON"
@@ -31,8 +36,10 @@ Item {
 
     LabelText {
         id: vehicleInfo
-        x: speedMode.width * 0.05
-        y: speedMode.height * 0.12
+        anchors{
+            bottom: packTempComponent.top
+            left: speedMode.left
+        }
         width: speedMode.width * 0.25
         height: speedMode.height * 0.1
         text: "VEHICLE INFO"
@@ -44,8 +51,10 @@ Item {
 
     LabelText {
         id: performanceInfo
-        x: speedMode.width * 0.5
-        y: speedMode.height * 0.12
+        anchors {
+            bottom: packTempComponent.top
+            horizontalCenter: timerDisplay.right
+        }
         width: speedMode.width * 0.4
         height: speedMode.height * 0.1
         text: "PERFORMANCE INFO"
@@ -58,51 +67,66 @@ Item {
 
     ThermometerValueComponent {
         id: packTempComponent
+        anchors {
+            horizontalCenter: vehicleInfo.horizontalCenter
+            bottom: motorTempComponent.top
+        }
+
         title: 'PACK TEMP'
-        x: speedMode.width * 0.05
-        y: speedMode.height * 0.2
         width: speedMode.width * 0.15
         height: speedMode.height * 0.25
     }
 
     ThermometerValueComponent {
         id: motorTempComponent
+        anchors {
+            horizontalCenter: vehicleInfo.horizontalCenter
+            bottom: batteryValueComponent.top
+        }
+
         title: 'MOTOR TEMP'
-        x: speedMode.width * 0.05
-        y: speedMode.height * 0.45
         width: speedMode.width * 0.15
         height: speedMode.height * 0.25
     }
 
     BatteryValueComponent {
         id: batteryValueComponent
+        anchors {
+            bottom: speedMode.bottom
+            horizontalCenter: vehicleInfo.horizontalCenter
+        }
+
         title: 'CHARGE STATE'
-        x: speedMode.width * 0.05
-        y: speedMode.height * 0.7
         width: speedMode.width * 0.15
         height: speedMode.height * 0.25
     }
 
     TimerDisplay {
         id: timerDisplay
-        x: speedMode.width * 0.3
-        y: speedMode.height * 0.25
+        anchors {
+            bottom: maxDrawGraph.top
+            horizontalCenter: speedMode.horizontalCenter
+        }
         width: speedMode.width * 0.4
         height: speedMode.height * 0.3
     }
 
     MaxDrawGraph {
         id: maxDrawGraph
-        x: speedMode.width * 0.38
-        y: speedMode.height * 0.6
+        anchors {
+            bottom: speedMode.bottom
+            horizontalCenter: speedMode.horizontalCenter
+        }
         dimension: Math.min(speedMode.height * 0.4,
                             speedMode.width * 0.25)
     }
 
     MaxSpeedComparator {
         id: maxSpeedComparator
-        x: speedMode.width * 0.88
-        y: speedMode.height * 0.2
+        anchors {
+            horizontalCenter: performanceInfo.right
+            top: packTempComponent.top
+        }
         width: speedMode.width / 10
         height: speedMode.height * 0.7
     }
