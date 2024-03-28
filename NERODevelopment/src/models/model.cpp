@@ -33,6 +33,10 @@ void Model::updatePinnedData() {
   }
 }
 
+QMap<QString, DebugPlotValue> Model::getPinnedData() {
+  return this->pinnedData;
+}
+
 void Model::updateAverageCellTemps() {
   if (averageCellTemps.size() >= 30) {
     averageCellTemps.pop_front();

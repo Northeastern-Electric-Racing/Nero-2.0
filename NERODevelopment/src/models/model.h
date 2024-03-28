@@ -85,6 +85,7 @@ public:
   void addPinnedData(QString id);
   void removePinnedData(QString id);
   void updatePinnedData();
+  QMap<QString, DebugPlotValue> getPinnedData();
   void updateAverageCellTemps();
   void updateStateOfChargeDeltas();
   std::optional<float> getById(QString id);
