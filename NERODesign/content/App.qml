@@ -1,6 +1,6 @@
+
 // Copyright (C) 2021 The Qt Company Ltd.
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
-
 import QtQuick 6.5
 import NERO
 import QtQuick.Timeline 1.0
@@ -22,7 +22,6 @@ Window {
         id: pitScreen
     }
 
-
     Timeline {
         id: appTimeline
         animations: [
@@ -42,7 +41,7 @@ Window {
 
         KeyframeGroup {
             target: pitScreen
-                property: "currentSpeed"
+            property: "currentSpeed"
             Keyframe {
                 value: 0
                 frame: 0
@@ -99,7 +98,7 @@ Window {
         KeyframeGroup {
             target: pitScreen
             property: "isTalking"
-            Keyframe  {
+            Keyframe {
                 value: true
                 frame: 0
             }
@@ -123,6 +122,4 @@ Window {
             }
         }
     }
-
 }
-

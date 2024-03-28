@@ -1,6 +1,7 @@
 #include "model.h"
+#include "QVector"
 
-Model::Model() : prevSoc(0), pageHeight(480), pageWidth(800) {}
+Model::Model() : pageHeight(480), pageWidth(800) {}
 
 void Model::updatePackTempData() {
   if (packTempData.size() >= 600) {
@@ -44,17 +45,6 @@ void Model::updateAverageCellTemps() {
   averageCellTemps.append(getAveCellTemp() ? *getAveCellTemp() : 0);
 }
 
-void Model::updateStateOfChargeDeltas() {
-  if (stateOfChargeDeltas.size() >= 30) {
-    stateOfChargeDeltas.pop_front();
-  }
-  std::optional<float> soc = this->getStateOfCharge();
-  if (soc) {
-    stateOfChargeDeltas.append(*soc - prevSoc);
-    prevSoc = *soc;
-  }
-}
-
 QList<DebugTableRowValue> Model::getDebugTableValues() {
   QList<DebugTableRowValue> table = {};
   for (auto it = this->currentData.begin(); it != this->currentData.end();
@@ -64,7 +54,7 @@ QList<DebugTableRowValue> Model::getDebugTableValues() {
     QString units = dataInfo.unit;
     float value = dataInfo.values[0].toFloat();
 
-    DebugTableRowValue row = {name, (std::round(value * 1000) / 1000), units};
+    DebugTableRowValue row = {name, (std::round(value)), units};
 
     table.append(row);
   }

@@ -70,6 +70,11 @@ Item {
             highlighted: selectedPageIndex === 4
             text: "Flappy Bird"
         }
+
+        HomeMenuItem {
+            highlighted: selectedPageIndex === 5
+            text: "Exit"
+        }
     }
 
     OffScreen {

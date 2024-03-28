@@ -365,6 +365,7 @@ QVector<QString> MockModel::convertNumberToDataInfoValue(float value) {
   // qDebug() << val;
   return val;
 }
+
 void MockModel::updateCurrentData() {
   this->currentData.insert(
       MPH, DataInfo(MPH, "mph", convertNumberToDataInfoValue(mph)));

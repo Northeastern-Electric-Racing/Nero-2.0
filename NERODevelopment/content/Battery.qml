@@ -7,8 +7,6 @@ Item {
     property int maxValue: 100
     property int horizontalFillMargin: width / 10
     property int verticalFillMargin: height / 20
-    height: parent.height
-    width: parent.width
 
     Rectangle {
         id: topOutlet
