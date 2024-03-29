@@ -283,6 +283,7 @@ std::optional<bool> RaspberryModel::getUpButtonPressed() {
   std::optional<float> value = this->getById(UPBUTTON);
   if (value) {
     std::string binary = std::bitset<8>(static_cast<int>(*value)).to_string();
+    qDebug() << binary;
     return binary.length() >= 2 ? binary[1] == '1' : false;
   }
   return std::nullopt;
