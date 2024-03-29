@@ -247,7 +247,7 @@ std::optional<bool> RaspberryModel::getForwardButtonPressed() {
 
   if (value) {
     std::string binary = std::bitset<8>(static_cast<int>(*value)).to_string();
-    return binary.length() >= 7 ? binary[6] == '1' : false;
+    return binary.length() >= 3 ? binary[2] == '1' : false;
   }
   return std::nullopt;
 }
@@ -274,7 +274,7 @@ std::optional<bool> RaspberryModel::getEnterButtonPressed() {
   std::optional<float> value = this->getById(ENTERBUTTON);
   if (value) {
     std::string binary = std::bitset<8>(static_cast<int>(*value)).to_string();
-    return binary.length() >= 3 ? binary[3] == '1' : false;
+    return binary.length() >= 4 ? binary[3] == '1' : false;
   }
   return std::nullopt;
 }
@@ -286,7 +286,7 @@ std::optional<bool> RaspberryModel::getUpButtonPressed() {
     qDebug() << binary[0] << " " << binary[1] << " " << binary[2] << " "
              << binary[3] << " " << binary[4] << " " << binary[5] << " "
              << binary[6] << " " << binary[7];
-    return binary.length() >= 2 ? binary[1] == '1' : false;
+    return binary.length() >= 7 ? binary[6] == '1' : false;
   }
   return std::nullopt;
 }
@@ -295,7 +295,7 @@ std::optional<bool> RaspberryModel::getDownButtonPressed() {
   std::optional<float> value = this->getById(DOWNBUTTON);
   if (value) {
     std::string binary = std::bitset<8>(static_cast<int>(*value)).to_string();
-    return binary.length() >= 5 ? binary[4] == '1' : false;
+    return binary.length() >= 6 ? binary[5] == '1' : false;
   }
   return std::nullopt;
 }
@@ -304,7 +304,7 @@ std::optional<bool> RaspberryModel::getHomeButtonPressed() {
   std::optional<float> value = this->getById(HOMEBUTTON);
   if (value) {
     std::string binary = std::bitset<8>(static_cast<int>(*value)).to_string();
-    return binary.length() >= 6 ? binary[5] == '1' : false;
+    return binary.length() >= 5 ? binary[4] == '1' : false;
   }
   return std::nullopt;
 }
