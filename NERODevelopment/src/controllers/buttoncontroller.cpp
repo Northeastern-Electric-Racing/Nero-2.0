@@ -37,6 +37,8 @@ void ButtonController::buttonUpdate() {
         QDateTime::currentDateTime().time().msec() -
                 this->m_leftButtonDebounce >
             this->m_debounceOffset) {
+      qDebug() << "Back Button Pressed";
+
       this->leftButtonPressed();
       this->m_leftButtonDebounce = QDateTime::currentDateTime().time().msec();
     }
@@ -44,6 +46,8 @@ void ButtonController::buttonUpdate() {
         QDateTime::currentDateTime().time().msec() -
                 this->m_downButtonDebounce >
             this->m_debounceOffset) {
+      qDebug() << "Down Button Pressed";
+
       this->downButtonPressed();
       this->m_downButtonDebounce = QDateTime::currentDateTime().time().msec();
     }
@@ -51,6 +55,8 @@ void ButtonController::buttonUpdate() {
         QDateTime::currentDateTime().time().msec() -
                 this->m_enterButtonDebounce >
             this->m_debounceOffset) {
+      qDebug() << "Enter Button Pressed";
+
       this->enterButtonPressed();
       this->m_enterButtonDebounce = QDateTime::currentDateTime().time().msec();
     }
@@ -58,6 +64,8 @@ void ButtonController::buttonUpdate() {
         QDateTime::currentDateTime().time().msec() -
                 this->m_rightButtonDebounce >
             this->m_debounceOffset) {
+      qDebug() << "Right Button Pressed";
+
       this->rightButtonPressed();
       this->m_rightButtonDebounce = QDateTime::currentDateTime().time().msec();
     }
@@ -65,12 +73,15 @@ void ButtonController::buttonUpdate() {
         QDateTime::currentDateTime().time().msec() -
                 this->m_downButtonDebounce >
             this->m_debounceOffset) {
+      qDebug() << "Down Button Pressed";
       this->downButtonPressed();
       this->m_downButtonDebounce = QDateTime::currentDateTime().time().msec();
     }
+
     if (this->m_model->getUpButtonPressed() == 1 &&
         QDateTime::currentDateTime().time().msec() - this->m_upButtonDebounce >
             this->m_debounceOffset) {
+      qDebug() << "Up button pressed";
       this->upButtonPressed();
       this->m_upButtonDebounce = QDateTime::currentDateTime().time().msec();
     }
@@ -78,6 +89,8 @@ void ButtonController::buttonUpdate() {
         QDateTime::currentDateTime().time().msec() -
                 this->m_rightButtonDebounce >
             this->m_debounceOffset) {
+
+      qDebug() << "Forward button pressed";
       this->rightButtonPressed();
       this->m_rightButtonDebounce = QDateTime::currentDateTime().time().msec();
     }
@@ -85,6 +98,7 @@ void ButtonController::buttonUpdate() {
         QDateTime::currentDateTime().time().msec() -
                 this->m_homeButtonDebounce >
             this->m_debounceOffset) {
+      qDebug() << "Home button pressed";
       this->homeButtonPressed();
       this->m_homeButtonDebounce = QDateTime::currentDateTime().time().msec();
     }
