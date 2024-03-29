@@ -245,11 +245,8 @@ std::optional<float> RaspberryModel::getBmsFault() {
 std::optional<bool> RaspberryModel::getForwardButtonPressed() {
   std::optional<float> value = this->getById(FORWARDBUTTON);
 
-  qDebug() << "Value" << value.value_or(-1);
   if (value) {
-    qDebug() << "Checking Value" << *value;
     std::string binary = std::bitset<8>(static_cast<int>(*value)).to_string();
-    qDebug() << "Binary" << binary;
     return binary.length() >= 7 ? binary[6] == '1' : false;
   }
   return std::nullopt;
