@@ -50,14 +50,19 @@ void NavigationController::homeButtonPressed() {
 }
 
 void NavigationController::buttonUpdate() {
-  std::optional<float> modeIndex = this->m_model->getModeIndex();
-  if (modeIndex) {
-    this->setSelectedPageIndex(*modeIndex);
-  }
+  if (this->m_model->currentPageIndex == this->m_pageIndex) {
+    std::optional<float> modeIndex = this->m_model->getModeIndex();
+    if (modeIndex) {
+      this->setSelectedPageIndex(*modeIndex);
+    }
 
-  std::optional<bool> homeButtonPressed = this->m_model->getHomeButtonPressed();
+    std::optional<bool> homeButtonPressed =
+        this->m_model->getHomeButtonPressed();
 
-  if (homeButtonPressed == 0) {
-    this->enterButtonPressed();
+    if (homeButtonPressed == 0) {
+      this->enterButtonPressed();
+    } else {
+      this->homeButtonPressed();
+    }
   }
 }
