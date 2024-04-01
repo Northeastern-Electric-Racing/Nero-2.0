@@ -59,10 +59,12 @@ void NavigationController::buttonUpdate() {
     std::optional<bool> homeButtonPressed =
         this->m_model->getHomeButtonPressed();
 
-    if (homeButtonPressed == 0) {
-      this->enterButtonPressed();
-    } else {
-      this->homeButtonPressed();
+    if (homeButtonPressed) {
+      if (homeButtonPressed == 0) {
+        this->enterButtonPressed();
+      } else {
+        this->homeButtonPressed();
+      }
     }
   }
 }
