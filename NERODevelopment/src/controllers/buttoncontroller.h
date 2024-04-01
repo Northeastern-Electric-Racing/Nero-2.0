@@ -11,7 +11,7 @@ public:
                             QObject *parent = nullptr);
 
 public slots:
-  void buttonUpdate();
+  virtual void buttonUpdate();
 
   virtual void enterButtonPressed();
   virtual void upButtonPressed();
