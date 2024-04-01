@@ -37,9 +37,9 @@ public slots:
 
 private:
   Model *m_model;
-  int m_numCriticalWarnings;
-  int m_numNonCriticalWarnings;
-  bool m_isTalking;
+  int m_numCriticalWarnings = 0;
+  int m_numNonCriticalWarnings = 0;
+  bool m_isTalking = false;
 };
 
 #endif // HEADERCONTROLLER_H

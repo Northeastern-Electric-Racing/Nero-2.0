@@ -7,7 +7,8 @@
 class ButtonController : public QObject {
   Q_OBJECT
 public:
-  explicit ButtonController(Model *model, QObject *parent = nullptr);
+  explicit ButtonController(Model *model, int pageIndex,
+                            QObject *parent = nullptr);
 
 public slots:
   void buttonUpdate();
@@ -21,6 +22,7 @@ public slots:
 
 protected:
   Model *m_model;
+  int m_pageIndex;
 };
 
 #endif // BUTTONCONTROLLER_H

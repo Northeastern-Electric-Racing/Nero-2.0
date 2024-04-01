@@ -41,7 +41,10 @@ void MqttClient::updateLogStateChange() {
   qDebug() << content << " " << m_client->state();
 }
 
-void MqttClient::brokerDisconnected() { qDebug("Disconnected"); }
+void MqttClient::brokerDisconnected() {
+  qDebug("Disconnected");
+  this->connectToHost();
+}
 
 void MqttClient::setClientPort(int p) { m_client->setPort(p); }
 
@@ -79,7 +82,7 @@ void MqttClient::updateMessage(const QMqttMessage &msg) {
                         QLatin1String(" Received Topic: ") +
                         msg.topic().name() + QLatin1String(" Message: ") +
                         msg.payload() + QLatin1Char('\n');
-  qDebug() << debug;
+  // qDebug() << debug;
 }
 
 void MqttClient::sendMessage(const QString topic, const QString msg) {

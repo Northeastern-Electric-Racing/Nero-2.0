@@ -30,6 +30,10 @@ qt6_add_qml_module(content
         Keyboard.qml
         KeyboardController.qml
         Configuration.qml
+        HeaderView.qml
+        CriticalFaultIcon.qml
+        NonCriticalWarning.qml
+        MicrophoneComponent.qml
 
     RESOURCES
         fonts/fonts.txt
@@ -37,4 +41,6 @@ qt6_add_qml_module(content
         images/bg.png
         images/pipe.png
         images/flappy-bird.png
+        images/microphone.svg
+        QML_FILES Lightning.qml
 )

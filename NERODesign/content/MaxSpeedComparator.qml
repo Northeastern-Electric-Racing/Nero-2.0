@@ -18,6 +18,7 @@ Rectangle {
     Text {
         id: maxSpeed
         text: spedometer.maxSpeed
+        font.pixelSize: parent.width * 0.2
         color: "white"
         x: -(width + dimension / 20)
     }
@@ -25,6 +26,7 @@ Rectangle {
     Text {
         id: lowestSpeed
         text: spedometer.lowestSpeed
+        font.pixelSize: parent.width * 0.2
         color: "white"
         x: -(width + dimension / 20)
         y: spedometer.height - height
@@ -67,12 +69,14 @@ Rectangle {
         color: "white"
         x: -(width + dimension / 20)
         y: spedometer.height * (1 - spedometer.previousTopSpeed / spedometer.maxSpeed)
-
+        font.pixelSize: parent.width * 0.2
         Text {
             id: topSpeedNumber
             text: spedometer.previousTopSpeed + qsTr("MPH")
             color: "white"
             y: -height
+            font.pixelSize: parent.width * 0.2
+
             x: (topSpeed.width - width)
         }
     }

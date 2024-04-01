@@ -1,7 +1,7 @@
 #include "efficiencycontroller.h"
 
 EfficiencyController::EfficiencyController(Model *model, QObject *parent)
-    : ButtonController{model, parent}, m_currentMaxTorque(0),
+    : ButtonController{model, 8, parent}, m_currentMaxTorque(0),
       m_currentRegenStrength(0), m_packSegments({0, 0, 0, 0}), m_maxCellTemp(0),
       m_stateOfCharge(0), m_inverterTemp(0), m_motorTemp(0),
       m_averageCellTemp(0), m_stateOfChargeDelta(0) {}

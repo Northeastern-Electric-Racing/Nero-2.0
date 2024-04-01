@@ -93,12 +93,11 @@ public:
   void removePinnedData(QString id);
   void updatePinnedData();
   void updateAverageCellTemps();
-  void updateStateOfChargeDeltas();
   std::optional<float> getById(QString id);
 
   int pageHeight;
   int pageWidth;
-  float prevSoc;
+  int currentPageIndex = -1;
 
 signals:
   void onCurrentDataChange();
@@ -116,6 +115,7 @@ protected:
   int m_fastestTime;
   int m_lastTime;
   int m_maxSpeed;
+
 };
 
 #define ModelInterfaceId "com.ner.model"

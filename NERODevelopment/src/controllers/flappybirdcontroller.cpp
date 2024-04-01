@@ -1,7 +1,7 @@
 #include "flappybirdcontroller.h"
 
 FlappyBirdController::FlappyBirdController(Model *model, QObject *parent)
-    : ButtonController{model, parent} {}
+    : ButtonController{model, 4, parent} {}
 
 bool FlappyBirdController::didJump() const { return m_didJump; }
 void FlappyBirdController::setDidJump(bool didJump) {
