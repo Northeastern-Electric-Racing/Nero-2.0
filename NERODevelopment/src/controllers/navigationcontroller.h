@@ -28,6 +28,7 @@ public slots:
   void downButtonPressed() override;
   void upButtonPressed() override;
   void homeButtonPressed() override;
+  void buttonUpdate() override;
 
 private:
   bool m_isSelected = false;

@@ -23,6 +23,13 @@ void ButtonController::homeButtonPressed() {
 }
 
 void ButtonController::buttonUpdate() {
+  if (this->m_model->currentPageIndex == -1) {
+    std::optional<float> index = this->m_model->getModeIndex();
+    if (index) {
+      this->m_model->currentPageIndex = *index;
+    }
+    return;
+  }
   if (this->m_pageIndex == this->m_model->currentPageIndex) {
     QDateTime currentDate = QDateTime::currentDateTime();
     // qDebug() << "Button Pressed"
