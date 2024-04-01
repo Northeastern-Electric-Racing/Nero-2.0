@@ -1,26 +1,16 @@
 #include "debuggraphcontroller.h"
 
 DebugGraphController::DebugGraphController(Model *model, QObject *parent)
-    : ButtonController(model, parent) {
-  connect(&m_dataUpdateTimer, &QTimer::timeout, this,
-          &DebugGraphController::updateGraphData);
-  m_dataUpdateTimer.start(1000);
-}
+    : ButtonController(model, 7, parent) {}
 
 DebugGraphController::~DebugGraphController() { m_dataUpdateTimer.stop(); }
 
-QList<QVariant> DebugGraphController::graphData() const { return m_graphData; }
+QList<QJsonObject> DebugGraphController::graphData() const {
+  return m_graphData;
+}
 
-void DebugGraphController::updateGraphData() {
-  QList<QVariant> newData;
-  auto pinnedDataMap = m_model->getPinnedData();
-
-  for (const auto &key : pinnedDataMap.keys()) {
-    const auto &value = pinnedDataMap.value(key);
-    newData.append(QVariant::fromValue(value));
+void DebugGraphController::setGraphData(QList<QJsonObject> json) {
+  if (this->m_graphData != json) {
+    this->m_graphData = json;
   }
-
-  m_graphData = newData;
-
-  emit graphDataChanged();
 }

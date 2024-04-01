@@ -3,6 +3,7 @@
 
 #include "app_environment.h"
 #include "controllers/configurationcontroller.h"
+#include "controllers/debuggraphcontroller.h"
 #include "controllers/debugtablecontroller.h"
 #include "controllers/flappybirdcontroller.h"
 #include "controllers/headercontroller.h"
@@ -49,6 +50,7 @@ int main(int argc, char *argv[]) {
   FlappyBirdController flappyBirdController(model);
   ConfigurationController configurationController(model);
   KeyboardController keyboardController(model);
+  DebugGraphController graphController(model);
 
   const QUrl url(u"qrc:Main/main.qml"_qs);
   QObject::connect(

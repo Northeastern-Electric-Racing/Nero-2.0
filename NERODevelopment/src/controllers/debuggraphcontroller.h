@@ -9,22 +9,22 @@
 
 class DebugGraphController : public ButtonController {
   Q_OBJECT
-  Q_PROPERTY(QList<QVariant> graphData READ graphData WRITE updateGraphData
+  Q_PROPERTY(QList<QJsonObject> graphData READ graphData WRITE setGraphData
                  NOTIFY graphDataChanged)
 
 public:
   explicit DebugGraphController(Model *model, QObject *parent = nullptr);
   ~DebugGraphController();
-  QList<QVariant> graphData() const;
+  QList<QJsonObject> graphData() const;
 
 signals:
   void graphDataChanged();
 
 public slots:
-  void updateGraphData();
+  void setGraphData(QList<QJsonObject>);
 
 private:
-  QList<QVariant> m_graphData;
+  QList<QJsonObject> m_graphData;
   QTimer m_dataUpdateTimer;
 };
 
