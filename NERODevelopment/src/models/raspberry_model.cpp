@@ -338,6 +338,7 @@ std::optional<int> RaspberryModel::getNumberOfNonCriticalFaults() {
   return std::nullopt;
 }
 
+
 int RaspberryModel::totalNumberOfOnesIn(float value) {
   int total = 0;
   std::string binary = std::bitset<8>(static_cast<int>(value)).to_string();
