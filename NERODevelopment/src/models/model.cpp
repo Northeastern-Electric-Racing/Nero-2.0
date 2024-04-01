@@ -40,6 +40,20 @@ void Model::updateAverageCellTemps() {
   averageCellTemps.append(getAveCellTemp() ? *getAveCellTemp() : 0);
 }
 
+
+int Model::getLastTime() {
+    return m_lastTime;
+}
+
+int Model::getFastestTime() {
+    return m_fastestTime;
+}
+
+int Model::getMaxSpeed() {
+    return m_maxSpeed;
+}
+
+
 void Model::updateStateOfChargeDeltas() {
   if (stateOfChargeDeltas.size() >= 30) {
     stateOfChargeDeltas.pop_front();

@@ -1,8 +1,8 @@
 #include "speedcontroller.h"
 
-SpeedController::SpeedController(Model *model, QObject* parent): ButtonController{model, parent}, m_tractionControl(false), m_packTemp(0),
-    m_motorTemp(0), m_chargeState(0), m_currentTime(0), m_fastestTime(0), m_lastTime(0), m_currentSpeed(0),
-    m_maxSpeed(0), m_current(0), m_maxCurrent(0), m_currentDischarge(0), m_maxCurrentDischarge(0){
+SpeedController::SpeedController(Model *model, QObject* parent): ButtonController{model, parent}, m_tractionControl(), m_packTemp(),
+    m_motorTemp(), m_chargeState(), m_currentTime(), m_fastestTime(), m_lastTime(), m_currentSpeed(),
+    m_maxSpeed(), m_current(), m_maxCurrent(), m_currentDischarge(), m_maxCurrentDischarge(){
     connect(m_model, &Model::onCurrentDataChange, this, &SpeedController::update);
 }
 
@@ -34,36 +34,36 @@ void SpeedController::setChargeState(float chargeState) {
         emit packTempChanged(chargeState);
     }
 }
-float SpeedController::currentTime() const {return m_currentTime;}
-void SpeedController::setCurrentTime(float packTemp) {
-    if (packTemp != m_packTemp) {
-        m_packTemp = packTemp;
-        emit packTempChanged(packTemp);
+int SpeedController::currentTime() const {return m_currentTime;}
+void SpeedController::setCurrentTime(int currentTime) {
+    if (currentTime != m_currentTime) {
+        m_currentTime = currentTime;
+        emit currentTimeChanged(currentTime);
     }
 }
-float SpeedController::fastestTime() const {return m_fastestTime;}
-void SpeedController::setFastestTime(float fastTime) {
+int SpeedController::fastestTime() const {return m_fastestTime;}
+void SpeedController::setFastestTime(int fastTime) {
     if (fastTime != m_fastestTime) {
         m_fastestTime = fastTime;
         emit fastestTimeChanged(fastTime);
     }
 }
-float SpeedController::lastTime() const {return m_lastTime;}
-void SpeedController::setLastTime(float lastTime) {
+int SpeedController::lastTime() const {return m_lastTime;}
+void SpeedController::setLastTime(int lastTime) {
     if (lastTime != m_lastTime) {
         m_lastTime = lastTime;
         emit lastTimeChanged(lastTime);
     }
 }
-float SpeedController::currentSpeed() const {return m_currentSpeed;}
-void SpeedController::setCurrentSpeed(float currentSpeed) {
+int SpeedController::currentSpeed() const {return m_currentSpeed;}
+void SpeedController::setCurrentSpeed(int currentSpeed) {
     if (currentSpeed != m_currentSpeed) {
         m_currentSpeed = currentSpeed;
         emit currentSpeedChanged(currentSpeed);
     }
 }
-float SpeedController::maxSpeed() const {return m_maxSpeed;}
-void SpeedController::setMaxSpeed(float maxSpeed) {
+int SpeedController::maxSpeed() const {return m_maxSpeed;}
+void SpeedController::setMaxSpeed(int maxSpeed) {
     if (maxSpeed != m_maxSpeed) {
         m_maxSpeed = maxSpeed;
         emit maxSpeedChanged(maxSpeed);
@@ -104,9 +104,9 @@ void SpeedController::update() {
      setMotorTemp(*m_model->getMotorTemp());
      setChargeState(*m_model->getStateOfCharge());
      setCurrentTime(*m_model->getTime());
-     setFastestTime(*m_model->getFastestTime());
-     setLastTime(*m_model->getLastTime());
+     setFastestTime(m_model->getFastestTime());
+     setLastTime(m_model->getLastTime());
      setCurrentSpeed(*m_model->getMph());
-     setMaxSpeed(*m_model->getMaxSpeed());
+     setMaxSpeed(m_model->getMaxSpeed());
      setCurrent(*m_model->getCurrent());
 }

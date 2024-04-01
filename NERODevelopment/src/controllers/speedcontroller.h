@@ -16,15 +16,15 @@ class SpeedController : public ButtonController {
 
     Q_PROPERTY(float chargeState READ chargeState WRITE setChargeState NOTIFY chargeStateChanged);
 
-    Q_PROPERTY(float currentTime READ currentTime WRITE setCurrentTime NOTIFY currentTimeChanged);
+    Q_PROPERTY(int currentTime READ currentTime WRITE setCurrentTime NOTIFY currentTimeChanged);
 
-    Q_PROPERTY(float fastestTime READ fastestTime WRITE setFastestTime NOTIFY fastestTimeChanged);
+    Q_PROPERTY(int fastestTime READ fastestTime WRITE setFastestTime NOTIFY fastestTimeChanged);
 
-    Q_PROPERTY(float lastTime READ lastTime WRITE setLastTime NOTIFY lastTimeChanged);
+    Q_PROPERTY(int lastTime READ lastTime WRITE setLastTime NOTIFY lastTimeChanged);
 
-    Q_PROPERTY(float currentSpeed READ currentSpeed WRITE setCurrentSpeed NOTIFY currentSpeedChanged);
+    Q_PROPERTY(int currentSpeed READ currentSpeed WRITE setCurrentSpeed NOTIFY currentSpeedChanged);
 
-    Q_PROPERTY(float maxSpeed READ maxSpeed WRITE setMaxSpeed NOTIFY maxSpeedChanged);
+    Q_PROPERTY(int maxSpeed READ maxSpeed WRITE setMaxSpeed NOTIFY maxSpeedChanged);
 
     Q_PROPERTY(float current READ current WRITE setCurrent NOTIFY currentChanged);
 
@@ -45,11 +45,11 @@ public:
     float packTemp() const;
     float motorTemp() const;
     float chargeState() const;
-    float currentTime() const;
-    float fastestTime() const;
-    float lastTime() const;
-    float currentSpeed() const;
-    float maxSpeed() const;
+    int currentTime() const;
+    int fastestTime() const;
+    int lastTime() const;
+    int currentSpeed() const;
+    int maxSpeed() const;
     float current() const;
     float maxCurrent() const;
     float currentDischarge() const;
@@ -60,11 +60,11 @@ signals:
     void packTempChanged(float);
     void motorTempChanged(float);
     void chargeStateChanged(float);
-    void currentTimeChanged(float);
-    void fastestTimeChanged(float);
-    void lastTimeChanged(float);
-    void currentSpeedChanged(float);
-    void maxSpeedChanged(float);
+    void currentTimeChanged(int);
+    void fastestTimeChanged(int);
+    void lastTimeChanged(int);
+    void currentSpeedChanged(int);
+    void maxSpeedChanged(int);
     void currentChanged(float);
     void maxCurrentChanged(float);
     void currentDischargeChanged(float);
@@ -75,11 +75,11 @@ public slots:
     void setPackTemp(float);
     void setMotorTemp(float);
     void setChargeState(float);
-    void setCurrentTime(float);
-    void setFastestTime(float);
-    void setLastTime(float);
-    void setCurrentSpeed(float);
-    void setMaxSpeed(float);
+    void setCurrentTime(int);
+    void setFastestTime(int);
+    void setLastTime(int);
+    void setCurrentSpeed(int);
+    void setMaxSpeed(int);
     void setCurrent(float);
     void setMaxCurrent(float);
     void setCurrentDischarge(float);
@@ -88,19 +88,19 @@ public slots:
     void update();
 
 private:
-    bool m_tractionControl;
-    float m_packTemp;
-    float m_motorTemp;
-    float m_chargeState;
-    float m_currentTime;
-    float m_fastestTime;
-    float m_lastTime;
-    float m_currentSpeed;
-    float m_maxSpeed;
-    float m_current;
-    float m_maxCurrent;
-    float m_currentDischarge;
-    float m_maxCurrentDischarge;
+    bool m_tractionControl = false;
+    float m_packTemp = 0;
+    float m_motorTemp = 0;
+    float m_chargeState = 0;
+    int m_currentTime = 0;
+    int m_fastestTime = 0;
+    int m_lastTime = 0;
+    int m_currentSpeed = 0;
+    int m_maxSpeed = 0;
+    float m_current = 0;
+    float m_maxCurrent = 0;
+    float m_currentDischarge = 0;
+    float m_maxCurrentDischarge = 0;
 
 };
 
