@@ -7,7 +7,7 @@ Rectangle {
     property bool downSelected: false
     height: 200
     width: 100
-    color: "black"
+    color: "transparent"
 
     Column {
         id: arrowContainer

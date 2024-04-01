@@ -28,11 +28,28 @@ Rectangle {
                 id: motorTempThermometer
                 value: thermometerValue
                 height: 100
+                Lightning{
+                    dimension: 50
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.horizontalCenter: parent.horizontalCenter
+                }
             }
 
             ValueText {
-                text: thermometerValue + "º"
+                id: text2
+                text: thermometerValue
                 Layout.preferredWidth: 100
+                ValueText {
+                    id: text3
+                    y: 66
+                    width: 35
+                    height: 30
+                    text: "Nm"
+                    font.pixelSize: 25 // Adjust the font size as needed
+                    anchors.bottom: text2.bottom
+                    anchors.left: text2.right
+                    anchors.bottomMargin: 5
+                }
             }
         }
 
