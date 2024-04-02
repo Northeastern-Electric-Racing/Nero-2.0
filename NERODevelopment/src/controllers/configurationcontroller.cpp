@@ -17,10 +17,8 @@ bool ConfigurationController::isKeyboardSelected() const {
   return this->m_isKeyboardSelected;
 }
 void ConfigurationController::setIsKeyboardSelected(bool selected) {
-  if (this->m_isKeyboardSelected != selected) {
-    this->m_isKeyboardSelected = selected;
-    emit this->isKeyboardSelectedChanged();
-  }
+  this->m_isKeyboardSelected = selected;
+  emit this->isKeyboardSelectedChanged();
 }
 
 void ConfigurationController::setDriverName(QString driverName) {
@@ -61,6 +59,6 @@ void ConfigurationController::enterButtonPressed() {
     this->m_model->sendMessage("system", this->m_systemName);
     this->m_model->sendMessage("location", this->m_locationName);
   } else {
-    this->setIsKeyboardSelected(!this->m_isKeyboardSelected);
+    this->setIsKeyboardSelected(true);
   }
 }

@@ -39,6 +39,17 @@ void KeyboardController::rightButtonPressed() {
       std::min(this->m_numKeys - 1, this->m_selectedIndex + 1));
 }
 
+void KeyboardController::setExit(bool exit) {
+  this->m_exit = exit;
+  emit exitChanged();
+}
+bool KeyboardController::exit() const { return this->m_exit; }
+
+void KeyboardController::homeButtonPressed() {
+  this->setExit(true);
+  this->m_model->currentPageIndex = -1;
+}
+
 void KeyboardController::enterButtonPressed() {
   this->setSelectedKey(true);
   this->setSelectedKey(false);
