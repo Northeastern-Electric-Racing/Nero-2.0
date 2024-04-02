@@ -65,6 +65,8 @@ void NavigationController::buttonUpdate() {
       } else {
         this->homeButtonPressed();
       }
+    } else {
+      this->homeButtonPressed();
     }
   }
 }

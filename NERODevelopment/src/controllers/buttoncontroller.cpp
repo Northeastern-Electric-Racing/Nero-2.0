@@ -89,12 +89,12 @@ void ButtonController::buttonUpdate() {
       this->rightButtonPressed();
       this->m_rightButtonDebounce = currentDate.toMSecsSinceEpoch();
     }
-    // if (this->m_model->getHomeButtonPressed() == 1 &&
-    //     currentDate.toMSecsSinceEpoch() - this->m_homeButtonDebounce >
-    //         this->m_debounceOffset) {
-    //   qDebug() << "Home button pressed";
-    //   this->homeButtonPressed();
-    //   this->m_homeButtonDebounce = currentDate.toMSecsSinceEpoch();
-    // }
+    if (this->m_model->getHomeButtonPressed() == 1 &&
+        currentDate.toMSecsSinceEpoch() - this->m_homeButtonDebounce >
+            this->m_debounceOffset) {
+      qDebug() << "Home button pressed";
+      this->homeButtonPressed();
+      this->m_homeButtonDebounce = currentDate.toMSecsSinceEpoch();
+    }
   }
 }

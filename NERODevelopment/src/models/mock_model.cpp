@@ -347,7 +347,7 @@ std::optional<bool> MockModel::getBackwardButtonPressed() { return 0; }
 
 std::optional<bool> MockModel::getRightButtonPressed() { return 0; }
 
-std::optional<bool> MockModel::getHomeButtonPressed() { return 1; }
+std::optional<bool> MockModel::getHomeButtonPressed() { return std::nullopt; }
 
 std::optional<bool> MockModel::getIsTalking() { return true; }
 
