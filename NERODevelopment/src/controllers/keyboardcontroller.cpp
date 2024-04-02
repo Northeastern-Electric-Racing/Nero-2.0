@@ -22,11 +22,15 @@ void KeyboardController::setSelectedKey(bool selected) {
 }
 
 void KeyboardController::downButtonPressed() {
+  qDebug() << "down Button Pressed Keyboard";
+
   this->setSelectedIndex(
       std::min(this->m_numKeys - 1, this->m_selectedIndex + this->m_columns));
 }
 
 void KeyboardController::upButtonPressed() {
+  qDebug() << "up Button Pressed Keyboard";
+
   this->setSelectedIndex(std::max(0, this->m_selectedIndex - this->m_columns));
 }
 

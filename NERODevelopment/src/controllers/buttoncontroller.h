@@ -23,12 +23,12 @@ public slots:
 protected:
   Model *m_model;
   int m_pageIndex;
-  long long m_enterButtonDebounce = 0;
-  long long m_upButtonDebounce = 0;
-  long long m_downButtonDebounce = 0;
-  long long m_rightButtonDebounce = 0;
-  long long m_leftButtonDebounce = 0;
-  long long m_homeButtonDebounce = 0;
+  qint64 m_enterButtonDebounce = 0;
+  qint64 m_upButtonDebounce = 0;
+  qint64 m_downButtonDebounce = 0;
+  qint64 m_rightButtonDebounce = 0;
+  qint64 m_leftButtonDebounce = 0;
+  qint64 m_homeButtonDebounce = 0;
   int m_debounceOffset = 500;
 };
 
