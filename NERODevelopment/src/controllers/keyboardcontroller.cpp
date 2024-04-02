@@ -46,6 +46,7 @@ void KeyboardController::setExit(bool exit) {
 bool KeyboardController::exit() const { return this->m_exit; }
 
 void KeyboardController::homeButtonPressed() {
+  qDebug() << "Home Button Pressed Keyboard";
   this->setExit(true);
   this->m_model->currentPageIndex = -1;
 }
