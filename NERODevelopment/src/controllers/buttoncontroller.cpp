@@ -19,6 +19,7 @@ void ButtonController::leftButtonPressed() {}
 void ButtonController::rightButtonPressed() {}
 
 void ButtonController::homeButtonPressed() {
+  qDebug() << "Home button pressed button controller";
   this->m_model->currentPageIndex = -1;
 }
 
