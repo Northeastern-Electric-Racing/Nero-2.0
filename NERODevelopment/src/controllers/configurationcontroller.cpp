@@ -64,3 +64,9 @@ void ConfigurationController::enterButtonPressed() {
     }
   }
 }
+
+void ConfigurationController::homeButtonPressed() {
+  if (!this->m_isKeyboardSelected) {
+    this->m_model->currentPageIndex = -1;
+  }
+}
