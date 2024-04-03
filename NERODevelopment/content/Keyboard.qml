@@ -25,6 +25,7 @@ Item {
     property double rows: 5
     property int selectedIndex: keyboardViewController.selectedIndex
     property bool isKeySelected: keyboardViewController.selectedKey
+    property bool exit: keyboardViewController.exit
     property int numKeys: 44
 
     Keys.onPressed: event => {
@@ -44,8 +45,18 @@ Item {
                             case Qt.Key_Return:
                             keyboardViewController.enterButtonPressed()
                             break
+                            case Qt.Key_Escape:
+                            keyboardViewController.homeButtonPressed()
+                            break
                         }
                     }
+
+    onExitChanged: {
+        if (exit) {
+            rejected()
+            keyboardViewController.setExit(false)
+        }
+    }
 
     MouseArea {
         anchors.fill: parent
@@ -419,7 +430,6 @@ Item {
                             onIsKeySelectedChanged: {
                                 if (root.isKeySelected && highlighted) {
                                     clicked()
-                                    event.accepted = true
                                 }
                             }
                         }

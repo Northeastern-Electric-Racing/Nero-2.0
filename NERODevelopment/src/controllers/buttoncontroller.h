@@ -11,7 +11,7 @@ public:
                             QObject *parent = nullptr);
 
 public slots:
-  void buttonUpdate();
+  virtual void buttonUpdate();
 
   virtual void enterButtonPressed();
   virtual void upButtonPressed();
@@ -23,6 +23,13 @@ public slots:
 protected:
   Model *m_model;
   int m_pageIndex;
+  qint64 m_enterButtonDebounce = 0;
+  qint64 m_upButtonDebounce = 0;
+  qint64 m_downButtonDebounce = 0;
+  qint64 m_rightButtonDebounce = 0;
+  qint64 m_leftButtonDebounce = 0;
+  qint64 m_homeButtonDebounce = 0;
+  int m_debounceOffset = 500;
 };
 
 #endif // BUTTONCONTROLLER_H
