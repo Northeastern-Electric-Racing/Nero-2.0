@@ -41,30 +41,11 @@ void Model::updateAverageCellTemps() {
   averageCellTemps.append(getAveCellTemp() ? *getAveCellTemp() : 0);
 }
 
+int Model::getLastTime() { return m_lastTime; }
 
-int Model::getLastTime() {
-    return m_lastTime;
-}
+int Model::getFastestTime() { return m_fastestTime; }
 
-int Model::getFastestTime() {
-    return m_fastestTime;
-}
-
-int Model::getMaxSpeed() {
-    return m_maxSpeed;
-}
-
-
-void Model::updateStateOfChargeDeltas() {
-  if (stateOfChargeDeltas.size() >= 30) {
-    stateOfChargeDeltas.pop_front();
-  }
-  std::optional<float> soc = this->getStateOfCharge();
-  if (soc) {
-    stateOfChargeDeltas.append(*soc - prevSoc);
-    prevSoc = *soc;
-  }
-}
+int Model::getMaxSpeed() { return m_maxSpeed; }
 
 QList<DebugTableRowValue> Model::getDebugTableValues() {
   QList<DebugTableRowValue> table = {};
