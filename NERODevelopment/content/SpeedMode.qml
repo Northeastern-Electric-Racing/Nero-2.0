@@ -5,9 +5,52 @@ Item {
     id: speedMode
     property int widthValue: 800
     property int heightValue: 480
-
     width: widthValue
     height: heightValue
+
+    property string packTempStatus: speedController.attributeStatusMap[""]
+    property string motorTempStatus: speedController.attributeStatusMap[""]
+    property string chargeStateStatus: speedController.attributeStatusMap[""]
+    property string timerDisplayStatus: speedController.attributeStatusMap[""]
+    property string maxDrawStatus: speedController.attributeStatusMap[""]
+    property string maxSpeedStatus: speedController.attributeStatusMap[""]
+
+    property int selectedFlowIndex: speedController.selectedFlowIndex
+
+    property bool didSelect: speedController.didSelect
+
+    Keys.onPressed: event => {
+                        switch (event.key) {
+                            case Qt.Key_Up:
+                            speedController.upButtonPressed()
+                            break
+                            case Qt.Key_Left:
+                            speedController.leftButtonPressed()
+                            break
+                            case Qt.Key_Right:
+                            speedController.rightButtonPressed()
+                            break
+                            case Qt.Key_Down:
+                            speedController.downButtonPressed()
+                            break
+                            case Qt.Key_Return:
+                            speedController.enterButtonPressed()
+                            break
+                            default:
+                            break
+                        }
+                    }
+
+    onDidSelectChanged: {
+        if (speedMode.didSelect) {
+            descriptionModal.openModal(speedController.selectedName,
+                                       speedController.selectedDescription,
+                                       speedController.selectedUrl)
+        } else {
+            descriptionModal.closeModal()
+        }
+    }
+
 
     HeaderView {
         id: headerView
@@ -75,6 +118,8 @@ Item {
         title: 'PACK TEMP'
         width: speedMode.width * 0.15
         height: speedMode.height * 0.25
+        highlight: speedMode.selectedFlowIndex == 0
+        status: speedMode.speedModeStatus
     }
 
     ThermometerValueComponent {
@@ -87,6 +132,8 @@ Item {
         title: 'MOTOR TEMP'
         width: speedMode.width * 0.15
         height: speedMode.height * 0.25
+        highlight: speedMode.selectedFlowIndex == 1
+        status: speedMode.motorTempStatus
     }
 
     BatteryValueComponent {
@@ -99,6 +146,8 @@ Item {
         title: 'CHARGE STATE'
         width: speedMode.width * 0.15
         height: speedMode.height * 0.25
+        highlight: speedMode.selectedFlowIndex == 2
+        status: speedMode.chargeStateStatus
     }
 
     TimerDisplay {
@@ -109,6 +158,8 @@ Item {
         }
         width: speedMode.width * 0.4
         height: speedMode.height * 0.3
+        highlight: speedMode.selectedFlowIndex == 3
+        status: speedMode.timerDisplayStatus
     }
 
     MaxDrawGraph {
@@ -119,6 +170,8 @@ Item {
         }
         dimension: Math.min(speedMode.height * 0.4,
                             speedMode.width * 0.25)
+        highlight: speedMode.selectedFlowIndex == 4
+        status: speedMode.maxDrawStatus
     }
 
     MaxSpeedComparator {
@@ -129,5 +182,7 @@ Item {
         }
         width: speedMode.width / 10
         height: speedMode.height * 0.7
+        highlight: speedMode.selectedFlowIndex == 5
+        status: speedMode.maxSpeedStatus
     }
 }
