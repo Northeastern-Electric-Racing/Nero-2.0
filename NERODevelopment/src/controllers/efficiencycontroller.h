@@ -63,6 +63,7 @@ public slots:
   void setMotorTemp(qreal);
   void setAverageCellTemp(qreal);
   void setStateOfChargeDelta(int);
+  void currentDataDidChange();
 
 private:
   int m_currentMaxTorque;        // torque percentage [0,100]

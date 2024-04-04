@@ -4,7 +4,7 @@ import QtQuick.Layouts
 Rectangle {
     property int iconHeight: 90
     property int iconWidth: 50
-    property int batteryValue: 50
+    property int torqueLimit: 50
     property string title: "TORQUE LIMIT"
     color:"transparent"
 
@@ -27,7 +27,7 @@ Rectangle {
             ValueText {
                 id: text2
                 Layout.preferredWidth: 100
-                text: batteryValue
+                text: torqueLimit
                 ValueText {
                     id: text3
                     text: "%"

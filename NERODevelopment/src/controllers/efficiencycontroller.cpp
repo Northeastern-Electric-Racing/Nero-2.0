@@ -4,7 +4,18 @@ EfficiencyController::EfficiencyController(Model *model, QObject *parent)
     : ButtonController{model, parent}, m_currentMaxTorque(0),
       m_currentRegenStrength(0), m_packSegments({0, 0, 0, 0}), m_maxCellTemp(0),
       m_stateOfCharge(0), m_inverterTemp(0), m_motorTemp(0),
-      m_averageCellTemp(0), m_stateOfChargeDelta(0) {}
+      m_averageCellTemp(0), m_stateOfChargeDelta(0) {
+  connect(m_model, &Model::onCurrentDataChange, this,
+          &EfficiencyController::currentDataDidChange);
+}
+
+// EfficiencyController::EfficiencyController(Model *model, QObject *parent)
+//     : ButtonController{model, parent}, m_speed(0), m_status(false),
+//       m_direction(true), m_packTemp(0.0), m_motorTemp(0.0),
+//       m_stateOfCharge(0.0) {
+//   connect(m_model, &Model::onCurrentDataChange, this,
+//           &HomeController::currentDataDidChange);
+// }
 
 int EfficiencyController::currentMaxTorque() const {
   return m_currentMaxTorque;
@@ -88,4 +99,16 @@ void EfficiencyController::setStateOfChargeDelta(int delta) {
     m_stateOfChargeDelta = delta;
     emit stateOfChargeDeltaChanged(delta);
   }
+}
+
+void EfficiencyController::currentDataDidChange() {
+  setCurrentMaxTorque(*m_model->getTorquePower());
+  setCurrentRegenStrength(*m_model->getRegenPower());
+  // setPackSegments(*m_model->getPackSegments());
+  setMaxCellTemp(*m_model->getMaxCellTemp());
+  setStateOfCharge(*m_model->getStateOfCharge());
+  setInverterTemp(*m_model->getInverterTemp());
+  setMotorTemp(*m_model->getMotorTemp());
+  setAverageCellTemp(*m_model->getAveCellTemp());
+  // setStateOfChargeDelta(*m_model->getStatus());
 }

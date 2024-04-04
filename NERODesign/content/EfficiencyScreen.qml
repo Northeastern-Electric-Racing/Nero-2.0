@@ -3,21 +3,19 @@ import QtQuick.Controls 2.15
 import QtQuick.Particles
 import QtQuick.Layouts
 
+import NERO
+
 Item {
     id: efficiency
     anchors.fill: parent
-    property int stateOfChargePercentage: homeController.stateOfCharge
-    property int packTempValue: homeController.packTemp
-    property int motorTempValue: homeController.motorTemp
-    property int currentSpeed: homeController.speed
-    property bool forward: homeController.status
+    property int torqueLimit: efficiencyController.currentMaxTorque
+    property int numRegen: efficiencyController.currentRegenStrength
+    property int hvSOC: efficiencyController.stateOfCharge
+    property int lvSOC: efficiencyController.stateOfChargeDelta
+    property int inverterTemp: efficiencyController.inverterTemp
+    property bool motorTemp: efficiencyController.motorTemp
+    property bool averageCellTemp: efficiencyController.averageCellTemp
 
-    property int maxSpeed: 5
-    property int horizontalMargin: 10
-    property int horizontalIconSpacing: -55
-    property int iconWidth: 40
-    property int iconHeight: 90
-    property int labelVerticalSpacing: 10
     width: 800
     height: 480
 
@@ -66,21 +64,21 @@ Item {
             ThermometerValueComponent {
                 id: motorTempThermometer
                 width: parent.width
-                thermometerValue: 50
+                thermometerValue: motorTemp
                 title: "MOTOR TEMP"
             }
 
             ThermometerValueComponent {
                 id: packTempThermometer
                 width: parent.width
-                thermometerValue: 50
+                thermometerValue: averageCellTemp
                 title: "PACK TEMP"
             }
 
             EffThermometerValueComponent {
                 id: regen
                 width: parent.width
-                thermometerValue: 50
+                thermometerValue: numRegen
                 title: "REGEN"
             }
         }
@@ -138,18 +136,21 @@ Item {
 
             TorqueValueComponent {
                 id: torqueValue
+                torqueLimit: 70
             }
 
             EffBatteryValueComponent{
                 id: battery
                 title: "HV SOC"
                 anchors.right: percentRow.right
+                batteryValue: hvSOC
             }
 
             EffBatteryValueComponent{
                 id: battery2
                 title: "LV SOC"
                 anchors.bottom: percentRow.bottom
+                batteryValue: lvSOC
             }
         }
     }
