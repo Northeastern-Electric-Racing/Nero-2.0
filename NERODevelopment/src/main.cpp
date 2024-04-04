@@ -49,6 +49,7 @@ int main(int argc, char *argv[]) {
   FlappyBirdController flappyBirdController(model);
   ConfigurationController configurationController(model);
   KeyboardController keyboardController(model);
+  SpeedController speedController(model);
 
   const QUrl url(u"qrc:Main/main.qml"_qs);
   QObject::connect(
@@ -74,6 +75,8 @@ int main(int argc, char *argv[]) {
                                            &configurationController);
   engine.rootContext()->setContextProperty("keyboardViewController",
                                            &keyboardController);
+  engine.rootContext()->setContextProperty("speedController",
+                                           &speedController);
 
   engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
 
