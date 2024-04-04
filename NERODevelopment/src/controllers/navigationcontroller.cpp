@@ -16,9 +16,9 @@ void NavigationController::setSelectedPageIndex(int index) {
 bool NavigationController::isSelected() const { return this->m_isSelected; }
 void NavigationController::setIsSelected(bool isSelected) {
   if (isSelected != this->m_isSelected) {
-    qDebug() << "Setting isSelected to " << isSelected << " from "
-             << this->m_isSelected
-             << " in NavigationController::setIsSelected(bool isSelected)";
+    // qDebug() << "Setting isSelected to " << isSelected << " from "
+    //          << this->m_isSelected
+    //          << " in NavigationController::setIsSelected(bool isSelected)";
     this->m_isSelected = isSelected;
     emit this->isSelectedChanged();
   }
@@ -47,4 +47,26 @@ void NavigationController::enterButtonPressed() {
 void NavigationController::homeButtonPressed() {
   this->m_model->currentPageIndex = -1;
   this->setIsSelected(false);
+}
+
+void NavigationController::buttonUpdate() {
+  if (this->m_model->currentPageIndex == this->m_pageIndex) {
+    std::optional<float> modeIndex = this->m_model->getModeIndex();
+    if (modeIndex) {
+      this->setSelectedPageIndex(*modeIndex);
+    }
+
+    std::optional<bool> homeButtonPressed =
+        this->m_model->getHomeButtonPressed();
+
+    if (homeButtonPressed) {
+      if (homeButtonPressed == 0) {
+        this->enterButtonPressed();
+      } else {
+        this->homeButtonPressed();
+      }
+    } else {
+      this->homeButtonPressed();
+    }
+  }
 }

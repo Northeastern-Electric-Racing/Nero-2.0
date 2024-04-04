@@ -63,6 +63,9 @@ set(PROJECT_SOURCES
     src/utils/descriptioninfo.cpp
 
     src/main.cpp
+
+    src/controllers/speedcontroller.h
+    src/controllers/speedcontroller.cpp
 )
 
 find_package(Qt6 REQUIRED COMPONENTS Core Gui Qml Quick Network Mqtt Protobuf)

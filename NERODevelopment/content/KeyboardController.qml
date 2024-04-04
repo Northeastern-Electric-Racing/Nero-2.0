@@ -8,6 +8,8 @@ Item {
 
     signal accepted(string text)
 
+    signal rejected
+
     // onAccepted: print('onAccepted', text)
     function show() {
         keyboard = keyboardComponent.createObject(null, {
@@ -37,11 +39,14 @@ Item {
     Connections {
         target: keyboard
 
-        onAccepted: {
-            root.accepted(text) // emit
-            keyboard.destroy() // hide
-        }
+        onAccepted: text => {
+                        root.accepted(text) // emit
+                        keyboard.destroy() // hide
+                    }
 
-        onRejected: keyboard.destroy() // hide
+        onRejected: {
+            root.rejected()
+            keyboard.destroy()
+        }
     }
 }

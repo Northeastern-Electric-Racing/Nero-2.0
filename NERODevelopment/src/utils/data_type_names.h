@@ -37,14 +37,14 @@
 #define MPUFAULT "mpufault"
 #define DCL "dcl"
 #define CCL "ccl"
-#define FORWARDBUTTON "forwardbutton"
-#define BACKWARDBUTTON "backwardbutton"
-#define RIGHTBUTTON "rightbutton"
-#define ENTERBUTTON "rightbutton"
-#define UPBUTTON "upbutton"
-#define DOWNBUTTON "downbutton"
-#define HOMEBUTTON "homebutton"
-#define MODEINDEX "modeindex"
+#define FORWARDBUTTON "WHEEL/Buttons/1"
+#define BACKWARDBUTTON "WHEEL/Buttons/1"
+#define RIGHTBUTTON "WHEEL/Buttons/1"
+#define ENTERBUTTON "WHEEL/Buttons/1"
+#define UPBUTTON "WHEEL/Buttons/1"
+#define DOWNBUTTON "WHEEL/Buttons/1"
+#define HOMEBUTTON "MPU/State/Mode"
+#define MODEINDEX "MPU/State/ModeIndex"
 #define GFORCEX "gforcex"
 #define GFORCEY "gforcey"
 #define GFORCEZ "gforcez"
@@ -66,5 +66,9 @@
 #define CRITICALFAULTS "CRITICAL FAULTS"
 #define NONCRITICALFAULTS "NON CRITICAL FAULTS"
 #define MICROPHONE "MICROPHONE"
+#define FASTESTTIME "FASTESTTIME"
+#define LASTTIME "LASTTIME"
+
+
 
 #endif // DATATYPENAMES_H
