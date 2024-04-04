@@ -17,6 +17,7 @@ Item {
     property int rowHeight: 30
 
     Keys.onPressed: event => {
+                        console.log(event.key, Qt.Key_Enter)
                         switch (event.key) {
                             case Qt.Key_Up:
                             debugTableController.upButtonPressed()
@@ -29,6 +30,9 @@ Item {
                             break
                             case Qt.Key_Down:
                             debugTableController.downButtonPressed()
+                            break
+                            case Qt.Key_Return:
+                            debugTableController.enterButtonPressed()
                             break
                             default:
                             break
@@ -146,5 +150,11 @@ Item {
                 }
             }
         }
+    }
+
+    DebugGraph {
+        visible: debugTableController.showGraph
+        chartTitle: debugTableController.selectedValues[debugTableController.selectedValuesIndex]["name"]
+        yLabel: debugTableController.selectedValues[debugTableController.selectedValuesIndex]["unit"]
     }
 }
