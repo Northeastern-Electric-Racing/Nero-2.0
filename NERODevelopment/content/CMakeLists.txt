@@ -7,6 +7,7 @@ qt6_add_qml_module(content
     URI "content"
     VERSION 1.0
     QML_FILES
+        SpeedMode.qml
         Spedometer.qml
         App.qml
         Thermometer.qml
