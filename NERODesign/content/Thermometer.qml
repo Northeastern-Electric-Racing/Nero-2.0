@@ -11,8 +11,8 @@ Item {
     property int minValue: -15
     property string color: regen ? "red" : value > maxValue - ((Math.abs(maxValue) + Math.abs(
                                                     minValue)) / 5) ? "red" : value > maxValue - (((Math.abs(maxValue) + Math.abs(minValue)) / 5) * 2) ? "orange" : value > maxValue - (((Math.abs(maxValue) + Math.abs(minValue)) / 5) * 3) ? "#FFF500" : value > maxValue - (((Math.abs(maxValue) + Math.abs(minValue)) / 5) * 4) ? "blue" : "purple"
-    height: 300
-    width: height
+    height: 500
+    width: 600
 
     Rectangle {
         visible: thermometer.regen

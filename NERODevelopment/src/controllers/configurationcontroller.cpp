@@ -1,7 +1,7 @@
 #include "configurationcontroller.h"
 
 ConfigurationController::ConfigurationController(Model *model, QObject *parent)
-    : ButtonController{model, parent} {}
+    : ButtonController{model, 3, parent} {}
 
 int ConfigurationController::selectedConfigurationIndex() const {
   return this->m_selectedConfigurationIndex;
@@ -17,10 +17,8 @@ bool ConfigurationController::isKeyboardSelected() const {
   return this->m_isKeyboardSelected;
 }
 void ConfigurationController::setIsKeyboardSelected(bool selected) {
-  if (this->m_isKeyboardSelected != selected) {
-    this->m_isKeyboardSelected = selected;
-    emit this->isKeyboardSelectedChanged();
-  }
+  this->m_isKeyboardSelected = selected;
+  emit this->isKeyboardSelectedChanged();
 }
 
 void ConfigurationController::setDriverName(QString driverName) {
@@ -56,11 +54,19 @@ void ConfigurationController::upButtonPressed() {
 }
 
 void ConfigurationController::enterButtonPressed() {
-  if (this->m_selectedConfigurationIndex == 3) {
-    this->m_model->sendMessage("driver", this->m_driverName);
-    this->m_model->sendMessage("system", this->m_systemName);
-    this->m_model->sendMessage("location", this->m_locationName);
-  } else {
-    this->setIsKeyboardSelected(!this->m_isKeyboardSelected);
+  if (!this->m_isKeyboardSelected) {
+    if (this->m_selectedConfigurationIndex == 3) {
+      this->m_model->sendMessage("driver", this->m_driverName);
+      this->m_model->sendMessage("system", this->m_systemName);
+      this->m_model->sendMessage("location", this->m_locationName);
+    } else {
+      this->setIsKeyboardSelected(true);
+    }
+  }
+}
+
+void ConfigurationController::homeButtonPressed() {
+  if (!this->m_isKeyboardSelected) {
+    this->m_model->currentPageIndex = -1;
   }
 }

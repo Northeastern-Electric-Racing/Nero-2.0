@@ -78,7 +78,14 @@ public:
   virtual std::optional<bool> getIsTalking() = 0;
   virtual std::optional<int> getNumberOfCriticalFaults() = 0;
   virtual std::optional<int> getNumberOfNonCriticalFaults() = 0;
+  virtual std::optional<int> getTime() = 0;
   virtual void sendMessage(QString topic, QString message) = 0;
+
+
+
+  int getFastestTime();
+  int getLastTime();
+  int getMaxSpeed();
 
   QList<DebugTableRowValue> getDebugTableValues();
   void updatePackTempData();
@@ -86,12 +93,11 @@ public:
   void removePinnedData(QString id);
   void updatePinnedData();
   void updateAverageCellTemps();
-  void updateStateOfChargeDeltas();
   std::optional<float> getById(QString id);
 
   int pageHeight;
   int pageWidth;
-  float prevSoc;
+  int currentPageIndex = -1;
 
 signals:
   void onCurrentDataChange();
@@ -106,6 +112,10 @@ protected:
   QList<FaultInstance> faultInstances;
   QList<float> averageCellTemps;
   QList<float> stateOfChargeDeltas;
+  int m_fastestTime;
+  int m_lastTime;
+  int m_maxSpeed;
+
 };
 
 #define ModelInterfaceId "com.ner.model"

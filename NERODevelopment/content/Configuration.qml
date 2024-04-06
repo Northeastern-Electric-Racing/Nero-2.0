@@ -26,6 +26,8 @@ Item {
                             case Qt.Key_Return:
                             configurationController.enterButtonPressed()
                             break
+                            default:
+                            break
                         }
                     }
 
@@ -37,8 +39,8 @@ Item {
     }
 
     onIsFocusedChanged: {
+        focus = !isFocused
         focus = isFocused
-        console.log("setting focus to", isFocused, focus)
     }
 
     ValueText {
@@ -58,11 +60,15 @@ Item {
         KeyboardInput {
             id: driverKeyboard
             label: "Enter Driver"
-            onAccepted: {
-                configuration.driverText = text
+            onAccepted: text => {
+                            configuration.driverText = text
+                            configuration.isFocused = false
+                            configuration.isFocused = true
+                            configurationController.setDriverName(text)
+                            configurationController.setIsKeyboardSelected(false)
+                        }
+            onRejected: {
                 configuration.isFocused = false
-                configuration.isFocused = true
-                configurationController.setDriverName(text)
                 configurationController.setIsKeyboardSelected(false)
             }
             selected: configuration.isKeyboardSelected
@@ -82,11 +88,15 @@ Item {
 
         KeyboardInput {
             label: "Enter Location"
-            onAccepted: {
-                configuration.locationText = text
+            onAccepted: text => {
+                            configuration.locationText = text
+                            configuration.isFocused = false
+                            configuration.isFocused = true
+                            configurationController.setLocationName(text)
+                            configurationController.setIsKeyboardSelected(false)
+                        }
+            onRejected: {
                 configuration.isFocused = false
-                configuration.isFocused = true
-                configurationController.setLocationName(text)
                 configurationController.setIsKeyboardSelected(false)
             }
             selected: configuration.isKeyboardSelected
@@ -105,11 +115,15 @@ Item {
         anchors.horizontalCenter: parent.horizontalCenter
         KeyboardInput {
             label: "Enter System"
-            onAccepted: {
-                configuration.systemText = text
+            onAccepted: text => {
+                            configuration.systemText = text
+                            configuration.isFocused = false
+                            configuration.isFocused = true
+                            configurationController.setSystemName(text)
+                            configurationController.setIsKeyboardSelected(false)
+                        }
+            onRejected: {
                 configuration.isFocused = false
-                configuration.isFocused = true
-                configurationController.setSystemName(text)
                 configurationController.setIsKeyboardSelected(false)
             }
             selected: configuration.isKeyboardSelected

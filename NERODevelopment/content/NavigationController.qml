@@ -4,7 +4,7 @@ import NERO
 Item {
     id: navigation
     anchors.fill: parent
-    focus: !isSelected
+    focus: !navigation.isSelected
     property int selectedPageIndex: navigationController.selectedPageIndex
     property bool isSelected: navigationController.isSelected
 
@@ -69,6 +69,11 @@ Item {
         HomeMenuItem {
             highlighted: selectedPageIndex === 4
             text: "Flappy Bird"
+        }
+
+        HomeMenuItem {
+            highlighted: selectedPageIndex === 5
+            text: "Exit"
         }
     }
 

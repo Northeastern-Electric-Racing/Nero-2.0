@@ -2,38 +2,52 @@ import QtQuick 2.15
 import QtQuick.Layouts
 
 Rectangle {
-    property int iconHeight: 90
-    property int iconWidth: 50
-    property int batteryValue: 50
-    property string title: "CHARGE STATE"
+    id: batteryComponent
+    property int batteryValue: 0
+    property string title: "MOTOR TEMP"
+    property int horizontalIconSpacing: width * 0.1
+    property int labelVerticalSpacing: height * 0.1
 
-    ColumnLayout {
-        id: batteryColumn
-        anchors.fill: parent
+    height: 100
+    width: 100
+    color: 'black'
 
-        RowLayout {
-            id: batteryRow
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-            Layout.alignment: Qt.AlignCenter
+    Rectangle {
+        id: batteryRow
+        anchors.top: parent.top
+        anchors.horizontalCenter: parent.horizontalCenter
+        height: batteryComponent.height * 0.8
+        color: 'transparent'
 
-            Battery {
-                id: battery
-                Layout.fillHeight: true
-                width: 55
-                value: batteryValue
-            }
+        Battery {
+            id: battery
+            value: batteryValue
+            height: parent.height
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            anchors.topMargin: batteryComponent.labelVerticalSpacing
+            anchors.right: parent.horizontalCenter
+            anchors.rightMargin: batteryComponent.horizontalIconSpacing
 
-            ValueText {
-                Layout.preferredWidth: 100
-                text: batteryValue
-            }
+            width: batteryComponent.width / 2 - batteryComponent.horizontalIconSpacing * 2
         }
 
-        LabelText {
-            text: title
-            Layout.fillHeight: true
-            Layout.alignment: Qt.AlignCenter
+        ValueText {
+            text: batteryValue
+            font.pixelSize: 0.6 * batteryComponent.height
+            anchors.left: battery.right
+            anchors.leftMargin: batteryComponent.horizontalIconSpacing
+            anchors.top: parent.top
+            anchors.topMargin: batteryComponent.labelVerticalSpacing
+            anchors.bottom: parent.bottom
         }
+    }
+
+    LabelText {
+        anchors.top: batteryRow.bottom
+        anchors.bottom: parent.bottom
+        anchors.horizontalCenter: parent.horizontalCenter
+        text: title
+        font.pixelSize: 0.15 * parent.width
     }
 }

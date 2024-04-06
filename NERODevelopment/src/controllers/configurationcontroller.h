@@ -30,6 +30,7 @@ public slots:
   void downButtonPressed() override;
   void upButtonPressed() override;
   void enterButtonPressed() override;
+  void homeButtonPressed() override;
 
 private:
   int m_selectedConfigurationIndex = 0;

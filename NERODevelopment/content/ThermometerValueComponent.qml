@@ -2,45 +2,47 @@ import QtQuick 2.15
 import QtQuick.Layouts
 
 Rectangle {
+    id: thermometerComponent
     property int thermometerValue: 0
     property string title: "MOTOR TEMP"
-    property int iconHeight: 90
-    property int iconWidth: 40
-    property int horizontalIconSpacing: -55
-    property int labelVerticalSpacing: 10
+    property int horizontalIconSpacing: width * 0.1
+    property int labelVerticalSpacing: height * 0.1
 
     color: 'black'
+    height: 100
+    width: 100
 
-    ColumnLayout {
-        id: motorTempColumn
-        anchors.fill: parent
-        Layout.alignment: Qt.AlignVCenter
+    Rectangle {
+        id: thermRow
+        anchors.top: parent.top
+        anchors.horizontalCenter: parent.horizontalCenter
+        height: thermometerComponent.height * 0.6
+        color: 'transparent'
+        anchors.topMargin: thermometerComponent.labelVerticalSpacing
 
-        RowLayout {
-            id: motorTempRow
-            Layout.fillHeight: true
-            Layout.fillWidth: true
-
-            Layout.alignment: Qt.AlignCenter
-            spacing: -15
-
-            Thermometer {
-                id: motorTempThermometer
-                value: thermometerValue
-                height: 100
-            }
-
-            ValueText {
-                text: thermometerValue
-                Layout.preferredWidth: 100
-            }
+        Thermometer {
+            id: thermometer
+            value: thermometerValue
+            height: parent.height
+            width: parent.height
+            anchors.top: parent.top
+            anchors.right: parent.horizontalCenter
         }
 
-        LabelText {
-            text: title
-            Layout.fillHeight: true
-            Layout.alignment: Qt.AlignCenter
+        ValueText {
+            text: thermometerValue
+            font.pixelSize: 0.5 * thermometerComponent.width
+            anchors.left: thermometer.right
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
         }
-        Spacer {}
+    }
+
+    LabelText {
+        anchors.top: thermRow.bottom
+        anchors.bottom: parent.bottom
+        anchors.horizontalCenter: parent.horizontalCenter
+        text: title
+        font.pixelSize: 0.15 * parent.width
     }
 }

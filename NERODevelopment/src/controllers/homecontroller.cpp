@@ -1,7 +1,7 @@
 #include "homecontroller.h"
 
 HomeController::HomeController(Model *model, QObject *parent)
-    : ButtonController{model, parent}, m_speed(0), m_status(false),
+    : ButtonController{model, 1, parent}, m_speed(0), m_status(false),
       m_direction(true), m_packTemp(0.0), m_motorTemp(0.0),
       m_stateOfCharge(0.0) {
   connect(m_model, &Model::onCurrentDataChange, this,
@@ -63,10 +63,12 @@ void HomeController::setStateOfCharge(float stateOfCharge) {
 }
 
 void HomeController::currentDataDidChange() {
-  setPackTemp(*m_model->getPackTemp());
-  setMotorTemp(*m_model->getMotorTemp());
-  setDirection(*m_model->getDir());
-  setStateOfCharge(*m_model->getStateOfCharge());
-  setSpeed(*m_model->getMph());
-  setStatus(*m_model->getStatus());
+  if (this->m_pageIndex == this->m_model->currentPageIndex) {
+    setPackTemp(*m_model->getPackTemp());
+    setMotorTemp(*m_model->getMotorTemp());
+    setDirection(*m_model->getDir());
+    setStateOfCharge(*m_model->getStateOfCharge());
+    setSpeed(*m_model->getMph());
+    setStatus(*m_model->getStatus());
+  }
 }

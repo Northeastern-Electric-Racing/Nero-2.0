@@ -39,7 +39,7 @@ Item {
         id: overlay
         anchors.fill: microphone
         source: microphone
-        color: "white"
+        color: "black"
         transform: rotation
         antialiasing: true
     }

@@ -11,7 +11,9 @@ Rectangle {
     property alias text: textInput.text // in/out
 
     signal accepted(string text)
+
     // onAccepted: print('onAccepted', text)
+    signal rejected
 
     // private
     width: 500
@@ -57,9 +59,11 @@ Rectangle {
 
         password: root.password
 
-        onAccepted: {
-            textInput.text = text
-            root.accepted(text) // emit
-        }
+        onAccepted: text => {
+                        textInput.text = text
+                        root.accepted(text) // emit
+                    }
+
+        onRejected: root.rejected()
     }
 }

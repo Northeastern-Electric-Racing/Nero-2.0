@@ -1,7 +1,7 @@
 #include "navigationcontroller.h"
 
 NavigationController::NavigationController(Model *model, QObject *parent)
-    : ButtonController{model, parent} {}
+    : ButtonController{model, -1, parent} {}
 
 int NavigationController::selectedPageIndex() const {
   return this->m_selectedPageIndex;
@@ -16,9 +16,9 @@ void NavigationController::setSelectedPageIndex(int index) {
 bool NavigationController::isSelected() const { return this->m_isSelected; }
 void NavigationController::setIsSelected(bool isSelected) {
   if (isSelected != this->m_isSelected) {
-    qDebug() << "Setting isSelected to " << isSelected << " from "
-             << this->m_isSelected
-             << " in NavigationController::setIsSelected(bool isSelected)";
+    // qDebug() << "Setting isSelected to " << isSelected << " from "
+    //          << this->m_isSelected
+    //          << " in NavigationController::setIsSelected(bool isSelected)";
     this->m_isSelected = isSelected;
     emit this->isSelectedChanged();
   }
@@ -36,6 +36,37 @@ void NavigationController::upButtonPressed() {
   }
 }
 
-void NavigationController::enterButtonPressed() { this->setIsSelected(true); }
+void NavigationController::enterButtonPressed() {
+  if (this->m_selectedPageIndex == this->m_numPages - 1) {
+    exit(0);
+  }
+  this->m_model->currentPageIndex = this->m_selectedPageIndex;
+  this->setIsSelected(true);
+}
 
-void NavigationController::homeButtonPressed() { this->setIsSelected(false); }
+void NavigationController::homeButtonPressed() {
+  this->m_model->currentPageIndex = -1;
+  this->setIsSelected(false);
+}
+
+void NavigationController::buttonUpdate() {
+  if (this->m_model->currentPageIndex == this->m_pageIndex) {
+    std::optional<float> modeIndex = this->m_model->getModeIndex();
+    if (modeIndex) {
+      this->setSelectedPageIndex(*modeIndex);
+    }
+
+    std::optional<bool> homeButtonPressed =
+        this->m_model->getHomeButtonPressed();
+
+    if (homeButtonPressed) {
+      if (homeButtonPressed == 0) {
+        this->enterButtonPressed();
+      } else {
+        this->homeButtonPressed();
+      }
+    } else {
+      this->homeButtonPressed();
+    }
+  }
+}

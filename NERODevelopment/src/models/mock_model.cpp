@@ -227,7 +227,7 @@ std::optional<float> MockModel::getBmsFault() { return bmsFaults; }
 
 std::optional<float> MockModel::getMpuFault() { return mpuFaults; }
 
-std::optional<float> MockModel::getModeIndex() { return modeIndex; }
+std::optional<float> MockModel::getModeIndex() { return std::nullopt; }
 
 std::optional<float> MockModel::getMaxCellVoltage() {
   return round(maxCellVoltage * 10) / 10;
@@ -347,13 +347,15 @@ std::optional<bool> MockModel::getBackwardButtonPressed() { return 0; }
 
 std::optional<bool> MockModel::getRightButtonPressed() { return 0; }
 
-std::optional<bool> MockModel::getHomeButtonPressed() { return 0; }
+std::optional<bool> MockModel::getHomeButtonPressed() { return std::nullopt; }
 
 std::optional<bool> MockModel::getIsTalking() { return true; }
 
 std::optional<int> MockModel::getNumberOfCriticalFaults() { return 1; }
 
 std::optional<int> MockModel::getNumberOfNonCriticalFaults() { return 1; }
+
+std::optional<int> MockModel::getTime() { return 1; }
 
 void MockModel::sendMessage(QString topic, QString message) {
   qDebug() << "Sending Message: " << topic << " " << message;

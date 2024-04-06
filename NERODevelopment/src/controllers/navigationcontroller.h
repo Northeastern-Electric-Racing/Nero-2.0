@@ -28,11 +28,12 @@ public slots:
   void downButtonPressed() override;
   void upButtonPressed() override;
   void homeButtonPressed() override;
+  void buttonUpdate() override;
 
 private:
   bool m_isSelected = false;
   int m_selectedPageIndex = 0;
-  int m_numPages = 5;
+  int m_numPages = 6;
 };
 
 #endif // NAVIGATIONCONTROLLER_H
