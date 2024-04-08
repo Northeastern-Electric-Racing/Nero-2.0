@@ -16,9 +16,6 @@ void NavigationController::setSelectedPageIndex(int index) {
 bool NavigationController::isSelected() const { return this->m_isSelected; }
 void NavigationController::setIsSelected(bool isSelected) {
   if (isSelected != this->m_isSelected) {
-    // qDebug() << "Setting isSelected to " << isSelected << " from "
-    //          << this->m_isSelected
-    //          << " in NavigationController::setIsSelected(bool isSelected)";
     this->m_isSelected = isSelected;
     emit this->isSelectedChanged();
   }

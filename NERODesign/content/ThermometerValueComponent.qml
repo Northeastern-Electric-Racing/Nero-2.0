@@ -7,8 +7,9 @@ Rectangle {
     property string title: "MOTOR TEMP"
     property int horizontalIconSpacing: width * 0.1
     property int labelVerticalSpacing: height * 0.1
+    property bool regen: false
 
-    color: 'black'
+    color: 'transparent'
     height: 100
     width: 100
 
@@ -27,6 +28,7 @@ Rectangle {
             width: parent.height
             anchors.top: parent.top
             anchors.right: parent.horizontalCenter
+            regen: thermometerComponent.regen
         }
 
         ValueText {
@@ -34,12 +36,14 @@ Rectangle {
             font.pixelSize: 0.5 * thermometerComponent.width
             anchors.left: thermometer.right
             anchors.top: parent.top
+            anchors.topMargin: thermometerComponent.labelVerticalSpacing
             anchors.bottom: parent.bottom
         }
     }
 
     LabelText {
         anchors.top: thermRow.bottom
+        anchors.topMargin: thermometerComponent.labelVerticalSpacing
         anchors.bottom: parent.bottom
         anchors.horizontalCenter: parent.horizontalCenter
         text: title

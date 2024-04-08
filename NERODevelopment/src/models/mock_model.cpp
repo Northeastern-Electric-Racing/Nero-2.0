@@ -357,6 +357,10 @@ std::optional<int> MockModel::getNumberOfNonCriticalFaults() { return 1; }
 
 std::optional<int> MockModel::getTime() { return 1; }
 
+std::optional<float> MockModel::getLowVoltageStateOfCharge() {
+  return lvBattery;
+}
+
 void MockModel::sendMessage(QString topic, QString message) {
   qDebug() << "Sending Message: " << topic << " " << message;
 }

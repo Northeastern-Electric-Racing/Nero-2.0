@@ -4,6 +4,7 @@
 #include "app_environment.h"
 #include "controllers/configurationcontroller.h"
 #include "controllers/debugtablecontroller.h"
+#include "controllers/efficiencycontroller.h"
 #include "controllers/flappybirdcontroller.h"
 #include "controllers/headercontroller.h"
 #include "controllers/homecontroller.h"
@@ -49,6 +50,7 @@ int main(int argc, char *argv[]) {
   FlappyBirdController flappyBirdController(model);
   ConfigurationController configurationController(model);
   KeyboardController keyboardController(model);
+  EfficiencyController efficencyController(model);
 
   const QUrl url(u"qrc:Main/main.qml"_qs);
   QObject::connect(
@@ -74,6 +76,8 @@ int main(int argc, char *argv[]) {
                                            &configurationController);
   engine.rootContext()->setContextProperty("keyboardViewController",
                                            &keyboardController);
+  engine.rootContext()->setContextProperty("efficiencyController",
+                                           &efficencyController);
 
   engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
 

@@ -1,21 +1,10 @@
 #include "efficiencycontroller.h"
 
 EfficiencyController::EfficiencyController(Model *model, QObject *parent)
-    : ButtonController{model, 8, parent}, m_currentMaxTorque(0),
-      m_currentRegenStrength(0), m_packSegments({0, 0, 0, 0}), m_maxCellTemp(0),
-      m_stateOfCharge(0), m_inverterTemp(0), m_motorTemp(0),
-      m_averageCellTemp(0), m_stateOfChargeDelta(0) {
+    : ButtonController{model, 2, parent} {
   connect(m_model, &Model::onCurrentDataChange, this,
           &EfficiencyController::currentDataDidChange);
 }
-
-// EfficiencyController::EfficiencyController(Model *model, QObject *parent)
-//     : ButtonController{model, parent}, m_speed(0), m_status(false),
-//       m_direction(true), m_packTemp(0.0), m_motorTemp(0.0),
-//       m_stateOfCharge(0.0) {
-//   connect(m_model, &Model::onCurrentDataChange, this,
-//           &HomeController::currentDataDidChange);
-// }
 
 int EfficiencyController::currentMaxTorque() const {
   return m_currentMaxTorque;
@@ -37,26 +26,6 @@ void EfficiencyController::setCurrentRegenStrength(int strength) {
   }
 }
 
-QVector<qreal> EfficiencyController::packSegments() const {
-  return m_packSegments;
-}
-void EfficiencyController::setPackSegments(QVector<qreal> packs) {
-  // TODO: chek if this comparison and assignment are wise
-  // most likely will always result in true and assignment
-  if (m_packSegments != packs) {
-    m_packSegments = packs;
-    emit packSegmentsChanged(packs);
-  }
-}
-
-qreal EfficiencyController::maxCellTemp() const { return m_maxCellTemp; }
-void EfficiencyController::setMaxCellTemp(qreal temp) {
-  if (temp != m_maxCellTemp) {
-    m_maxCellTemp = temp;
-    emit maxCellTempChanged(temp);
-  }
-}
-
 int EfficiencyController::stateOfCharge() const { return m_stateOfCharge; }
 void EfficiencyController::setStateOfCharge(int charge) {
   if (charge != m_stateOfCharge) {
@@ -65,50 +34,68 @@ void EfficiencyController::setStateOfCharge(int charge) {
   }
 }
 
-qreal EfficiencyController::inverterTemp() const { return m_inverterTemp; }
-void EfficiencyController::setInverterTemp(qreal temp) {
-  if (temp != m_inverterTemp) {
-    m_inverterTemp = temp;
-    emit inverterTempChanged(temp);
-  }
-}
-
-qreal EfficiencyController::motorTemp() const { return m_motorTemp; }
-void EfficiencyController::setMotorTemp(qreal temp) {
+int EfficiencyController::motorTemp() const { return m_motorTemp; }
+void EfficiencyController::setMotorTemp(int temp) {
   if (temp != m_motorTemp) {
     m_motorTemp = temp;
     emit motorTempChanged(temp);
   }
 }
 
-qreal EfficiencyController::averageCellTemp() const {
-  return m_averageCellTemp;
-}
-void EfficiencyController::setAverageCellTemp(qreal temp) {
-  if (temp != m_averageCellTemp) {
-    m_averageCellTemp = temp;
-    emit averageCellTempChanged(temp);
+int EfficiencyController::packTemp() const { return m_packTemp; }
+void EfficiencyController::setPackTemp(int temp) {
+  if (temp != m_packTemp) {
+    m_packTemp = temp;
+    emit packTempChanged(temp);
   }
 }
 
-int EfficiencyController::stateOfChargeDelta() const {
-  return m_stateOfChargeDelta;
+int EfficiencyController::lowVoltageStateOfCharge() const {
+  return m_lowVoltageStateOfCharge;
 }
-void EfficiencyController::setStateOfChargeDelta(int delta) {
-  if (delta != m_stateOfChargeDelta) {
-    m_stateOfChargeDelta = delta;
-    emit stateOfChargeDeltaChanged(delta);
+void EfficiencyController::setLowVoltageStateOfCharge(int charge) {
+  if (charge != m_lowVoltageStateOfCharge) {
+    m_lowVoltageStateOfCharge = charge;
+    emit lowVoltageStateOfChargeChanged(charge);
+  }
+}
+
+int EfficiencyController::speed() const { return m_speed; }
+void EfficiencyController::setSpeed(int speed) {
+  if (speed != m_speed) {
+    m_speed = speed;
+    emit speedChanged(speed);
   }
 }
 
 void EfficiencyController::currentDataDidChange() {
-  setCurrentMaxTorque(*m_model->getTorquePower());
-  setCurrentRegenStrength(*m_model->getRegenPower());
-  // setPackSegments(*m_model->getPackSegments());
-  setMaxCellTemp(*m_model->getMaxCellTemp());
-  setStateOfCharge(*m_model->getStateOfCharge());
-  setInverterTemp(*m_model->getInverterTemp());
-  setMotorTemp(*m_model->getMotorTemp());
-  setAverageCellTemp(*m_model->getAveCellTemp());
-  // setStateOfChargeDelta(*m_model->getStatus());
+  std::optional<float> torque = m_model->getTorquePower();
+  std::optional<float> regen = m_model->getRegenPower();
+  std::optional<float> soc = m_model->getStateOfCharge();
+  std::optional<float> motorTemp = m_model->getMotorTemp();
+  std::optional<float> packTemp = m_model->getPackTemp();
+  std::optional<float> lowVoltageSoc = m_model->getLowVoltageStateOfCharge();
+  std::optional<float> speed = m_model->getMph();
+
+  if (torque) {
+    setCurrentMaxTorque(*torque);
+  }
+  if (regen) {
+    setCurrentRegenStrength(*regen);
+  }
+  if (soc) {
+    setStateOfCharge(*soc);
+  }
+  if (motorTemp) {
+    setMotorTemp(*motorTemp);
+  }
+  if (packTemp) {
+    setPackTemp(*packTemp);
+  }
+  if (lowVoltageSoc) {
+    setLowVoltageStateOfCharge(*lowVoltageSoc);
+  }
+  if (speed) {
+    setSpeed(*speed);
+  }
 }

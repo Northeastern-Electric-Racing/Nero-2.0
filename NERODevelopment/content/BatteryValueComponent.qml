@@ -10,7 +10,7 @@ Rectangle {
 
     height: 100
     width: 100
-    color: 'black'
+    color: 'transparent'
 
     Rectangle {
         id: batteryRow
@@ -45,6 +45,7 @@ Rectangle {
 
     LabelText {
         anchors.top: batteryRow.bottom
+        anchors.topMargin: batteryComponent.labelVerticalSpacing
         anchors.bottom: parent.bottom
         anchors.horizontalCenter: parent.horizontalCenter
         text: title

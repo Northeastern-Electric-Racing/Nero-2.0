@@ -35,8 +35,6 @@ Item {
             ThermometerValueComponent {
                 Layout.row: 0
                 Layout.column: 0
-                iconWidth: pit.iconWidth
-                iconHeight: pit.iconHeight
                 horizontalIconSpacing: pit.horizontalIconSpacing
                 labelVerticalSpacing: pit.labelVerticalSpacing
                 thermometerValue: pit.packTempValue
@@ -65,8 +63,6 @@ Item {
                 Layout.row: 1
                 Layout.column: 0
                 Layout.alignment: Qt.AlignTop
-                iconWidth: pit.iconWidth
-                iconHeight: pit.iconHeight
                 horizontalIconSpacing: pit.horizontalIconSpacing
                 labelVerticalSpacing: pit.labelVerticalSpacing
                 batteryValue: pit.stateOfChargePercentage
@@ -75,8 +71,6 @@ Item {
             ThermometerValueComponent {
                 Layout.row: 1
                 Layout.column: 1
-                iconWidth: pit.iconWidth
-                iconHeight: pit.iconHeight
                 horizontalIconSpacing: pit.horizontalIconSpacing
                 labelVerticalSpacing: pit.labelVerticalSpacing
                 thermometerValue: pit.motorTempValue
