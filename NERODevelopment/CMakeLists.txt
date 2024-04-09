@@ -27,6 +27,7 @@ set(PROJECT_SOURCES
     src/controllers/flappybirdcontroller.h
     src/controllers/keyboardcontroller.h
     src/controllers/configurationcontroller.h
+    src/controllers/debuggraphcontroller.h
 
     src/models/mock_model.h
     src/models/model.h
@@ -51,6 +52,7 @@ set(PROJECT_SOURCES
     src/controllers/flappybirdcontroller.cpp
     src/controllers/keyboardcontroller.cpp
     src/controllers/configurationcontroller.cpp
+    src/controllers/debuggraphcontroller.cpp
 
     src/models/mock_model.cpp
     src/models/model.cpp

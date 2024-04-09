@@ -157,5 +157,6 @@ Item {
         visible: showGraph
         chartTitle: values[selectedValueIndex]["name"]
         yLabel: values[selectedValueIndex]["unit"]
+        anchors.fill: parent
     }
 }

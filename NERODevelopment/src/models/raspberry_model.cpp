@@ -364,8 +364,4 @@ int RaspberryModel::totalNumberOfOnesIn(float value) {
   return total;
 }
 
-std::optional<int> RaspberryModel::getTime() {
-  return this->getById(CURRENT_TIME);
-}
-
 #endif

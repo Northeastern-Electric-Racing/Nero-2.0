@@ -73,6 +73,8 @@ void DebugTableController::enterButtonPressed() {
 }
 
 void DebugTableController::downButtonPressed() {
+  if (this->m_showGraph)
+    return;
   qDebug() << "pressed down arrow" << m_selectedTopicsIndex << m_scrollingTopics
            << this->m_topics.length() << m_selectedValues.length()
            << m_selectedValuesIndex;
@@ -89,6 +91,8 @@ void DebugTableController::downButtonPressed() {
 }
 
 void DebugTableController::upButtonPressed() {
+  if (this->m_showGraph)
+    return;
   if (this->m_scrollingTopics) {
     if (this->m_selectedTopicsIndex != 0) {
       this->setSelectedTopicsIndex(this->m_selectedTopicsIndex - 1);
@@ -102,10 +106,14 @@ void DebugTableController::upButtonPressed() {
 }
 
 void DebugTableController::leftButtonPressed() {
+  if (this->m_showGraph)
+    return;
   this->setScrollingTopics(true);
 }
 
 void DebugTableController::rightButtonPressed() {
+  if (this->m_showGraph)
+    return;
   this->setScrollingTopics(false);
 }
 

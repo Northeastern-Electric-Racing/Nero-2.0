@@ -34,6 +34,7 @@ qt6_add_qml_module(content
         CriticalFaultIcon.qml
         NonCriticalWarning.qml
         MicrophoneComponent.qml
+        DebugGraph.qml
 
     RESOURCES
         fonts/fonts.txt
