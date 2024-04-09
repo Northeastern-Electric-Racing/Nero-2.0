@@ -81,8 +81,6 @@ public:
   virtual std::optional<int> getTime() = 0;
   virtual void sendMessage(QString topic, QString message) = 0;
 
-
-
   int getFastestTime();
   int getLastTime();
   int getMaxSpeed();
@@ -116,7 +114,6 @@ protected:
   int m_fastestTime;
   int m_lastTime;
   int m_maxSpeed;
-
 };
 
 #define ModelInterfaceId "com.ner.model"

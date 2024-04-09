@@ -355,6 +355,7 @@ std::optional<int> MockModel::getNumberOfCriticalFaults() { return 1; }
 
 std::optional<int> MockModel::getNumberOfNonCriticalFaults() { return 1; }
 
+std::optional<int> MockModel::getTime() { return 0; }
 void MockModel::sendMessage(QString topic, QString message) {
   qDebug() << "Sending Message: " << topic << " " << message;
 }

@@ -13,6 +13,7 @@ Item {
     property int selectedTopicIndex: debugTableController.selectedTopicsIndex
     property int selectedValueIndex: debugTableController.selectedValuesIndex
     property bool scrollingTopics: debugTableController.scrollingTopics
+    property bool showGraph: debugTableController.showGraph
 
     property int rowHeight: 30
 
@@ -153,8 +154,8 @@ Item {
     }
 
     DebugGraph {
-        visible: debugTableController.showGraph
-        chartTitle: debugTableController.selectedValues[debugTableController.selectedValuesIndex]["name"]
-        yLabel: debugTableController.selectedValues[debugTableController.selectedValuesIndex]["unit"]
+        visible: showGraph
+        chartTitle: values[selectedValueIndex]["name"]
+        yLabel: values[selectedValueIndex]["unit"]
     }
 }
