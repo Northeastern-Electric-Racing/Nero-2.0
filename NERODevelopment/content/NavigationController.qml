@@ -77,7 +77,7 @@ Item {
         }
 
         HomeMenuItem {
-            highlighted: selectedPageIndex === 5
+            highlighted: selectedPageIndex === 6
             text: "Exit"
         }
     }
