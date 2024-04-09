@@ -21,11 +21,11 @@ Item {
     property var dummyData: debugGraphController.graphData
 
     onDummyDataChanged: {
-        series.clear();
+        series.clear()
     }
 
     onVisibleChanged: {
-        debugGraphController.setTitle(chartTitle);
+        debugGraphController.setTitle(chartTitle)
     }
     ChartView {
         anchors.fill: parent
@@ -42,7 +42,7 @@ Item {
             color: "white"
             labelsColor: "white"
             titleText: "<font color='white'>" + chartItem.xLabel + "</font>"
-            tickCount: chartItem.maxX + 1
+            tickCount: chartItem.maxX - chartItem.minX + 1
             labelFormat: "%d"
         }
 
@@ -54,7 +54,7 @@ Item {
             labelsColor: "white"
             color: "white"
             titleText: "<font color='white'>" + chartItem.yLabel + "</font>"
-            tickCount: chartItem.maxY / 5 + 1
+            tickCount: chartItem.maxY - chartItem.minY + 1
             labelFormat: "%d"
         }
 
@@ -71,7 +71,7 @@ Item {
         model: dummyData
         delegate: Item {
             Component.onCompleted: {
-                series.append(modelData.x, modelData.y);
+                series.append(modelData.x, modelData.y)
             }
         }
     }

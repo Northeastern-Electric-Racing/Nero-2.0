@@ -68,8 +68,6 @@ void DebugGraphController::update() {
   }
   this->m_last_refresh = QDateTime::currentMSecsSinceEpoch();
 
-  qDebug() << "updating";
-
   this->m_model->updatePinnedData();
 
   QList<QJsonObject> allPoints;
@@ -89,8 +87,8 @@ void DebugGraphController::update() {
     }
   }
 
-  int maxY = 0;
-  int minY = 0;
+  int maxY = -99999;
+  int minY = 99999;
 
   for (const QJsonObject &point : allPoints) {
     int yValue = point["y"].toInt();
