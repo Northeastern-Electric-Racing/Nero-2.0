@@ -76,6 +76,7 @@ void DebugGraphController::update() {
   int globalIndex = this->m_num_points - 1;
 
   const QList<float> &dataList = pinnedData[this->m_title].data;
+  qDebug() << dataList.length();
   for (int i = 0; i < std::min(this->m_num_points, (int)dataList.length());
        ++i) {
     float value = dataList.at(i);
@@ -100,8 +101,8 @@ void DebugGraphController::update() {
     }
   }
 
-  setMaxY(maxY * 1.1);
-  setMinY(minY);
+  setMaxY(maxY + 5);
+  setMinY(minY - 5);
 
   setGraphData(allPoints);
 }

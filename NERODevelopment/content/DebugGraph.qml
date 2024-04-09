@@ -11,7 +11,7 @@ Item {
     property string chartTitle: ""
 
     property int minX: 0
-    property int maxX: 20
+    property int maxX: debugGraphController.graphData.length
     property string xLabel: "TIME (MS)"
 
     property int minY: debugGraphController.minY
@@ -21,6 +21,7 @@ Item {
     property var dummyData: debugGraphController.graphData
 
     onDummyDataChanged: {
+        console.log(maxX)
         series.clear()
     }
 
@@ -54,7 +55,7 @@ Item {
             labelsColor: "white"
             color: "white"
             titleText: "<font color='white'>" + chartItem.yLabel + "</font>"
-            tickCount: chartItem.maxY - chartItem.minY + 1
+            tickCount: 5
             labelFormat: "%d"
         }
 
