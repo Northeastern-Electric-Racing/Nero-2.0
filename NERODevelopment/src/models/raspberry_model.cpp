@@ -364,4 +364,8 @@ int RaspberryModel::totalNumberOfOnesIn(float value) {
   return total;
 }
 
+std::optional<float> RaspberryModel::getLowVoltageStateOfCharge() {
+  return this->getById(LOWVOLTAGESOC);
+}
+
 #endif

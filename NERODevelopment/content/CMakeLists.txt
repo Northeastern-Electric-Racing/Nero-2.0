@@ -35,6 +35,9 @@ qt6_add_qml_module(content
         NonCriticalWarning.qml
         MicrophoneComponent.qml
         DebugGraph.qml
+        EfficiencyScreen.qml
+        TorqueValueComponent.qml
+        TorqueAdj.qml
 
     RESOURCES
         fonts/fonts.txt
