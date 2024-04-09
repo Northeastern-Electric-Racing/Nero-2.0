@@ -6,8 +6,6 @@ DebugGraphController::DebugGraphController(Model *model, QObject *parent)
           &DebugGraphController::update);
 }
 
-DebugGraphController::~DebugGraphController() { m_dataUpdateTimer.stop(); }
-
 QList<QJsonObject> DebugGraphController::graphData() const {
   return this->m_graphData;
 }
@@ -56,12 +54,13 @@ void DebugGraphController::setValues(QString title, QString unit) {
 }
 
 void DebugGraphController::update() {
-  this->m_model->updatePinnedData();
 
   if (QDateTime::currentMSecsSinceEpoch() - this->m_last_refresh <
       this->m_refresh_rate) {
     return;
   }
+
+  this->m_model->updatePinnedData();
 
   this->m_last_refresh = QDateTime::currentMSecsSinceEpoch();
 

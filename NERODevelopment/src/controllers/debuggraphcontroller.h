@@ -18,7 +18,6 @@ class DebugGraphController : public ButtonController {
 
 public:
   explicit DebugGraphController(Model *model, QObject *parent = nullptr);
-  ~DebugGraphController();
   QList<QJsonObject> graphData() const;
   QString unit() const;
   QString title() const;
@@ -48,7 +47,6 @@ private:
   QString m_title = "AVERAGE CELL TEMPERATURE";
   int m_maxY = 60;
   int m_minY = 0;
-  QTimer m_dataUpdateTimer;
   qint64 m_last_refresh = 0;
   int m_refresh_rate = 500;
   int m_num_points = 21;
