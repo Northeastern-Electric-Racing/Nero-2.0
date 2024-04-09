@@ -30,8 +30,13 @@ void DebugGraphController::setGraphData(QList<QJsonObject> json) {
 void DebugGraphController::setUnit(QString unit) { this->m_unit = unit; }
 
 void DebugGraphController::setTitle(QString title) {
+  if (m_title == title) {
+    this->m_model->removePinnedData(title);
+    return;
+  }
   this->m_title = title;
   this->m_model->addPinnedData(title);
+  emit this->titleChanged();
 }
 
 void DebugGraphController::setMaxY(int max) {
@@ -54,8 +59,6 @@ void DebugGraphController::setValues(QString title, QString unit) {
 }
 
 void DebugGraphController::update() {
-
-  qDebug() << this->m_pageIndex << this->m_model->currentPageIndex;
   if (this->m_model->currentPageIndex != this->m_pageIndex)
     return;
 
@@ -72,21 +75,18 @@ void DebugGraphController::update() {
   QList<QJsonObject> allPoints;
   QMap<QString, DebugPlotValue> pinnedData = this->m_model->getPinnedData();
 
-  int globalIndex = 0;
+  int globalIndex = this->m_num_points - 1;
 
-  auto iter = pinnedData.constBegin();
-  while (iter != pinnedData.constEnd()) {
-    const QList<float> &dataList = iter.value().data;
-    for (int i = 0; i < this->m_num_points; ++i) {
-      float value = dataList.at(i);
-      if (!std::isnan(value) && std::isfinite(value)) {
-        QJsonObject point;
-        point["x"] = globalIndex++;
-        point["y"] = value;
-        allPoints.append(point);
-      }
+  const QList<float> &dataList = pinnedData[this->m_title].data;
+  for (int i = 0; i < std::min(this->m_num_points, (int)dataList.length());
+       ++i) {
+    float value = dataList.at(i);
+    if (!std::isnan(value) && std::isfinite(value)) {
+      QJsonObject point;
+      point["x"] = globalIndex--;
+      point["y"] = value;
+      allPoints.append(point);
     }
-    ++iter;
   }
 
   int maxY = 0;
@@ -104,8 +104,6 @@ void DebugGraphController::update() {
 
   setMaxY(maxY * 1.1);
   setMinY(minY);
-
-  std::reverse(allPoints.begin(), allPoints.end());
 
   setGraphData(allPoints);
 }

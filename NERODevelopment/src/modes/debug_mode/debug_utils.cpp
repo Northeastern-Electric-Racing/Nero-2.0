@@ -7,6 +7,8 @@ DebugPlotValue::DebugPlotValue(const QString &name, const QString &unit,
   // Constructor implementation
 }
 
+DebugPlotValue::DebugPlotValue() : data(), name(""), unit("") {}
+
 FaultInstance::FaultInstance(int fault_decimal, int max_cell_temp,
                              int max_cell_voltage, int average_cell_temp,
                              int average_cell_voltage, int min_cell_temp,

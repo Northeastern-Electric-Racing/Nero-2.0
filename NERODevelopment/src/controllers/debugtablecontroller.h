@@ -3,7 +3,6 @@
 
 #include "QtCore/qvariant.h"
 #include "buttoncontroller.h"
-#include "src/controllers/navigationcontroller.h"
 #include "src/models/model.h"
 #include <QObject>
 
