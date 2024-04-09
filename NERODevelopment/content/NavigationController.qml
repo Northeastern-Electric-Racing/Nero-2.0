@@ -58,16 +58,21 @@ Item {
 
         HomeMenuItem {
             highlighted: selectedPageIndex === 2
-            text: "Debug"
+            text: "Efficiency"
         }
 
         HomeMenuItem {
             highlighted: selectedPageIndex === 3
-            text: "Configuration"
+            text: "Debug"
         }
 
         HomeMenuItem {
             highlighted: selectedPageIndex === 4
+            text: "Configuration"
+        }
+
+        HomeMenuItem {
+            highlighted: selectedPageIndex === 5
             text: "Flappy Bird"
         }
 
@@ -87,18 +92,23 @@ Item {
         focus: selectedPageIndex === 1 && isSelected
     }
 
-    DebugTable {
+    EfficiencyScreen {
         visible: selectedPageIndex === 2 && isSelected
         focus: selectedPageIndex === 2 && isSelected
     }
 
-    Configuration {
+    DebugTable {
         visible: selectedPageIndex === 3 && isSelected
-        isFocused: selectedPageIndex === 3 && isSelected
+        focus: selectedPageIndex === 3 && isSelected
+    }
+
+    Configuration {
+        visible: selectedPageIndex === 4 && isSelected
+        isFocused: selectedPageIndex === 4 && isSelected
     }
 
     FlappyBird {
-        visible: selectedPageIndex === 4 && isSelected
-        isFocused: selectedPageIndex === 4 && isSelected
+        visible: selectedPageIndex === 5 && isSelected
+        isFocused: selectedPageIndex === 5 && isSelected
     }
 }

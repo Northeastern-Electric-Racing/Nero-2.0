@@ -10,7 +10,7 @@ Item {
     property int maxValue: 65
     property int minValue: -15
     property string color: regen ? "red" : value > maxValue - ((Math.abs(maxValue) + Math.abs(
-                                                    minValue)) / 5) ? "red" : value > maxValue - (((Math.abs(maxValue) + Math.abs(minValue)) / 5) * 2) ? "orange" : value > maxValue - (((Math.abs(maxValue) + Math.abs(minValue)) / 5) * 3) ? "#FFF500" : value > maxValue - (((Math.abs(maxValue) + Math.abs(minValue)) / 5) * 4) ? "blue" : "purple"
+                                                                    minValue)) / 5) ? "red" : value > maxValue - (((Math.abs(maxValue) + Math.abs(minValue)) / 5) * 2) ? "orange" : value > maxValue - (((Math.abs(maxValue) + Math.abs(minValue)) / 5) * 3) ? "#FFF500" : value > maxValue - (((Math.abs(maxValue) + Math.abs(minValue)) / 5) * 4) ? "blue" : "purple"
     height: 500
     width: 600
 
@@ -22,7 +22,7 @@ Item {
         color: "white"
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
-        anchors.verticalCenterOffset: - parent.height / 20
+        anchors.verticalCenterOffset: -parent.height / 20
         radius: 20
         rotation: -45
         anchors.centerIn: parent
@@ -81,7 +81,7 @@ Item {
         visible: thermometer.regen
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
-        anchors.verticalCenterOffset: - parent.height / 20
+        anchors.verticalCenterOffset: -parent.height / 20
         dimension: parent.height / 2.25
     }
 }
