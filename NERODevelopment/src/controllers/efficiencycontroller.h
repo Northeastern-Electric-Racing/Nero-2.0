@@ -56,13 +56,13 @@ public slots:
   void currentDataDidChange();
 
 private:
-  int m_currentMaxTorque;        // torque percentage [0,100]
-  int m_currentRegenStrength;    // regen strength [1,3]
-  int m_stateOfCharge;           // charge percentage [0,100]
-  int m_motorTemp;               // Celsius
-  int m_packTemp;                // Celsius
-  int m_lowVoltageStateOfCharge; // charge percentage [0,100]
-  int m_speed;                   // speed in mph
+  int m_currentMaxTorque = 0;        // torque percentage [0,100]
+  int m_currentRegenStrength = 0;    // regen strength [1,3]
+  int m_stateOfCharge = 0;           // charge percentage [0,100]
+  int m_motorTemp = 0;               // Celsius
+  int m_packTemp = 0;                // Celsius
+  int m_lowVoltageStateOfCharge = 0; // charge percentage [0,100]
+  int m_speed = 0;                   // speed in mph
 };
 
 #endif // EFFICIENCYCONTROLLER_H

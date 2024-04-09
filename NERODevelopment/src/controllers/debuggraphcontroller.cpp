@@ -1,7 +1,7 @@
 #include "debuggraphcontroller.h"
 
 DebugGraphController::DebugGraphController(Model *model, QObject *parent)
-    : ButtonController(model, 7, parent) {
+    : ButtonController(model, 3, parent) {
   connect(model, &Model::onCurrentDataChange, this,
           &DebugGraphController::update);
 }
@@ -55,14 +55,19 @@ void DebugGraphController::setValues(QString title, QString unit) {
 
 void DebugGraphController::update() {
 
+  qDebug() << this->m_pageIndex << this->m_model->currentPageIndex;
+  if (this->m_model->currentPageIndex != this->m_pageIndex)
+    return;
+
   if (QDateTime::currentMSecsSinceEpoch() - this->m_last_refresh <
       this->m_refresh_rate) {
     return;
   }
+  this->m_last_refresh = QDateTime::currentMSecsSinceEpoch();
+
+  qDebug() << "updating";
 
   this->m_model->updatePinnedData();
-
-  this->m_last_refresh = QDateTime::currentMSecsSinceEpoch();
 
   QList<QJsonObject> allPoints;
   QMap<QString, DebugPlotValue> pinnedData = this->m_model->getPinnedData();
