@@ -5,8 +5,7 @@ import NERO
 
 Item {
     id: debugTable
-    width: 800
-    height: 480
+    anchors.fill: parent
 
     property variant topics: debugTableController.topics
     property variant values: debugTableController.selectedValues
