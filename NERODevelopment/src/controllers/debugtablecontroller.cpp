@@ -75,9 +75,6 @@ void DebugTableController::enterButtonPressed() {
 void DebugTableController::downButtonPressed() {
   if (this->m_showGraph)
     return;
-  qDebug() << "pressed down arrow" << m_selectedTopicsIndex << m_scrollingTopics
-           << this->m_topics.length() << m_selectedValues.length()
-           << m_selectedValuesIndex;
   if (this->m_scrollingTopics) {
     if (this->m_selectedTopicsIndex < this->m_topics.length() - 1) {
       this->setSelectedTopicsIndex(this->m_selectedTopicsIndex + 1);
@@ -126,9 +123,7 @@ void DebugTableController::update() {
     return;
   }
   this->m_last_refresh = QDateTime::currentMSecsSinceEpoch();
-  // qDebug() << "updating debug table"
-  //          << this->m_last_refresh + this->m_refresh_rate
-  //          << QDateTime::currentMSecsSinceEpoch();
+
   QSet<QString> topicsSet = {};
   QList<QString> topics = {};
   QList<DebugTableRowValue> rows = this->m_model->getDebugTableValues();

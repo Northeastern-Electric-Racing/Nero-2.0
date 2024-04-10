@@ -18,7 +18,6 @@ Item {
     property int rowHeight: 30
 
     Keys.onPressed: event => {
-                        console.log(event.key, Qt.Key_Enter)
                         switch (event.key) {
                             case Qt.Key_Up:
                             debugTableController.upButtonPressed()
@@ -144,8 +143,8 @@ Item {
                     }
                 }
 
-                property var columnWidths: [valuesTableView.width * 3
-                    / 4, valuesTableView.width / 8, valuesTableView.width / 8]
+                property var columnWidths: [valuesTableView.width
+                    / 2, valuesTableView.width / 4, valuesTableView.width / 4]
                 columnWidthProvider: function (column) {
                     return columnWidths[column]
                 }
@@ -155,7 +154,7 @@ Item {
 
     DebugGraph {
         visible: showGraph
-        chartTitle: values[selectedValueIndex]["name"]
+        chartTitle: values[selectedValueIndex]["id"]
         yLabel: values[selectedValueIndex]["unit"]
         anchors.fill: parent
     }
