@@ -27,6 +27,7 @@ set(PROJECT_SOURCES
     src/controllers/flappybirdcontroller.h
     src/controllers/keyboardcontroller.h
     src/controllers/configurationcontroller.h
+    src/controllers/debuggraphcontroller.h
 
     src/models/mock_model.h
     src/models/model.h
@@ -51,6 +52,7 @@ set(PROJECT_SOURCES
     src/controllers/flappybirdcontroller.cpp
     src/controllers/keyboardcontroller.cpp
     src/controllers/configurationcontroller.cpp
+    src/controllers/debuggraphcontroller.cpp
 
     src/models/mock_model.cpp
     src/models/model.cpp
@@ -68,7 +70,7 @@ set(PROJECT_SOURCES
     src/controllers/speedcontroller.cpp
 )
 
-find_package(Qt6 REQUIRED COMPONENTS Core Gui Qml Quick Network Mqtt Protobuf)
+find_package(Qt6 REQUIRED COMPONENTS Core Gui Qml Quick Network Mqtt Protobuf Widgets)
 
 qt_add_executable(NEROApp ${PROJECT_SOURCES})
 
@@ -95,6 +97,7 @@ target_link_libraries(NEROApp PRIVATE
     Qt6::Mqtt
     Qt6::Quick
     Qt6::Protobuf
+    Qt6::Widgets
 )
 
 if (BUILD_QDS_COMPONENTS)

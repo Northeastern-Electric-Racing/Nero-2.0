@@ -18,6 +18,8 @@ class DebugTableController : public ButtonController {
                  setSelectedValuesIndex NOTIFY selectedValuesIndexChanged FINAL)
   Q_PROPERTY(bool scrollingTopics READ scrollingTopics WRITE setScrollingTopics
                  NOTIFY scrollingTopicsChanged FINAL)
+  Q_PROPERTY(bool showGraph READ showGraph WRITE setShowGraph NOTIFY
+                 showGraphChanged FINAL)
 
 public:
   explicit DebugTableController(Model *model, QObject *parent = nullptr);
@@ -26,6 +28,7 @@ public:
   int selectedValuesIndex() const;
   int selectedTopicsIndex() const;
   bool scrollingTopics() const;
+  bool showGraph() const;
 
 signals:
   void topicsChanged();
@@ -33,6 +36,8 @@ signals:
   void selectedValuesIndexChanged();
   void selectedTopicsIndexChanged();
   void scrollingTopicsChanged();
+  void valueSelected(QString, QString);
+  void showGraphChanged();
 
 public slots:
   void setTopics(QList<QJsonObject>);
@@ -40,6 +45,7 @@ public slots:
   void setSelectedValuesIndex(int);
   void setSelectedTopicsIndex(int);
   void setScrollingTopics(bool);
+  void setShowGraph(bool);
 
   void update();
 
@@ -54,6 +60,7 @@ private:
   QList<QJsonObject> m_selectedValues;
   int m_selectedTopicsIndex = 0;
   bool m_scrollingTopics = true;
+  bool m_showGraph = false;
   int m_selectedValuesIndex = 0;
   int m_refresh_rate = 500;
   qint64 m_last_refresh = 0;

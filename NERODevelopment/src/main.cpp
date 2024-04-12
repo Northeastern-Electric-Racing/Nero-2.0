@@ -3,6 +3,7 @@
 
 #include "app_environment.h"
 #include "controllers/configurationcontroller.h"
+#include "controllers/debuggraphcontroller.h"
 #include "controllers/debugtablecontroller.h"
 #include "controllers/efficiencycontroller.h"
 #include "controllers/flappybirdcontroller.h"
@@ -15,7 +16,7 @@
 #include "import_qml_plugins.h"
 #include "src/models/mock_model.h"
 #include "src/models/raspberry_model.h"
-#include <QGuiApplication>
+#include <QApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include <QThread>
@@ -23,7 +24,7 @@
 int main(int argc, char *argv[]) {
   set_qt_environment();
 
-  QGuiApplication app(argc, argv);
+  QApplication app(argc, argv);
 
   QQmlApplicationEngine engine;
 
@@ -45,11 +46,12 @@ int main(int argc, char *argv[]) {
   HomeController homeController(model);
   HeaderController headerController(model);
   OffViewController offViewController(model);
-  DebugTableController tableController(model);
   NavigationController navigationController(model);
+  DebugTableController tableController(model);
   FlappyBirdController flappyBirdController(model);
   ConfigurationController configurationController(model);
   KeyboardController keyboardController(model);
+  DebugGraphController graphController(model);
   EfficiencyController efficencyController(model);
 
   const QUrl url(u"qrc:Main/main.qml"_qs);
@@ -76,6 +78,8 @@ int main(int argc, char *argv[]) {
                                            &configurationController);
   engine.rootContext()->setContextProperty("keyboardViewController",
                                            &keyboardController);
+  engine.rootContext()->setContextProperty("debugGraphController",
+                                           &graphController);
   engine.rootContext()->setContextProperty("efficiencyController",
                                            &efficencyController);
 

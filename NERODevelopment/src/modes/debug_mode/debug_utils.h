@@ -65,6 +65,8 @@ struct DebugPlotValue {
 public:
   DebugPlotValue(const QString &name, const QString &unit,
                  const QList<float> &data);
+
+  DebugPlotValue();
   QList<float> data;
   QString name;
   QString unit;

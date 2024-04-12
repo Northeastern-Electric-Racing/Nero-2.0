@@ -5,14 +5,14 @@ import NERO
 
 Item {
     id: debugTable
-    width: 800
-    height: 480
+    anchors.fill: parent
 
     property variant topics: debugTableController.topics
     property variant values: debugTableController.selectedValues
     property int selectedTopicIndex: debugTableController.selectedTopicsIndex
     property int selectedValueIndex: debugTableController.selectedValuesIndex
     property bool scrollingTopics: debugTableController.scrollingTopics
+    property bool showGraph: debugTableController.showGraph
 
     property int rowHeight: 30
 
@@ -29,6 +29,9 @@ Item {
                             break
                             case Qt.Key_Down:
                             debugTableController.downButtonPressed()
+                            break
+                            case Qt.Key_Return:
+                            debugTableController.enterButtonPressed()
                             break
                             default:
                             break
@@ -139,12 +142,19 @@ Item {
                     }
                 }
 
-                property var columnWidths: [valuesTableView.width * 3
-                    / 4, valuesTableView.width / 8, valuesTableView.width / 8]
+                property var columnWidths: [valuesTableView.width
+                    / 2, valuesTableView.width / 4, valuesTableView.width / 4]
                 columnWidthProvider: function (column) {
                     return columnWidths[column]
                 }
             }
         }
+    }
+
+    DebugGraph {
+        visible: showGraph
+        chartTitle: values[selectedValueIndex]["id"]
+        yLabel: values[selectedValueIndex]["unit"]
+        anchors.fill: parent
     }
 }

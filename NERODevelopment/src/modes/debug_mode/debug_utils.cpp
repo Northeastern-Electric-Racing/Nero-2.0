@@ -7,6 +7,8 @@ DebugPlotValue::DebugPlotValue(const QString &name, const QString &unit,
   // Constructor implementation
 }
 
+DebugPlotValue::DebugPlotValue() : data(), name(""), unit("") {}
+
 FaultInstance::FaultInstance(int fault_decimal, int max_cell_temp,
                              int max_cell_voltage, int average_cell_temp,
                              int average_cell_voltage, int min_cell_temp,
@@ -43,9 +45,24 @@ QString DebugTableRowValue::unit() const { return m_unit; }
 
 QJsonObject DebugTableRowValue::json() const {
   QJsonObject object;
-  object["name"] = this->m_name;
+  /* Get the name after the first two / */
+  QList<QString> split = this->m_name.split("/");
+  QString name = "";
+  if (split.length() > 2) {
+    for (int i = 2; i < split.length(); i++) {
+      name += split[i];
+      if (i != split.length() - 1) {
+        name += "/";
+      }
+    }
+  } else {
+    name = this->m_name;
+  }
+
+  object["name"] = name;
   object["value"] = this->m_value;
   object["unit"] = this->m_unit;
+  object["id"] = this->m_name;
 
   return object;
 }

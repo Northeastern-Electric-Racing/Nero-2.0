@@ -26,6 +26,8 @@ bool DebugTableController::scrollingTopics() const {
   return this->m_scrollingTopics;
 }
 
+bool DebugTableController::showGraph() const { return this->m_showGraph; }
+
 void DebugTableController::setScrollingTopics(bool scrollingTopics) {
   if (this->m_scrollingTopics != scrollingTopics) {
     this->m_scrollingTopics = scrollingTopics;
@@ -57,14 +59,22 @@ void DebugTableController::setTopics(QList<QJsonObject> topics) {
   emit this->topicsChanged();
 }
 
+void DebugTableController::setShowGraph(bool show) {
+  if (this->m_showGraph != show) {
+    this->m_showGraph = show;
+    emit this->showGraphChanged();
+  }
+}
+
 void DebugTableController::enterButtonPressed() {
-  // TODO SELECT CURRENTLY SELECTED VALUE
+  if (!this->scrollingTopics()) {
+    setShowGraph(!this->m_showGraph);
+  }
 }
 
 void DebugTableController::downButtonPressed() {
-  qDebug() << "pressed down arrow" << m_selectedTopicsIndex << m_scrollingTopics
-           << this->m_topics.length() << m_selectedValues.length()
-           << m_selectedValuesIndex;
+  if (this->m_showGraph)
+    return;
   if (this->m_scrollingTopics) {
     if (this->m_selectedTopicsIndex < this->m_topics.length() - 1) {
       this->setSelectedTopicsIndex(this->m_selectedTopicsIndex + 1);
@@ -78,6 +88,8 @@ void DebugTableController::downButtonPressed() {
 }
 
 void DebugTableController::upButtonPressed() {
+  if (this->m_showGraph)
+    return;
   if (this->m_scrollingTopics) {
     if (this->m_selectedTopicsIndex != 0) {
       this->setSelectedTopicsIndex(this->m_selectedTopicsIndex - 1);
@@ -91,10 +103,14 @@ void DebugTableController::upButtonPressed() {
 }
 
 void DebugTableController::leftButtonPressed() {
+  if (this->m_showGraph)
+    return;
   this->setScrollingTopics(true);
 }
 
 void DebugTableController::rightButtonPressed() {
+  if (this->m_showGraph)
+    return;
   this->setScrollingTopics(false);
 }
 
@@ -107,9 +123,7 @@ void DebugTableController::update() {
     return;
   }
   this->m_last_refresh = QDateTime::currentMSecsSinceEpoch();
-  qDebug() << "updating debug table"
-           << this->m_last_refresh + this->m_refresh_rate
-           << QDateTime::currentMSecsSinceEpoch();
+
   QSet<QString> topicsSet = {};
   QList<QString> topics = {};
   QList<DebugTableRowValue> rows = this->m_model->getDebugTableValues();

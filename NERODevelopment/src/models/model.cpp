@@ -13,13 +13,13 @@ void Model::updatePackTempData() {
 }
 
 void Model::addPinnedData(QString id) {
-  DataInfo value = this->currentData[id];
   bool success;
-  float parsedValue = value.values[0].toFloat(&success);
+  DataInfo dataInfo = this->currentData.value(id, DataInfo());
+  float value = dataInfo.values[0].toFloat(&success);
 
-  if (success) {
+  if (success && value != -9999) {
     pinnedData.insert(
-        id, DebugPlotValue(value.topic, value.unit, QList<float>(parsedValue)));
+        id, DebugPlotValue(dataInfo.topic, dataInfo.unit, QList<float>(value)));
   }
 }
 
@@ -32,6 +32,10 @@ void Model::updatePinnedData() {
     }
     pinnedData.find(id).value().data.prepend(*this->getById(id));
   }
+}
+
+QMap<QString, DebugPlotValue> Model::getPinnedData() {
+  return this->pinnedData;
 }
 
 void Model::updateAverageCellTemps() {
