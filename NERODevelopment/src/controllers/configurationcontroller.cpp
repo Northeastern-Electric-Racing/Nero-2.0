@@ -1,7 +1,7 @@
 #include "configurationcontroller.h"
 
 ConfigurationController::ConfigurationController(Model *model, QObject *parent)
-    : ButtonController{model, 4, parent} {}
+    : ButtonController{model, 5, parent} {}
 
 int ConfigurationController::selectedConfigurationIndex() const {
   return this->m_selectedConfigurationIndex;

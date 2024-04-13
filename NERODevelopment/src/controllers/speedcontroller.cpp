@@ -1,7 +1,7 @@
 #include "speedcontroller.h"
 
 SpeedController::SpeedController(Model *model, QObject *parent)
-    : ButtonController{model, 10, parent}, m_tractionControl(), m_packTemp(),
+    : ButtonController{model, 2, parent}, m_tractionControl(), m_packTemp(),
       m_motorTemp(), m_chargeState(), m_currentTime(), m_fastestTime(),
       m_lastTime(), m_currentSpeed(), m_maxSpeed(), m_current(), m_maxCurrent(),
       m_currentDischarge(), m_maxCurrentDischarge() {
@@ -33,7 +33,7 @@ float SpeedController::chargeState() const { return m_chargeState; }
 void SpeedController::setChargeState(float chargeState) {
   if (chargeState != m_chargeState) {
     m_chargeState = chargeState;
-    emit packTempChanged(chargeState);
+    emit chargeStateChanged(chargeState);
   }
 }
 int SpeedController::currentTime() const { return m_currentTime; }

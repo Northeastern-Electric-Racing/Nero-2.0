@@ -1,7 +1,7 @@
 #include "efficiencycontroller.h"
 
 EfficiencyController::EfficiencyController(Model *model, QObject *parent)
-    : ButtonController{model, 2, parent} {
+    : ButtonController{model, 3, parent} {
   connect(m_model, &Model::onCurrentDataChange, this,
           &EfficiencyController::currentDataDidChange);
 }

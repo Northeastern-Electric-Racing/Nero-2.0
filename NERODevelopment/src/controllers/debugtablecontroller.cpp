@@ -1,7 +1,7 @@
 #include "debugtablecontroller.h"
 
 DebugTableController::DebugTableController(Model *model, QObject *parent)
-    : ButtonController{model, 3, parent} {
+    : ButtonController{model, 4, parent} {
   connect(model, &Model::onCurrentDataChange, this,
           &DebugTableController::update);
 }

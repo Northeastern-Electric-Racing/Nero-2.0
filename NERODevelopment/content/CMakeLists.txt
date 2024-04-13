@@ -38,6 +38,11 @@ qt6_add_qml_module(content
         EfficiencyScreen.qml
         TorqueValueComponent.qml
         TorqueAdj.qml
+        SpeedMode.qml
+        TimerDisplay.qml
+        MaxSpeedComparator.qml
+        MaxDrawGraph.qml
+        RunInfo.qml
 
     RESOURCES
         fonts/fonts.txt
