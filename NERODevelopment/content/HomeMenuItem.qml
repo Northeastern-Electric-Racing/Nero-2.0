@@ -13,6 +13,7 @@ Rectangle {
     LabelText {
         id: label
         padding: 8
+        font.pixelSize: 16
         text: parent.text
     }
 }
