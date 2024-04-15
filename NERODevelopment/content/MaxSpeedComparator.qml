@@ -2,7 +2,7 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 
 Rectangle {
-    id: spedometer
+    id: maxSpeedComparator
     property int dimension: 100
     property int maxSpeed: 100
     property int lowestSpeed: 0
@@ -17,7 +17,7 @@ Rectangle {
 
     Text {
         id: maxSpeed
-        text: spedometer.maxSpeed
+        text: maxSpeedComparator.maxSpeed
         font.pixelSize: parent.width * 0.2
         color: "white"
         x: -(width + dimension / 20)
@@ -25,23 +25,24 @@ Rectangle {
 
     Text {
         id: lowestSpeed
-        text: spedometer.lowestSpeed
+        text: maxSpeedComparator.lowestSpeed
         font.pixelSize: parent.width * 0.2
         color: "white"
         x: -(width + dimension / 20)
-        y: spedometer.height - height
+        y: maxSpeedComparator.height - height
     }
 
     Rectangle {
         id: bar
-        y: (spedometer.height - height) - 5
+        y: (maxSpeedComparator.height - height) - 5
         anchors.horizontalCenter: parent.horizontalCenter
         width: topSpeedBar.width
-        height: spedometer.height * percentageHeight - 10
+        height: maxSpeedComparator.height * percentageHeight - 10
         radius: 5
         property real percentageHeight: parseFloat(
-                                            (spedometer.currentSpeed / spedometer.maxSpeed).toFixed(
-                                                2)) // Calculate percentage of height relative to spedometer
+                                            (maxSpeedComparator.currentSpeed
+                                             / maxSpeedComparator.maxSpeed).toFixed(
+                                                2)) // Calculate percentage of height relative to maxSpeedComparator
 
         gradient: Gradient {
             GradientStop {
@@ -68,11 +69,12 @@ Rectangle {
         text: qsTr("TOP SPEED")
         color: "white"
         x: -(width + dimension / 20)
-        y: spedometer.height * (1 - spedometer.previousTopSpeed / spedometer.maxSpeed)
+        y: maxSpeedComparator.height * (1 - maxSpeedComparator.previousTopSpeed
+                                        / maxSpeedComparator.maxSpeed)
         font.pixelSize: parent.width * 0.2
         Text {
             id: topSpeedNumber
-            text: spedometer.previousTopSpeed + qsTr("MPH")
+            text: maxSpeedComparator.previousTopSpeed + qsTr("MPH")
             color: "white"
             y: -height
             font.pixelSize: parent.width * 0.2
@@ -81,17 +83,22 @@ Rectangle {
         }
     }
 
+    onCurrentSpeedChanged: {
+        console.log("Speededd", maxSpeedComparator.currentSpeed)
+    }
+
     Rectangle {
         id: topSpeedBar
-        y: spedometer.height * (1 - spedometer.previousTopSpeed / spedometer.maxSpeed)
-        width: spedometer.width - dimension / 6
+        y: maxSpeedComparator.height * (1 - maxSpeedComparator.previousTopSpeed
+                                        / maxSpeedComparator.maxSpeed)
+        width: maxSpeedComparator.width - dimension / 6
         anchors.horizontalCenter: parent.horizontalCenter
         height: 2
         color: "white"
     }
 
     function setCurrentSpeed(speed) {
-        spedometer.currentSpeed = speed
+        maxSpeedComparator.currentSpeed = speed
     }
 
     function setTopSpeed(top_speed) {
