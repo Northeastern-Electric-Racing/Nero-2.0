@@ -1,7 +1,25 @@
 #include "model.h"
 #include "QVector"
 
-Model::Model() : pageHeight(480), pageWidth(800) {}
+Model::Model() : pageHeight(480), pageWidth(800) {
+  connect(this, &Model::onCurrentDataChange, this, &Model::updateStoredValues);
+}
+
+void Model::updateStoredValues() {
+  std::optional<float> mph = this->getMph();
+  if (mph) {
+    if (mph.value() > m_maxSpeed) {
+      m_maxSpeed = mph.value();
+    }
+  }
+  std::optional<int> time = this->getTime();
+  if (time) {
+    m_lastTime = time.value();
+    if (time.value() < m_fastestTime || m_fastestTime == 0) {
+      m_fastestTime = time.value();
+    }
+  }
+}
 
 void Model::updatePackTempData() {
   if (packTempData.size() >= 600) {

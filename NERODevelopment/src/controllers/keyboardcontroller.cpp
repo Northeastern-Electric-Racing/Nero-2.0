@@ -1,7 +1,7 @@
 #include "keyboardcontroller.h"
 
 KeyboardController::KeyboardController(Model *model, QObject *parent)
-    : ButtonController{model, 4, parent} {}
+    : ButtonController{model, 5, parent} {}
 
 int KeyboardController::selectedIndex() const { return this->m_selectedIndex; }
 

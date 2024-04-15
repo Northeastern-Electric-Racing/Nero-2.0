@@ -12,6 +12,7 @@
 #include "controllers/keyboardcontroller.h"
 #include "controllers/navigationcontroller.h"
 #include "controllers/offviewcontroller.h"
+#include "controllers/speedcontroller.h"
 #include "import_qml_components_plugins.h"
 #include "import_qml_plugins.h"
 #include "src/models/mock_model.h"
@@ -53,6 +54,7 @@ int main(int argc, char *argv[]) {
   KeyboardController keyboardController(model);
   DebugGraphController graphController(model);
   EfficiencyController efficencyController(model);
+  SpeedController speedController(model);
 
   const QUrl url(u"qrc:Main/main.qml"_qs);
   QObject::connect(
@@ -82,6 +84,7 @@ int main(int argc, char *argv[]) {
                                            &graphController);
   engine.rootContext()->setContextProperty("efficiencyController",
                                            &efficencyController);
+  engine.rootContext()->setContextProperty("speedController", &speedController);
 
   engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
 
