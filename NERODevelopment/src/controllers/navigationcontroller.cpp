@@ -49,6 +49,7 @@ void NavigationController::homeButtonPressed() {
 void NavigationController::buttonUpdate() {
   if (this->m_model->currentPageIndex == this->m_pageIndex) {
     std::optional<float> modeIndex = this->m_model->getModeIndex();
+    qDebug() << "Mode Index: " << modeIndex.value();
     if (modeIndex) {
       this->setSelectedPageIndex(*modeIndex);
     }
