@@ -72,7 +72,6 @@ void MqttClient::receiveMessage(const QByteArray &message,
 
   if (success) {
     emit emitServerData(serverData, topic.name());
-    qDebug() << topic.name() << serverData.values();
   } else {
     qDebug() << "Failed to decode server message";
   }

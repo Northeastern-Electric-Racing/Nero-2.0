@@ -292,8 +292,9 @@ std::optional<bool> RaspberryModel::getDownButtonPressed() {
   std::optional<float> value = this->getById(DOWNBUTTON);
   if (value) {
     std::string binary = std::bitset<8>(static_cast<int>(*value)).to_string();
-    qDebug() << "binary: " << binary[0] << binary[1] << binary[2] << binary[3]
-             << binary[4] << binary[5] << binary[6] << binary[7];
+    // qDebug() << "binary: " << binary[0] << binary[1] << binary[2] <<
+    // binary[3]
+    //          << binary[4] << binary[5] << binary[6] << binary[7];
     return binary[6] == '1';
   }
   return std::nullopt;
