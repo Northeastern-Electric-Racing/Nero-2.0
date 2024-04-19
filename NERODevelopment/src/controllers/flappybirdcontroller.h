@@ -15,8 +15,9 @@ public:
 
 public slots:
   void setDidJump(bool);
-
   void enterButtonPressed() override;
+  void saveScore(int);
+
 signals:
   void didJumpChanged();
 

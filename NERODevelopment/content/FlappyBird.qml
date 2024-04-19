@@ -27,9 +27,9 @@ Item {
     property int birdHitBox: 30
     property int pipeWidth: 25
     property int pipeHeight: 300
-    property int minPipeOpening: 110
-    property int birdDrop: 4
-    property int speed: 3
+    property int pipeOpeningheight: 150
+    property double birdDrop: 1
+    property double speed: 3
     property int frameRate: 25
     property bool didJump: flappyBirdController.didJump
 
@@ -42,11 +42,12 @@ Item {
                 flappyBird.xWall1 = 450
                 flappyBird.xWall2 = 650
                 flappyBird.xWall3 = 800
-                flappyBird.speed = 10
+                flappyBird.speed = 3
                 return
             }
 
             jumpAnimation.running = true
+            birdDrop = 1
         }
     }
 
@@ -60,6 +61,7 @@ Item {
         repeat: true
         onTriggered: {
             if (flappyBird.gameOver) {
+                flappyBirdController.saveScore(flappyBird.score)
                 return
             }
 
@@ -70,37 +72,28 @@ Item {
             if (xWall1 < 0) {
                 xWall1 = parent.width
                 wall1.y = -100 - Math.round(Math.random() * 100)
-                const secondVal = 250 + Math.round(Math.random() * 100)
-                if (secondVal - (wall1.y + pipeHeight) < minPipeOpening) {
-                    wall11.y = wall1.y + pipeHeight + minPipeOpening
-                } else {
-                    wall11.y = secondVal
-                }
+                wall11.y = wall1.y + pipeHeight + pipeOpeningheight
+                flappyBird.score += 1
             }
             if (xWall2 < 0) {
                 xWall2 = parent.width
                 wall21.y = -100 - Math.round(Math.random() * 100)
-                const secondVal = 250 + Math.round(Math.random() * 100)
-                if (secondVal - (wall21.y + pipeHeight) < minPipeOpening) {
-                    wall22.y = wall21.y + pipeHeight + minPipeOpening
-                } else {
-                    wall22.y = secondVal
-                }
+                wall22.y = wall21.y + pipeHeight + pipeOpeningheight
+                flappyBird.score += 1
             }
             if (xWall3 < 0) {
                 xWall3 = parent.width
                 wall31.y = -100 - Math.round(Math.random() * 100)
-                const secondVal = 250 + Math.round(Math.random() * 100)
-                if (secondVal - (wall31.y + pipeHeight) < minPipeOpening) {
-                    wall32.y = wall31.y + pipeHeight + minPipeOpening
-                } else {
-                    wall32.y = secondVal
-                }
-                flappyBird.speed += 1
+                wall32.y = wall31.y + pipeHeight + pipeOpeningheight
+                flappyBird.speed += 0.2
                 flappyBird.score += 1
             }
 
-            yBallValue += flappyBird.birdDrop
+            if (!jumpAnimation.running) {
+                yBallValue += flappyBird.birdDrop
+                flappyBird.birdDrop += 0.2
+            }
+
             xWall1 -= flappyBird.speed
             xWall2 -= flappyBird.speed
             xWall3 -= flappyBird.speed
@@ -116,7 +109,7 @@ Item {
 
     Image {
         id: wall1
-        x: xWall1 + 20
+        x: xWall1
         y: -150
         source: pipeSrc
         rotation: 180
@@ -130,7 +123,7 @@ Item {
     }
     Image {
         id: wall21
-        x: xWall2 + 20
+        x: xWall2
         y: -175
         source: pipeSrc
         rotation: 180
@@ -145,7 +138,7 @@ Item {
 
     Image {
         id: wall31
-        x: xWall3 + 20
+        x: xWall3
         y: -140
         source: pipeSrc
         rotation: 180
@@ -164,7 +157,7 @@ Item {
 
     NumberAnimation on yBallValue {
         id: jumpAnimation
-        to: yBallValue - 80
+        to: yBallValue - 40
         duration: 100
     }
 

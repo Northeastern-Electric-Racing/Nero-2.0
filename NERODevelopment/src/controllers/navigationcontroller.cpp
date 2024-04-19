@@ -34,8 +34,8 @@ void NavigationController::upButtonPressed() {
 }
 
 void NavigationController::enterButtonPressed() {
-  if (this->m_selectedPageIndex == this->m_numPages - 1) {
-    exit(0);
+  if (this->m_model->currentPageIndex == this->m_numPages) {
+    this->exitProgram();
   }
   this->m_model->currentPageIndex = this->m_selectedPageIndex;
   this->setIsSelected(true);
@@ -45,6 +45,8 @@ void NavigationController::homeButtonPressed() {
   this->m_model->currentPageIndex = -1;
   this->setIsSelected(false);
 }
+
+void NavigationController::exitProgram() { exit(0); }
 
 void NavigationController::buttonUpdate() {
   if (this->m_model->currentPageIndex == this->m_pageIndex) {
