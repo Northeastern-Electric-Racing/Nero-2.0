@@ -256,7 +256,7 @@ std::optional<bool> RaspberryModel::getBackwardButtonPressed() {
   std::optional<float> value = this->getById(BACKWARDBUTTON);
   if (value) {
     std::string binary = std::bitset<8>(static_cast<int>(*value)).to_string();
-    return binary[2] == '1';
+    return binary[5] == '1';
   }
   return std::nullopt;
 }
@@ -265,7 +265,7 @@ std::optional<bool> RaspberryModel::getRightButtonPressed() {
   std::optional<float> value = this->getById(RIGHTBUTTON);
   if (value) {
     std::string binary = std::bitset<8>(static_cast<int>(*value)).to_string();
-    return binary[5] == '1';
+    return binary[3] == '1';
   }
   return std::nullopt;
 }
@@ -274,7 +274,7 @@ std::optional<bool> RaspberryModel::getEnterButtonPressed() {
   std::optional<float> value = this->getById(ENTERBUTTON);
   if (value) {
     std::string binary = std::bitset<8>(static_cast<int>(*value)).to_string();
-    return binary[4] == '1';
+    return binary[1] == '1';
   }
   return std::nullopt;
 }
@@ -283,7 +283,7 @@ std::optional<bool> RaspberryModel::getUpButtonPressed() {
   std::optional<float> value = this->getById(UPBUTTON);
   if (value) {
     std::string binary = std::bitset<8>(static_cast<int>(*value)).to_string();
-    return binary[3] == '1';
+    return binary[4] == '1';
   }
   return std::nullopt;
 }
