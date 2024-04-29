@@ -11,8 +11,8 @@
 
 class OffViewController : public ButtonController {
   Q_OBJECT
-  Q_PROPERTY(QMap<QString, AttributeStatus> attributeStatus READ attributeStatus
-                 NOTIFY attributeStatusChanged)
+  Q_PROPERTY(QVariantMap attributeStatus READ attributeStatus NOTIFY
+                 attributeStatusChanged)
   Q_PROPERTY(float packTemp READ packTemp WRITE setPackTemp NOTIFY
                  packTempChanged FINAL)
   Q_PROPERTY(float motorTemp READ motorTemp WRITE setMotorTemp NOTIFY
@@ -34,7 +34,7 @@ class OffViewController : public ButtonController {
 public:
   explicit OffViewController(Model *model, QObject *parent = nullptr);
 
-  QMap<QString, AttributeStatus> attributeStatus() const;
+  QVariantMap attributeStatus() const;
   float packTemp() const;
   float motorTemp() const;
   float stateOfCharge() const;
@@ -45,8 +45,7 @@ public:
   QString selectedUrl() const;
 
 signals:
-  void
-  attributeStatusChanged(const QMap<QString, AttributeStatus> &attributeStatus);
+  void attributeStatusChanged(const QVariantMap &attributeStatus);
   void packTempChanged(float);
   void motorTempChanged(float);
   void stateOfChargeChanged(float);
@@ -57,7 +56,7 @@ signals:
   void selectedUrlChanged();
 
 public slots:
-  void setAttributeStatus(const QString &name, AttributeStatus status);
+  void setAttributeStatus(const QString &name, int status);
   void setPackTemp(float);
   void setMotorTemp(float);
   void setStateOfCharge(float);
@@ -76,7 +75,7 @@ public slots:
 
 private:
   AttributeStatus mapFloatToAttributeStatus(float);
-  QMap<QString, AttributeStatus> m_attributeStatus;
+  QVariantMap m_attributeStatus;
   float m_packTemp;
   float m_motorTemp;
   float m_stateOfCharge;
