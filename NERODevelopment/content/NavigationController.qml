@@ -95,7 +95,7 @@ Item {
         }
     }
 
-    OffScreen {
+    OffScreen2 {
         visible: selectedPageIndex === offPageIndex && isSelected
         focus: selectedPageIndex === offPageIndex && isSelected
     }
