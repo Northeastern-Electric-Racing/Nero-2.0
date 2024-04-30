@@ -480,14 +480,6 @@ Rectangle {
         }
     }
 
-    DescriptionModal {
-        id: descriptionModal
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.verticalCenterOffset: -parent.height / 7
-        dimension: 300
-    }
-
     HeaderView {
         id: headerView
         height: 100
@@ -506,5 +498,13 @@ Rectangle {
         anchors.leftMargin: parent.width / 30
         source: "qrc:/content/images/neroLogo.png"
         fillMode: Image.PreserveAspectFit
+    }
+
+    DescriptionModal {
+        id: descriptionModal
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.verticalCenterOffset: parent.height / 20
+        dimension: 300
     }
 }

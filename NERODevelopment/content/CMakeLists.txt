@@ -56,4 +56,13 @@ qt6_add_qml_module(content
         images/flappy-bird.png
         images/microphone.svg
         images/neroLogo.png
+        images/bots.jpg
+        images/bspd.jpg
+        images/cockpitBrb.jpg
+        images/glv.jpg
+        images/imd.jpg
+        images/inertia.jpg
+        images/interlocks.jpg
+        images/sidebrb.jpg
+        images/tsms.jpg
 )
