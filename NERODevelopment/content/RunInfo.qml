@@ -18,6 +18,16 @@ Item {
     property bool isTop: false
     property bool isBottom: false
 
+    function formatTime(milliseconds) {
+            var minutes = Math.floor(milliseconds / 60000);
+            var seconds = Math.floor((milliseconds % 60000) / 1000);
+            var ms = milliseconds % 1000;
+
+            return (minutes < 10 ? "0" : "") + minutes + ":"
+                 + (seconds < 10 ? "0" : "") + seconds + ":"
+                 + (ms < 100 ? (ms < 10 ? "00" : "0") : "") + ms;
+        }
+
     Rectangle {
         id: bottomRect
         visible: runInfo.isTop
@@ -66,7 +76,7 @@ Item {
 
             ValueText {
                 id: valueText
-                text: value
+                text: formatTime(value)
                 font.pixelSize: rightBlackRectangle.height * 0.8
                 x: rightBlackRectangle.width * 0.5 - rightBlackRectangle.height / 4.5
                 y: rightBlackRectangle.height * -0.1

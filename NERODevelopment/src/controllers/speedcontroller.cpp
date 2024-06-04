@@ -129,20 +129,6 @@ void SpeedController::update() {
   setPackTemp(*m_model->getPackTemp());
   setMotorTemp(*m_model->getMotorTemp());
   setChargeState(*m_model->getStateOfCharge());
-
-  if (auto newTime = m_model->getTime(); newTime.has_value()) {
-    setCurrentTime(newTime.value());
-  }
-
-  if (auto newFastestTime = m_model->getFastestTime();
-      newFastestTime.has_value()) {
-    setFastestTime(newFastestTime.value());
-  }
-
-  if (auto newLastTime = m_model->getLastTime(); newLastTime.has_value()) {
-    setLastTime(newLastTime.value());
-  }
-
   setCurrentSpeed(*m_model->getMph());
   setMaxSpeed(m_model->getMaxSpeed());
   setCurrent(*m_model->getCurrent());

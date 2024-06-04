@@ -29,7 +29,7 @@ Item {
             widthValue: timerDisplay.width
             heightValue: timerDisplay.height / 3.3
             label: "CURRENT RUN"
-            value: "0"
+            value: "2000"
             radius: Math.min(timerDisplay.height / 7, timerDisplay.width / 20)
             isTop: true
         }

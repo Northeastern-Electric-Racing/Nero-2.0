@@ -1,5 +1,6 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+
 import NERO
 
 Item {
@@ -17,12 +18,11 @@ Item {
     property int currentSpeed: speedController.currentSpeed
     property int currentDraw: speedController.current
 
-    focus: true
     Keys.onPressed: {
-        if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
-            speedController.handleEnterPress();
+            if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
+                speedController.handleEnterPress();
+            }
         }
-    }
 
     HeaderView {
         id: headerView
