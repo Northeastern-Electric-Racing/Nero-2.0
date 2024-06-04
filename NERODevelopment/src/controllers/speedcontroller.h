@@ -3,47 +3,36 @@
 
 #include "../models/model.h"
 #include "buttoncontroller.h"
+#include <QElapsedTimer>
 #include <QObject>
 
 class SpeedController : public ButtonController {
   Q_OBJECT
   Q_PROPERTY(bool tractionControl READ tractionControl WRITE setTractionControl
-                 NOTIFY tractionControlChanged);
-
+                 NOTIFY tractionControlChanged)
   Q_PROPERTY(
-      float packTemp READ packTemp WRITE setPackTemp NOTIFY packTempChanged);
-
-  Q_PROPERTY(float motorTemp READ motorTemp WRITE setMotorTemp NOTIFY
-                 motorTempChanged);
-
+      float packTemp READ packTemp WRITE setPackTemp NOTIFY packTempChanged)
+  Q_PROPERTY(
+      float motorTemp READ motorTemp WRITE setMotorTemp NOTIFY motorTempChanged)
   Q_PROPERTY(float chargeState READ chargeState WRITE setChargeState NOTIFY
-                 chargeStateChanged);
-
+                 chargeStateChanged)
   Q_PROPERTY(int currentTime READ currentTime WRITE setCurrentTime NOTIFY
-                 currentTimeChanged);
-
+                 currentTimeChanged)
   Q_PROPERTY(int fastestTime READ fastestTime WRITE setFastestTime NOTIFY
-                 fastestTimeChanged);
-
+                 fastestTimeChanged)
   Q_PROPERTY(
-      int lastTime READ lastTime WRITE setLastTime NOTIFY lastTimeChanged);
-
+      int lastTime READ lastTime WRITE setLastTime NOTIFY lastTimeChanged)
   Q_PROPERTY(int currentSpeed READ currentSpeed WRITE setCurrentSpeed NOTIFY
-                 currentSpeedChanged);
-
+                 currentSpeedChanged)
   Q_PROPERTY(
-      int maxSpeed READ maxSpeed WRITE setMaxSpeed NOTIFY maxSpeedChanged);
-
-  Q_PROPERTY(float current READ current WRITE setCurrent NOTIFY currentChanged);
-
+      int maxSpeed READ maxSpeed WRITE setMaxSpeed NOTIFY maxSpeedChanged)
+  Q_PROPERTY(float current READ current WRITE setCurrent NOTIFY currentChanged)
   Q_PROPERTY(float maxCurrent READ maxCurrent WRITE setMaxCurrent NOTIFY
-                 maxCurrentChanged);
-
+                 maxCurrentChanged)
   Q_PROPERTY(float currentDischarge READ currentDischarge WRITE
-                 setCurrentDischarge NOTIFY currentDischargeChanged);
-
+                 setCurrentDischarge NOTIFY currentDischargeChanged)
   Q_PROPERTY(float maxCurrentDischarge READ maxCurrentDischarge WRITE
-                 setMaxCurrentDischarge NOTIFY maxCurrentDischargeChanged);
+                 setMaxCurrentDischarge NOTIFY maxCurrentDischargeChanged)
 
 public:
   explicit SpeedController(Model *model, QObject *parent = nullptr);
@@ -92,6 +81,8 @@ public slots:
   void setCurrentDischarge(float);
   void setMaxCurrentDischarge(float);
 
+  void handleEnterPress();
+
   void update();
 
 private:
@@ -108,6 +99,9 @@ private:
   float m_maxCurrent = 0;
   float m_currentDischarge = 0;
   float m_maxCurrentDischarge = 0;
+
+  bool m_timerRunning = false;
+  QElapsedTimer m_timer;
 };
 
 #endif // SPEEDCONTROLLER_H

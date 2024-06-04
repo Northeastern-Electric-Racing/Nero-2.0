@@ -1,10 +1,8 @@
 #include "speedcontroller.h"
+#include <QElapsedTimer>
 
 SpeedController::SpeedController(Model *model, QObject *parent)
-    : ButtonController{model, 2, parent}, m_tractionControl(), m_packTemp(),
-      m_motorTemp(), m_chargeState(), m_currentTime(), m_fastestTime(),
-      m_lastTime(), m_currentSpeed(), m_maxSpeed(), m_current(), m_maxCurrent(),
-      m_currentDischarge(), m_maxCurrentDischarge() {
+    : ButtonController{model, 2, parent} {
   connect(m_model, &Model::onCurrentDataChange, this, &SpeedController::update);
 }
 
@@ -99,6 +97,27 @@ void SpeedController::setMaxCurrentDischarge(float maxCurrentDischarge) {
   if (maxCurrentDischarge != m_maxCurrentDischarge) {
     m_maxCurrentDischarge = maxCurrentDischarge;
     emit maxCurrentDischargeChanged(maxCurrentDischarge);
+  }
+}
+
+void SpeedController::handleEnterPress() {
+  if (m_timerRunning) {
+    m_timerRunning = false;
+    int runTime = static_cast<int>(m_timer.elapsed());
+    qDebug() << "grah grah";
+    qDebug() << runTime;
+    qDebug() << lastTime();
+    qDebug() << fastestTime();
+    setCurrentTime(runTime);
+    setLastTime(runTime);
+
+    if (runTime < fastestTime() || fastestTime() == 1) {
+      setFastestTime(runTime);
+    }
+
+  } else {
+    m_timerRunning = true;
+    m_timer.start();
   }
 }
 
