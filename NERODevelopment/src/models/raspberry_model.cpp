@@ -345,14 +345,6 @@ std::optional<int> RaspberryModel::getNumberOfNonCriticalFaults() {
   return std::nullopt;
 }
 
-std::optional<int> RaspberryModel::getTime() {
-  std::optional<float> value = this->getById(CURRENT_TIME);
-  if (value) {
-    return std::round(*value);
-  }
-  return std::nullopt;
-}
-
 int RaspberryModel::totalNumberOfOnesIn(float value) {
   int total = 0;
   std::string binary = std::bitset<8>(static_cast<int>(value)).to_string();

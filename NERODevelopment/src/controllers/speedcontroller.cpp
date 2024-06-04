@@ -102,22 +102,25 @@ void SpeedController::setMaxCurrentDischarge(float maxCurrentDischarge) {
 
 void SpeedController::handleEnterPress() {
   if (m_timerRunning) {
+    // Stop the timer
     m_timerRunning = false;
     int runTime = static_cast<int>(m_timer.elapsed());
-    qDebug() << "grah grah";
-    qDebug() << runTime;
-    qDebug() << lastTime();
-    qDebug() << fastestTime();
+    qDebug() << "Timer stopped. Run time:" << runTime
+             << " Last time:" << m_lastTime
+             << " Fastest time:" << m_fastestTime;
     setCurrentTime(runTime);
     setLastTime(runTime);
 
-    if (runTime < fastestTime() || fastestTime() == 1) {
+    if (runTime < fastestTime() || fastestTime() == 0) {
       setFastestTime(runTime);
+      qDebug() << "fastest time overridden" << runTime;
     }
 
   } else {
+    // Start the timer
     m_timerRunning = true;
     m_timer.start();
+    qDebug() << "Timer started.";
   }
 }
 
@@ -126,9 +129,20 @@ void SpeedController::update() {
   setPackTemp(*m_model->getPackTemp());
   setMotorTemp(*m_model->getMotorTemp());
   setChargeState(*m_model->getStateOfCharge());
-  setCurrentTime(*m_model->getTime());
-  setFastestTime(m_model->getFastestTime());
-  setLastTime(m_model->getLastTime());
+
+  if (auto newTime = m_model->getTime(); newTime.has_value()) {
+    setCurrentTime(newTime.value());
+  }
+
+  if (auto newFastestTime = m_model->getFastestTime();
+      newFastestTime.has_value()) {
+    setFastestTime(newFastestTime.value());
+  }
+
+  if (auto newLastTime = m_model->getLastTime(); newLastTime.has_value()) {
+    setLastTime(newLastTime.value());
+  }
+
   setCurrentSpeed(*m_model->getMph());
   setMaxSpeed(m_model->getMaxSpeed());
   setCurrent(*m_model->getCurrent());

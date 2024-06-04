@@ -63,9 +63,11 @@ void Model::updateAverageCellTemps() {
   averageCellTemps.append(getAveCellTemp() ? *getAveCellTemp() : 0);
 }
 
-int Model::getLastTime() { return m_lastTime; }
+std::optional<int> Model::getTime() { return m_currentTime; }
 
-int Model::getFastestTime() { return m_fastestTime; }
+std::optional<int> Model::getLastTime() { return m_lastTime; }
+
+std::optional<int> Model::getFastestTime() { return m_fastestTime; }
 
 int Model::getMaxSpeed() { return m_maxSpeed; }
 
