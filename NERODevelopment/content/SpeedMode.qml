@@ -20,7 +20,7 @@ Item {
 
     Keys.onPressed: {
             if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
-                speedController.handleEnterPress();
+                speedController.enterButtonPressed();
             }
         }
 

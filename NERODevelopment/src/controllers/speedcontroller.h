@@ -81,7 +81,7 @@ public slots:
   void setCurrentDischarge(float);
   void setMaxCurrentDischarge(float);
 
-  void handleEnterPress();
+  virtual void enterButtonPressed() override;
 
   void update();
 

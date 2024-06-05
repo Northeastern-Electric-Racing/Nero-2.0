@@ -100,7 +100,7 @@ void SpeedController::setMaxCurrentDischarge(float maxCurrentDischarge) {
   }
 }
 
-void SpeedController::handleEnterPress() {
+void SpeedController::enterButtonPressed() {
   if (m_timerRunning) {
     // Stop the timer
     m_timerRunning = false;
