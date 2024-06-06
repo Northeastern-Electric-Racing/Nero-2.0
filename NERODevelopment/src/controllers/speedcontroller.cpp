@@ -113,13 +113,13 @@ void SpeedController::enterButtonPressed() {
              << " Last time:" << m_lastTime
              << " Fastest time:" << m_fastestTime;
     setCurrentTime(runTime);
-    setLastTime(runTime);
 
     if (runTime < fastestTime() || fastestTime() == 0) {
       setFastestTime(runTime);
       qDebug() << "fastest time overridden" << runTime;
     }
   } else {
+    setLastTime(m_currentTime);
     m_timerRunning = true;
     m_timer.start();
     m_updateTimer->start();
