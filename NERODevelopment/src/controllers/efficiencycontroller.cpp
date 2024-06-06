@@ -1,9 +1,13 @@
 #include "efficiencycontroller.h"
 
 EfficiencyController::EfficiencyController(Model *model, QObject *parent)
-    : ButtonController{model, 3, parent} {
+    : ButtonController{model, 3, parent}, m_updateTimer(new QTimer(this)),
+      m_timerRunning(false) {
   connect(m_model, &Model::onCurrentDataChange, this,
           &EfficiencyController::currentDataDidChange);
+  connect(m_updateTimer, &QTimer::timeout, this,
+          &EfficiencyController::updateCurrentTime);
+  m_updateTimer->setInterval(1);
 }
 
 int EfficiencyController::currentMaxTorque() const {
@@ -97,5 +101,63 @@ void EfficiencyController::currentDataDidChange() {
   }
   if (speed) {
     setSpeed(*speed);
+  }
+}
+
+int EfficiencyController::currentTime() const { return m_currentTime; }
+void EfficiencyController::setCurrentTime(int currentTime) {
+  if (currentTime != m_currentTime) {
+    m_currentTime = currentTime;
+    emit currentTimeChanged(currentTime);
+  }
+}
+int EfficiencyController::fastestTime() const { return m_fastestTime; }
+void EfficiencyController::setFastestTime(int fastTime) {
+  if (fastTime != m_fastestTime) {
+    m_fastestTime = fastTime;
+    emit fastestTimeChanged(fastTime);
+  }
+}
+int EfficiencyController::lastTime() const { return m_lastTime; }
+void EfficiencyController::setLastTime(int lastTime) {
+  if (lastTime != m_lastTime) {
+    m_lastTime = lastTime;
+    emit lastTimeChanged(lastTime);
+  }
+}
+
+void EfficiencyController::enterButtonPressed() {
+  if (m_timerRunning) {
+    int runTime = static_cast<int>(m_timer.elapsed());
+    m_timerRunning = false;
+    m_updateTimer->stop();
+
+    qDebug() << "Timer stopped. Run time:" << runTime
+             << " Last time:" << m_lastTime
+             << " Fastest time:" << m_fastestTime;
+
+    setLastTime(runTime);
+    setCurrentTime(runTime);
+
+    if (runTime < fastestTime() || fastestTime() == 0) {
+      setFastestTime(runTime);
+      qDebug() << "Fastest time overridden:" << runTime;
+    }
+
+    m_timerRunning = true;
+    m_timer.start();
+    m_updateTimer->start();
+    qDebug() << "Timer started for new lap.";
+  } else {
+    m_timerRunning = true;
+    m_timer.start();
+    m_updateTimer->start();
+    qDebug() << "Timer started.";
+  }
+}
+
+void EfficiencyController::updateCurrentTime() {
+  if (m_timerRunning) {
+    setCurrentTime(static_cast<int>(m_timer.elapsed()));
   }
 }

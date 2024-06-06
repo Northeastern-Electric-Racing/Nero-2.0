@@ -18,11 +18,11 @@ Item {
     property int currentSpeed: speedController.currentSpeed
     property int currentDraw: speedController.current
 
-    Keys.onPressed: {
-            if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
-                speedController.enterButtonPressed();
-            }
+    Keys.onPressed: (event) => {
+        if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
+            speedController.enterButtonPressed();
         }
+    }
 
     HeaderView {
         id: headerView

@@ -15,9 +15,19 @@ Item {
     property int motorTemp: efficiencyController.motorTemp
     property int packTemp: efficiencyController.packTemp
     property int speed: efficiencyController.speed
+    property int timerValue: efficiencyController.currentTime
+    property int lastRunTime: efficiencyController.lastTime
+    property int fastestRunTime: efficiencyController.fastestTime
 
     width: 800
     height: 480
+
+    Keys.onPressed: (event) => {
+            if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
+                efficiencyController.enterButtonPressed();
+            }
+        }
+
 
     HeaderView {
         id: header
@@ -65,17 +75,16 @@ Item {
         width: efficiency.width * 0.5
         height: parent.height
 
-        Rectangle {
-            id: onRect
-            width: parent.width
-            height: parent.width * 0.1
-            color: "transparent"
-            LabelText {
-                text: "ON"
-                color: "#18ff00"
-                anchors.centerIn: parent
-                font.pixelSize: 50
+        TimerDisplay {
+            id: timerDisplay
+            anchors {
+                horizontalCenter: parent.horizontalCenter
             }
+            width: efficiency.width * 0.4
+            height: efficiency.height * 0.3
+            currentRunTime: efficiency.timerValue
+            lastRunTime: efficiency.lastRunTime
+            fastestRunTime: efficiency.fastestRunTime
         }
 
         Spedometer {
@@ -83,14 +92,6 @@ Item {
             width: parent.width
             value: efficiency.speed
             anchors.top: onRect.bottom
-        }
-
-        DirectionView {
-            id: directionView
-            width: parent.width * 0.5
-            height: parent.height * 0.15
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.top: spedometer.bottom
         }
     }
 
