@@ -1,9 +1,13 @@
 #include "speedcontroller.h"
 #include <QElapsedTimer>
+#include <QTimer>
 
 SpeedController::SpeedController(Model *model, QObject *parent)
-    : ButtonController{model, 2, parent} {
+    : ButtonController{model, 2, parent}, m_updateTimer(new QTimer(this)) {
   connect(m_model, &Model::onCurrentDataChange, this, &SpeedController::update);
+  connect(m_updateTimer, &QTimer::timeout, this,
+          &SpeedController::updateCurrentTime);
+  m_updateTimer->setInterval(1);
 }
 
 bool SpeedController::tractionControl() const { return m_tractionControl; }
@@ -102,8 +106,8 @@ void SpeedController::setMaxCurrentDischarge(float maxCurrentDischarge) {
 
 void SpeedController::enterButtonPressed() {
   if (m_timerRunning) {
-    // Stop the timer
     m_timerRunning = false;
+    m_updateTimer->stop();
     int runTime = static_cast<int>(m_timer.elapsed());
     qDebug() << "Timer stopped. Run time:" << runTime
              << " Last time:" << m_lastTime
@@ -115,12 +119,17 @@ void SpeedController::enterButtonPressed() {
       setFastestTime(runTime);
       qDebug() << "fastest time overridden" << runTime;
     }
-
   } else {
-    // Start the timer
     m_timerRunning = true;
     m_timer.start();
+    m_updateTimer->start();
     qDebug() << "Timer started.";
+  }
+}
+
+void SpeedController::updateCurrentTime() {
+  if (m_timerRunning) {
+    setCurrentTime(static_cast<int>(m_timer.elapsed()));
   }
 }
 

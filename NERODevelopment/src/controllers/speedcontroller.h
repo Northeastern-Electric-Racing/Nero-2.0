@@ -5,6 +5,7 @@
 #include "buttoncontroller.h"
 #include <QElapsedTimer>
 #include <QObject>
+#include <QTimer>
 
 class SpeedController : public ButtonController {
   Q_OBJECT
@@ -81,7 +82,8 @@ public slots:
   void setCurrentDischarge(float);
   void setMaxCurrentDischarge(float);
 
-  virtual void enterButtonPressed() override;
+  void enterButtonPressed() override;
+  void updateCurrentTime();
 
   void update();
 
@@ -102,6 +104,7 @@ private:
 
   bool m_timerRunning = false;
   QElapsedTimer m_timer;
+  QTimer *m_updateTimer;
 };
 
 #endif // SPEEDCONTROLLER_H
