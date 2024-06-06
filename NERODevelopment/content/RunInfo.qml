@@ -70,12 +70,12 @@ Item {
 
         Rectangle {
             id: rightBlackRectangle
-            width: runInfo.width / 2.2
+            width: runInfo.width / 2.3
             height: runInfo.height * 0.8
             color: "black"
+            x: runInfo.width / 1.85
 
             anchors {
-                right: parent.right
                 verticalCenter: parent.verticalCenter
             }
 
@@ -95,6 +95,7 @@ Item {
             anchors {
                 left: parent.left
                 verticalCenter: parent.verticalCenter
+                rightMargin: runInfo.width
             }
             font.pixelSize: Math.min(runInfo.height * 0.6, runInfo.width * 0.08)
             color: "black"
