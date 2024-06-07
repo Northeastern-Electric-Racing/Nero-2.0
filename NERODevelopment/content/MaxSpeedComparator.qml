@@ -83,10 +83,6 @@ Rectangle {
         }
     }
 
-    onCurrentSpeedChanged: {
-        console.log("Speededd", maxSpeedComparator.currentSpeed)
-    }
-
     Rectangle {
         id: topSpeedBar
         y: maxSpeedComparator.height * (1 - maxSpeedComparator.previousTopSpeed
@@ -95,15 +91,6 @@ Rectangle {
         anchors.horizontalCenter: parent.horizontalCenter
         height: 2
         color: "white"
-    }
-
-    function setCurrentSpeed(speed) {
-        maxSpeedComparator.currentSpeed = speed
-    }
-
-    function setTopSpeed(top_speed) {
-        topSpeedNumber.text = top_speed + "MPH"
-        topSpeed.y = top_speed
     }
 
     Behavior on currentSpeed {

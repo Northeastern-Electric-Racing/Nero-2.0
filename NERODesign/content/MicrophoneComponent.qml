@@ -1,12 +1,10 @@
-
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import QtQuick.Studio.Components
 import Qt5Compat.GraphicalEffects
 
 Item {
-    width: 400
-    height: 300
+    width: 100
+    height: 100
     property bool isTalking: false
 
     SequentialAnimation {
@@ -25,7 +23,6 @@ Item {
             to: "#00FF00"
             duration: 1000
         }
-
     }
 
     Image {
@@ -34,16 +31,16 @@ Item {
         height: parent.height
         width: parent.width
         visible: isTalking
-        source: "images/microphone.svg"
+        source: "qrc:/content/images/microphone.svg"
         fillMode: Image.PreserveAspectFit
     }
 
-    ColorOverlay{
+    ColorOverlay {
         id: overlay
         anchors.fill: microphone
-        source:microphone
-        color:"transparent"
-        transform:rotation
+        source: microphone
+        color: "black"
+        transform: rotation
         antialiasing: true
     }
 }

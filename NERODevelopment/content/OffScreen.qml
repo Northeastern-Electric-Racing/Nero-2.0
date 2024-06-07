@@ -11,16 +11,19 @@ Item {
     visible: true
     focus: true
 
-    property string sideBrbStatus: offViewController.attributeStatusMap[""]
-    property string bmsStatus: offViewController.attributeStatusMap[""]
-    property string imdStatus: offViewController.attributeStatusMap[""]
-    property string bspdStatus: offViewController.attributeStatusMap[""]
-    property string botsStatus: offViewController.attributeStatusMap[""]
-    property string inertiaStatus: offViewController.attributeStatusMap[""]
-    property string cockPitBrbStatus: offViewController.attributeStatusMap[""]
-    property string tsmsStatus: offViewController.attributeStatusMap[""]
-    property string hvdInterlockStatus: offViewController.attributeStatusMap[""]
-    property string hvdConnector: offViewController.attributeStatusMap[""]
+    property variant attributeStatusMap: offViewController.attributeStatus
+
+    property int sideBrbStatus: attributeStatusMap["MPU/Fuses/BRB"]
+    property int bmsStatus: attributeStatusMap["MPU/Shutdown/BMS"]
+    property int imdStatus: attributeStatusMap["MPU/Shutdown/IMD"]
+    property int bspdStatus: attributeStatusMap["MPU/Shutdown/BSPD"]
+    property int botsStatus: attributeStatusMap["MPU/Shutdown/BOTS"]
+    property int inertiaStatus: attributeStatusMap["MPU/Shutdown/Inertia"]
+    property int cockPitBrbStatus: attributeStatusMap["MPU/Shutdown/CockpitBRB"]
+    property int tsmsStatus: attributeStatusMap["MPU/State/TSMS"]
+    property int hvdInterlockStatus: attributeStatusMap["MPU/Shutdown/HVC_Interlock"]
+    property int hvdConnectorStatus: attributeStatusMap["MPU/Shutdown/HVD_Interlock"]
+    property int mpuStatus: attributeStatusMap["MPU/Fault/Severity"]
 
     property double packTemp: offViewController.packTemp
     property double motorTemp: offViewController.motorTemp
@@ -51,6 +54,10 @@ Item {
                             break
                         }
                     }
+
+    onAttributeStatusMapChanged: {
+        console.log(attributeStatusMap)
+    }
 
     onDidSelectChanged: {
         if (offScreen.didSelect) {
@@ -182,7 +189,7 @@ Item {
             Layout.row: 4
             Layout.column: 0
             shutdownFlowTask: "MPU"
-            status: offScreen.bspdStatus
+            status: offScreen.mpuStatus
             highlight: offScreen.selectedFlowIndex == 4
         }
 

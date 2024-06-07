@@ -8,26 +8,36 @@ OffViewController::OffViewController(Model *model, QObject *parent)
           &OffViewController::update);
 }
 
-QMap<QString, AttributeStatus> OffViewController::attributeStatus() const {
+QVariantMap OffViewController::attributeStatus() const {
   return m_attributeStatus;
 }
-void OffViewController::setAttributeStatus(const QString &name,
-                                           AttributeStatus status) {
+void OffViewController::setAttributeStatus(const QString &name, int status) {
   if (m_attributeStatus.value(name) != status) {
+    qDebug() << "setting attribute status";
     m_attributeStatus[name] = status;
     emit attributeStatusChanged(m_attributeStatus);
   }
 }
 
 void OffViewController::update() {
-  for (const auto &attributeName : {SIDEBRBS, BMS, BSPD, MPU, BOTS, INERTIA,
-                                    CPBRB, TSMS, HVDINTRLK, HVCNCTR}) {
+  for (const QString &attributeName :
+       {SIDEBRBS, BMS, IMD, BSPD, MPU, BOTS, INERTIA, CPBRB, TSMS, HVDINTRLK,
+        HVCNCTR}) {
     std::optional<float> value = this->m_model->getById(attributeName);
     if (value) {
-      setAttributeStatus(attributeName,
-                         this->mapFloatToAttributeStatus(*value));
+      if (attributeName == MPU) {
+        if (value == 1) {
+          setAttributeStatus(attributeName,
+                             static_cast<int>(AttributeStatus::FAULTED));
+        }
+      } else {
+        setAttributeStatus(
+            attributeName,
+            static_cast<int>(this->mapFloatToAttributeStatus(*value)));
+      }
     } else {
-      setAttributeStatus(attributeName, AttributeStatus::OFF);
+      setAttributeStatus(attributeName,
+                         static_cast<int>(AttributeStatus::GOOD));
     }
   }
   setPackTemp(*m_model->getPackTemp());

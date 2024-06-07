@@ -4,13 +4,9 @@ import QtQuick.Controls 2.15
 Item {
     property int dimension: 200
     property int numWarnings: 1
-    property bool hide: false
-
 
     width: dimension * 1.5
     height: dimension * 1.5
-
-    visible: !hide
 
     Rectangle {
         id: circle

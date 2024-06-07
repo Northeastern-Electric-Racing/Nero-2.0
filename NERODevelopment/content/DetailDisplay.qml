@@ -5,13 +5,23 @@ import QtQuick.Particles
 Rectangle {
     id: detailDisplay
     property string shutdownFlowTask: "Task"
-    property string status: "CLEAR"
-    property bool ok: false
-    property bool clear: true
+    property string statusDisplay: "CLEAR"
+    property int status: 0
     property bool highlight: false
     height: 60
     width: 250
     color: "black"
+
+    onStatusChanged: {
+        console.log("Changing status")
+        if (status === 0) {
+            statusDisplay = "OFF"
+        } else if (status == 1) {
+            statusDisplay = "GOOD"
+        } else {
+            statusDisplay = "FAULTED"
+        }
+    }
 
     Rectangle {
         id: taskDisplay
@@ -85,21 +95,21 @@ Rectangle {
     }
 
     Rectangle {
-        id: statusDisplay
-        color: clear ? "transparent" : (ok === true ? "#14FF00" : (ok === false ? "#FF0000" : "transparent"))
+        id: statusDisplayContainer
+        color: status == 0 ? "transparent" : (status === 1 ? "#14FF00" : (status === 2 ? "#FF0000" : "transparent"))
         width: Math.max(parent.width * 0.4,
                         statusText.implicitWidth + 20) // Ensure minimum width
         height: parent.height
         anchors.left: taskDisplay.right
         radius: 10
-        border.color: clear ? "white" : "transparent"
-        border.width: clear ? 3 : 0
+        border.color: status == 0 ? "white" : "transparent"
+        border.width: status == 0 ? 3 : 0
 
         LabelText {
             id: statusText
             visible: !clear
             color: "black"
-            text: detailDisplay.status
+            text: detailDisplay.statusDisplay
             anchors.centerIn: parent
         }
     }

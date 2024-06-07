@@ -7,6 +7,14 @@ Item {
     focus: !navigation.isSelected
     property int selectedPageIndex: navigationController.selectedPageIndex
     property bool isSelected: navigationController.isSelected
+    property int exitPageIndex: 7
+    property int offPageIndex: 0
+    property int pitPageIndex: 1
+    property int speedPageIndex: 2
+    property int efficiencyPageIndex: 3
+    property int debugPageIndex: 4
+    property int configurationPageIndex: 5
+    property int flappyPageIndex: 6
 
     Keys.onPressed: event => {
                         console.log(navigationController.isSelected,
@@ -47,78 +55,78 @@ Item {
         }
 
         HomeMenuItem {
-            highlighted: selectedPageIndex === 0
+            highlighted: selectedPageIndex === offPageIndex
             text: "Off"
         }
 
         HomeMenuItem {
-            highlighted: selectedPageIndex === 1
+            highlighted: selectedPageIndex === pitPageIndex
             text: "Pit"
         }
 
         HomeMenuItem {
-            highlighted: selectedPageIndex === 2
+            highlighted: selectedPageIndex === speedPageIndex
             text: "Performance"
         }
 
         HomeMenuItem {
-            highlighted: selectedPageIndex === 3
+            highlighted: selectedPageIndex === efficiencyPageIndex
             text: "Efficiency"
         }
 
         HomeMenuItem {
-            highlighted: selectedPageIndex === 4
+            highlighted: selectedPageIndex === debugPageIndex
             text: "Debug"
         }
 
         HomeMenuItem {
-            highlighted: selectedPageIndex === 5
+            highlighted: selectedPageIndex === configurationPageIndex
             text: "Configuration"
         }
 
         HomeMenuItem {
-            highlighted: selectedPageIndex === 6
+            highlighted: selectedPageIndex === flappyPageIndex
             text: "Flappy Bird"
         }
 
         HomeMenuItem {
-            highlighted: selectedPageIndex === 7
+            highlighted: selectedPageIndex === exitPageIndex
             text: "Exit"
         }
     }
 
-    OffScreen {
-        visible: selectedPageIndex === 0 && isSelected
-        focus: selectedPageIndex === 0 && isSelected
+    OffScreen2 {
+        visible: selectedPageIndex === offPageIndex && isSelected
+        focus: selectedPageIndex === offPageIndex && isSelected
     }
 
     Pit {
-        visible: selectedPageIndex === 1 && isSelected
-        focus: selectedPageIndex === 1 && isSelected
+        visible: selectedPageIndex === pitPageIndex && isSelected
+        focus: selectedPageIndex === pitPageIndex && isSelected
     }
 
     SpeedMode {
-        visible: selectedPageIndex === 2 && isSelected
-        focus: selectedPageIndex === 2 && isSelected
+        visible: selectedPageIndex === speedPageIndex && isSelected
+        focus: selectedPageIndex === speedPageIndex && isSelected
     }
 
     EfficiencyScreen {
-        visible: selectedPageIndex === 3 && isSelected
-        focus: selectedPageIndex === 3 && isSelected
+        visible: selectedPageIndex === efficiencyPageIndex && isSelected
+        focus: selectedPageIndex === efficiencyPageIndex && isSelected
     }
 
     DebugTable {
-        visible: selectedPageIndex === 4 && isSelected
-        focus: selectedPageIndex === 4 && isSelected
+        visible: selectedPageIndex === debugPageIndex && isSelected
+        focus: selectedPageIndex === debugPageIndex && isSelected
     }
 
     Configuration {
-        visible: selectedPageIndex === 5 && isSelected
-        isFocused: selectedPageIndex === 5 && isSelected
+        visible: selectedPageIndex === configurationPageIndex && isSelected
+        isFocused: selectedPageIndex === configurationPageIndex && isSelected
     }
 
     FlappyBird {
-        visible: selectedPageIndex === 6 && isSelected
-        isFocused: selectedPageIndex === 6 && isSelected
+        visible: selectedPageIndex === flappyPageIndex && isSelected
+        isFocused: selectedPageIndex === flappyPageIndex && isSelected
     }
 }
