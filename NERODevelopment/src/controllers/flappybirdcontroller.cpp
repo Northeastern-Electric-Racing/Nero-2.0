@@ -17,3 +17,9 @@ void FlappyBirdController::enterButtonPressed() {
   this->setDidJump(true);
   this->setDidJump(false);
 }
+
+void FlappyBirdController::saveScore(int score) {
+  QString topic = "NERO/FLAPPYBIRD/SCORE";
+  QString message = QString::number(score);
+  m_model->sendMessage(topic, message);
+}

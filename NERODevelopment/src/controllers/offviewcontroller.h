@@ -11,8 +11,8 @@
 
 class OffViewController : public ButtonController {
   Q_OBJECT
-  Q_PROPERTY(QMap<QString, AttributeStatus> attributeStatus READ attributeStatus
-                 NOTIFY attributeStatusChanged)
+  Q_PROPERTY(QVariantMap attributeStatus READ attributeStatus NOTIFY
+                 attributeStatusChanged)
   Q_PROPERTY(float packTemp READ packTemp WRITE setPackTemp NOTIFY
                  packTempChanged FINAL)
   Q_PROPERTY(float motorTemp READ motorTemp WRITE setMotorTemp NOTIFY
@@ -34,7 +34,7 @@ class OffViewController : public ButtonController {
 public:
   explicit OffViewController(Model *model, QObject *parent = nullptr);
 
-  QMap<QString, AttributeStatus> attributeStatus() const;
+  QVariantMap attributeStatus() const;
   float packTemp() const;
   float motorTemp() const;
   float stateOfCharge() const;
@@ -45,8 +45,7 @@ public:
   QString selectedUrl() const;
 
 signals:
-  void
-  attributeStatusChanged(const QMap<QString, AttributeStatus> &attributeStatus);
+  void attributeStatusChanged(const QVariantMap &attributeStatus);
   void packTempChanged(float);
   void motorTempChanged(float);
   void stateOfChargeChanged(float);
@@ -57,7 +56,7 @@ signals:
   void selectedUrlChanged();
 
 public slots:
-  void setAttributeStatus(const QString &name, AttributeStatus status);
+  void setAttributeStatus(const QString &name, int status);
   void setPackTemp(float);
   void setMotorTemp(float);
   void setStateOfCharge(float);
@@ -76,7 +75,7 @@ public slots:
 
 private:
   AttributeStatus mapFloatToAttributeStatus(float);
-  QMap<QString, AttributeStatus> m_attributeStatus;
+  QVariantMap m_attributeStatus;
   float m_packTemp;
   float m_motorTemp;
   float m_stateOfCharge;
@@ -87,17 +86,41 @@ private:
   QString m_selectedUrl;
 
   QVector<DescriptionInfo> *m_descriptionInfo = new QVector<DescriptionInfo>{
-      DescriptionInfo("Side BRBs", "", ""),
-      DescriptionInfo("BMS", "", ""),
-      DescriptionInfo("IMD", "", ""),
-      DescriptionInfo("BSPD", "", ""),
-      DescriptionInfo("BOTS", "", ""),
-      DescriptionInfo("MPU", "", ""),
-      DescriptionInfo("INERTIA", "", ""),
-      DescriptionInfo("CRC BRB", "", ""),
-      DescriptionInfo("TSMS", "", ""),
-      DescriptionInfo("HVD INTERLOCK", "", ""),
-      DescriptionInfo("HVD CONNECTOR", "", ""),
+      DescriptionInfo("GLVMS",
+                      "The master switch that allows for 24 volt to power low "
+                      "voltage system.",
+                      "qrc:/content/images/glv.jpg"),
+      DescriptionInfo("Side BRBs",
+                      "Emergency shutdown switches to fully and immediately "
+                      "power down low voltage and tractive.",
+                      "qrc:/content/images/sidebrb.jpg"),
+      DescriptionInfo("BMS",
+                      "The battery management system to monitor state and "
+                      "faults of accumulator.",
+                      "qrc:/content/images/imd.jpg"),
+      DescriptionInfo(
+          "IMD", "Monitors isolation between the high and low voltage systems.",
+          "qrc:/content/images/imd.jpg"),
+      DescriptionInfo(
+          "CAN", "Monitors the status of intercomputer communication system.",
+          "qrc:/content/images/imd.jpg"),
+      DescriptionInfo("BSPD",
+                      "Brake System Plausibility Device which detects "
+                      "inconsistencies in the brake sensor.",
+                      "qrc:/content/images/bspd.jpg"),
+      DescriptionInfo("BOTS",
+                      "Brake over travel switch which detects if we have lost "
+                      "pressure in the brakes.",
+                      "qrc:/content/images/bots.jpg"),
+      DescriptionInfo("INERTIA", "Measures if there is a crash.",
+                      "qrc:/content/images/inertia.jpg"),
+      DescriptionInfo("Pit BRB", "Driver tractive shutdown button.",
+                      "qrc:/content/images/cockpitBrb.jpg"),
+      DescriptionInfo("INTERLOCKS",
+                      "Detects if all high voltage connections are made.",
+                      "qrc:/content/images/interlocks.jpg"),
+      DescriptionInfo("TSMS", "Toggles tractive system.",
+                      "qrc:/content/images/tsms.jpg"),
 
   };
 };

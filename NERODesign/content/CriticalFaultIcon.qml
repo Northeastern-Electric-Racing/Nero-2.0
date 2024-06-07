@@ -51,20 +51,23 @@ Item {
 
         Rectangle {
             id: faultCircle
-            x: text1.x + width / 3
-            y: critical.height - height / 1.5
-            width: (critical.dimension / 2) * 1.2
-            height: (critical.dimension / 2) * 1.2
+            anchors.right: parent.right
+            anchors.rightMargin: -dimension / 10
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: -dimension / 10
+            width: (critical.dimension / 2)
+            height: (critical.dimension / 2)
             radius: 100
 
             visible: numWarnings > 0
 
             Text {
-                id: faultNum
-                anchors.centerIn: parent
-                color: "black"
+                id: number
                 text: numWarnings
-                font.pixelSize: 0.75 * faultCircle.width
+                font.pixelSize: 0.75 * parent.width
+                font.weight: Font.Bold
+                font.bold: false
+                anchors.centerIn: parent
             }
         }
     }

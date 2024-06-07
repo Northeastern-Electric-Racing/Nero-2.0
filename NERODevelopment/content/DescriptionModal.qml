@@ -1,5 +1,6 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import Qt5Compat.GraphicalEffects
 
 Rectangle {
     id: modal
@@ -19,26 +20,32 @@ Rectangle {
         width: parent.height / 1.5
         x: dimension / 10
         y: -width / 2
-        radius: 1000
+        radius: width / 2
         color: "#cbcaca"
 
         border.color: "white"
         border.width: 10
-        clip: true
+        clip: true // This enables clipping of content outside the rectangle
+
         Image {
             id: modalImage
-            width: parent.width - parent.border.width
-            height: parent.height - parent.border.width
-            anchors.centerIn: parent
+            anchors.fill: parent // This makes the image fill the rectangle
+            source: "qrc:/content/images/neroLogo.png" // Set the image source here
             fillMode: Image.PreserveAspectCrop
-        }
 
-        Rectangle {
-            id: mask
-            width: parent.width / 2
-            height: width
-            radius: width / 2
-            visible: false
+            layer.enabled: true
+            layer.effect: OpacityMask {
+                maskSource: Item {
+                    width: modalPic.width
+                    height: modalPic.height
+                    Rectangle {
+                        width: modalPic.width
+                        height: modalPic.height
+                        radius: modalPic.radius
+                        color: "white"
+                    }
+                }
+            }
         }
     }
 

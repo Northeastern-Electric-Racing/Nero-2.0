@@ -43,6 +43,10 @@ qt6_add_qml_module(content
         MaxSpeedComparator.qml
         MaxDrawGraph.qml
         RunInfo.qml
+        Lightning.qml
+        Arrow.qml
+        OffScreen2.qml
+        StatusDisplay.qml
 
     RESOURCES
         fonts/fonts.txt
@@ -51,5 +55,14 @@ qt6_add_qml_module(content
         images/pipe.png
         images/flappy-bird.png
         images/microphone.svg
-        QML_FILES Lightning.qml
+        images/neroLogo.png
+        images/bots.jpg
+        images/bspd.jpg
+        images/cockpitBrb.jpg
+        images/glv.jpg
+        images/imd.jpg
+        images/inertia.jpg
+        images/interlocks.jpg
+        images/sidebrb.jpg
+        images/tsms.jpg
 )

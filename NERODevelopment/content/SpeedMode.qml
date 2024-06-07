@@ -153,8 +153,4 @@ Item {
         currentSpeed: speedMode.currentSpeed
         previousTopSpeed: speedMode.maxSpeed
     }
-
-    onCurrentSpeedChanged: {
-        console.log("speed changed")
-    }
 }

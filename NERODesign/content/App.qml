@@ -20,7 +20,8 @@ Window {
     // Pit {
     //     id: pitScreen
     // }
-    EfficiencyScreen {}
+    // EfficiencyScreen {}
+    OffScreen {}
     Timeline {
         id: appTimeline
         animations: [
