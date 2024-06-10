@@ -8,7 +8,7 @@ EfficiencyController::EfficiencyController(Model *model, QObject *parent)
   connect(m_updateTimer, &QTimer::timeout, this,
           &EfficiencyController::updateCurrentTime);
   m_updateTimer->setInterval(1);
-  this->m_debounceOffset = 2000;
+  this->m_debounceOffset = 750;
 }
 
 int EfficiencyController::currentMaxTorque() const {

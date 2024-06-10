@@ -29,12 +29,7 @@ protected:
   qint64 m_rightButtonDebounce = 0;
   qint64 m_leftButtonDebounce = 0;
   qint64 m_homeButtonDebounce = 0;
-  int m_debounceOffset = 100;
-  bool m_downButtonDebounceRunning = false;
-  bool m_upButtonDebounceRunning = false;
-  bool m_rightButtonDebounceRunning = false;
-  bool m_leftButtonDebounceRunning = false;
-  bool m_enterButtonDebounceRunning = false;
+  int m_debounceOffset = 500;
 };
 
 #endif // BUTTONCONTROLLER_H
