@@ -78,12 +78,12 @@ public:
   virtual std::optional<bool> getIsTalking() = 0;
   virtual std::optional<int> getNumberOfCriticalFaults() = 0;
   virtual std::optional<int> getNumberOfNonCriticalFaults() = 0;
-  virtual std::optional<int> getTime() = 0;
   virtual void sendMessage(QString topic, QString message) = 0;
   virtual std::optional<float> getLowVoltageStateOfCharge() = 0;
 
-  int getFastestTime();
-  int getLastTime();
+  std::optional<int> getTime();
+  std::optional<int> getFastestTime();
+  std::optional<int> getLastTime();
   int getMaxSpeed();
 
   QList<DebugTableRowValue> getDebugTableValues();
@@ -113,6 +113,7 @@ protected:
   QList<FaultInstance> faultInstances;
   QList<float> averageCellTemps;
   QList<float> stateOfChargeDeltas;
+  int m_currentTime;
   int m_fastestTime;
   int m_lastTime;
   int m_maxSpeed;

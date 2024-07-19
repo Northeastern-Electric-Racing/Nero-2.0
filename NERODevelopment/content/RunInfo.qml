@@ -18,6 +18,19 @@ Item {
     property bool isTop: false
     property bool isBottom: false
 
+    function formatTime(milliseconds) {
+        var minutes = Math.floor(milliseconds / 60000);
+        var seconds = Math.floor((milliseconds % 60000) / 1000);
+        var ms = milliseconds % 1000;
+
+        var formattedMinutes = (minutes < 10 ? "0" + minutes : "" + minutes).split('').join(' ');
+        var formattedSeconds = (seconds < 10 ? "0" + seconds : "" + seconds).split('').join(' ');
+        var formattedMs = (ms < 100 ? (ms < 10 ? "00" + ms : "0" + ms) : "" + ms).split('').join(' ');
+
+        return formattedMinutes + " : " + formattedSeconds + " : " + formattedMs;
+    }
+
+
     Rectangle {
         id: bottomRect
         visible: runInfo.isTop
@@ -57,19 +70,20 @@ Item {
 
         Rectangle {
             id: rightBlackRectangle
-            width: runInfo.width / 4
+            width: runInfo.width / 2.3
             height: runInfo.height * 0.8
             color: "black"
+            x: runInfo.width / 1.85
 
-            x: parent.width * 0.7
-            y: parent.height / 10
+            anchors {
+                verticalCenter: parent.verticalCenter
+            }
 
             ValueText {
                 id: valueText
-                text: value
-                font.pixelSize: rightBlackRectangle.height * 0.8
-                x: rightBlackRectangle.width * 0.5 - rightBlackRectangle.height / 4.5
-                y: rightBlackRectangle.height * -0.1
+                text: formatTime(value)
+                font.pixelSize: rightBlackRectangle.height * 0.9
+                anchors.centerIn: parent
                 color: "white"
                 font.bold: true
             }
@@ -78,9 +92,11 @@ Item {
         LabelText {
             id: labelText
             text: label
-            x: runInfo.width * 0.05
-            y: runInfo.isTop ? runInfo.height * 0.6 - font.pixelSize + topRect.height
-                               * 0.1 : (runInfo.isBottom ? runInfo.height * 0.6 - font.pixelSize + bottomRect.height * 0.15 : runInfo.height * 0.6 - font.pixelSize)
+            anchors {
+                left: parent.left
+                verticalCenter: parent.verticalCenter
+                rightMargin: runInfo.width
+            }
             font.pixelSize: Math.min(runInfo.height * 0.6, runInfo.width * 0.08)
             color: "black"
             font.bold: true

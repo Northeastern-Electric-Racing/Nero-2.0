@@ -1,11 +1,13 @@
 #include "speedcontroller.h"
+#include <QElapsedTimer>
+#include <QTimer>
 
 SpeedController::SpeedController(Model *model, QObject *parent)
-    : ButtonController{model, 2, parent}, m_tractionControl(), m_packTemp(),
-      m_motorTemp(), m_chargeState(), m_currentTime(), m_fastestTime(),
-      m_lastTime(), m_currentSpeed(), m_maxSpeed(), m_current(), m_maxCurrent(),
-      m_currentDischarge(), m_maxCurrentDischarge() {
+    : ButtonController{model, 2, parent}, m_updateTimer(new QTimer(this)) {
   connect(m_model, &Model::onCurrentDataChange, this, &SpeedController::update);
+  connect(m_updateTimer, &QTimer::timeout, this,
+          &SpeedController::updateCurrentTime);
+  m_updateTimer->setInterval(1);
 }
 
 bool SpeedController::tractionControl() const { return m_tractionControl; }
@@ -102,14 +104,40 @@ void SpeedController::setMaxCurrentDischarge(float maxCurrentDischarge) {
   }
 }
 
+void SpeedController::enterButtonPressed() {
+  if (m_timerRunning) {
+    m_timerRunning = false;
+    m_updateTimer->stop();
+    int runTime = static_cast<int>(m_timer.elapsed());
+    qDebug() << "Timer stopped. Run time:" << runTime
+             << " Last time:" << m_lastTime
+             << " Fastest time:" << m_fastestTime;
+    setCurrentTime(runTime);
+
+    if (runTime < fastestTime() || fastestTime() == 0) {
+      setFastestTime(runTime);
+      qDebug() << "fastest time overridden" << runTime;
+    }
+  } else {
+    setLastTime(m_currentTime);
+    m_timerRunning = true;
+    m_timer.start();
+    m_updateTimer->start();
+    qDebug() << "Timer started.";
+  }
+}
+
+void SpeedController::updateCurrentTime() {
+  if (m_timerRunning) {
+    setCurrentTime(static_cast<int>(m_timer.elapsed()));
+  }
+}
+
 void SpeedController::update() {
   setTractionControl(*m_model->getTractionControl());
   setPackTemp(*m_model->getPackTemp());
   setMotorTemp(*m_model->getMotorTemp());
   setChargeState(*m_model->getStateOfCharge());
-  setCurrentTime(*m_model->getTime());
-  setFastestTime(m_model->getFastestTime());
-  setLastTime(m_model->getLastTime());
   setCurrentSpeed(*m_model->getMph());
   setMaxSpeed(m_model->getMaxSpeed());
   setCurrent(*m_model->getCurrent());

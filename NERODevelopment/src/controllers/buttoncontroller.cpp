@@ -19,7 +19,6 @@ void ButtonController::leftButtonPressed() {}
 void ButtonController::rightButtonPressed() {}
 
 void ButtonController::homeButtonPressed() {
-  qDebug() << "Home button pressed button controller";
   this->m_model->currentPageIndex = -1;
 }
 
@@ -42,23 +41,10 @@ void ButtonController::buttonUpdate() {
 
       this->leftButtonPressed();
       this->m_leftButtonDebounce = currentDate.toMSecsSinceEpoch();
+    } else if (this->m_model->getBackwardButtonPressed() == 0) {
+      this->m_leftButtonDebounce = currentDate.toMSecsSinceEpoch();
     }
-    if (this->m_model->getDownButtonPressed() == 1 &&
-        currentDate.toMSecsSinceEpoch() - this->m_downButtonDebounce >
-            this->m_debounceOffset) {
-      qDebug() << "Down Button Pressed";
 
-      this->downButtonPressed();
-      this->m_downButtonDebounce = currentDate.toMSecsSinceEpoch();
-    }
-    if (this->m_model->getEnterButtonPressed() == 1 &&
-        currentDate.toMSecsSinceEpoch() - this->m_enterButtonDebounce >
-            this->m_debounceOffset) {
-      qDebug() << "Enter Button Pressed";
-
-      this->enterButtonPressed();
-      this->m_enterButtonDebounce = currentDate.toMSecsSinceEpoch();
-    }
     if (this->m_model->getRightButtonPressed() == 1 &&
         currentDate.toMSecsSinceEpoch() - this->m_rightButtonDebounce >
             this->m_debounceOffset) {
@@ -66,13 +52,30 @@ void ButtonController::buttonUpdate() {
 
       this->rightButtonPressed();
       this->m_rightButtonDebounce = currentDate.toMSecsSinceEpoch();
+    } else if (this->m_model->getRightButtonPressed() == 0) {
+      this->m_rightButtonDebounce = currentDate.toMSecsSinceEpoch();
     }
-    if (this->m_model->getDownButtonPressed() == 1 &&
-        currentDate.toMSecsSinceEpoch() - this->m_downButtonDebounce >
+
+    // if (this->m_model->getForwardButtonPressed() == 1 &&
+    //     currentDate.toMSecsSinceEpoch() - this->m_rightButtonDebounce >
+    //         this->m_debounceOffset) {
+
+    //   qDebug() << "Forward button pressed";
+    //   this->rightButtonPressed();
+    //   this->m_rightButtonDebounce = currentDate.toMSecsSinceEpoch();
+    // } else if (this->m_model->getForwardButtonPressed() == 0) {
+    //   this->m_rightButtonDebounce = currentDate.toMSecsSinceEpoch();
+    // }
+
+    if (this->m_model->getEnterButtonPressed() == 1 &&
+        currentDate.toMSecsSinceEpoch() - this->m_enterButtonDebounce >
             this->m_debounceOffset) {
-      qDebug() << "Down Button Pressed";
-      this->downButtonPressed();
-      this->m_downButtonDebounce = currentDate.toMSecsSinceEpoch();
+      qDebug() << "Enter Button Pressed";
+
+      this->enterButtonPressed();
+      this->m_enterButtonDebounce = currentDate.toMSecsSinceEpoch();
+    } else if (this->m_model->getEnterButtonPressed() == 0) {
+      this->m_enterButtonDebounce = currentDate.toMSecsSinceEpoch();
     }
 
     if (this->m_model->getUpButtonPressed() == 1 &&
@@ -81,15 +84,21 @@ void ButtonController::buttonUpdate() {
       qDebug() << "Up button pressed";
       this->upButtonPressed();
       this->m_upButtonDebounce = currentDate.toMSecsSinceEpoch();
+    } else if (this->m_model->getUpButtonPressed() == 0) {
+      this->m_upButtonDebounce = currentDate.toMSecsSinceEpoch();
     }
-    if (this->m_model->getForwardButtonPressed() == 1 &&
-        currentDate.toMSecsSinceEpoch() - this->m_rightButtonDebounce >
-            this->m_debounceOffset) {
 
-      qDebug() << "Forward button pressed";
-      this->rightButtonPressed();
-      this->m_rightButtonDebounce = currentDate.toMSecsSinceEpoch();
+    if (this->m_model->getDownButtonPressed() == 1 &&
+        currentDate.toMSecsSinceEpoch() - this->m_downButtonDebounce >
+            this->m_debounceOffset) {
+      qDebug() << "Down Button Pressed";
+
+      this->downButtonPressed();
+      this->m_downButtonDebounce = currentDate.toMSecsSinceEpoch();
+    } else if (this->m_model->getDownButtonPressed() == 0) {
+      this->m_downButtonDebounce = currentDate.toMSecsSinceEpoch();
     }
+
     if (this->m_model->getHomeButtonPressed() == 1 &&
         currentDate.toMSecsSinceEpoch() - this->m_homeButtonDebounce >
             this->m_debounceOffset) {

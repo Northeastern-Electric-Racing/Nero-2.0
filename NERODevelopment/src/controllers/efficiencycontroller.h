@@ -2,7 +2,9 @@
 #define EFFICIENCYCONTROLLER_H
 
 #include "buttoncontroller.h"
+#include <QElapsedTimer>
 #include <QObject>
+#include <QTimer>
 
 /**
  * @brief The EfficiencyController class
@@ -25,6 +27,12 @@ class EfficiencyController : public ButtonController {
                  setLowVoltageStateOfCharge NOTIFY
                      lowVoltageStateOfChargeChanged FINAL)
   Q_PROPERTY(int speed READ speed WRITE setSpeed NOTIFY speedChanged FINAL)
+  Q_PROPERTY(int currentTime READ currentTime WRITE setCurrentTime NOTIFY
+                 currentTimeChanged)
+  Q_PROPERTY(int fastestTime READ fastestTime WRITE setFastestTime NOTIFY
+                 fastestTimeChanged)
+  Q_PROPERTY(
+      int lastTime READ lastTime WRITE setLastTime NOTIFY lastTimeChanged)
 
 public:
   explicit EfficiencyController(Model *model, QObject *parent = nullptr);
@@ -35,6 +43,9 @@ public:
   int packTemp() const;
   int lowVoltageStateOfCharge() const;
   int speed() const;
+  int currentTime() const;
+  int fastestTime() const;
+  int lastTime() const;
 
 signals:
   void currentMaxTorqueChanged(int);
@@ -44,6 +55,9 @@ signals:
   void packTempChanged(int);
   void lowVoltageStateOfChargeChanged(int);
   void speedChanged(int);
+  void currentTimeChanged(int);
+  void fastestTimeChanged(int);
+  void lastTimeChanged(int);
 
 public slots:
   void setCurrentMaxTorque(int);
@@ -54,6 +68,12 @@ public slots:
   void setLowVoltageStateOfCharge(int);
   void setSpeed(int);
   void currentDataDidChange();
+  void setCurrentTime(int);
+  void setFastestTime(int);
+  void setLastTime(int);
+
+  void enterButtonPressed() override;
+  void updateCurrentTime();
 
 private:
   int m_currentMaxTorque = 0;        // torque percentage [0,100]
@@ -63,6 +83,12 @@ private:
   int m_packTemp = 0;                // Celsius
   int m_lowVoltageStateOfCharge = 0; // charge percentage [0,100]
   int m_speed = 0;                   // speed in mph
+  int m_currentTime = 0;
+  int m_fastestTime = 0;
+  int m_lastTime = 0;
+  bool m_timerRunning = false;
+  QElapsedTimer m_timer;
+  QTimer *m_updateTimer;
 };
 
 #endif // EFFICIENCYCONTROLLER_H
