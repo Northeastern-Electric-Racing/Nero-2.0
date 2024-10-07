@@ -21,6 +21,8 @@ class HomeController : public ButtonController {
                  motorTempChanged FINAL)
   Q_PROPERTY(float stateOfCharge READ stateOfCharge WRITE setStateOfCharge
                  NOTIFY stateOfChargeChanged FINAL)
+  Q_PROPERTY(bool dialogVisible READ dialogVisible WRITE setDialogVisible NOTIFY
+                 dialogVisibleChanged FINAL)
 
 public:
   explicit HomeController(Model *model, QObject *parent = nullptr);
@@ -30,6 +32,7 @@ public:
   float packTemp() const;
   float motorTemp() const;
   float stateOfCharge() const;
+  bool dialogVisible() const;
 
 signals:
   void speedChanged(int);
@@ -38,6 +41,7 @@ signals:
   void packTempChanged(float);
   void motorTempChanged(float);
   void stateOfChargeChanged(float);
+  void dialogVisibleChanged();
 
 public slots:
   void setSpeed(int);
@@ -47,6 +51,8 @@ public slots:
   void setMotorTemp(float);
   void setStateOfCharge(float);
   void currentDataDidChange();
+  void setDialogVisible(bool);
+  void enterButtonPressed();
 
 private:
   int m_speed;
@@ -55,6 +61,7 @@ private:
   float m_packTemp;
   float m_motorTemp;
   float m_stateOfCharge;
+  bool m_dialogVisible;
 };
 
 #endif // HOMECONTROLLER_H

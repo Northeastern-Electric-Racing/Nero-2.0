@@ -72,3 +72,16 @@ void HomeController::currentDataDidChange() {
     setStatus(*m_model->getStatus());
   }
 }
+
+bool HomeController::dialogVisible() const { return m_dialogVisible; }
+
+void HomeController::setDialogVisible(bool visible) {
+  if (visible != this->m_dialogVisible) {
+    this->m_dialogVisible = visible;
+    emit this->dialogVisibleChanged();
+  }
+}
+
+void HomeController::enterButtonPressed() {
+  this->setDialogVisible(!this->m_dialogVisible);
+}

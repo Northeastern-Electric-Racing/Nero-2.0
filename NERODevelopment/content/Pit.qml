@@ -12,6 +12,7 @@ Rectangle {
     property int motorTempValue: homeController.motorTemp
     property int currentSpeed: homeController.speed
     property bool forward: homeController.status
+    property bool dialog: homeController.dialogVisible
 
     property int maxSpeed: 5
     property int horizontalMargin: 10
@@ -22,6 +23,12 @@ Rectangle {
     color: 'black'
     height: 480
     width: 800
+
+    Keys.onPressed: (event) => {
+        if (event.key === Qt.Key_Enter || event.key === Qt.Key_Return) {
+            homeController.enterButtonPressed();
+        }
+    }
 
     Rectangle {
         id: mainRow
@@ -140,6 +147,18 @@ Rectangle {
                 Layout.alignment: Qt.AlignHCenter
             }
         }
+    }
+
+    onDialogChanged: {
+        if (pit.dialog) {
+            dialog.openModal();
+        } else {
+            dialog.closeModal();
+        }
+    }
+
+    Lily {
+        id: dialog
     }
 
     HeaderView {

@@ -47,6 +47,7 @@ qt6_add_qml_module(content
         Arrow.qml
         OffScreen2.qml
         StatusDisplay.qml
+        Lily.qml
 
     RESOURCES
         fonts/fonts.txt
