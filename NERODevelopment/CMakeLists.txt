@@ -80,6 +80,7 @@ qt_add_resources(NEROApp "configuration"
         qtquickcontrols2.conf
 )
 
+
 qt_add_protobuf(NEROApp
     PROTO_FILES
     src/proto/serverdata/serverdata.proto

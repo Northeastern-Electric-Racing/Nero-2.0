@@ -32,6 +32,14 @@ Item {
     property double speed: 3
     property int frameRate: 25
     property bool didJump: flappyBirdController.didJump
+    property string birdFrame1: "qrc:/content/images/yellowbird-downflap.png"
+    property string birdFrame2: "qrc:/content/images/yellowbird-midflap.png"
+    property string birdFrame3: "qrc:/content/images/yellowbird-upflap.png"
+
+    property int currentBirdFrame: 0
+
+    property real birdRotation: 0
+
 
     onDidJumpChanged: {
         if (didJump) {
@@ -43,6 +51,11 @@ Item {
                 flappyBird.xWall2 = 650
                 flappyBird.xWall3 = 800
                 flappyBird.speed = 3
+
+                // Reset the bird's rotation and drop speed
+                flappyBird.birdRotation = 0
+                flappyBird.birdDrop = 1
+
                 return
             }
 
@@ -50,6 +63,7 @@ Item {
             birdDrop = 1
         }
     }
+
 
     Timer {
         function isGameOver() {
@@ -61,14 +75,15 @@ Item {
         repeat: true
         onTriggered: {
             if (flappyBird.gameOver) {
-                flappyBirdController.saveScore(flappyBird.score)
-                return
-            }
+                            flappyBirdController.saveScore(flappyBird.score)
+                            return
+                        }
 
             time.text = Date().toString()
             if (isGameOver()) {
                 flappyBird.gameOver = true
             }
+
             if (xWall1 < 0) {
                 xWall1 = parent.width
                 wall1.y = -100 - Math.round(Math.random() * 100)
@@ -89,9 +104,14 @@ Item {
                 flappyBird.score += 1
             }
 
+            flappyBird.speed += 0.005
+
             if (!jumpAnimation.running) {
                 yBallValue += flappyBird.birdDrop
-                flappyBird.birdDrop += 0.2
+                flappyBird.birdDrop += 0.3  // Increase the fall speed by incrementing faster
+                flappyBird.birdRotation = Math.min(90, flappyBird.birdRotation + 5)  // Rotate the bird faster as it falls
+            } else {
+                flappyBird.birdRotation = -45
             }
 
             xWall1 -= flappyBird.speed
@@ -153,11 +173,12 @@ Item {
 
     Keys.onSpacePressed: {
         flappyBirdController.enterButtonPressed()
+        birdFlapAnimation.running = true
     }
 
     NumberAnimation on yBallValue {
         id: jumpAnimation
-        to: yBallValue - 40
+        to: yBallValue - 50
         duration: 100
     }
 
@@ -169,10 +190,24 @@ Item {
         id: ball
         x: xBallValue
         y: yBallValue
-        width: 50
-        height: 50
-        source: flappyBird.birdSrc
+        width: implicitWidth
+        height: implicitHeight
+        source: {
+                    if (currentBirdFrame === 0) return birdFrame1;
+                    else if (currentBirdFrame === 1) return birdFrame2;
+                    else return birdFrame3;
+                }
+        rotation: flappyBird.birdRotation
     }
+
+    SequentialAnimation {
+            id: birdFlapAnimation
+            running: false
+            loops: 1
+
+            PropertyAnimation { target: flappyBird; property: "currentBirdFrame"; from: 2; to: 0; duration: 1000 }
+            PropertyAnimation { target: flappyBird; property: "currentBirdFrame"; from: 0; to: 1; duration: 500 }
+        }
 
     Text {
         id: gameOverText
