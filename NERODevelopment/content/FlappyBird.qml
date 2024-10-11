@@ -37,6 +37,7 @@ Item {
     property string birdFrame3: "qrc:/content/images/yellowbird-upflap.png"
 
     property int currentBirdFrame: 0
+    property bool startFalling: false
 
     property real birdRotation: 0
 
@@ -55,12 +56,25 @@ Item {
                 // Reset the bird's rotation and drop speed
                 flappyBird.birdRotation = 0
                 flappyBird.birdDrop = 1
-
+                startFalling = false
+                birdFallDelay.start()  // Start the fall timer to ensure bird starts falling even if no jump is pressed
                 return
             }
 
             jumpAnimation.running = true
             birdDrop = 1
+            startFalling = false
+            birdFallDelay.restart()
+        }
+    }
+
+    Timer {
+        id: birdFallDelay
+        interval: 150
+        running: false
+        repeat: false
+        onTriggered: {
+            startFalling = true  // Bird starts falling faster after delay
         }
     }
 
@@ -75,9 +89,9 @@ Item {
         repeat: true
         onTriggered: {
             if (flappyBird.gameOver) {
-                            flappyBirdController.saveScore(flappyBird.score)
-                            return
-                        }
+                flappyBirdController.saveScore(flappyBird.score)
+                return
+            }
 
             time.text = Date().toString()
             if (isGameOver()) {
@@ -106,12 +120,15 @@ Item {
 
             flappyBird.speed += 0.005
 
-            if (!jumpAnimation.running) {
+            if (!jumpAnimation.running && startFalling) {
                 yBallValue += flappyBird.birdDrop
                 flappyBird.birdDrop += 0.3  // Increase the fall speed by incrementing faster
                 flappyBird.birdRotation = Math.min(90, flappyBird.birdRotation + 5)  // Rotate the bird faster as it falls
+            } else if (!jumpAnimation.running && !startFalling) {
+                flappyBird.birdDrop = 1  // Slow initial fall after jump or at the start
+                flappyBird.birdRotation = Math.min(45, flappyBird.birdRotation + 3)  // Slight rotation before full dive
             } else {
-                flappyBird.birdRotation = -45
+                flappyBird.birdRotation = -45  // Bird flaps up during jump
             }
 
             xWall1 -= flappyBird.speed
