@@ -65,4 +65,8 @@ qt6_add_qml_module(content
         images/interlocks.jpg
         images/sidebrb.jpg
         images/tsms.jpg
+	images/flappy-bird.png
+	images/yellowbird-upflap.png
+	images/yellowbird-midflap.png
+	images/yellowbird-downflap.png
 )
