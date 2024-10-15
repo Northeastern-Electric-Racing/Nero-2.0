@@ -1,11 +1,20 @@
 #include "homecontroller.h"
 
 HomeController::HomeController(Model *model, QObject *parent)
-    : ButtonController{model, 1, parent}, m_speed(0), m_status(false),
-      m_direction(true), m_packTemp(0.0), m_motorTemp(0.0),
+    : ButtonController{model, 1, parent}, m_dialogVisible(false), m_speed(0),
+      m_status(false), m_direction(true), m_packTemp(0.0), m_motorTemp(0.0),
       m_stateOfCharge(0.0) {
   connect(m_model, &Model::onCurrentDataChange, this,
           &HomeController::currentDataDidChange);
+}
+
+bool HomeController::dialogVisible() const { return m_dialogVisible; }
+
+void HomeController::setDialogVisible(bool visible) {
+  if (m_dialogVisible != visible) {
+    m_dialogVisible = visible;
+    emit dialogVisibleChanged();
+  }
 }
 
 int HomeController::speed() const { return m_speed; }

@@ -13,15 +13,28 @@ Window {
     title: "NERO"
 
     FontLoader {
-        id: webFont
-        source: "fonts/Roboto-Black.ttf"
-    }
+            id: webFont
+            source: "fonts/Roboto-Black.ttf"
+        }
 
-    // Pit {
-    //     id: pitScreen
-    // }
-    // EfficiencyScreen {}
-    OffScreen {}
+        QMLDialog {
+            id: dialogComponent
+        }
+
+        Text {
+            id: instructionText
+            text: "Press Enter to toggle the full-screen name box"
+            anchors.centerIn: parent
+            font.pixelSize: 20
+            color: "white"
+            visible: dialogComponent.visible ? false : true
+        }
+
+    //Pit {
+      //  id: pitScreen
+    //}
+    //EfficiencyScreen {}
+    //OffScreen {}
     Timeline {
         id: appTimeline
         animations: [

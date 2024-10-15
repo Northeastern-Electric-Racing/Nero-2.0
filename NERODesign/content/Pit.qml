@@ -7,6 +7,11 @@ import NERO
 Rectangle {
     id: pit
     anchors.fill: parent
+    width: 800
+    height: 600
+    color: 'lightgray'
+    focus: true
+
     property int stateOfChargePercentage: homeController.stateOfCharge
     property int packTempValue: homeController.packTemp
     property int motorTempValue: homeController.motorTemp
@@ -18,10 +23,12 @@ Rectangle {
     property int horizontalIconSpacing: -55
     property int iconWidth: 40
     property int iconHeight: 90
-    property int labelVerticalSpacing: 10
-    color: 'black'
-    height: 480
-    width: 800
+
+    Keys.onPressed: {
+        if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
+            dialog.visible = !dialog.visible
+        }
+    }
 
     Rectangle {
         id: mainRow

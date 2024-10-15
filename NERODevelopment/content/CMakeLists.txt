@@ -31,6 +31,7 @@ qt6_add_qml_module(content
         KeyboardController.qml
         Configuration.qml
         HeaderView.qml
+        QMLDialog.qml
         CriticalFaultIcon.qml
         NonCriticalWarning.qml
         MicrophoneComponent.qml

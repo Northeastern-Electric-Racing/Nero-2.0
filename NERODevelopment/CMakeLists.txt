@@ -104,6 +104,8 @@ if (BUILD_QDS_COMPONENTS)
     include(${CMAKE_CURRENT_SOURCE_DIR}/qmlcomponents)
 endif()
 
+option(BUILD_QDS_COMPONENTS "Build design studio components" ON)
+
 include(${CMAKE_CURRENT_SOURCE_DIR}/qmlmodules)
 
 if (LINK_INSIGHT)
