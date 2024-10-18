@@ -7,7 +7,7 @@ Item {
     focus: !navigation.isSelected
     property int selectedPageIndex: navigationController.selectedPageIndex
     property bool isSelected: navigationController.isSelected
-    property int exitPageIndex: 7
+    property int exitPageIndex: 8
     property int offPageIndex: 0
     property int pitPageIndex: 1
     property int speedPageIndex: 2
@@ -15,6 +15,7 @@ Item {
     property int debugPageIndex: 4
     property int configurationPageIndex: 5
     property int flappyPageIndex: 6
+    property int snakePageIndex: 7
 
     Keys.onPressed: event => {
                         console.log(navigationController.isSelected,
@@ -90,6 +91,11 @@ Item {
         }
 
         HomeMenuItem {
+            highlighted: selectedPageIndex === snakePageIndex
+            text: "Snake"
+        }
+
+        HomeMenuItem {
             highlighted: selectedPageIndex === exitPageIndex
             text: "Exit"
         }
@@ -128,5 +134,10 @@ Item {
     FlappyBird {
         visible: selectedPageIndex === flappyPageIndex && isSelected
         isFocused: selectedPageIndex === flappyPageIndex && isSelected
+    }
+
+    Snake {
+        visible: selectedPageIndex === snakePageIndex && isSelected
+        isFocused: selectedPageIndex === snakePageIndex && isSelected
     }
 }
