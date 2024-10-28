@@ -1,9 +1,7 @@
 #include "snakecontroller.h"
 
 SnakeController::SnakeController(Model *model, QObject *parent)
-    : ButtonController{model, 6, parent} {
-  // this->m_debounceOffset = 150;
-}
+    : ButtonController{model, 7, parent} {}
 
 void SnakeController::handleKeyPress(int key) {
   int newDirection = m_currentDirection;
@@ -29,14 +27,15 @@ void SnakeController::handleKeyPress(int key) {
     return;
   }
 
-  if (!isOppositeDirection(newDirection)) {
+  if (!isSameOrOppositeDirection(newDirection)) {
     m_currentDirection = newDirection;
     emit directionChanged(m_currentDirection);
   }
 }
 
-bool SnakeController::isOppositeDirection(int newDirection) {
-  return (m_currentDirection + 2) % 4 == newDirection;
+bool SnakeController::isSameOrOppositeDirection(int newDirection) {
+  return (m_currentDirection + 2) % 4 == newDirection ||
+         m_currentDirection == newDirection;
 }
 
 void SnakeController::saveScore(int score) {

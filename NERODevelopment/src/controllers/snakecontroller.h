@@ -19,7 +19,7 @@ signals:
 
 private:
   int m_currentDirection;
-  bool isOppositeDirection(int newDirection);
+  bool isSameOrOppositeDirection(int newDirection);
 };
 
 #endif // SNAKECONTROLLER_H
