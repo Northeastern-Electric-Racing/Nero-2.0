@@ -39,6 +39,7 @@ qt6_add_qml_module(content
         TorqueValueComponent.qml
         TorqueAdj.qml
         SpeedMode.qml
+        Snake.qml
         TimerDisplay.qml
         MaxSpeedComparator.qml
         MaxDrawGraph.qml
@@ -69,4 +70,5 @@ qt6_add_qml_module(content
 	images/yellowbird-upflap.png
 	images/yellowbird-midflap.png
 	images/yellowbird-downflap.png
+        QML_FILES Snake.qml
 )
