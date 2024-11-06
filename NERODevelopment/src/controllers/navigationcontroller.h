@@ -34,7 +34,7 @@ public slots:
 private:
   bool m_isSelected = false;
   int m_selectedPageIndex = 0;
-  int m_numPages = 8;
+  int m_numPages = 9;
 };
 
 #endif // NAVIGATIONCONTROLLER_H
