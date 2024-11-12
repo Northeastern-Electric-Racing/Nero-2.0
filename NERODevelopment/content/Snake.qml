@@ -33,7 +33,13 @@ Rectangle {
     Component.onCompleted: startGame()
 
     function startGame() {
-        snakeBody = [{ x: Math.floor(gridWidth / 2), y: Math.floor(gridHeight / 2) }]
+        let centerX = Math.floor(gridWidth / 2)
+        let centerY = Math.floor(gridHeight / 2)
+        snakeBody = [
+            { x: centerX,     y: centerY },
+            { x: centerX - 1, y: centerY },
+            { x: centerX - 2, y: centerY }
+        ]
         direction = 1
         gameOver = false
         score = 0
