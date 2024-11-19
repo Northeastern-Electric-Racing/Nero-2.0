@@ -5,12 +5,13 @@ Item {
     height: 300
 
     property real barrelAngle: 0
+    property color tankColor: "black"
 
     Rectangle {
         width: 170
         height: 40
         radius: height / 2
-        color: "black"
+        color: tankColor
         anchors.verticalCenterOffset: 14
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
@@ -20,7 +21,7 @@ Item {
         width: 55
         height: 20
         radius: height / 2
-        color: "black"
+        color: tankColor
         anchors.verticalCenterOffset: 13
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
@@ -32,7 +33,7 @@ Item {
         width: 55
         height: 20
         radius: height / 2
-        color: "black"
+        color: tankColor
         anchors.verticalCenterOffset: 13
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
@@ -53,7 +54,7 @@ Item {
             width: 250
             height: 100
             radius: height / 2
-            color: "black"
+            color: tankColor
             anchors.verticalCenterOffset: 15
             anchors.verticalCenter: parent.verticalCenter
 
@@ -64,7 +65,7 @@ Item {
         width: 250
         height: 45
         radius: height / 2
-        color: "black"
+        color: tankColor
         anchors.verticalCenterOffset: 75
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
@@ -75,7 +76,7 @@ Item {
         width: 100
         height: 50
         radius: height / 2
-        color: "black"
+        color: tankColor
         anchors.verticalCenterOffset: -50
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
@@ -85,7 +86,7 @@ Item {
             width: 35
             height: 20
             radius: height / 5
-            color: "black"
+            color: tankColor
             anchors.verticalCenterOffset: -19
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
@@ -97,7 +98,7 @@ Item {
         id: turretBottom
         width: 100
         height: 40
-        color: "black"
+        color: tankColor
         anchors.verticalCenterOffset: -30
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
@@ -106,7 +107,7 @@ Item {
             id: barrel
             width: 140
             height: 16
-            color: "black"
+            color: tankColor
             anchors.verticalCenterOffset: -5
             anchors.verticalCenter: parent.verticalCenter
             anchors.left: parent.left
@@ -119,7 +120,7 @@ Item {
                 width: 35
                 height: 25
                 radius: height / 4
-                color: "black"
+                color: tankColor
                 anchors.horizontalCenterOffset: 75
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
