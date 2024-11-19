@@ -1,13 +1,28 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 
+import NERO
+
 Item {
     id: speedMode
-    property int widthValue: 800
-    property int heightValue: 480
+    anchors.fill: parent
 
-    width: widthValue
-    height: heightValue
+    property bool tractionControlStatus: speedController.tractionControl
+    property int packTemp: speedController.packTemp
+    property int motorTemp: speedController.motorTemp
+    property int batteryValue: speedController.chargeState
+    property int timerValue: speedController.currentTime
+    property int lastRunTime: speedController.lastTime
+    property int fastestRunTime: speedController.fastestTime
+    property int maxSpeed: speedController.maxSpeed
+    property int currentSpeed: speedController.currentSpeed
+    property int currentDraw: speedController.current
+
+    Keys.onPressed: (event) => {
+        if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
+            speedController.enterButtonPressed();
+        }
+    }
 
     HeaderView {
         id: headerView
@@ -24,19 +39,19 @@ Item {
         anchors {
             top: speedMode.top
             horizontalCenter: speedMode.horizontalCenter
-
         }
         width: speedMode.width * 0.7
         height: speedMode.height * 0.12
-        text: "TRACTION CONTROL - ON"
+        text: speedMode.tractionControlStatus ? "TRACTION CONTROL - ON" : "TRACTION CONTROL - OFF"
         color: "#14ff00"
-        font.pixelSize: Math.min(speedMode.height * 0.09, speedMode.width * 0.06)
-        font.bold : true
+        font.pixelSize: Math.min(speedMode.height * 0.09,
+                                 speedMode.width * 0.06)
+        font.bold: true
     }
 
     LabelText {
         id: vehicleInfo
-        anchors{
+        anchors {
             bottom: packTempComponent.top
             left: speedMode.left
         }
@@ -46,7 +61,7 @@ Item {
         color: "white"
         font.pixelSize: Math.min(speedMode.height * 0.06,
                                  speedMode.width * 0.035)
-        font.bold : true
+        font.bold: true
     }
 
     LabelText {
@@ -61,9 +76,8 @@ Item {
         color: "white"
         font.pixelSize: Math.min(speedMode.height * 0.06,
                                  speedMode.width * 0.035)
-        font.bold : true
+        font.bold: true
     }
-
 
     ThermometerValueComponent {
         id: packTempComponent
@@ -75,6 +89,7 @@ Item {
         title: 'PACK TEMP'
         width: speedMode.width * 0.15
         height: speedMode.height * 0.25
+        thermometerValue: speedMode.packTemp
     }
 
     ThermometerValueComponent {
@@ -87,18 +102,21 @@ Item {
         title: 'MOTOR TEMP'
         width: speedMode.width * 0.15
         height: speedMode.height * 0.25
+        thermometerValue: speedMode.motorTemp
     }
 
     BatteryValueComponent {
         id: batteryValueComponent
         anchors {
             bottom: speedMode.bottom
+            bottomMargin: 15
             horizontalCenter: vehicleInfo.horizontalCenter
         }
 
         title: 'CHARGE STATE'
         width: speedMode.width * 0.15
         height: speedMode.height * 0.25
+        batteryValue: speedMode.batteryValue
     }
 
     TimerDisplay {
@@ -109,6 +127,9 @@ Item {
         }
         width: speedMode.width * 0.4
         height: speedMode.height * 0.3
+        currentRunTime: speedMode.timerValue
+        lastRunTime: speedMode.lastRunTime
+        fastestRunTime: speedMode.fastestRunTime
     }
 
     MaxDrawGraph {
@@ -117,8 +138,8 @@ Item {
             bottom: speedMode.bottom
             horizontalCenter: speedMode.horizontalCenter
         }
-        dimension: Math.min(speedMode.height * 0.4,
-                            speedMode.width * 0.25)
+        dimension: Math.min(speedMode.height * 0.4, speedMode.width * 0.25)
+        value: speedMode.currentDraw
     }
 
     MaxSpeedComparator {
@@ -129,5 +150,7 @@ Item {
         }
         width: speedMode.width / 10
         height: speedMode.height * 0.7
+        currentSpeed: speedMode.currentSpeed
+        previousTopSpeed: speedMode.maxSpeed
     }
 }

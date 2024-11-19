@@ -78,8 +78,6 @@ Rectangle {
             height: parent.height / 3
             width: parent.width
 
-            anchors.baseline: True
-
             Canvas {
                 id: downCanvas
 
