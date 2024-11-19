@@ -17,11 +17,11 @@ Window {
         source: "fonts/Roboto-Black.ttf"
     }
 
-    // Pit {
-    //     id: pitScreen
-    // }
-    // EfficiencyScreen {}
-    OffScreen {}
+      Pit {
+         id: pitScreen
+      }
+    //EfficiencyScreen {}
+    // OffScreen {}
     Timeline {
         id: appTimeline
         animations: [
