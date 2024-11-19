@@ -4,13 +4,12 @@ import QtQuick.Layouts 1.15
 
 import NERO
 
-Rectangle {
+Item {
     id: offScreen
-    width: 800
-    height: 480
+    width: parent.width
+    height: parent.width
     visible: true
     focus: true
-    color: "black"
 
     property variant attributeStatusMap: offViewController.attributeStatus
 

@@ -6,13 +6,18 @@ Item {
     id: detailDisplay
     property string shutdownFlowTask: "BSPD"
     property int status: 0
-    property bool highlight: true
+    property bool highlight: false
+    onHighlightChanged: {
+        if (!highlight) {
+            background.border.width = 1
+        }
+    }
 
     Rectangle {
-        id: detailRect
+        id: background
         anchors.fill: parent
         radius: 5
-        color: status == 0 ? "black" : (status === 1 ? "#14FF00" : (status === 2 ? "#FF0000" : "transparent"))
+        color: detailDisplay.status == 0 ? "black" : (detailDisplay.status == 1 ? "#14FF00" : (detailDisplay.status == 2 ? "#FF0000" : "transparent"))
         border.color: "white"
         border.width: 1
 
@@ -28,14 +33,14 @@ Item {
             running: detailDisplay.highlight
             repeat: true
             onTriggered: {
-                detailRect.border.width = (detailRect.border.width
-                                           === 1) ? 5 : 1 // Toggle between 0 and 10
+                background.border.width = (background.border.width
+                                           === 1) ? 5 : 1 // Toggle between 0 and 5
             }
         }
 
         LabelText {
             id: taskText
-            color: status == 0 ? "white" : "black"
+            color: detailDisplay.status == 0 ? "white" : "black"
             text: detailDisplay.shutdownFlowTask
             anchors.centerIn: parent
             font.bold: true

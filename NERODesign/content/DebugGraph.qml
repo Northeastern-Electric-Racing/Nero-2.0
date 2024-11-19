@@ -1,32 +1,33 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtCharts 2.6
+import NERO
 
 Item {
     id: chartItem
     width: 800
     height: 480
 
-    property string chartTitle: "AVERAGE CELL TEMPERATURE"
+    property string chartTitle: ""
 
     property int minX: 0
-    property int maxX: 20
+    property int maxX: debugGraphController.graphData.length
     property string xLabel: "TIME (MS)"
 
-    property int minY: 0
-    property int maxY: 50
-    property string yLabel: "TEMPERATURE (C)"
+    property int minY: debugGraphController.minY
+    property int maxY: debugGraphController.maxY
+    property string yLabel: ""
 
-    property var dummyData: [
-        {"x": 0, "y": 30},
-        {"x": 4, "y": 15},
-        {"x": 6, "y": 30},
-        {"x": 8, "y": 15},
-        {"x": 13, "y": 40},
-        {"x": 18, "y": 15},
-        {"x": 20, "y": 27}
-    ]
+    property var dummyData: debugGraphController.graphData
 
+    onDummyDataChanged: {
+        console.log(maxX)
+        series.clear()
+    }
+
+    onVisibleChanged: {
+        debugGraphController.setTitle(chartTitle)
+    }
     ChartView {
         anchors.fill: parent
         backgroundColor: "black"
@@ -42,7 +43,7 @@ Item {
             color: "white"
             labelsColor: "white"
             titleText: "<font color='white'>" + chartItem.xLabel + "</font>"
-            tickCount: chartItem.maxX + 1
+            tickCount: chartItem.maxX - chartItem.minX + 1
             labelFormat: "%d"
         }
 
@@ -54,7 +55,7 @@ Item {
             labelsColor: "white"
             color: "white"
             titleText: "<font color='white'>" + chartItem.yLabel + "</font>"
-            tickCount: chartItem.maxY / 5 + 1
+            tickCount: 5
             labelFormat: "%d"
         }
 
@@ -71,7 +72,7 @@ Item {
         model: dummyData
         delegate: Item {
             Component.onCompleted: {
-                series.append(modelData.x, modelData.y);
+                series.append(modelData.x, modelData.y)
             }
         }
     }

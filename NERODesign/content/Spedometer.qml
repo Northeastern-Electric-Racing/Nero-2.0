@@ -63,13 +63,13 @@ Item {
     Canvas {
         id: ring
         x: shape.x
-        y: shape.y
+        y: shape.y - gauge.verticalPadding + (gauge.verticalPadding / 10)
         width: parent.width
         height: parent.height
         antialiasing: true
 
         property real centerX: ring.width / 2
-        property real centerY: ring.height - gauge.verticalPadding + (gauge.verticalPadding / 10)
+        property real centerY: ring.height
         property real borderWidth: gauge.outerStrokeWidth
         property real ringRadius: (ring.width - gauge.horizontalPadding * 2) / 2
         property real pi: Math.PI

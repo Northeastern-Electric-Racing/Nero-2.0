@@ -4,6 +4,12 @@ import QtQuick.Controls 2.15
 Rectangle {
     id: snake
 
+    anchors.fill: parent
+    focus: snake.isFocused
+    visible: true
+
+    property bool isFocused: false
+
     width: 800
     height: 480
     color: "black"

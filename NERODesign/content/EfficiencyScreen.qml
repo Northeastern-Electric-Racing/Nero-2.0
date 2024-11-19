@@ -11,13 +11,23 @@ Item {
     property int torqueLimit: efficiencyController.currentMaxTorque
     property int numRegen: efficiencyController.currentRegenStrength
     property int hvSOC: efficiencyController.stateOfCharge
-    property int lvSOC: efficiencyController.stateOfChargeDelta
-    property int inverterTemp: efficiencyController.inverterTemp
-    property bool motorTemp: efficiencyController.motorTemp
-    property bool averageCellTemp: efficiencyController.averageCellTemp
+    property int lvSOC: efficiencyController.lowVoltageStateOfCharge
+    property int motorTemp: efficiencyController.motorTemp
+    property int packTemp: efficiencyController.packTemp
+    property int speed: efficiencyController.speed
+    property int timerValue: efficiencyController.currentTime
+    property int lastRunTime: efficiencyController.lastTime
+    property int fastestRunTime: efficiencyController.fastestTime
 
     width: 800
     height: 480
+
+    Keys.onPressed: (event) => {
+            if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
+                efficiencyController.enterButtonPressed();
+            }
+        }
+
 
     HeaderView {
         id: header
@@ -33,7 +43,7 @@ Item {
         ThermometerValueComponent {
             id: motorTempThermometer
             anchors.horizontalCenter: parent.horizontalCenter
-            thermometerValue: motorTemp
+            thermometerValue: efficiency.motorTemp
             Layout.preferredHeight: parent.height / 3
             title: "MOTOR TEMP"
         }
@@ -41,7 +51,7 @@ Item {
         ThermometerValueComponent {
             id: packTempThermometer
             anchors.horizontalCenter: parent.horizontalCenter
-            thermometerValue: averageCellTemp
+            thermometerValue: efficiency.packTemp
             Layout.preferredHeight: parent.height / 3
             title: "PACK TEMP"
         }
@@ -51,7 +61,7 @@ Item {
             regen: true
             Layout.preferredHeight: parent.height / 3
             anchors.horizontalCenter: parent.horizontalCenter
-            thermometerValue: numRegen
+            thermometerValue: efficiency.numRegen
             title: "REGEN"
         }
     }
@@ -65,31 +75,23 @@ Item {
         width: efficiency.width * 0.5
         height: parent.height
 
-        Rectangle {
-            id: onRect
-            width: parent.width
-            height: parent.width * 0.1
-            color: "transparent"
-            LabelText {
-                text: "ON"
-                color: "#18ff00"
-                anchors.centerIn: parent
-                font.pixelSize: 50
+        TimerDisplay {
+            id: timerDisplay
+            anchors {
+                horizontalCenter: parent.horizontalCenter
             }
+            width: efficiency.width * 0.4
+            height: efficiency.height * 0.3
+            currentRunTime: efficiency.timerValue
+            lastRunTime: efficiency.lastRunTime
+            fastestRunTime: efficiency.fastestRunTime
         }
 
         Spedometer {
             id: spedometer
             width: parent.width
+            value: efficiency.speed
             anchors.top: onRect.bottom
-        }
-
-        DirectionView {
-            id: directionView
-            width: parent.width * 0.5
-            height: parent.height * 0.15
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.top: spedometer.bottom
         }
     }
 
@@ -103,7 +105,7 @@ Item {
 
         TorqueValueComponent {
             id: torqueValue
-            torqueValue: 70
+            torqueValue: efficiency.torqueLimit
             Layout.preferredHeight: parent.height / 4
             anchors.horizontalCenter: parent.horizontalCenter
         }
@@ -111,7 +113,7 @@ Item {
         BatteryValueComponent {
             id: battery
             title: "HV SOC"
-            batteryValue: hvSOC
+            batteryValue: efficiency.hvSOC
             anchors.horizontalCenter: parent.horizontalCenter
             Layout.preferredHeight: parent.height / 4
         }
@@ -119,7 +121,7 @@ Item {
         BatteryValueComponent {
             id: battery2
             title: "LV SOC"
-            batteryValue: lvSOC
+            batteryValue: efficiency.lvSOC
             anchors.horizontalCenter: parent.horizontalCenter
             Layout.preferredHeight: parent.height / 4
         }

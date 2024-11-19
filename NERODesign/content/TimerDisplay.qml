@@ -6,6 +6,9 @@ Item {
     id: timerDisplay
     property int widthValue: 500
     property int heightValue: 400
+    property int currentRunTime: 0
+    property int lastRunTime: 0
+    property int fastestRunTime: 0
 
     width: widthValue
     height: heightValue
@@ -29,7 +32,7 @@ Item {
             widthValue: timerDisplay.width
             heightValue: timerDisplay.height / 3.3
             label: "CURRENT RUN"
-            value: "2000"
+            value: timerDisplay.currentRunTime
             radius: Math.min(timerDisplay.height / 7, timerDisplay.width / 20)
             isTop: true
         }
@@ -44,7 +47,7 @@ Item {
             widthValue: timerDisplay.width
             heightValue: timerDisplay.height / 3.3
             label: "LAST RUN"
-            value: "0"
+            value: timerDisplay.lastRunTime
         }
 
         RunInfo {
@@ -57,7 +60,7 @@ Item {
             widthValue: timerDisplay.width
             heightValue: timerDisplay.height / 3.3
             label: "FASTEST RUN"
-            value: "0"
+            value: timerDisplay.fastestRunTime
             radius: Math.min(timerDisplay.height / 7, timerDisplay.width / 20)
             isBottom: true
         }
