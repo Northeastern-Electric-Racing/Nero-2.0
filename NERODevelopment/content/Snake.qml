@@ -22,8 +22,8 @@ Rectangle {
 
     QtObject {
         id: food
-        property int x: 0
-        property int y: 0
+        property int x: Math.floor(gridWidth / 3 * 2)
+        property int y: Math.floor(gridHeight / 2)
     }
 
     property int direction: 1  // 0: Up, 1: Right, 2: Down, 3: Left
@@ -43,9 +43,8 @@ Rectangle {
         direction = 1
         gameOver = false
         score = 0
-        food.x = 0
-        food.y = 0
-        placeFood()
+        food.x = Math.floor(gridWidth / 3 * 2)
+        food.y = centerY
         gameTimer.start()
         updateSnakeModel()
     }
