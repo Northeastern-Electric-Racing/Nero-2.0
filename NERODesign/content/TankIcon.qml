@@ -1,6 +1,7 @@
 import QtQuick 2.15
 
 Item {
+    id: tankIcon
     width: 400
     height: 300
 
