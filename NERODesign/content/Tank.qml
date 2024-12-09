@@ -203,7 +203,7 @@ Rectangle {
                 height: 13
                 radius: height / 2
                 color: "transparent"
-                border.color: "crimson"
+                border.color: "darkred"
                 border.width: 2.5
                 anchors.horizontalCenter: ai.horizontalCenter
                 anchors.top: aiLabel.bottom
@@ -216,7 +216,7 @@ Rectangle {
                     radius: (aiScoreDisplay.height - 2) / 2
                     anchors.left: parent.left
                     anchors.top: parent.top
-                    color: tank.aiScore >= 1 ? "white" : "darkred"
+                    color: tank.aiScore >= 1 ? "white" : "#d44562"
                     border.color: "transparent"
                     z: -1
                 }
@@ -228,7 +228,7 @@ Rectangle {
                     anchors.left: aiScoreDisplay.left
                     anchors.leftMargin: aiScoreDisplay.width / 3
                     anchors.verticalCenter: parent.verticalCenter
-                    color: "crimson"
+                    color: "darkred"
                     border.color: "transparent"
                 }
 
@@ -237,7 +237,7 @@ Rectangle {
                     height: aiScoreDisplay.height
                     anchors.left: separator2.right
                     anchors.top: parent.top
-                    color: tank.aiScore >= 2 ? "white" : "darkred"
+                    color: tank.aiScore >= 2 ? "white" : "#d44562"
                     border.color: "transparent"
                     z: -1
                 }
@@ -247,7 +247,7 @@ Rectangle {
                     height: aiScoreDisplay.height
                     anchors.left: aiScoreDisplay.left
                     anchors.leftMargin: 2* aiScoreDisplay.width / 3
-                    color: "crimson"
+                    color: "darkred"
                     border.color: "transparent"
                 }
 
@@ -257,7 +257,7 @@ Rectangle {
                     radius: (aiScoreDisplay.height - 2) / 2
                     anchors.right: parent.right
                     anchors.top: parent.top
-                    color: tank.aiScore >= 3 ? "white" : "darkred"
+                    color: tank.aiScore >= 3 ? "white" : "#d44562"
                     border.color: "transparent"
                     z: -2
                 }
