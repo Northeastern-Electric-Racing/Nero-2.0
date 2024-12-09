@@ -15,6 +15,9 @@ Rectangle {
     property int playerScore: 0
     property int aiScore: 0
 
+    property bool playerWin: false
+    property bool aiWin: false
+
     Canvas {
         id: background
 
@@ -112,7 +115,7 @@ Rectangle {
             Rectangle {
                 id: playerScoreDisplay
                 width: 60
-                height: 13
+                height: 11
                 radius: height / 2
                 color: "transparent"
                 border.color: "mediumblue"
@@ -129,7 +132,7 @@ Rectangle {
                     radius: (playerScoreDisplay.height - 2) / 2
                     anchors.left: parent.left
                     anchors.top: parent.top
-                    color: tank.playerScore >= 1 ? "white" : "royalblue"
+                    color: tank.playerScore >= 1 ? "royalblue" : "white"
                     border.color: "transparent"
                     z: -1
                 }
@@ -150,7 +153,7 @@ Rectangle {
                     height: playerScoreDisplay.height
                     anchors.left: separator1.right
                     anchors.top: parent.top
-                    color: tank.playerScore >= 2 ? "white" : "royalblue"
+                    color: tank.playerScore >= 2 ? "royalblue" : "white"
                     border.color: "transparent"
                     z: -1
                 }
@@ -170,7 +173,7 @@ Rectangle {
                     radius: (playerScoreDisplay.height - 2) / 2
                     anchors.right: parent.right
                     anchors.top: parent.top
-                    color: tank.playerScore >= 3 ? "white" : "royalblue"
+                    color: tank.playerScore >= 3 ? "royalblue" : "white"
                     border.color: "transparent"
                     z: -2
                 }
@@ -200,7 +203,7 @@ Rectangle {
             Rectangle {
                 id: aiScoreDisplay
                 width: 60
-                height: 13
+                height: 11
                 radius: height / 2
                 color: "transparent"
                 border.color: "darkred"
@@ -216,7 +219,7 @@ Rectangle {
                     radius: (aiScoreDisplay.height - 2) / 2
                     anchors.left: parent.left
                     anchors.top: parent.top
-                    color: tank.aiScore >= 1 ? "white" : "#d44562"
+                    color: tank.aiScore >= 1 ? "#d44562" : "white"
                     border.color: "transparent"
                     z: -1
                 }
@@ -237,7 +240,7 @@ Rectangle {
                     height: aiScoreDisplay.height
                     anchors.left: separator2.right
                     anchors.top: parent.top
-                    color: tank.aiScore >= 2 ? "white" : "#d44562"
+                    color: tank.aiScore >= 2 ? "#d44562" : "white"
                     border.color: "transparent"
                     z: -1
                 }
@@ -257,7 +260,7 @@ Rectangle {
                     radius: (aiScoreDisplay.height - 2) / 2
                     anchors.right: parent.right
                     anchors.top: parent.top
-                    color: tank.aiScore >= 3 ? "white" : "#d44562"
+                    color: tank.aiScore >= 3 ? "#d44562" : "white"
                     border.color: "transparent"
                     z: -2
                 }
@@ -265,6 +268,24 @@ Rectangle {
         }
     }
 
+    Text {
+        id: playerWin
+        visible: tank.playerWin
+        anchors.centerIn: parent
+        color: "black"
+        text: "Game Over, You Win! (Hit Enter to play again)"
+        font.pixelSize: 20
+        font.weight: Font.Medium
+    }
 
+    Text {
+        id: aiWin
+        visible: tank.aiWin
+        anchors.centerIn: parent
+        color: "black"
+        text: "Game Over, You Lose! (Hit Enter to play again)"
+        font.pixelSize: 20
+        font.weight: Font.Medium
+    }
 
 }
