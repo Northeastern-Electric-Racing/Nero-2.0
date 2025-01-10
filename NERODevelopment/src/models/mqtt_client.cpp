@@ -66,7 +66,7 @@ void MqttClient::brokerConnected() {
 
 void MqttClient::receiveMessage(const QByteArray &message,
                                 const QMqttTopicName &topic) {
-  serverdata::ServerData serverData;
+  serverdata::v2::ServerData serverData;
 
   bool success = m_serializer.deserialize(&serverData, message);
 
@@ -85,10 +85,10 @@ void MqttClient::updateMessage(const QMqttMessage &msg) {
   // qDebug() << debug;
 }
 
-void MqttClient::sendMessage(const QString topic, const QString msg) {
-  serverdata::ServerData serverData;
+void MqttClient::sendMessage(const QString topic, const float value) {
+  serverdata::v2::ServerData serverData;
   serverData.setUnit("");
-  serverData.setValues({msg});
+  serverData.setValues({value});
   QByteArray data = serverData.serialize(&this->m_serializer);
   m_client->publish("NERO/" + topic, data);
 }

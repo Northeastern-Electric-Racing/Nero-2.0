@@ -26,11 +26,11 @@ void RaspberryModel::connectToMQTT() {
   this->m_client = client;
 }
 
-void RaspberryModel::sendMessage(const QString topic, const QString message) {
-  this->m_client->sendMessage(topic, message);
+void RaspberryModel::sendMessage(const QString topic, const float value) {
+  this->m_client->sendMessage(topic, value);
 }
 
-void RaspberryModel::receiveServerData(const serverdata::ServerData data,
+void RaspberryModel::receiveServerData(const serverdata::v2::ServerData data,
                                        const QString topic) {
   // qDebug() << "Topic: " << topic << "Data" << data.values();
   this->currentData[topic] = DataInfo(topic, data.unit(), data.values());

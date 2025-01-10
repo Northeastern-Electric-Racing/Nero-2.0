@@ -77,11 +77,11 @@ public:
   std::optional<int> getNumberOfNonCriticalFaults() override;
   std::optional<float> getLowVoltageStateOfCharge() override;
 
-  void sendMessage(const QString topic, const QString message) override;
+  void sendMessage(const QString topic, const float value) override;
 
 private slots:
   void updateCurrentData() override;
-  void receiveServerData(const serverdata::ServerData, const QString topic);
+  void receiveServerData(const serverdata::v2::ServerData, const QString topic);
 
 private:
   void processData(const std::string &data);

@@ -75,7 +75,7 @@ public:
   std::optional<int> getNumberOfNonCriticalFaults() override;
   std::optional<float> getLowVoltageStateOfCharge() override;
 
-  void sendMessage(const QString topic, const QString message) override;
+  void sendMessage(const QString topic, const float value) override;
 
 private slots:
   void updateCurrentData() override;
@@ -135,7 +135,7 @@ private:
   float down;
   float right;
 
-  QVector<QString> convertNumberToDataInfoValue(float value);
+  QVector<float> convertNumberToDataInfoValue(float value);
 };
 
 #endif // MOCK_MODEL_H

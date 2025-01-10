@@ -40,13 +40,13 @@ public slots:
    * topic and then the passed following topic path.
    * @param msg, the message to send
    */
-  void sendMessage(const QString topic, const QString msg);
+  void sendMessage(const QString topic, const float value);
 
 signals:
   /**
    * @brief emitServerData, Emits the parsed server data object from protobuf
    */
-  void emitServerData(const serverdata::ServerData, const QString);
+  void emitServerData(const serverdata::v2::ServerData, const QString);
 
 private slots:
 

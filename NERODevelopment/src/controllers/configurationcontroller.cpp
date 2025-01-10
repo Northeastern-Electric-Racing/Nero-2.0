@@ -56,9 +56,12 @@ void ConfigurationController::upButtonPressed() {
 void ConfigurationController::enterButtonPressed() {
   if (!this->m_isKeyboardSelected) {
     if (this->m_selectedConfigurationIndex == 3) {
-      this->m_model->sendMessage("driver", this->m_driverName);
-      this->m_model->sendMessage("system", this->m_systemName);
-      this->m_model->sendMessage("location", this->m_locationName);
+      // this->m_model->sendMessage("driver", this->m_driverName);
+      // this->m_model->sendMessage("system", this->m_systemName);
+      // this->m_model->sendMessage("location", this->m_locationName);
+      this->m_model->sendMessage("driver", 0);
+      this->m_model->sendMessage("system", 0);
+      this->m_model->sendMessage("location", 0);
     } else {
       this->setIsKeyboardSelected(true);
     }
