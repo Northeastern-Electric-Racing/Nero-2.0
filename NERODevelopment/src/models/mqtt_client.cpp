@@ -5,6 +5,7 @@
 #include <QtCore/QDateTime>
 #include <QtMqtt/QMqttClient>
 #include <QtWidgets/QMessageBox>
+#include <chrono>
 #include <serverdata.qpb.h>
 
 MqttClient::MqttClient(QObject *parent) : QObject(parent) {
@@ -89,6 +90,14 @@ void MqttClient::sendMessage(const QString topic, const float value) {
   serverdata::v2::ServerData serverData;
   serverData.setUnit("");
   serverData.setValues({value});
+
+  auto now = std::chrono::system_clock::now();
+  auto microseconds = std::chrono::duration_cast<std::chrono::microseconds>(
+                          now.time_since_epoch())
+                          .count();
+  QtProtobuf::uint64 timeUs = static_cast<QtProtobuf::uint64>(microseconds);
+
+  serverData.setTimeUs(timeUs);
   QByteArray data = serverData.serialize(&this->m_serializer);
   m_client->publish("NERO/" + topic, data);
 }
