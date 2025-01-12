@@ -359,13 +359,13 @@ std::optional<float> MockModel::getLowVoltageStateOfCharge() {
   return lvBattery;
 }
 
-void MockModel::sendMessage(QString topic, QString message) {
-  qDebug() << "Sending Message: " << topic << " " << message;
+void MockModel::sendMessage(QString topic, float value) {
+  qDebug() << "Sending Message: " << topic << " " << value;
 }
 
-QVector<QString> MockModel::convertNumberToDataInfoValue(float value) {
+QVector<float> MockModel::convertNumberToDataInfoValue(float value) {
   // qDebug() << value;
-  QVector<QString> val = {QString::number(value)};
+  QVector<float> val = {value};
   // qDebug() << val;
   return val;
 }

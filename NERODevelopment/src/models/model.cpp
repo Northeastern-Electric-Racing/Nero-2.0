@@ -33,7 +33,7 @@ void Model::updatePackTempData() {
 void Model::addPinnedData(QString id) {
   bool success;
   DataInfo dataInfo = this->currentData.value(id, DataInfo());
-  float value = dataInfo.values[0].toFloat(&success);
+  float value = dataInfo.values[0];
 
   if (success && value != -9999) {
     pinnedData.insert(
@@ -78,7 +78,7 @@ QList<DebugTableRowValue> Model::getDebugTableValues() {
     const DataInfo &dataInfo = it.value();
     QString name = dataInfo.topic;
     QString units = dataInfo.unit;
-    float value = dataInfo.values[0].toFloat();
+    float value = dataInfo.values[0];
 
     DebugTableRowValue row = {name, (std::round(value)), units};
 
@@ -90,7 +90,7 @@ QList<DebugTableRowValue> Model::getDebugTableValues() {
 
 std::optional<float> Model::getById(QString id) {
   bool ok;
-  float value = this->currentData.value(id, DataInfo()).values[0].toFloat(&ok);
+  float value = this->currentData.value(id, DataInfo()).values[0];
   if (ok && value != -9999) {
     return value;
   } else {

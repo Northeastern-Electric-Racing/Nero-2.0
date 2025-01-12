@@ -7,11 +7,11 @@
 struct DataInfo {
   QString topic;
   QString unit;
-  QVector<QString> values;
+  QVector<float> values;
 
   DataInfo();
   DataInfo(const QString topic, const QString unit,
-           const QVector<QString> values);
+           const QVector<float> values);
 };
 
 #endif // SERVER_DATA_H

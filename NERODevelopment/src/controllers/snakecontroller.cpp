@@ -40,6 +40,5 @@ bool SnakeController::isSameOrOppositeDirection(int newDirection) {
 
 void SnakeController::saveScore(int score) {
   QString topic = "NERO/SNAKE/SCORE";
-  QString message = QString::number(score);
-  m_model->sendMessage(topic, message);
+  m_model->sendMessage(topic, score);
 }
