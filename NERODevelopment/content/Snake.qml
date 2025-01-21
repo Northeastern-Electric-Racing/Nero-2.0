@@ -7,7 +7,7 @@ Rectangle {
     anchors.fill: parent
     focus: snakeGame.isFocused
     visible: true
-
+    property bool directionCooldown: false
     property bool isFocused: false
 
     width: 800
@@ -33,6 +33,7 @@ Rectangle {
     Component.onCompleted: startGame()
 
     function startGame() {
+        console.log(direction)
         let centerX = Math.floor(gridWidth / 2)
         let centerY = Math.floor(gridHeight / 2)
         snakeBody = [
@@ -43,10 +44,11 @@ Rectangle {
         direction = 1
         gameOver = false
         score = 0
-        food.x = Math.floor(gridWidth / 3 * 2)
-        food.y = centerY
-        gameTimer.start()
+        food.x = 0
+        food.y = 0
+        placeFood()
         updateSnakeModel()
+        gameTimer.start()
     }
 
     function placeFood() {
@@ -136,13 +138,36 @@ Rectangle {
         onTriggered: updateGame()
     }
 
+    Timer {
+        id: cooldownTimer
+        interval: 100 // Adjust this value for the desired cooldown period
+        repeat: false
+        onTriggered: directionCooldown = false
+    }
+
     Keys.onPressed: {
-        console.log("Key pressed:", event.key)
-        snakeController.handleKeyPress(event.key)
+        if (directionCooldown) return; // Ignore input during cooldown
+
+        if ((event.key === Qt.Key_Up && direction !== 2) ||
+            (event.key === Qt.Key_Right && direction !== 3) ||
+            (event.key === Qt.Key_Down && direction !== 0) ||
+            (event.key === Qt.Key_Left && direction !== 1)) {
+            directionCooldown = true;
+            cooldownTimer.start(); // Start the cooldown timer
+            switch (event.key) {
+                case Qt.Key_Up: direction = 0; break;
+                case Qt.Key_Right: direction = 1; break;
+                case Qt.Key_Down: direction = 2; break;
+                case Qt.Key_Left: direction = 3; break;
+            }
+        }
+
         if (event.key === Qt.Key_Return && gameOver) {
-            startGame()
+            startGame();
         }
     }
+
+
 
     ListModel {
         id: snakeModel
