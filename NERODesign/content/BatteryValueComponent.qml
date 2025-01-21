@@ -4,7 +4,7 @@ import QtQuick.Layouts
 Rectangle {
     id: batteryComponent
     property int batteryValue: 0
-    property string title: "MOTOR TEMP"
+    property string title: "Charge State"
     property int horizontalIconSpacing: width * 0.1
     property int labelVerticalSpacing: height * 0.1
 
@@ -33,10 +33,9 @@ Rectangle {
         }
 
         ValueText {
-            text: batteryValue
-            font.pixelSize: 0.6 * batteryComponent.height
-            anchors.left: battery.right
-            anchors.leftMargin: batteryComponent.horizontalIconSpacing
+            text: batteryComponent.batteryValue
+            font.pixelSize: 0.5 * batteryComponent.width
+            anchors.left: batttery.right
             anchors.top: parent.top
             anchors.topMargin: batteryComponent.labelVerticalSpacing
             anchors.bottom: parent.bottom

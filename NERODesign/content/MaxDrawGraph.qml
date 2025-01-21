@@ -15,6 +15,7 @@ Rectangle {
     property int value: 130
 
     Canvas {
+        id: canvas
         anchors.fill: parent
         onPaint: {
             var ctx = getContext("2d")
@@ -50,7 +51,6 @@ Rectangle {
             Layout.topMargin: 0.06 * background.dimension
         }
     }
-
 
     onValueChanged: canvas.requestPaint()
 }

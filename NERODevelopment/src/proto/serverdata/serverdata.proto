@@ -1,8 +1,13 @@
 syntax = "proto3";
 
-package serverdata;
+package serverdata.v2;
 
 message ServerData {
-   repeated string values = 1;
+   // ensure old type is reserved
+   reserved 1;
+   reserved "value";
    string unit = 2;
+   // time since unix epoch in MICROSECONDS
+   uint64 time_us = 3;
+   repeated float values = 4;
 }

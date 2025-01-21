@@ -8,8 +8,8 @@ Rectangle {
     property int horizontalIconSpacing: width * 0.1
     property int labelVerticalSpacing: height * 0.1
     property bool regen: false
-
-    color: 'transparent'
+    color: "transparent"
+    property string thermometerColor: "#FF0000"
     height: 100
     width: 100
 
@@ -29,6 +29,7 @@ Rectangle {
             anchors.top: parent.top
             anchors.right: parent.horizontalCenter
             regen: thermometerComponent.regen
+            color: thermometerComponent.thermometerColor
         }
 
         ValueText {
