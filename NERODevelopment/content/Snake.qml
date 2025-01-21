@@ -44,9 +44,8 @@ Rectangle {
         direction = 1
         gameOver = false
         score = 0
-        food.x = 0
-        food.y = 0
-        placeFood()
+        food.x = Math.floor(gridWidth / 3 * 2)
+        food.y = centerY
         updateSnakeModel()
         gameTimer.start()
     }
@@ -140,7 +139,7 @@ Rectangle {
 
     Timer {
         id: cooldownTimer
-        interval: 100 // Adjust this value for the desired cooldown period
+        interval: 75 // Adjust this value for the desired cooldown period
         repeat: false
         onTriggered: directionCooldown = false
     }
