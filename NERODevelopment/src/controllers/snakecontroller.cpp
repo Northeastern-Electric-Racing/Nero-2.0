@@ -1,7 +1,7 @@
 #include "snakecontroller.h"
 
 SnakeController::SnakeController(Model *model, QObject *parent)
-    : ButtonController{model, 7, parent} {}
+    : ButtonController{model, 5, parent} {}
 
 void SnakeController::handleKeyPress(int key) {
   int newDirection = m_currentDirection;
