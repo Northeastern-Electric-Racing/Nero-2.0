@@ -39,6 +39,7 @@ qt6_add_qml_module(content
         TorqueValueComponent.qml
         TorqueAdj.qml
         SpeedMode.qml
+        Snake.qml
         TimerDisplay.qml
         MaxSpeedComparator.qml
         MaxDrawGraph.qml
@@ -47,7 +48,6 @@ qt6_add_qml_module(content
         Arrow.qml
         OffScreen2.qml
         StatusDisplay.qml
-        Snake.qml
         SnakeBody.qml
         SnakeFood.qml
 

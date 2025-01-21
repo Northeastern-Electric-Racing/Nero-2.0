@@ -12,6 +12,7 @@
 #include "controllers/keyboardcontroller.h"
 #include "controllers/navigationcontroller.h"
 #include "controllers/offviewcontroller.h"
+#include "controllers/snakecontroller.h"
 #include "controllers/speedcontroller.h"
 #include "import_qml_components_plugins.h"
 #include "import_qml_plugins.h"
@@ -50,6 +51,7 @@ int main(int argc, char *argv[]) {
   NavigationController navigationController(model);
   DebugTableController tableController(model);
   FlappyBirdController flappyBirdController(model);
+  SnakeController snakeController(model);
   ConfigurationController configurationController(model);
   KeyboardController keyboardController(model);
   DebugGraphController graphController(model);
@@ -76,6 +78,7 @@ int main(int argc, char *argv[]) {
                                            &navigationController);
   engine.rootContext()->setContextProperty("flappyBirdController",
                                            &flappyBirdController);
+  engine.rootContext()->setContextProperty("snakeController", &snakeController);
   engine.rootContext()->setContextProperty("configurationController",
                                            &configurationController);
   engine.rootContext()->setContextProperty("keyboardViewController",
