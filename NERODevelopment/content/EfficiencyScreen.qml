@@ -22,12 +22,12 @@ Item {
     width: 800
     height: 480
 
-    Keys.onPressed: (event) => {
-            if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
-                efficiencyController.enterButtonPressed();
-            }
-        }
-
+    Keys.onPressed: event => {
+                        if (event.key === Qt.Key_Return
+                            || event.key === Qt.Key_Enter) {
+                            efficiencyController.enterButtonPressed()
+                        }
+                    }
 
     HeaderView {
         id: header
@@ -92,6 +92,7 @@ Item {
             width: parent.width
             value: efficiency.speed
             anchors.top: onRect.bottom
+            verticalPadding: 10
         }
     }
 

@@ -127,7 +127,6 @@ Rectangle {
                 Layout.preferredHeight: 300
                 value: pit.currentSpeed
                 maxValue: pit.maxSpeed
-                verticalPadding: 50
                 Layout.alignment: Qt.AlignHCenter
             }
 
