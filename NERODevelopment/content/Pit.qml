@@ -121,7 +121,7 @@ Rectangle {
             anchors.top: parent.top
             anchors.bottom: parent.bottom
 
-            Spedometer {
+            Radial {
                 id: spedometer
                 Layout.preferredWidth: 400
                 Layout.preferredHeight: 300

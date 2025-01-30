@@ -80,18 +80,18 @@ Item {
             anchors {
                 horizontalCenter: parent.horizontalCenter
             }
-            width: efficiency.width * 0.4
-            height: efficiency.height * 0.3
+            width: efficiency.width * 0.8
+            height: efficiency.height * 0.08
             currentRunTime: efficiency.timerValue
             lastRunTime: efficiency.lastRunTime
             fastestRunTime: efficiency.fastestRunTime
         }
 
-        Spedometer {
+        Radial {
             id: spedometer
             width: parent.width
             value: efficiency.speed
-            anchors.top: onRect.bottom
+            anchors.top: timerDisplay.bottom
             verticalPadding: 10
         }
     }

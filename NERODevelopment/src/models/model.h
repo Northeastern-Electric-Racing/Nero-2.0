@@ -85,6 +85,7 @@ public:
   std::optional<int> getFastestTime();
   std::optional<int> getLastTime();
   int getMaxSpeed();
+  float getMaxDraw();
 
   QList<DebugTableRowValue> getDebugTableValues();
   void updatePackTempData();
@@ -117,6 +118,7 @@ protected:
   int m_fastestTime;
   int m_lastTime;
   int m_maxSpeed;
+  float m_maxDraw;
 };
 
 #define ModelInterfaceId "com.ner.model"

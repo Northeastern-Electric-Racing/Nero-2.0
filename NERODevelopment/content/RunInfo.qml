@@ -4,38 +4,31 @@ import QtQuick.Controls 2.15
 Item {
     id: runInfo
 
-    property int widthValue: 200
-    property int heightValue: 40
-
-    width: widthValue
-    height: heightValue
-
     property string backgroundColor: "white"
     property string label: ""
     property int value: 0
     property int topRadius: 0
     property int radius: 0
-    property bool isTop: false
-    property bool isBottom: false
+    property bool isRight: false
+    property bool isLeft: false
 
     function formatTime(milliseconds) {
-        var minutes = Math.floor(milliseconds / 60000);
-        var seconds = Math.floor((milliseconds % 60000) / 1000);
-        var ms = milliseconds % 1000;
+        var minutes = Math.floor(milliseconds / 60000)
+        var seconds = Math.floor((milliseconds % 60000) / 1000)
+        var ms = Math.trunc(milliseconds % 1000 / 10)
 
-        var formattedMinutes = (minutes < 10 ? "0" + minutes : "" + minutes).split('').join(' ');
-        var formattedSeconds = (seconds < 10 ? "0" + seconds : "" + seconds).split('').join(' ');
-        var formattedMs = (ms < 100 ? (ms < 10 ? "00" + ms : "0" + ms) : "" + ms).split('').join(' ');
+        var formattedMinutes = minutes > 0 ? minutes + ":" : ""
+        var formattedSeconds = seconds + ":"
+        var formattedMs = ms + ""
 
-        return formattedMinutes + " : " + formattedSeconds + " : " + formattedMs;
+        return formattedMinutes + formattedSeconds + formattedMs
     }
 
-
     Rectangle {
-        id: bottomRect
-        visible: runInfo.isTop
-        width: runInfo.width
-        height: runInfo.radius
+        id: rightRect
+        visible: runInfo.isRight
+        width: runInfo.radius
+        height: runInfo.height
         color: runInfo.backgroundColor
 
         anchors {
@@ -45,14 +38,14 @@ Item {
     }
 
     Rectangle {
-        id: topRect
-        visible: runInfo.isBottom
-        width: runInfo.width
-        height: runInfo.radius
+        id: leftRect
+        visible: runInfo.isLeft
+        width: runInfo.radius
+        height: runInfo.height
         color: runInfo.backgroundColor
 
         anchors {
-            left: runInfo.left
+            right: runInfo.right
             top: runInfo.top
         }
     }
@@ -86,6 +79,7 @@ Item {
                 anchors.centerIn: parent
                 color: "white"
                 font.bold: true
+                font.letterSpacing: 0
             }
         }
 
@@ -95,9 +89,9 @@ Item {
             anchors {
                 left: parent.left
                 verticalCenter: parent.verticalCenter
-                rightMargin: runInfo.width
+                leftMargin: parent.width / 40
             }
-            font.pixelSize: Math.min(runInfo.height * 0.6, runInfo.width * 0.08)
+            font.pixelSize: Math.min(runInfo.height * 0.45)
             color: "black"
             font.bold: true
         }

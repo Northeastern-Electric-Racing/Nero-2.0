@@ -1,5 +1,6 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import QtQuick.Layouts
 
 import NERO
 
@@ -10,19 +11,24 @@ Item {
     property bool tractionControlStatus: speedController.tractionControl
     property int packTemp: speedController.packTemp
     property int motorTemp: speedController.motorTemp
-    property int batteryValue: speedController.chargeState
     property int timerValue: speedController.currentTime
     property int lastRunTime: speedController.lastTime
     property int fastestRunTime: speedController.fastestTime
     property int maxSpeed: speedController.maxSpeed
     property int currentSpeed: speedController.currentSpeed
-    property int currentDraw: speedController.current
+    property int maxDraw: speedController.maxCurrent
+    property int dcl: speedController.currentDischarge
 
-    Keys.onPressed: (event) => {
-        if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
-            speedController.enterButtonPressed();
-        }
-    }
+    property int xMargin: width / 20
+    property int yMargin: height / 20
+    property int verticalSpacing: height / 40
+
+    Keys.onPressed: event => {
+                        if (event.key === Qt.Key_Return
+                            || event.key === Qt.Key_Enter) {
+                            speedController.enterButtonPressed()
+                        }
+                    }
 
     HeaderView {
         id: headerView
@@ -35,7 +41,7 @@ Item {
     }
 
     LabelText {
-        id: labelText
+        id: tractionControl
         anchors {
             top: speedMode.top
             horizontalCenter: speedMode.horizontalCenter
@@ -49,108 +55,108 @@ Item {
         font.bold: true
     }
 
-    LabelText {
-        id: vehicleInfo
-        anchors {
-            bottom: packTempComponent.top
-            left: speedMode.left
-        }
-        width: speedMode.width * 0.25
-        height: speedMode.height * 0.1
-        text: "VEHICLE INFO"
-        color: "white"
-        font.pixelSize: Math.min(speedMode.height * 0.06,
-                                 speedMode.width * 0.035)
-        font.bold: true
-    }
-
-    LabelText {
-        id: performanceInfo
-        anchors {
-            bottom: packTempComponent.top
-            horizontalCenter: timerDisplay.right
-        }
-        width: speedMode.width * 0.4
-        height: speedMode.height * 0.1
-        text: "PERFORMANCE INFO"
-        color: "white"
-        font.pixelSize: Math.min(speedMode.height * 0.06,
-                                 speedMode.width * 0.035)
-        font.bold: true
-    }
-
-    ThermometerValueComponent {
-        id: packTempComponent
-        anchors {
-            horizontalCenter: vehicleInfo.horizontalCenter
-            bottom: motorTempComponent.top
-        }
-
-        title: 'PACK TEMP'
-        width: speedMode.width * 0.15
-        height: speedMode.height * 0.25
-        thermometerValue: speedMode.packTemp
-    }
-
-    ThermometerValueComponent {
-        id: motorTempComponent
-        anchors {
-            horizontalCenter: vehicleInfo.horizontalCenter
-            bottom: batteryValueComponent.top
-        }
-
-        title: 'MOTOR TEMP'
-        width: speedMode.width * 0.15
-        height: speedMode.height * 0.25
-        thermometerValue: speedMode.motorTemp
-    }
-
-    BatteryValueComponent {
-        id: batteryValueComponent
-        anchors {
-            bottom: speedMode.bottom
-            bottomMargin: 15
-            horizontalCenter: vehicleInfo.horizontalCenter
-        }
-
-        title: 'CHARGE STATE'
-        width: speedMode.width * 0.15
-        height: speedMode.height * 0.25
-        batteryValue: speedMode.batteryValue
-    }
-
     TimerDisplay {
         id: timerDisplay
         anchors {
-            bottom: maxDrawGraph.top
-            horizontalCenter: speedMode.horizontalCenter
+            top: tractionControl.bottom
+            left: parent.left
+            right: parent.right
+            rightMargin: speedMode.xMargin
+            leftMargin: speedMode.xMargin
+            topMargin: speedMode.verticalSpacing
         }
-        width: speedMode.width * 0.4
-        height: speedMode.height * 0.3
+        height: parent.height / 12
         currentRunTime: speedMode.timerValue
         lastRunTime: speedMode.lastRunTime
         fastestRunTime: speedMode.fastestRunTime
     }
 
-    MaxDrawGraph {
-        id: maxDrawGraph
+    RowLayout {
+        id: mainRow
         anchors {
-            bottom: speedMode.bottom
-            horizontalCenter: speedMode.horizontalCenter
+            top: timerDisplay.bottom
+            left: parent.left
+            right: parent.right
+            rightMargin: speedMode.xMargin
+            leftMargin: speedMode.xMargin
+            bottom: parent.bottom
+            bottomMargin: speedMode.yMargin
+            topMargin: speedMode.verticalSpacing
         }
-        dimension: Math.min(speedMode.height * 0.4, speedMode.width * 0.25)
-        value: speedMode.currentDraw
-    }
+        spacing: parent.width / 20
 
-    MaxSpeedComparator {
-        id: maxSpeedComparator
-        anchors {
-            horizontalCenter: performanceInfo.right
-            top: packTempComponent.top
+        ColumnLayout {
+            Layout.fillHeight: true
+            Layout.fillWidth: true
+            Layout.preferredWidth: 1
+            spacing: parent.height / 20
+
+            ThermometerValueComponent {
+                thermometerValue: speedMode.motorTemp
+                title: "MOTOR TEMP"
+                Layout.fillHeight: true
+                Layout.fillWidth: true
+                Layout.preferredHeight: 1
+            }
+
+            ThermometerValueComponent {
+                thermometerValue: speedMode.packTemp
+                title: "PACK TEMP"
+                Layout.fillHeight: true
+                Layout.fillWidth: true
+                Layout.preferredHeight: 1
+            }
         }
-        width: speedMode.width / 10
-        height: speedMode.height * 0.7
-        currentSpeed: speedMode.currentSpeed
-        previousTopSpeed: speedMode.maxSpeed
+
+        ColumnLayout {
+            Layout.fillHeight: true
+            Layout.fillWidth: true
+            Layout.preferredWidth: 1
+
+            LabelText {
+                color: "#47A7FF"
+                text: "TOP SPEED"
+                Layout.preferredHeight: 2
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+            }
+
+            Radial {
+                value: speedMode.maxSpeed
+                Layout.preferredHeight: 9
+                Layout.fillHeight: true
+                Layout.fillWidth: true
+                color: "blue"
+            }
+        }
+
+        ColumnLayout {
+            Layout.fillHeight: true
+            Layout.fillWidth: true
+            Layout.preferredWidth: 1
+            clip: false
+
+            LabelText {
+                color: "#47A7FF"
+                text: "MAX DRAW"
+                Layout.preferredHeight: 2
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+            }
+
+            Radial {
+                value: speedMode.maxDraw
+                Layout.preferredHeight: 9
+                Layout.fillHeight: true
+                Layout.fillWidth: true
+                maxValue: 400
+                label: "DCL: " + speedMode.dcl
+                unitLabel: 'A'
+            }
+        }
     }
 }
