@@ -22,6 +22,9 @@ Item {
     property int xMargin: width / 20
     property int yMargin: height / 20
     property int verticalSpacing: height / 40
+    property int borderRadii: 10
+    property int valueFontSize: Math.min(height / 8, width / 8)
+    property int labelFontSize: Math.min(height / 20, width / 20)
 
     Keys.onPressed: event => {
                         if (event.key === Qt.Key_Return
@@ -69,6 +72,7 @@ Item {
         currentRunTime: speedMode.timerValue
         lastRunTime: speedMode.lastRunTime
         fastestRunTime: speedMode.fastestRunTime
+        radius: speedMode.borderRadii
     }
 
     RowLayout {
@@ -97,6 +101,9 @@ Item {
                 Layout.fillHeight: true
                 Layout.fillWidth: true
                 Layout.preferredHeight: 1
+                radius: speedMode.borderRadii
+                valueFontSize: speedMode.valueFontSize
+                labelFontSize: speedMode.labelFontSize
             }
 
             ThermometerValueComponent {
@@ -105,6 +112,9 @@ Item {
                 Layout.fillHeight: true
                 Layout.fillWidth: true
                 Layout.preferredHeight: 1
+                radius: speedMode.borderRadii
+                valueFontSize: speedMode.valueFontSize
+                labelFontSize: speedMode.labelFontSize
             }
         }
 
@@ -121,6 +131,7 @@ Item {
                 Layout.fillHeight: true
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
+                font.pixelSize: speedMode.labelFontSize
             }
 
             Radial {
@@ -129,6 +140,7 @@ Item {
                 Layout.fillHeight: true
                 Layout.fillWidth: true
                 color: "blue"
+                valueFontSize: speedMode.valueFontSize
             }
         }
 
@@ -146,6 +158,7 @@ Item {
                 Layout.fillHeight: true
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
+                font.pixelSize: speedMode.labelFontSize
             }
 
             Radial {
@@ -156,6 +169,7 @@ Item {
                 maxValue: 400
                 label: "DCL: " + speedMode.dcl
                 unitLabel: 'A'
+                valueFontSize: speedMode.valueFontSize
             }
         }
     }

@@ -3,13 +3,16 @@ import QtQuick.Layouts
 
 Item {
     id: thermometerComponent
-    property int thermometerValue: 0
+    property int thermometerValue
     property string title: "MOTOR TEMP"
     property int horizontalIconSpacing: width * 0.1
     property int labelVerticalSpacing: height * 0.1
     property bool regen: false
     property string labelColor: "#47A7FF"
     property int horizontalPadding: width * 0.1
+    property int radius
+    property int valueFontSize
+    property int labelFontSize
 
     LabeledComponent {
         anchors.fill: parent
@@ -25,5 +28,8 @@ Item {
         labelColor: thermometerComponent.labelColor
         horizontalPadding: thermometerComponent.horizontalPadding
         valueUnit: "°"
+        radius: thermometerComponent.radius
+        valueFontSize: thermometerComponent.valueFontSize
+        labelFontSize: thermometerComponent.labelFontSize
     }
 }

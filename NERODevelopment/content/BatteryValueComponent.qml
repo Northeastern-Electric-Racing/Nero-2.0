@@ -3,12 +3,15 @@ import QtQuick.Layouts
 
 Item {
     id: batteryComponent
-    property int batteryValue: 0
+    property int batteryValue
     property string title: "Charge State"
     property int horizontalIconSpacing: width * 0.1
     property int labelVerticalSpacing: height * 0.1
     property string labelColor: "#47AFFF"
     property int horizontalPadding: width * 0.1
+    property int radius
+    property int valueFontSize
+    property int labelFontSize
 
     LabeledComponent {
         anchors.fill: parent
@@ -22,5 +25,8 @@ Item {
         labelColor: batteryComponent.labelColor
         horizontalPadding: batteryComponent.horizontalPadding
         valueUnit: "%"
+        radius: batteryComponent.radius
+        valueFontSize: batteryComponent.valueFontSize
+        labelFontSize: batteryComponent.labelFontSize
     }
 }

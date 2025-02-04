@@ -8,19 +8,20 @@ Item {
     property double maxValue: 100
     property int verticalPadding: gauge.height / 10
     property int horizontalPadding: gauge.width / 10
-    property int innerStrokeWidth: 3
+    property int innerStrokeWidth: 5
     property int outerStrokeWidth: 30
     property int mainTextTopPadding: 0
     property int heightOffset: 100
     property string label: "mph"
     property string color: "purple"
     property string unitLabel: ""
+    property int valueFontSize: width / 10
 
     Text {
         id: valueText
         text: Math.round(gauge.value) + unitLabel
         anchors.horizontalCenter: parent.horizontalCenter
-        font.pixelSize: gauge.width / 5
+        font.pixelSize: gauge.valueFontSize
         font.family: webFont.name
         color: "white"
 
@@ -60,10 +61,6 @@ Item {
         property double step: ((gauge.value - gauge.minValue)
                                / (gauge.maxValue - gauge.minValue) * (endAngle - startAngle))
 
-        Component.onCompleted: {
-            console.log('radius: ', ringRadius)
-        }
-
         onPaint: {
             const context = getContext("2d")
             context.reset()
@@ -99,7 +96,7 @@ Item {
         text: gauge.label
         color: "gray"
         font.family: webFont.name
-        font.pixelSize: gauge.width / 10
+        font.pixelSize: gauge.valueFontSize / 2
         anchors.top: valueText.bottom
         anchors.horizontalCenter: valueText.horizontalCenter
     }

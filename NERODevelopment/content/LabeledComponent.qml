@@ -10,6 +10,8 @@ Rectangle {
     property int horizontalPadding
     property Component icon
     property string valueUnit
+    property int valueFontSize
+    property int labelFontSize
 
     gradient: Gradient {
         stops: [
@@ -23,9 +25,6 @@ Rectangle {
             }
         ]
     }
-
-    radius: height / 8
-
     height: 100
     width: 100
 
@@ -36,7 +35,7 @@ Rectangle {
         anchors.topMargin: labelComponent.labelVerticalSpacing
 
         text: title
-        font.pixelSize: 0.15 * parent.width
+        font.pixelSize: labelComponent.labelFontSize
         color: labelComponent.labelColor
     }
 
@@ -68,20 +67,20 @@ Rectangle {
 
         ValueText {
             id: valueText
-            text: value
-            font.pixelSize: 0.8 * parent.height
+            text: labelComponent.value
+            font.pixelSize: labelComponent.valueFontSize
             anchors.left: componentContainer.item ? componentContainer.item.right : componentContainer.right
             anchors.leftMargin: labelComponent.horizontalIconSpacing
-            anchors.top: parent.top
+            anchors.verticalCenter: parent.verticalCenter
             anchors.bottom: parent.bottom
         }
 
         LabelText {
-            text: valueUnit
+            text: labelComponent.valueUnit
             anchors.left: valueText.right
             anchors.top: parent.top
             color: "#777777"
-            font.pixelSize: 0.8 * parent.height
+            font.pixelSize: labelComponent.valueFontSize
         }
     }
 }

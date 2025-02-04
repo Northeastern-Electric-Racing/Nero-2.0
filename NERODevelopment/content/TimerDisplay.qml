@@ -7,6 +7,8 @@ Item {
     property int currentRunTime: 0
     property int lastRunTime: 0
     property int fastestRunTime: 0
+    property int radius: Math.min(timerDisplay.height / 7,
+                                  timerDisplay.width / 20)
 
     RowLayout {
         width: timerDisplay.width
@@ -27,7 +29,7 @@ Item {
             backgroundColor: "#47A7FF"
             label: "CURRENT RUN"
             value: timerDisplay.currentRunTime
-            radius: Math.min(timerDisplay.height / 7, timerDisplay.width / 20)
+            radius: timerDisplay.radius
             isLeft: true
         }
 
@@ -51,7 +53,7 @@ Item {
             backgroundColor: "#AD00FF"
             label: "FASTEST RUN"
             value: timerDisplay.fastestRunTime
-            radius: Math.min(timerDisplay.height / 7, timerDisplay.width / 20)
+            radius: timerDisplay.radius
             isRight: true
         }
     }
