@@ -19,6 +19,10 @@ Rectangle {
     property int iconWidth: 40
     property int iconHeight: 90
     property int labelVerticalSpacing: 10
+
+    property int valueFontSize: Math.min(height / 8, width / 8)
+    property int labelFontSize: Math.min(height / 20, width / 20)
+
     color: 'black'
     height: 480
     width: 800
@@ -126,8 +130,8 @@ Rectangle {
                 Layout.preferredWidth: 400
                 Layout.preferredHeight: 300
                 value: pit.currentSpeed
-                maxValue: pit.maxSpeed
                 Layout.alignment: Qt.AlignHCenter
+                valueFontSize: pit.valueFontSize
             }
 
             DirectionView {

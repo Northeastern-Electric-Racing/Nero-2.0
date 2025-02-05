@@ -135,7 +135,7 @@ Item {
             }
 
             Radial {
-                value: speedMode.maxSpeed
+                value: speedMode.currentSpeed
                 Layout.preferredHeight: 9
                 Layout.fillHeight: true
                 Layout.fillWidth: true
