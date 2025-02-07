@@ -19,6 +19,12 @@ void Model::updateStoredValues() {
       m_fastestTime = time.value();
     }
   }
+  std::optional<float> draw = this->getCurrent();
+  if (draw) {
+    if (draw.value() > m_maxDraw) {
+      m_maxDraw = draw.value();
+    }
+  }
 }
 
 void Model::updatePackTempData() {
@@ -70,6 +76,8 @@ std::optional<int> Model::getLastTime() { return m_lastTime; }
 std::optional<int> Model::getFastestTime() { return m_fastestTime; }
 
 int Model::getMaxSpeed() { return m_maxSpeed; }
+
+float Model::getMaxDraw() { return m_maxDraw; }
 
 QList<DebugTableRowValue> Model::getDebugTableValues() {
   QList<DebugTableRowValue> table = {};

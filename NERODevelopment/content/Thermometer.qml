@@ -2,24 +2,29 @@ import QtQuick 6.5
 import QtQuick.Controls 6.5
 import QtQuick.Layouts
 
-Item {
+Rectangle {
     id: thermometer
     property bool regen: false
     property int value: 0
-    property int horizontalPadding: width / 20
     property int maxValue: 65
     property int minValue: -15
-    property string color: regen ? "red" : value > maxValue - ((Math.abs(maxValue) + Math.abs(
-                                                                    minValue)) / 5) ? "red" : value > maxValue - (((Math.abs(maxValue) + Math.abs(minValue)) / 5) * 2) ? "orange" : value > maxValue - (((Math.abs(maxValue) + Math.abs(minValue)) / 5) * 3) ? "#FFF500" : value > maxValue - (((Math.abs(maxValue) + Math.abs(minValue)) / 5) * 4) ? "blue" : "purple"
+    property string fillColor: regen ? "red" : value > maxValue - ((Math.abs(maxValue) + Math.abs(
+                                                                        minValue)) / 5) ? "red" : value > maxValue - (((Math.abs(maxValue) + Math.abs(minValue)) / 5) * 2) ? "orange" : value > maxValue - (((Math.abs(maxValue) + Math.abs(minValue)) / 5) * 3) ? "#FFF500" : value > maxValue - (((Math.abs(maxValue) + Math.abs(minValue)) / 5) * 4) ? "blue" : "purple"
     height: 500
-    width: 600
+    width: height / 2.233
+    color: 'transparent'
+
+    property int thermometerWidth: thermometer.height / 2.233
+    property int horizontalPadding: thermometer.thermometerWidth / 10
+    property int outerRectangleWidth: thermometer.thermometerWidth / 1.53
+    property int outerRectangleHeight: thermometer.height / 1.84
 
     Rectangle {
         visible: thermometer.regen
         id: lightningBackground
-        width: parent.width / 3
+        width: thermometer.thermometerWidth / 3
         height: parent.height / 4
-        color: "white"
+        color: thermometer.fillColor
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
         anchors.verticalCenterOffset: -parent.height / 20
@@ -32,10 +37,10 @@ Item {
         id: topSemiCircle
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.top: parent.top
-        width: parent.width / 4
-        height: parent.width / 4
-        radius: parent.width / 4
-        color: "white"
+        width: thermometer.outerRectangleWidth
+        height: parent.height / 12.5
+        radius: parent.height / 12.5
+        color: thermometer.fillColor
     }
 
     Rectangle {
@@ -43,27 +48,40 @@ Item {
         anchors.top: topSemiCircle.verticalCenter
         anchors.bottom: bottomOuterCircle.verticalCenter
         anchors.horizontalCenter: parent.horizontalCenter
-        width: parent.width / 4
-        height: parent.height / 2
-        color: "white"
+        width: thermometer.outerRectangleWidth
+        height: thermometer.outerRectangleHeight
+        color: thermometer.fillColor
     }
 
     Rectangle {
         id: bottomOuterCircle
         anchors.horizontalCenter: parent.horizontalCenter
-        y: parent.height / 2
-        width: thermometer.width / 2
-        height: thermometer.width / 2
-        radius: thermometer.width / 2
-        color: "white"
+        anchors.bottom: thermometer.bottom
+        width: thermometer.thermometerWidth
+        height: thermometer.thermometerWidth
+        radius: thermometer.thermometerWidth
+        color: thermometer.fillColor
+    }
 
-        Rectangle {
-            id: fillBottomCircle
-            anchors.centerIn: parent
-            width: parent.width * 0.8
-            height: parent.height * 0.8
-            radius: parent.radius
-            color: thermometer.color
+    Rectangle {
+        id: fillBottomCircle
+        anchors.centerIn: bottomOuterCircle
+        width: bottomOuterCircle.width * 0.8
+        height: bottomOuterCircle.height * 0.8
+        radius: bottomOuterCircle.radius
+        z: 1
+
+        gradient: Gradient {
+            stops: [
+                GradientStop {
+                    position: 1.0
+                    color: "black"
+                },
+                GradientStop {
+                    position: -0.8
+                    color: thermometer.fillColor
+                }
+            ]
         }
     }
 
@@ -73,7 +91,32 @@ Item {
 
         anchors.leftMargin: thermometer.horizontalPadding
         anchors.rightMargin: thermometer.horizontalPadding
-        color: thermometer.color
+        anchors.bottom: fillBottomCircle.top
+        anchors.topMargin: thermometer.height / 5
+        gradient: Gradient {
+            stops: [
+                GradientStop {
+                    position: 1.5
+                    color: "black"
+                },
+                GradientStop {
+                    position: 0.0
+                    color: thermometer.fillColor
+                }
+            ]
+        }
+        z: 0
+    }
+
+    Rectangle {
+        id: blackFillRectangle
+        anchors {
+            top: outerRectangle.top
+            left: fillRectangle.left
+            right: fillRectangle.right
+            bottom: fillRectangle.top
+        }
+        color: "black"
     }
 
     Lightning {

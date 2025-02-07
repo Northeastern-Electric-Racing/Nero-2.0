@@ -113,6 +113,7 @@ void SpeedController::enterButtonPressed() {
              << " Last time:" << m_lastTime
              << " Fastest time:" << m_fastestTime;
     setCurrentTime(runTime);
+    setLastTime(runTime);
 
     if (runTime < fastestTime() || fastestTime() == 0) {
       setFastestTime(runTime);
@@ -141,4 +142,6 @@ void SpeedController::update() {
   setCurrentSpeed(*m_model->getMph());
   setMaxSpeed(m_model->getMaxSpeed());
   setCurrent(*m_model->getCurrent());
+  setMaxCurrent(m_model->getMaxDraw());
+  setCurrentDischarge(*m_model->getDcl());
 }
