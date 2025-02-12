@@ -2,6 +2,7 @@
 #include "mqtt_client.h"
 
 #include <QJsonDocument>
+#include <QTimer>
 #include <QtCore/QDateTime>
 #include <QtMqtt/QMqttClient>
 #include <QtWidgets/QMessageBox>
@@ -44,7 +45,9 @@ void MqttClient::updateLogStateChange() {
 
 void MqttClient::brokerDisconnected() {
   qDebug("Disconnected");
-  this->connectToHost();
+
+  QTimer::singleShot(5000, this,
+                     &MqttClient::connectToHost); // 5000 ms = 5 seconds
 }
 
 void MqttClient::setClientPort(int p) { m_client->setPort(p); }
