@@ -7,15 +7,15 @@ Item {
     focus: !navigation.isSelected
     property int selectedPageIndex: navigationController.selectedPageIndex
     property bool isSelected: navigationController.isSelected
-    property int exitPageIndex: 8
+    property int exitPageIndex: 6
     property int offPageIndex: 0
     property int pitPageIndex: 1
     property int speedPageIndex: 2
     property int efficiencyPageIndex: 3
-    property int debugPageIndex: 4
-    property int configurationPageIndex: 5
-    property int flappyPageIndex: 6
-    property int snakePageIndex: 7
+    // property int debugPageIndex: 4
+    // property int configurationPageIndex: 5
+    property int flappyPageIndex: 4
+    property int snakePageIndex: 5
 
     Keys.onPressed: event => {
                         console.log(navigationController.isSelected,
@@ -75,15 +75,15 @@ Item {
             text: "Efficiency"
         }
 
-        HomeMenuItem {
-            highlighted: selectedPageIndex === debugPageIndex
-            text: "Debug"
-        }
+        // HomeMenuItem {
+        //     highlighted: selectedPageIndex === debugPageIndex
+        //     text: "Debug"
+        // }
 
-        HomeMenuItem {
-            highlighted: selectedPageIndex === configurationPageIndex
-            text: "Configuration"
-        }
+        // HomeMenuItem {
+        //     highlighted: selectedPageIndex === configurationPageIndex
+        //     text: "Configuration"
+        // }
 
         HomeMenuItem {
             highlighted: selectedPageIndex === flappyPageIndex
@@ -121,15 +121,15 @@ Item {
         focus: selectedPageIndex === efficiencyPageIndex && isSelected
     }
 
-    DebugTable {
-        visible: selectedPageIndex === debugPageIndex && isSelected
-        focus: selectedPageIndex === debugPageIndex && isSelected
-    }
+    // DebugTable {
+    //     visible: selectedPageIndex === debugPageIndex && isSelected
+    //     focus: selectedPageIndex === debugPageIndex && isSelected
+    // }
 
-    Configuration {
-        visible: selectedPageIndex === configurationPageIndex && isSelected
-        isFocused: selectedPageIndex === configurationPageIndex && isSelected
-    }
+    // Configuration {
+    //     visible: selectedPageIndex === configurationPageIndex && isSelected
+    //     isFocused: selectedPageIndex === configurationPageIndex && isSelected
+    // }
 
     FlappyBird {
         visible: selectedPageIndex === flappyPageIndex && isSelected

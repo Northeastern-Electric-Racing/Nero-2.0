@@ -7,7 +7,7 @@ qt6_add_qml_module(content
     URI "content"
     VERSION 1.0
     QML_FILES
-        Spedometer.qml
+        Radial.qml
         App.qml
         Thermometer.qml
         Battery.qml
@@ -39,6 +39,7 @@ qt6_add_qml_module(content
         TorqueValueComponent.qml
         TorqueAdj.qml
         SpeedMode.qml
+        Snake.qml
         TimerDisplay.qml
         MaxSpeedComparator.qml
         MaxDrawGraph.qml
@@ -47,9 +48,10 @@ qt6_add_qml_module(content
         Arrow.qml
         OffScreen2.qml
         StatusDisplay.qml
-        Snake.qml
         SnakeBody.qml
         SnakeFood.qml
+        LabeledComponent.qml
+
 
     RESOURCES
         fonts/fonts.txt

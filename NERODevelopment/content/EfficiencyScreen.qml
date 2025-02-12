@@ -22,12 +22,12 @@ Item {
     width: 800
     height: 480
 
-    Keys.onPressed: (event) => {
-            if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
-                efficiencyController.enterButtonPressed();
-            }
-        }
-
+    Keys.onPressed: event => {
+                        if (event.key === Qt.Key_Return
+                            || event.key === Qt.Key_Enter) {
+                            efficiencyController.enterButtonPressed()
+                        }
+                    }
 
     HeaderView {
         id: header
@@ -80,18 +80,19 @@ Item {
             anchors {
                 horizontalCenter: parent.horizontalCenter
             }
-            width: efficiency.width * 0.4
-            height: efficiency.height * 0.3
+            width: efficiency.width * 0.8
+            height: efficiency.height * 0.08
             currentRunTime: efficiency.timerValue
             lastRunTime: efficiency.lastRunTime
             fastestRunTime: efficiency.fastestRunTime
         }
 
-        Spedometer {
+        Radial {
             id: spedometer
             width: parent.width
             value: efficiency.speed
-            anchors.top: onRect.bottom
+            anchors.top: timerDisplay.bottom
+            verticalPadding: 10
         }
     }
 

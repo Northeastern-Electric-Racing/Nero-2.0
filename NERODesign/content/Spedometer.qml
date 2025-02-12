@@ -8,8 +8,8 @@ Item {
     property double maxValue: 100
     property int verticalPadding: 100
     property int horizontalPadding: 20
-    property int innerStrokeWidth: 10
-    property int outerStrokeWidth: 20
+    property int innerStrokeWidth: 3
+    property int outerStrokeWidth: 30
     property int mainTextTopPadding: 0
     width: 300
     height: width / 2 + verticalPadding
@@ -20,32 +20,17 @@ Item {
         height: parent.height
         anchors.centerIn: parent
 
-        ShapePath {
-            id: innerArc
-            fillColor: "transparent"
-            strokeColor: "white"
-            strokeWidth: gauge.innerStrokeWidth
-
-            startX: gauge.horizontalPadding
-            startY: shape.height - gauge.verticalPadding
-            PathArc {
-                relativeX: shape.width - (gauge.horizontalPadding * 2)
-                y: shape.height - gauge.verticalPadding
-                radiusX: 25
-                radiusY: 25
-            }
-        }
-
-
         Text {
             id: valueText
             text: Math.round(gauge.value)
             anchors.horizontalCenter: parent.horizontalCenter
-            font.pointSize: gauge.width / 4
+            font.pointSize: gauge.width / 5
             font.family: webFont.name
             color: "white"
 
             anchors.bottom: shape.bottom
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.verticalCenterOffset: 15
             anchors.bottomMargin: gauge.verticalPadding / (3/2)
         }
 
@@ -69,13 +54,13 @@ Item {
         antialiasing: true
 
         property real centerX: ring.width / 2
-        property real centerY: ring.height
+        property real centerY: ring.height / 2
         property real borderWidth: gauge.outerStrokeWidth
-        property real ringRadius: (ring.width - gauge.horizontalPadding * 2) / 2
+        property real ringRadius: (ring.width - gauge.horizontalPadding * 2) / 3
         property real pi: Math.PI
-        property double startAngle: pi
-        property double endAngle: 2  * pi
-        property double step: gauge.value / (gauge.maxValue - gauge.minValue) * (endAngle - startAngle)
+        property double startAngle: pi / 2
+        property double endAngle: 2 * pi
+        property double step: 1 - (gauge.value / (gauge.maxValue - gauge.minValue) * (endAngle - startAngle))
 
         onPaint: {
             const context = getContext("2d");
@@ -83,8 +68,8 @@ Item {
 
             // Draw the progress ring
             const gradient = context.createLinearGradient(0, 0, ring.width, 0);
-            gradient.addColorStop(0, "#14FF00");
-            gradient.addColorStop(0.75, "#FFF500");
+            gradient.addColorStop(0.1, "blue");
+            gradient.addColorStop(0.5, "black");
             context.fillStyle = gradient;
             context.strokeStyle = gradient;
 
@@ -92,30 +77,31 @@ Item {
             context.beginPath();
             context.clearRect(0, 0, ring.width, ring.height);
             context.arc(ring.centerX, ring.centerY, ring.ringRadius,
-                        ring.startAngle, ring.startAngle + ring.step, false);
+                        ring.startAngle, ring.startAngle - ring.step / 10, false);
             context.stroke();
+
+            // Draw the inner border
+            const innerBorderRadius = ring.ringRadius - ring.borderWidth / 2;
+                context.strokeStyle = "#87CEEB";
+                context.lineWidth = gauge.innerStrokeWidth;
+
+                context.beginPath();
+                context.arc(ring.centerX, ring.centerY, innerBorderRadius,
+                    ring.startAngle, ring.startAngle - ring.step / 10,false);
+                context.stroke();
         }
     }
 
     Text {
-        id: minValueText
-        text: "0"
-        color: "white"
+        id: mph
+        text: "mph"
+        color: "gray"
         font.family: webFont.name
         font.pointSize: gauge.verticalPadding / 2
         anchors.bottom: parent.bottom
-        anchors.left: parent.left
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.verticalCenterOffset: 70
         anchors.leftMargin: gauge.horizontalPadding / 2
-    }
-
-    Text {
-        id: maxValueText
-        text: gauge.maxValue
-        font.pointSize: gauge.verticalPadding / 2
-        color: "white"
-        font.family: webFont.name
-        anchors.right: parent.right
-        anchors.bottom: parent.bottom
-        anchors.rightMargin: gauge.horizontalPadding / 2
     }
 }

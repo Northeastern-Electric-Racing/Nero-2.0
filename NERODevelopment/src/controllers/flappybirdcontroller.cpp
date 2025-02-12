@@ -1,7 +1,7 @@
 #include "flappybirdcontroller.h"
 
 FlappyBirdController::FlappyBirdController(Model *model, QObject *parent)
-    : ButtonController{model, 6, parent} {
+    : ButtonController{model, 4, parent} {
   this->m_debounceOffset = 150;
 }
 
@@ -19,6 +19,6 @@ void FlappyBirdController::enterButtonPressed() {
 }
 
 void FlappyBirdController::saveScore(int score) {
-  QString topic = "NERO/FLAPPYBIRD/SCORE";
+  QString topic = "/FLAPPYBIRD/SCORE";
   m_model->sendMessage(topic, score);
 }
