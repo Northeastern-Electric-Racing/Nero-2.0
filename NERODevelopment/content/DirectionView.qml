@@ -4,10 +4,8 @@ import QtQuick.Layouts 1.0
 
 Item {
     id: directionView
-    width: 1920
-    height: 1080
     property bool forward: true
-    property int radius: 50
+    property int radius: 10
 
     RowLayout {
         id: rowLayout
@@ -15,37 +13,36 @@ Item {
         spacing: 20
 
         Rectangle {
-            id: rectangle
-            color: forward ? "#7CFC00" : "transparent"
+            id: driveContainer
+            color: forward ? "#FF49F8" : "transparent"
             Layout.fillHeight: true
-            Layout.preferredWidth: parent.width/2 - 10
-            border.color: forward ? "transparent" : "white"  // Outline color
-            border.width: 5      // Outline width
-            radius: directionView.radius          // Border radius to round the corners
-
+            Layout.preferredWidth: parent.width / 2 - 10
+            border.color: "#FF49F8" // Outline color
+            border.width: 5 // Outline width
+            radius: directionView.radius // Border radius to round the corners
 
             Text {
                 anchors.centerIn: parent
-                font.pixelSize: Math.min(parent.width, parent.height)
+                font.pixelSize: Math.min(parent.width, parent.height) / 1.5
                 text: "D"
-                color: "white"
+                color: forward ? 'black' : "white"
                 font.family: webFont.name
             }
         }
 
         Rectangle {
-            id: rectangle1
-            color: forward ? "transparent" : "Red"
+            id: reverseContainer
+            color: forward ? "transparent" : "#FF49F8"
             Layout.fillHeight: true
             Layout.preferredWidth: parent.width / 2 - 20
-            border.color: forward ? "white" : "transparent"  // Outline color
-            border.width: 5      // Outline width
-            radius: directionView.radius          // Border radius to round the corners
+            border.color: "#FF49F8" // Outline color
+            border.width: 5 // Outline width
+            radius: directionView.radius // Border radius to round the corners
 
             Text {
                 anchors.centerIn: parent
-                font.pixelSize: Math.min(parent.width, parent.height)
-                color: "white"
+                font.pixelSize: Math.min(parent.width, parent.height) / 1.5
+                color: forward ? "white" : 'black'
                 font.family: webFont.name
                 text: "R"
             }

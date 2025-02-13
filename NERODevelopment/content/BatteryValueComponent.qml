@@ -4,7 +4,7 @@ import QtQuick.Layouts
 Item {
     id: batteryComponent
     property int batteryValue
-    property string title: "Charge State"
+    property string title
     property int horizontalIconSpacing: width * 0.1
     property int labelVerticalSpacing: height * 0.1
     property string labelColor: "#47AFFF"

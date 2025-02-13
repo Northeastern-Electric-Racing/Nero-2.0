@@ -4,7 +4,7 @@ import QtQuick.Layouts
 Item {
     id: thermometerComponent
     property int thermometerValue
-    property string title: "MOTOR TEMP"
+    property string title
     property int horizontalIconSpacing: width * 0.1
     property int labelVerticalSpacing: height * 0.1
     property bool regen: false
