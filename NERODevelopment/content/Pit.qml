@@ -78,7 +78,6 @@ Rectangle {
                     anchors.bottom: parent.bottom
                     width: parent.width / 1.75
                     radius: 25
-                    //thermometerColor: "blue"
                     thermometerValue: pit.packTempValue
                     title: "PACK TEMP"
                 }
