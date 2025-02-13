@@ -80,7 +80,7 @@ Rectangle {
             anchors.left: valueText.right
             anchors.top: parent.top
             color: "#777777"
-            font.pixelSize: labelComponent.valueFontSize
+            font.pixelSize: 54
         }
     }
 }

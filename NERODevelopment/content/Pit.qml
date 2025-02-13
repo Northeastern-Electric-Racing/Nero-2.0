@@ -12,6 +12,8 @@ Rectangle {
     property int motorTempValue: homeController.motorTemp
     property int currentSpeed: homeController.speed
     property bool forward: homeController.status
+    property int hvSOC: efficiencyController.stateOfCharge
+    property int lvSOC: efficiencyController.lowVoltageStateOfCharge
 
     property int maxSpeed: 5
     property int horizontalMargin: 10
@@ -33,7 +35,7 @@ Rectangle {
         color: "transparent"
 
         Rectangle {
-            id: coreInfo
+            id: coreInfoLeft
             anchors.left: parent.left
             anchors.top: parent.top
             anchors.topMargin: 100
@@ -43,7 +45,7 @@ Rectangle {
             color: "transparent"
 
             Rectangle {
-                id: topRow
+                id: topLeft
                 anchors.top: parent.top
                 anchors.right: parent.right
                 anchors.left: parent.left
@@ -51,92 +53,113 @@ Rectangle {
                 color: "transparent"
 
                 ThermometerValueComponent {
+                    anchors.top: parent.top
+                    anchors.left: parent.left
+                    anchors.bottom: parent.bottom
+                    width: parent.width / 1.75
+                    radius: 25
+                    thermometerValue: pit.motorTempValue
+                    title: "MOTOR TEMP"
+                }
+            }
+
+            Rectangle {
+                id: bottomLeft
+                anchors.top: topLeft.bottom
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.bottom: parent.bottom
+                color: "transparent"
+
+                ThermometerValueComponent {
                     id: packTempThermometer
                     anchors.left: parent.left
                     anchors.top: parent.top
                     anchors.bottom: parent.bottom
-                    width: parent.width / 2
-
+                    width: parent.width / 1.75
+                    radius: 25
+                    //thermometerColor: "blue"
                     thermometerValue: pit.packTempValue
                     title: "PACK TEMP"
                 }
+            }
+        }
 
-                ColumnLayout {
+        Rectangle {
+            id: coreInfoRight
+            anchors.right: parent.right
+            anchors.top: parent.top
+            anchors.topMargin: 100
+            anchors.bottomMargin: 20
+            anchors.bottom: parent.bottom
+            width: parent.width / 2
+            color: "transparent"
+
+            Rectangle {
+                id: topRight
+                anchors.top: parent.top
+                anchors.right: parent.right
+                anchors.left: parent.left
+                height: parent.height / 2
+                color: "transparent"
+
+                BatteryValueComponent {
+                    id: hvSocBattery
                     anchors.top: parent.top
-                    anchors.bottom: parent.bottom
                     anchors.right: parent.right
-                    anchors.bottomMargin: 19
-                    anchors.topMargin: 18
-                    width: parent.width / 2
-
-                    ValueText {
-                        text: pit.maxSpeed
-                        Layout.alignment: Qt.AlignHCenter
-                        font.pixelSize: 0.6 * parent.height
-                    }
-
-                    LabelText {
-                        text: "SPEED LIMIT"
-                        Layout.alignment: Qt.AlignHCenter
-                        font.pixelSize: 0.15 * parent.width
-                    }
+                    anchors.bottom: parent.bottom
+                    width: parent.width / 1.75
+                    radius: 25
+                    batteryValue: hvSOC
+                    title: "HV SOC"
                 }
             }
+
             Rectangle {
-                id: bottomRow
-                anchors.top: topRow.bottom
+                id: bottomRight
+                anchors.top: topRight.bottom
                 anchors.left: parent.left
                 anchors.right: parent.right
                 anchors.bottom: parent.bottom
                 color: "transparent"
 
                 BatteryValueComponent {
-                    id: battery
+                    id: lvSocBattery
                     anchors.top: parent.top
-                    anchors.left: parent.left
-                    anchors.bottom: parent.bottom
-                    anchors.bottomMargin: 22
-
-                    width: parent.width / 2
-                    title: "PACK SOC"
-                    batteryValue: pit.stateOfChargePercentage
-                }
-
-                ThermometerValueComponent {
-                    anchors.top: parent.top
-                    anchors.left: battery.right
                     anchors.right: parent.right
                     anchors.bottom: parent.bottom
-
-                    thermometerValue: pit.motorTempValue
-                    title: "MOTOR TEMP"
+                    width: parent.width / 1.75
+                    radius: 25
+                    batteryValue: lvSOC
+                    title: "LV SOC"
                 }
             }
         }
 
         ColumnLayout {
-            id: spedometerColumn
-            anchors.left: coreInfo.right
-            anchors.right: parent.right
-            anchors.top: parent.top
-            anchors.bottom: parent.bottom
+            id: speedometerColumn
+            height: parent.height - 30
+            anchors.centerIn: mainRow
 
             Radial {
-                id: spedometer
-                Layout.preferredWidth: 400
-                Layout.preferredHeight: 300
+                id: speedometer
+                Layout.preferredWidth: 350
+                Layout.preferredHeight: 250
                 value: pit.currentSpeed
                 maxValue: pit.maxSpeed
-                Layout.alignment: Qt.AlignHCenter
+                valueFontSize: width / 5
+                verticalPadding: 75
+                anchors.centerIn: parent
             }
 
             DirectionView {
                 id: directionView
                 forward: forward
-                Layout.preferredWidth: 300
-                Layout.preferredHeight: 100
+                Layout.preferredWidth: 200
+                Layout.preferredHeight: 75
                 radius: 10
-                Layout.alignment: Qt.AlignHCenter
+                anchors.bottom: parent.bottom
+                anchors.horizontalCenter: parent.horizontalCenter
             }
         }
     }
@@ -146,6 +169,41 @@ Rectangle {
         anchors.top: parent.top
         anchors.left: parent.left
         anchors.right: parent.right
-        height: 100
+        height: 75
+
+        RowLayout {
+                anchors.centerIn: parent
+                spacing: 10
+
+                Text {
+                    text: "CAR ON"
+                    color: "#00FF00"
+                    font {
+                        pixelSize: 36
+                        bold: true
+                    }
+                    Layout.alignment: Qt.AlignVCenter
+                }
+
+                Text {
+                    text: "-"
+                    color: "white"
+                    font {
+                        pixelSize: 36
+                        bold: true
+                    }
+                    Layout.alignment: Qt.AlignVCenter
+                }
+
+                Text {
+                    text: "GLVMS OFF"
+                    color: "#FF0000"
+                    font {
+                        pixelSize: 36
+                        bold: true
+                    }
+                    Layout.alignment: Qt.AlignVCenter
+                }
+            }
     }
 }

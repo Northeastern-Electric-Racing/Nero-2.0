@@ -16,19 +16,19 @@ Item {
 
         Rectangle {
             id: rectangle
-            color: forward ? "#7CFC00" : "transparent"
+            color: forward ? "#55AAFF" : "transparent"
             Layout.fillHeight: true
-            Layout.preferredWidth: parent.width/2 - 10
+            Layout.preferredWidth: parent.width / 2 - 20
             border.color: forward ? "transparent" : "white"  // Outline color
-            border.width: 5      // Outline width
+            border.width: 2      // Outline width
             radius: directionView.radius          // Border radius to round the corners
 
 
             Text {
                 anchors.centerIn: parent
-                font.pixelSize: Math.min(parent.width, parent.height)
+                font.pixelSize: Math.min(parent.width, parent.height) / 1.5
                 text: "D"
-                color: "white"
+                color: "black"
                 font.family: webFont.name
             }
         }
@@ -38,13 +38,13 @@ Item {
             color: forward ? "transparent" : "Red"
             Layout.fillHeight: true
             Layout.preferredWidth: parent.width / 2 - 20
-            border.color: forward ? "white" : "transparent"  // Outline color
-            border.width: 5      // Outline width
+            border.color: forward ? "#55AAFF" : "transparent"  // Outline color
+            border.width: 2      // Outline width
             radius: directionView.radius          // Border radius to round the corners
 
             Text {
                 anchors.centerIn: parent
-                font.pixelSize: Math.min(parent.width, parent.height)
+                font.pixelSize: Math.min(parent.width, parent.height) / 1.5
                 color: "white"
                 font.family: webFont.name
                 text: "R"
