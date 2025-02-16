@@ -21,27 +21,57 @@ void NavigationController::setIsSelected(bool isSelected) {
   }
 }
 
+bool NavigationController::isGamesOpen() const { return this->m_gamesSelected; }
+void NavigationController::setIsGamesOpen(bool isGamesOpen) {
+  if (isGamesOpen != this->m_gamesSelected) {
+    this->m_gamesSelected = isGamesOpen;
+    emit this->isGamesOpenChanged();
+  }
+}
+
 void NavigationController::downButtonPressed() {
-  if (this->m_selectedPageIndex + 1 < this->m_numPages) {
-    this->setSelectedPageIndex(this->m_selectedPageIndex + 1);
+  if (m_gamesSelected) {
+    if (this->m_selectedPageIndex + 1 < this->m_numGames + this->m_numPages) {
+      this->setSelectedPageIndex(this->m_selectedPageIndex + 1);
+    }
+  } else {
+    if (this->m_selectedPageIndex + 1 < this->m_numPages) {
+      this->setSelectedPageIndex(this->m_selectedPageIndex + 1);
+    }
   }
 }
 
 void NavigationController::upButtonPressed() {
-  if (this->m_selectedPageIndex - 1 >= 0) {
-    this->setSelectedPageIndex(this->m_selectedPageIndex - 1);
+  if (m_gamesSelected) {
+    if (this->m_selectedPageIndex - 1 >= this->m_numPages) {
+      this->setSelectedPageIndex(this->m_selectedPageIndex - 1);
+    }
+  } else {
+    if (this->m_selectedPageIndex - 1 >= 0) {
+      this->setSelectedPageIndex(this->m_selectedPageIndex - 1);
+    }
   }
 }
 
 void NavigationController::enterButtonPressed() {
-  if (this->m_model->currentPageIndex == this->m_numPages) {
-    this->exitProgram();
+  // if (this->m_model->currentPageIndex == this->m_numPages) {
+  //   this->exitProgram();
+  // }
+  if (this->m_selectedPageIndex == this->m_numPages - 1 &&
+      !this->m_gamesSelected) {
+    this->setIsGamesOpen(true);
+    this->setSelectedPageIndex(this->m_numPages);
+  } else {
+    this->m_model->currentPageIndex = this->m_selectedPageIndex;
+    this->setIsSelected(true);
   }
-  this->m_model->currentPageIndex = this->m_selectedPageIndex;
-  this->setIsSelected(true);
 }
 
 void NavigationController::homeButtonPressed() {
+  if (m_gamesSelected) {
+    this->setIsGamesOpen(false);
+    this->setSelectedPageIndex(this->m_numPages - 1);
+  }
   this->m_model->currentPageIndex = -1;
   this->setIsSelected(false);
 }
@@ -59,14 +89,16 @@ void NavigationController::buttonUpdate() {
     std::optional<bool> homeButtonPressed =
         this->m_model->getHomeButtonPressed();
 
-    if (homeButtonPressed) {
-      if (homeButtonPressed == 0) {
-        this->enterButtonPressed();
+    if (!this->m_gamesSelected) {
+      if (homeButtonPressed) {
+        if (homeButtonPressed == 0) {
+          this->enterButtonPressed();
+        } else {
+          this->homeButtonPressed();
+        }
       } else {
         this->homeButtonPressed();
       }
-    } else {
-      this->homeButtonPressed();
     }
   }
 }

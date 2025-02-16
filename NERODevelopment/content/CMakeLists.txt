@@ -51,6 +51,8 @@ qt6_add_qml_module(content
         SnakeBody.qml
         SnakeFood.qml
         LabeledComponent.qml
+        HomeIcon.qml
+        SubMenuIcon.qml
 
 
     RESOURCES
@@ -60,6 +62,11 @@ qt6_add_qml_module(content
         images/pipe.png
         images/flappy-bird.png
         images/microphone.svg
+        images/flag.png
+        images/hare.png
+        images/turtle.png
+        images/zzz.png
+        images/game.png
         images/neroLogo.png
         images/bots.jpg
         images/bspd.jpg
