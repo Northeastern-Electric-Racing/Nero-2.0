@@ -31,7 +31,7 @@ void NavigationController::setIsGamesOpen(bool isGamesOpen) {
 
 void NavigationController::downButtonPressed() {
   if (m_gamesSelected) {
-    if (this->m_selectedPageIndex + 1 < this->m_numGames + this->m_numPages) {
+    if (this->m_selectedPageIndex + 2 < this->m_numGames + this->m_numPages) {
       this->setSelectedPageIndex(this->m_selectedPageIndex + 1);
     }
   } else {
@@ -43,7 +43,7 @@ void NavigationController::downButtonPressed() {
 
 void NavigationController::upButtonPressed() {
   if (m_gamesSelected) {
-    if (this->m_selectedPageIndex - 1 >= this->m_numPages) {
+    if (this->m_selectedPageIndex >= this->m_numPages) {
       this->setSelectedPageIndex(this->m_selectedPageIndex - 1);
     }
   } else {
@@ -54,13 +54,13 @@ void NavigationController::upButtonPressed() {
 }
 
 void NavigationController::enterButtonPressed() {
-  // if (this->m_model->currentPageIndex == this->m_numPages) {
-  //   this->exitProgram();
-  // }
-  if (this->m_selectedPageIndex == this->m_numPages - 1 &&
-      !this->m_gamesSelected) {
+  if (!this->m_gamesSelected &&
+      this->m_selectedPageIndex == this->m_numPages - 1) {
+    this->exitProgram();
+  } else if (this->m_selectedPageIndex == this->m_numPages - 2 &&
+             !this->m_gamesSelected) {
     this->setIsGamesOpen(true);
-    this->setSelectedPageIndex(this->m_numPages);
+    this->setSelectedPageIndex(this->m_numPages - 1);
   } else {
     this->m_model->currentPageIndex = this->m_selectedPageIndex;
     this->setIsSelected(true);

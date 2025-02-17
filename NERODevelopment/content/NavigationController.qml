@@ -14,45 +14,42 @@ Item {
     property int speedPageIndex: 3
     property int efficiencyPageIndex: 4
     property int gamePageIndex: 5
+    property int exitPageIndex: gamePageOpen ? 8 : 6
 
     property int flappyPageIndex: 6
     property int snakePageIndex: 7
 
     Keys.onPressed: event => {
-                        console.log(navigationController.isSelected,
-                                    selectedPageIndex, event.key)
-
-                            switch (event.key) {
-                                case Qt.Key_Escape:
-                                navigationController.homeButtonPressed()
-                                break
-                                case Qt.Key_Right:
-                                if (!this.isSelected) {
-                                    navigationController.downButtonPressed()
-                                }
-                                break
-                                case Qt.Key_Left:
-                                if (!this.isSelected) {
-                                    navigationController.upButtonPressed()
-                                }
-                                break
-                                case Qt.Key_Down:
-                                if (!this.isSelected) {
-                                    navigationController.downButtonPressed()
-                                }
-                                break
-                                case Qt.Key_Up:
-                                if (!this.isSelected) {
-                                    navigationController.upButtonPressed()
-                                }
-                                break
-                                case Qt.Key_Return:
-                                if (!this.isSelected) {
-                                    navigationController.enterButtonPressed()
-                                }
-                                break
+                        switch (event.key) {
+                            case Qt.Key_Escape:
+                            navigationController.homeButtonPressed()
+                            break
+                            case Qt.Key_Right:
+                            if (!this.isSelected) {
+                                navigationController.downButtonPressed()
                             }
-
+                            break
+                            case Qt.Key_Left:
+                            if (!this.isSelected) {
+                                navigationController.upButtonPressed()
+                            }
+                            break
+                            case Qt.Key_Down:
+                            if (!this.isSelected) {
+                                navigationController.downButtonPressed()
+                            }
+                            break
+                            case Qt.Key_Up:
+                            if (!this.isSelected) {
+                                navigationController.upButtonPressed()
+                            }
+                            break
+                            case Qt.Key_Return:
+                            if (!this.isSelected) {
+                                navigationController.enterButtonPressed()
+                            }
+                            break
+                        }
                     }
 
     HeaderView {
@@ -72,7 +69,6 @@ Item {
                 highlighted: selectedPageIndex === offPageIndex
                 text: "OFF"
             }
-
 
             HomeIcon {
                 highlighted: selectedPageIndex === pitDrivePageIndex
@@ -125,6 +121,11 @@ Item {
                     highlighted: selectedPageIndex === snakePageIndex
                     text: "SNAKE"
                 }
+            }
+
+            HomeIcon {
+                highlighted: selectedPageIndex === exitPageIndex
+                text: "Exit"
             }
         }
     }

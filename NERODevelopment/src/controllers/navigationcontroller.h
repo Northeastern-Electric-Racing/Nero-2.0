@@ -40,7 +40,7 @@ private:
   bool m_isSelected = false;
   bool m_gamesSelected = false;
   int m_selectedPageIndex = 0;
-  int m_numPages = 6;
+  int m_numPages = 7;
   int m_numGames = 2;
 };
 

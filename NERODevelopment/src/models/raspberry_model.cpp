@@ -255,8 +255,7 @@ std::optional<bool> RaspberryModel::getForwardButtonPressed() {
 std::optional<bool> RaspberryModel::getBackwardButtonPressed() {
   std::optional<float> value = this->getById(BACKWARDBUTTON);
   if (value) {
-    std::string binary = std::bitset<8>(static_cast<int>(*value)).to_string();
-    return binary[5] == '1';
+    return value == 0;
   }
   return std::nullopt;
 }
@@ -264,8 +263,7 @@ std::optional<bool> RaspberryModel::getBackwardButtonPressed() {
 std::optional<bool> RaspberryModel::getRightButtonPressed() {
   std::optional<float> value = this->getById(RIGHTBUTTON);
   if (value) {
-    std::string binary = std::bitset<8>(static_cast<int>(*value)).to_string();
-    return binary[3] == '1';
+    return value == 1;
   }
   return std::nullopt;
 }
@@ -273,8 +271,7 @@ std::optional<bool> RaspberryModel::getRightButtonPressed() {
 std::optional<bool> RaspberryModel::getEnterButtonPressed() {
   std::optional<float> value = this->getById(ENTERBUTTON);
   if (value) {
-    std::string binary = std::bitset<8>(static_cast<int>(*value)).to_string();
-    return binary[1] == '1';
+    return value == 5;
   }
   return std::nullopt;
 }
@@ -282,8 +279,7 @@ std::optional<bool> RaspberryModel::getEnterButtonPressed() {
 std::optional<bool> RaspberryModel::getUpButtonPressed() {
   std::optional<float> value = this->getById(UPBUTTON);
   if (value) {
-    std::string binary = std::bitset<8>(static_cast<int>(*value)).to_string();
-    return binary[4] == '1';
+    return value == 3;
   }
   return std::nullopt;
 }
@@ -291,11 +287,10 @@ std::optional<bool> RaspberryModel::getUpButtonPressed() {
 std::optional<bool> RaspberryModel::getDownButtonPressed() {
   std::optional<float> value = this->getById(DOWNBUTTON);
   if (value) {
-    std::string binary = std::bitset<8>(static_cast<int>(*value)).to_string();
     // qDebug() << "binary: " << binary[0] << binary[1] << binary[2] <<
     // binary[3]
     //          << binary[4] << binary[5] << binary[6] << binary[7];
-    return binary[0] == '1';
+    return value == 4;
   }
   return std::nullopt;
 }
