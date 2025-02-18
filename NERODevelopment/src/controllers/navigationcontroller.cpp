@@ -83,24 +83,28 @@ void NavigationController::buttonUpdate() {
     std::optional<float> modeIndex = this->m_model->getModeIndex();
     // qDebug() << "Mode Index: " << modeIndex.value_or(-999);
 
-    if (modeIndex) {
-      this->setSelectedPageIndex(*modeIndex);
-    }
-
     std::optional<bool> homeButtonPressed =
         this->m_model->getHomeButtonPressed();
 
     // qDebug() << "Home button: " << homeButtonPressed.value_or(-999);
 
-    if (!this->m_gamesSelected) {
-      if (homeButtonPressed) {
-        if (homeButtonPressed == 0) {
-          this->enterButtonPressed();
-        } else {
-          this->homeButtonPressed();
-        }
-      } else {
-        this->homeButtonPressed();
+    std::optional<bool> enterButtonPressed =
+        this->m_model->getEnterButtonPressed();
+
+    if (!homeButtonPressed.has_value()) {
+      return;
+    }
+
+    if (homeButtonPressed == true) {
+      this->homeButtonPressed();
+      if (modeIndex) {
+        this->setSelectedPageIndex(*modeIndex);
+      }
+    } else if (!this->m_gamesSelected) {
+      this->enterButtonPressed();
+    } else {
+      if (enterButtonPressed) {
+        this->enterButtonPressed();
       }
     }
   }
