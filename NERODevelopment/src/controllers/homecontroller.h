@@ -19,8 +19,11 @@ class HomeController : public ButtonController {
                  packTempChanged FINAL)
   Q_PROPERTY(float motorTemp READ motorTemp WRITE setMotorTemp NOTIFY
                  motorTempChanged FINAL)
-  Q_PROPERTY(float stateOfCharge READ stateOfCharge WRITE setStateOfCharge
-                 NOTIFY stateOfChargeChanged FINAL)
+  Q_PROPERTY(int stateOfCharge READ stateOfCharge WRITE setStateOfCharge NOTIFY
+                 stateOfChargeChanged FINAL)
+  Q_PROPERTY(int lowVoltageStateOfCharge READ lowVoltageStateOfCharge WRITE
+                 setLowVoltageStateOfCharge NOTIFY
+                     lowVoltageStateOfChargeChanged FINAL)
 
 public:
   explicit HomeController(Model *model, QObject *parent = nullptr);
@@ -29,7 +32,8 @@ public:
   bool direction() const;
   float packTemp() const;
   float motorTemp() const;
-  float stateOfCharge() const;
+  int stateOfCharge() const;
+  int lowVoltageStateOfCharge() const;
 
 signals:
   void speedChanged(int);
@@ -37,7 +41,8 @@ signals:
   void directionChanged(bool);
   void packTempChanged(float);
   void motorTempChanged(float);
-  void stateOfChargeChanged(float);
+  void stateOfChargeChanged(int);
+  void lowVoltageStateOfChargeChanged(int);
 
 public slots:
   void setSpeed(int);
@@ -45,8 +50,9 @@ public slots:
   void setDirection(bool);
   void setPackTemp(float);
   void setMotorTemp(float);
-  void setStateOfCharge(float);
   void currentDataDidChange();
+  void setStateOfCharge(int);
+  void setLowVoltageStateOfCharge(int);
 
 private:
   int m_speed;
@@ -54,7 +60,8 @@ private:
   bool m_direction;
   float m_packTemp;
   float m_motorTemp;
-  float m_stateOfCharge;
+  int m_stateOfCharge;
+  int m_lowVoltageStateOfCharge;
 };
 
 #endif // HOMECONTROLLER_H
