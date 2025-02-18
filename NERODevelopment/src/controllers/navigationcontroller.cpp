@@ -103,7 +103,7 @@ void NavigationController::buttonUpdate() {
     } else if (!this->m_gamesSelected) {
       this->enterButtonPressed();
     } else {
-      if (enterButtonPressed) {
+      if (enterButtonPressed == true) {
         this->enterButtonPressed();
       }
     }
