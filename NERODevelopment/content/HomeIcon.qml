@@ -1,10 +1,11 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import QtQuick.Layouts
 
 Rectangle {
     id: root
-    width: 132
-    height: 150
+    Layout.fillWidth: true
+    Layout.fillHeight: true
     color: "transparent"
 
     property bool highlighted: false
@@ -18,8 +19,8 @@ Rectangle {
 
         Rectangle {
             id: icon
-            width: 132
-            height: 132
+            Layout.preferredWidth: parent.width
+            Layout.preferredHeight: parent.width
             radius: 15
 
             gradient: Gradient {
@@ -31,8 +32,8 @@ Rectangle {
                 id: iconImage
                 source: root.source
                 anchors.centerIn: parent
-                width: 80
-                height: 80
+                width: parent.width * 0.6
+                height: width
                 fillMode: Image.PreserveAspectFit
             }
         }

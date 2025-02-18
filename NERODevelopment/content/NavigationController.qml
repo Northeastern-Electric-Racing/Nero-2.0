@@ -1,4 +1,5 @@
 import QtQuick 2.15
+import QtQuick.Layouts
 import NERO
 
 Item {
@@ -18,6 +19,9 @@ Item {
 
     property int flappyPageIndex: 6
     property int snakePageIndex: 7
+
+    height: 480
+    width: 800
 
     Keys.onPressed: event => {
                         switch (event.key) {
@@ -56,61 +60,83 @@ Item {
         id: header
     }
 
-    Column {
+    ColumnLayout {
+        anchors {
+            top: header.bottom
+            bottom: parent.bottom
+            left: parent.left
+            right: parent.right
+            margins: parent.width * 0.02
+        }
         visible: !navigation.isSelected
         spacing: 15
-        anchors.centerIn: parent
 
-        Row {
+        RowLayout {
+            Layout.preferredHeight: parent.height * 0.4
+            Layout.fillWidth: true
             anchors.horizontalCenter: parent.horizontalCenter
             spacing: 15
 
             HomeIcon {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
                 highlighted: selectedPageIndex === offPageIndex
                 text: "OFF"
             }
 
             HomeIcon {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
                 highlighted: selectedPageIndex === pitDrivePageIndex
                 text: "PIT - DRIVE"
                 source: "qrc:/content/images/flag.png"
             }
 
             HomeIcon {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
                 highlighted: selectedPageIndex === pitReversePageIndex
                 text: "PIT - REVERSE"
                 source: "qrc:/content/images/flag.png"
             }
 
             HomeIcon {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
                 highlighted: selectedPageIndex === speedPageIndex
                 text: "PERFORMANCE"
                 source: "qrc:/content/images/hare.png"
             }
 
             HomeIcon {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
                 highlighted: selectedPageIndex === efficiencyPageIndex
                 text: "EFFICIENCY"
                 source: "qrc:/content/images/turtle.png"
             }
         }
 
-        Row {
+        RowLayout {
             visible: !navigation.isSelected
             anchors.horizontalCenter: parent.horizontalCenter
             spacing: 15
-            height: 150
+            Layout.preferredHeight: parent.height * 0.4
 
             HomeIcon {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
                 highlighted: selectedPageIndex === gamePageIndex
                 text: "GAMES"
                 source: "qrc:/content/images/game.png"
                 visible: !gamePageOpen
             }
 
-            Column {
+            ColumnLayout {
                 visible: gamePageOpen
                 spacing: 10
+                Layout.fillHeight: true
+                Layout.preferredWidth: parent.width * 0.2
 
                 SubMenuIcon {
                     highlighted: selectedPageIndex === flappyPageIndex
@@ -124,8 +150,10 @@ Item {
             }
 
             HomeIcon {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
                 highlighted: selectedPageIndex === exitPageIndex
-                text: "Exit"
+                text: "EXIT"
             }
         }
     }
