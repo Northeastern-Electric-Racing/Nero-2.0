@@ -4,36 +4,38 @@ import QtQuick.Layouts
 
 Rectangle {
     id: root
-    Layout.fillWidth: true
-    Layout.fillHeight: true
     color: "transparent"
 
     property bool highlighted: false
     property string text: "Off"
     property string source: "qrc:/content/images/zzz.png"
 
-    Column {
-        id: layout
-        anchors.centerIn: parent
+    ColumnLayout {
+        id: imageContainer
+        anchors.fill: parent
         spacing: 4
 
         Rectangle {
             id: icon
-            Layout.preferredWidth: parent.width
-            Layout.preferredHeight: parent.width
+            Layout.fillWidth: true
+            Layout.fillHeight: true
             radius: 15
 
             gradient: Gradient {
-                GradientStop { position: 0.0; color: highlighted ? "#6e6e6e" : "#191919" }
-                GradientStop { position: 1.0; color: highlighted ? "#333333" : "#111111" }
+                GradientStop {
+                    position: 0.0
+                    color: highlighted ? "#6e6e6e" : "#191919"
+                }
+                GradientStop {
+                    position: 1.0
+                    color: highlighted ? "#333333" : "#111111"
+                }
             }
 
             Image {
                 id: iconImage
                 source: root.source
-                anchors.centerIn: parent
-                width: parent.width * 0.6
-                height: width
+                anchors.fill: parent
                 fillMode: Image.PreserveAspectFit
             }
         }
@@ -42,7 +44,7 @@ Rectangle {
             id: label
             text: root.text
             font.pixelSize: 15
-            width: layout.width
+            Layout.fillWidth: true
             horizontalAlignment: Text.AlignHCenter
         }
     }

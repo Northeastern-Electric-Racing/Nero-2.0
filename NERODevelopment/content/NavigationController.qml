@@ -23,6 +23,8 @@ Item {
     height: 480
     width: 800
 
+    property int boxSize: Math.min(height / 3, width / 6)
+
     Keys.onPressed: event => {
                         switch (event.key) {
                             case Qt.Key_Escape:
@@ -72,45 +74,45 @@ Item {
         spacing: 15
 
         RowLayout {
-            Layout.preferredHeight: parent.height * 0.4
+            Layout.fillHeight: true
             Layout.fillWidth: true
-            anchors.horizontalCenter: parent.horizontalCenter
             spacing: 15
+            Layout.alignment: Qt.AlignHCenter
 
             HomeIcon {
-                Layout.fillWidth: true
-                Layout.fillHeight: true
+                height: navigation.boxSize
+                width: navigation.boxSize
                 highlighted: selectedPageIndex === offPageIndex
                 text: "OFF"
             }
 
             HomeIcon {
-                Layout.fillWidth: true
-                Layout.fillHeight: true
+                height: navigation.boxSize
+                width: navigation.boxSize
                 highlighted: selectedPageIndex === pitDrivePageIndex
                 text: "PIT - DRIVE"
                 source: "qrc:/content/images/flag.png"
             }
 
             HomeIcon {
-                Layout.fillWidth: true
-                Layout.fillHeight: true
+                height: navigation.boxSize
+                width: navigation.boxSize
                 highlighted: selectedPageIndex === pitReversePageIndex
                 text: "PIT - REVERSE"
                 source: "qrc:/content/images/flag.png"
             }
 
             HomeIcon {
-                Layout.fillWidth: true
-                Layout.fillHeight: true
+                height: navigation.boxSize
+                width: navigation.boxSize
                 highlighted: selectedPageIndex === speedPageIndex
                 text: "PERFORMANCE"
                 source: "qrc:/content/images/hare.png"
             }
 
             HomeIcon {
-                Layout.fillWidth: true
-                Layout.fillHeight: true
+                height: navigation.boxSize
+                width: navigation.boxSize
                 highlighted: selectedPageIndex === efficiencyPageIndex
                 text: "EFFICIENCY"
                 source: "qrc:/content/images/turtle.png"
@@ -119,13 +121,13 @@ Item {
 
         RowLayout {
             visible: !navigation.isSelected
-            anchors.horizontalCenter: parent.horizontalCenter
             spacing: 15
-            Layout.preferredHeight: parent.height * 0.4
+            Layout.fillHeight: true
+            Layout.alignment: Qt.AlignHCenter
 
             HomeIcon {
-                Layout.fillWidth: true
-                Layout.fillHeight: true
+                height: navigation.boxSize
+                width: navigation.boxSize
                 highlighted: selectedPageIndex === gamePageIndex
                 text: "GAMES"
                 source: "qrc:/content/images/game.png"
@@ -136,7 +138,7 @@ Item {
                 visible: gamePageOpen
                 spacing: 10
                 Layout.fillHeight: true
-                Layout.preferredWidth: parent.width * 0.2
+                Layout.fillWidth: true
 
                 SubMenuIcon {
                     highlighted: selectedPageIndex === flappyPageIndex
@@ -150,8 +152,8 @@ Item {
             }
 
             HomeIcon {
-                Layout.fillWidth: true
-                Layout.fillHeight: true
+                height: navigation.boxSize
+                width: navigation.boxSize
                 highlighted: selectedPageIndex === exitPageIndex
                 text: "EXIT"
             }
