@@ -57,10 +57,11 @@ Rectangle {
                     anchors.bottom: parent.bottom
                     width: parent.width / 2
 
-                    thermometerValue: pit.packTempValue
+                    value: pit.packTempValue
                     title: "PACK TEMP"
+                    textColor: "#4DA6FF"
+                    componentColor: "#FF0000"
                 }
-
                 ColumnLayout {
                     anchors.top: parent.top
                     anchors.bottom: parent.bottom
@@ -95,11 +96,13 @@ Rectangle {
                     anchors.top: parent.top
                     anchors.left: parent.left
                     anchors.bottom: parent.bottom
-                    anchors.bottomMargin: 22
+                    anchors.bottomMargin: 2
 
                     width: parent.width / 2
                     title: "PACK SOC"
-                    batteryValue: pit.stateOfChargePercentage
+                    value: pit.stateOfChargePercentage
+                    textColor: "#4DA6FF"
+                    componentColor: "#00FF00"
                 }
 
                 ThermometerValueComponent {
@@ -108,8 +111,10 @@ Rectangle {
                     anchors.right: parent.right
                     anchors.bottom: parent.bottom
 
-                    thermometerValue: pit.motorTempValue
+                    value: pit.motorTempValue
                     title: "MOTOR TEMP"
+                    textColor: "#4DA6FF"
+                    componentColor: "#FF0000"
                 }
             }
         }

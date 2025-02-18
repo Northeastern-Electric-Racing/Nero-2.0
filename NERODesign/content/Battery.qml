@@ -1,61 +1,99 @@
-import QtQuick 2.15
-import QtQuick.Controls 2.15
+import QtQuick 6.5
+import QtQuick.Controls 6.5
+import QtQuick.Layouts
 
 Item {
-    id: battery
-    property int value: 100
-    property int maxValue: 100
-    property int horizontalFillMargin: width / 10
-    property int verticalFillMargin: height / 20
+   id: battery
+   property int value: 0
+   property int maxValue: 100
+   property int minValue: 0
+   property string color: "#00FF00"
+   height: 500
+   width: 200
 
-    Rectangle {
-        id: topOutlet
-        x: parent.width / 2 - parent.width / 4
-        width: parent.width / 4.5
-        height: parent.height
-        radius: 30
-        color: battery.value > 70 ? "#55FF00" : battery.value > 40 ? "orange" : "red"
-        anchors.centerIn: parent
-    }
+   property real fillPercentage: (Math.max(0, value - minValue) / (maxValue - minValue))
+   property bool increasing: value > previousValue
+   property int previousValue: value
 
-    Rectangle {
-        id: mainContainer
-        y: 48
-        width: parent.width / 2.15
-        height: parent.height - parent.height / 10
-        radius: 30
-        color: battery.value > 70 ? "#55FF00" : battery.value > 40 ? "orange" : "red"
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: 0
-        anchors.horizontalCenterOffset: 0
-        anchors.horizontalCenter: parent.horizontalCenter
+   onValueChanged: {
+       increasing = value > previousValue;
+       previousValue = value;
+   }
 
-        Rectangle {
-            id: emptyContainer
-            y: 123
-            width: parent.width - (battery.horizontalFillMargin * 1.5)
-            height: (parent.height - (battery.verticalFillMargin * 3))
-            radius: 30
-            color: "black"
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: 36
-            anchors.horizontalCenterOffset: 0
-            anchors.horizontalCenter: parent.horizontalCenter
+   // Battery body
+   Rectangle {
+       id: outerRectangle
+       anchors.centerIn: parent
+       width: parent.width / 2
+       height: parent.height * 0.8
+       color: "transparent"
+       border.width: width * 0.15  // Increased from 0.1
+       border.color: battery.color
+       radius: width * 0.15
 
-            Rectangle {
-                id: fillContainer
-                y: 136
-                width: parent.width
-                height: (parent.height * (battery.value / battery.maxValue))
-                gradient: Gradient {
-                                GradientStop { position: 0.0; color: battery.value > 70 ? "#55FF00" : battery.value > 40 ? "orange" : "red" }
-                                GradientStop { position: 1.0; color: "black" }
-                            }
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: 0
-                anchors.horizontalCenterOffset: 0
-                anchors.horizontalCenter: parent.horizontalCenter
-            }
-        }
-    }
+       // Battery fill
+       Rectangle {
+           id: fillRect
+           width: parent.width - parent.border.width * 2
+           anchors.bottom: parent.bottom
+           anchors.bottomMargin: parent.border.width
+           anchors.horizontalCenter: parent.horizontalCenter
+           height: (parent.height - parent.border.width * 2) * fillPercentage
+           color: "transparent"
+           clip: true
+
+           Rectangle {
+               id: gradientFill
+               width: parent.width
+               height: parent.height
+               anchors.bottom: parent.bottom
+               gradient: Gradient {
+                   GradientStop { position: 0.0; color: battery.color }
+                   GradientStop { position: 0.5; color: Qt.darker(battery.color, 2.5) }
+                   GradientStop { position: 1.0; color: Qt.darker(battery.color, 3.5) }
+               }
+
+               Behavior on height {
+                   NumberAnimation {
+                       duration: 1000
+                       easing.type: Easing.OutQuad
+                       running: increasing
+                   }
+               }
+
+               Behavior on height {
+                   NumberAnimation {
+                       duration: 1000
+                       easing.type: Easing.InOutQuad
+                       running: !increasing
+                   }
+               }
+           }
+       }
+   }
+
+   // Battery top with squared bottom corners
+   Item {
+       id: batteryTopContainer
+       width: outerRectangle.width * 0.4
+       height: outerRectangle.width * 0.2
+       anchors.bottom: outerRectangle.top
+       anchors.horizontalCenter: outerRectangle.horizontalCenter
+
+       // Main nub with rounded top corners only
+       Rectangle {
+           id: batteryTop
+           anchors.fill: parent
+           color: battery.color
+           radius: width * 0.15
+
+           // Square bottom corners by overlaying rectangles
+           Rectangle {
+               width: parent.width
+               height: parent.height / 2
+               anchors.bottom: parent.bottom
+               color: parent.color
+           }
+       }
+   }
 }
