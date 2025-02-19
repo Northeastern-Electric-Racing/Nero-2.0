@@ -17,7 +17,7 @@ qt6_add_qml_module(content
         DirectionView.qml
         DetailDisplay.qml
         OffScreen.qml
-        DebugTable.qml
+
         ThermometerValueComponent.qml
         BatteryValueComponent.qml
         Spacer.qml
@@ -26,15 +26,10 @@ qt6_add_qml_module(content
         NavigationController.qml
         HomeMenuItem.qml
         FlappyBird.qml
-        KeyboardInput.qml
-        Keyboard.qml
-        KeyboardController.qml
-        Configuration.qml
         HeaderView.qml
         CriticalFaultIcon.qml
         NonCriticalWarning.qml
         MicrophoneComponent.qml
-        DebugGraph.qml
         EfficiencyScreen.qml
         TorqueValueComponent.qml
         TorqueAdj.qml
@@ -53,7 +48,6 @@ qt6_add_qml_module(content
         LabeledComponent.qml
         HomeIcon.qml
         SubMenuIcon.qml
-
 
     RESOURCES
         fonts/fonts.txt

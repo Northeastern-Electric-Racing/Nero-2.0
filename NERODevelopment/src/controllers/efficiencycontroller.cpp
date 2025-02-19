@@ -1,14 +1,13 @@
 #include "efficiencycontroller.h"
 
 EfficiencyController::EfficiencyController(Model *model, QObject *parent)
-    : ButtonController{model, 3, parent}, m_updateTimer(new QTimer(this)),
+    : ButtonController{model, 4, parent}, m_updateTimer(new QTimer(this)),
       m_timerRunning(false) {
   connect(m_model, &Model::onCurrentDataChange, this,
           &EfficiencyController::currentDataDidChange);
   connect(m_updateTimer, &QTimer::timeout, this,
           &EfficiencyController::updateCurrentTime);
   m_updateTimer->setInterval(1);
-  this->m_debounceOffset = 750;
 }
 
 int EfficiencyController::currentMaxTorque() const {
