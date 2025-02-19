@@ -53,12 +53,23 @@ void HomeController::setMotorTemp(float motorTemp) {
   }
 }
 
-float HomeController::stateOfCharge() const { return m_stateOfCharge; }
+int HomeController::stateOfCharge() const { return m_stateOfCharge; }
 
-void HomeController::setStateOfCharge(float stateOfCharge) {
-  if (m_stateOfCharge != stateOfCharge) {
-    m_stateOfCharge = stateOfCharge;
-    emit stateOfChargeChanged(stateOfCharge);
+void HomeController::setStateOfCharge(int charge) {
+  if (charge != m_stateOfCharge) {
+    m_stateOfCharge = charge;
+    emit stateOfChargeChanged(charge);
+  }
+}
+
+int HomeController::lowVoltageStateOfCharge() const {
+  return m_lowVoltageStateOfCharge;
+}
+
+void HomeController::setLowVoltageStateOfCharge(int charge) {
+  if (charge != m_lowVoltageStateOfCharge) {
+    m_lowVoltageStateOfCharge = charge;
+    emit lowVoltageStateOfChargeChanged(charge);
   }
 }
 

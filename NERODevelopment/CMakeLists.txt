@@ -65,7 +65,9 @@ find_package(Qt6 REQUIRED COMPONENTS Core Gui Qml Quick Network Mqtt Protobuf Wi
 
 qt_add_executable(NEROApp ${PROJECT_SOURCES}
     src/controllers/snakecontroller.h
-    src/controllers/snakecontroller.cpp)
+    src/controllers/snakecontroller.cpp
+    src/controllers/tankcontroller.cpp
+    src/controllers/tankcontroller.h)
 
 qt_add_resources(NEROApp "configuration"
     PREFIX "/"
