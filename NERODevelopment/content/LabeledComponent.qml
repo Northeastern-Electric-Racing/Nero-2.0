@@ -1,4 +1,5 @@
 import QtQuick 2.15
+import QtQuick.Layouts
 
 Rectangle {
     id: labelComponent
@@ -12,6 +13,8 @@ Rectangle {
     property string valueUnit
     property int valueFontSize
     property int labelFontSize
+    property int unitFontSize: valueFontSize
+    property bool unitAnchorBottom: false
 
     gradient: Gradient {
         stops: [
@@ -39,22 +42,21 @@ Rectangle {
         color: labelComponent.labelColor
     }
 
-    Rectangle {
-        id: thermRow
+    RowLayout {
+        id: mainRow
         anchors {
             top: labelText.bottom
-            left: parent.left
-            right: parent.right
+            horizontalCenter: parent.horizontalCenter
             bottom: parent.bottom
-            topMargin: labelComponent.labelVerticalSpacing
+            // topMargin: labelComponent.labelVerticalSpacing
             leftMargin: labelComponent.horizontalPadding
             rightMargin: labelComponent.horizontalPadding
             bottomMargin: labelComponent.labelVerticalSpacing
         }
 
-        color: 'transparent'
-
         Loader {
+            Layout.fillWidth: true
+            Layout.fillHeight: true
             id: componentContainer
             anchors {
                 top: parent.top
@@ -67,20 +69,18 @@ Rectangle {
 
         ValueText {
             id: valueText
-            text: labelComponent.value
+            value: labelComponent.value
             font.pixelSize: labelComponent.valueFontSize
-            anchors.left: componentContainer.item ? componentContainer.item.right : componentContainer.right
-            anchors.leftMargin: labelComponent.horizontalIconSpacing
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.bottom: parent.bottom
+            Layout.fillWidth: true
+            Layout.fillHeight: true
         }
 
         LabelText {
             text: labelComponent.valueUnit
-            anchors.left: valueText.right
-            anchors.top: parent.top
             color: "#777777"
-            font.pixelSize: labelComponent.valueFontSize
+            font.pixelSize: labelComponent.unitFontSize
+            Layout.fillWidth: true
+            Layout.alignment: labelComponent.unitAnchorBottom ? Qt.AlignBottom : Qt.AlignTop
         }
     }
 }

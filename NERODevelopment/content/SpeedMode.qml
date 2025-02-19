@@ -23,8 +23,9 @@ Item {
     property int yMargin: height / 20
     property int verticalSpacing: height / 40
     property int borderRadii: 10
-    property int valueFontSize: Math.min(height / 8, width / 8)
+    property int valueFontSize: Math.min(height / 6, width / 8)
     property int labelFontSize: Math.min(height / 20, width / 20)
+    property int radialUnitFontSize: valueFontSize / 3
 
     Keys.onPressed: event => {
                         if (event.key === Qt.Key_Return
@@ -32,16 +33,6 @@ Item {
                             speedController.enterButtonPressed()
                         }
                     }
-
-    HeaderView {
-        id: headerView
-        anchors {
-            top: speedMode.top
-            horizontalCenter: speedMode.horizontalCenter
-        }
-        width: speedMode.width
-        height: speedMode.height * 0.15
-    }
 
     LabelText {
         id: tractionControl
@@ -141,6 +132,7 @@ Item {
                 Layout.fillWidth: true
                 color: "blue"
                 valueFontSize: speedMode.valueFontSize
+                unitFontSize: speedMode.radialUnitFontSize
             }
         }
 
@@ -170,6 +162,7 @@ Item {
                 label: "DCL: " + speedMode.dcl
                 unitLabel: 'A'
                 valueFontSize: speedMode.valueFontSize
+                unitFontSize: speedMode.radialUnitFontSize
             }
         }
     }
