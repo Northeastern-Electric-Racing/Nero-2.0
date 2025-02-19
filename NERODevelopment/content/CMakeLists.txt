@@ -67,6 +67,8 @@ qt6_add_qml_module(content
         images/turtle.png
         images/zzz.png
         images/game.png
+        images/reverse.png
+        images/exit.png
         images/neroLogo.png
         images/bots.jpg
         images/bspd.jpg

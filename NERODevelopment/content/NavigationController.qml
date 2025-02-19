@@ -99,7 +99,7 @@ Item {
                 width: navigation.boxSize
                 highlighted: selectedPageIndex === pitReversePageIndex
                 text: "PIT - REVERSE"
-                source: "qrc:/content/images/flag.png"
+                source: "qrc:/content/images/reverse.png"
             }
 
             HomeIcon {
@@ -156,6 +156,7 @@ Item {
                 width: navigation.boxSize
                 highlighted: selectedPageIndex === exitPageIndex
                 text: "EXIT"
+                source: "qrc:/content/images/exit.png"
             }
         }
     }

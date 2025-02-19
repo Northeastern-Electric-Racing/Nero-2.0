@@ -35,7 +35,8 @@ Rectangle {
             Image {
                 id: iconImage
                 source: root.source
-                anchors.fill: parent
+                width: parent.width * 0.6
+                anchors.centerIn: parent
                 fillMode: Image.PreserveAspectFit
             }
         }
