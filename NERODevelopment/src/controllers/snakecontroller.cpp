@@ -1,7 +1,7 @@
 #include "snakecontroller.h"
 
 SnakeController::SnakeController(Model *model, QObject *parent)
-    : ButtonController{model, 5, parent} {}
+    : ButtonController{model, 7, parent} {}
 
 void SnakeController::handleKeyPress(int key) {
   int newDirection = m_currentDirection;
@@ -39,6 +39,6 @@ bool SnakeController::isSameOrOppositeDirection(int newDirection) {
 }
 
 void SnakeController::saveScore(int score) {
-  QString topic = "/SNAKE/SCORE";
-  m_model->sendMessage(topic, score);
+  QString topic = "SNAKE/SCORE";
+  this->m_model->sendMessage(topic, score);
 }

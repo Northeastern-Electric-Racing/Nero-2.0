@@ -3,7 +3,7 @@
 #include <QTimer>
 
 SpeedController::SpeedController(Model *model, QObject *parent)
-    : ButtonController{model, 2, parent}, m_updateTimer(new QTimer(this)) {
+    : ButtonController{model, 3, parent}, m_updateTimer(new QTimer(this)) {
   connect(m_model, &Model::onCurrentDataChange, this, &SpeedController::update);
   connect(m_updateTimer, &QTimer::timeout, this,
           &SpeedController::updateCurrentTime);

@@ -104,3 +104,8 @@ std::optional<float> Model::getById(QString id) {
     return std::nullopt;
   }
 }
+
+void Model::setValue(QString topic, float value) {
+  this->currentData[topic] = DataInfo(topic, "", {value});
+  // emit this->onCurrentDataChange();
+}

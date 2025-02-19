@@ -2,14 +2,10 @@
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
 
 #include "app_environment.h"
-#include "controllers/configurationcontroller.h"
-#include "controllers/debuggraphcontroller.h"
-#include "controllers/debugtablecontroller.h"
 #include "controllers/efficiencycontroller.h"
 #include "controllers/flappybirdcontroller.h"
 #include "controllers/headercontroller.h"
 #include "controllers/homecontroller.h"
-#include "controllers/keyboardcontroller.h"
 #include "controllers/navigationcontroller.h"
 #include "controllers/offviewcontroller.h"
 #include "controllers/snakecontroller.h"
@@ -34,27 +30,23 @@ int main(int argc, char *argv[]) {
 
   Model *model;
 
-  if (osName == "raspberrypi-sta") {
-    model = new RaspberryModel;
-    model->connectToMQTT();
-  } else {
-    model = new MockModel;
-    QThread *dataThread = new QThread;
+  // if (osName == "raspberrypi-sta") {
+  model = new RaspberryModel;
+  model->connectToMQTT();
+  // } else {
+  //   model = new MockModel;
+  //   QThread *dataThread = new QThread;
 
-    model->moveToThread(dataThread);
-    dataThread->start();
-  }
+  //   model->moveToThread(dataThread);
+  //   dataThread->start();
+  // }
 
   HomeController homeController(model);
   HeaderController headerController(model);
   OffViewController offViewController(model);
   NavigationController navigationController(model);
-  DebugTableController tableController(model);
   FlappyBirdController flappyBirdController(model);
   SnakeController snakeController(model);
-  ConfigurationController configurationController(model);
-  KeyboardController keyboardController(model);
-  DebugGraphController graphController(model);
   EfficiencyController efficencyController(model);
   SpeedController speedController(model);
 
@@ -72,19 +64,11 @@ int main(int argc, char *argv[]) {
                                            &headerController);
   engine.rootContext()->setContextProperty("offViewController",
                                            &offViewController);
-  engine.rootContext()->setContextProperty("debugTableController",
-                                           &tableController);
   engine.rootContext()->setContextProperty("navigationController",
                                            &navigationController);
   engine.rootContext()->setContextProperty("flappyBirdController",
                                            &flappyBirdController);
   engine.rootContext()->setContextProperty("snakeController", &snakeController);
-  engine.rootContext()->setContextProperty("configurationController",
-                                           &configurationController);
-  engine.rootContext()->setContextProperty("keyboardViewController",
-                                           &keyboardController);
-  engine.rootContext()->setContextProperty("debugGraphController",
-                                           &graphController);
   engine.rootContext()->setContextProperty("efficiencyController",
                                            &efficencyController);
   engine.rootContext()->setContextProperty("speedController", &speedController);
