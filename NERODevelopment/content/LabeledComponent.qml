@@ -46,7 +46,6 @@ Rectangle {
         id: mainRow
         anchors {
             top: labelText.bottom
-            horizontalCenter: parent.horizontalCenter
             bottom: parent.bottom
             left: parent.left
             right: parent.right
@@ -59,25 +58,40 @@ Rectangle {
             Layout.fillWidth: true
             Layout.fillHeight: true
             Layout.preferredWidth: 1
+            visible: !!labelComponent.icon
 
             sourceComponent: labelComponent.icon
         }
 
-        ValueText {
-            id: valueText
-            value: labelComponent.value
-            font.pixelSize: labelComponent.valueFontSize
+        RowLayout {
             Layout.fillWidth: true
-            Layout.alignment: Qt.AlignCenter
-            Layout.preferredWidth: 2
-            horizontalAlignment: Text.AlignHCenter
-        }
+            Layout.fillHeight: true
+            Layout.preferredWidth: 3
 
-        LabelText {
-            text: labelComponent.valueUnit
-            color: "#777777"
-            font.pixelSize: labelComponent.unitFontSize
-            Layout.alignment: labelComponent.unitAnchorBottom ? Qt.AlignBottom : Qt.AlignTop
+            Item {
+                Layout.fillWidth: true
+            }
+
+            Row {
+                Layout.alignment: Qt.AlignHCenter
+
+                ValueText {
+                    id: valueText
+                    value: labelComponent.value
+                    font.pixelSize: labelComponent.valueFontSize
+                }
+
+                LabelText {
+                    text: labelComponent.valueUnit
+                    color: "#777777"
+                    font.pixelSize: labelComponent.unitFontSize
+                    anchors.bottom: labelComponent.unitAnchorBottom ? parent.bottom : null
+                }
+            }
+
+            Item {
+                Layout.fillWidth: true
+            }
         }
     }
 }
