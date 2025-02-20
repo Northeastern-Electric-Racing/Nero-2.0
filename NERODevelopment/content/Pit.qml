@@ -15,11 +15,12 @@ Rectangle {
     property bool forward: homeController.status
 
     property int maxSpeed: 5
-    property int horizontalMargin: 40
+    property int horizontalMargin: parent.width / 40
     property int componentRadii: 20
-    property int bottomMargin: 40
-    property int valueFontSize: Math.min(height / 8, width / 8)
+    property int bottomMargin: parent.height / 10
+    property int valueFontSize: Math.min(height / 7.5, width / 7.5)
     property int labelFontSize: Math.min(height / 20, width / 20)
+    property int unitFontSize: valueFontSize / 1.5
 
     color: 'black'
     height: 480
@@ -45,7 +46,7 @@ Rectangle {
             right: parent.right
             bottom: parent.bottom
         }
-        spacing: parent.width / 20
+        spacing: parent.width / 40
 
         ColumnLayout {
             Layout.fillWidth: true
@@ -115,6 +116,7 @@ Rectangle {
                 radius: pit.componentRadii
                 valueFontSize: pit.valueFontSize
                 labelFontSize: pit.labelFontSize
+                unitFontSize: pit.unitFontSize
             }
 
             BatteryValueComponent {
@@ -126,6 +128,7 @@ Rectangle {
                 radius: pit.componentRadii
                 valueFontSize: pit.valueFontSize
                 labelFontSize: pit.labelFontSize
+                unitFontSize: pit.unitFontSize
             }
         }
     }

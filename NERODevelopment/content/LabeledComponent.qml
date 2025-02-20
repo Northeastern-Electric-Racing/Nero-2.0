@@ -48,7 +48,8 @@ Rectangle {
             top: labelText.bottom
             horizontalCenter: parent.horizontalCenter
             bottom: parent.bottom
-            // topMargin: labelComponent.labelVerticalSpacing
+            left: parent.left
+            right: parent.right
             leftMargin: labelComponent.horizontalPadding
             rightMargin: labelComponent.horizontalPadding
             bottomMargin: labelComponent.labelVerticalSpacing
@@ -57,12 +58,7 @@ Rectangle {
         Loader {
             Layout.fillWidth: true
             Layout.fillHeight: true
-            id: componentContainer
-            anchors {
-                top: parent.top
-                bottom: parent.bottom
-                left: parent.left
-            }
+            Layout.preferredWidth: 1
 
             sourceComponent: labelComponent.icon
         }
@@ -72,14 +68,15 @@ Rectangle {
             value: labelComponent.value
             font.pixelSize: labelComponent.valueFontSize
             Layout.fillWidth: true
-            Layout.fillHeight: true
+            Layout.alignment: Qt.AlignCenter
+            Layout.preferredWidth: 2
+            horizontalAlignment: Text.AlignHCenter
         }
 
         LabelText {
             text: labelComponent.valueUnit
             color: "#777777"
             font.pixelSize: labelComponent.unitFontSize
-            Layout.fillWidth: true
             Layout.alignment: labelComponent.unitAnchorBottom ? Qt.AlignBottom : Qt.AlignTop
         }
     }
