@@ -139,20 +139,20 @@ Rectangle {
 
     Timer {
         id: cooldownTimer
-        interval: 75 // Adjust this value for the desired cooldown period
+        interval: 75
         repeat: false
         onTriggered: directionCooldown = false
     }
 
-    Keys.onPressed: {
-        if (directionCooldown) return; // Ignore input during cooldown
+    Keys.onPressed: event => {
+        if (directionCooldown) return;
 
         if ((event.key === Qt.Key_Up && direction !== 2) ||
             (event.key === Qt.Key_Right && direction !== 3) ||
             (event.key === Qt.Key_Down && direction !== 0) ||
             (event.key === Qt.Key_Left && direction !== 1)) {
             directionCooldown = true;
-            cooldownTimer.start(); // Start the cooldown timer
+            cooldownTimer.start();
             switch (event.key) {
                 case Qt.Key_Up: direction = 0; break;
                 case Qt.Key_Right: direction = 1; break;

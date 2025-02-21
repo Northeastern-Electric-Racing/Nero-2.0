@@ -62,6 +62,14 @@ Item {
         id: header
     }
 
+    LabelText {
+        id: tsmsIndicator
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.topMargin: parent.height * 0.1
+        text: navigationController.isTsOn ? "TSMS - ON" : "TSMS - OFF"
+        color: navigationController.isTsOn ? "green" : "red"
+    }
+
     ColumnLayout {
         anchors {
             top: header.bottom
@@ -69,6 +77,7 @@ Item {
             left: parent.left
             right: parent.right
             margins: parent.width * 0.02
+            bottomMargin: parent.height * 0.1
         }
         visible: !navigation.isSelected
         spacing: 15
