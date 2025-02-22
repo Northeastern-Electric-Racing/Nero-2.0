@@ -1,4 +1,5 @@
 import QtQuick 2.15
+import QtQuick.Layouts
 
 Rectangle {
     id: labelComponent
@@ -12,6 +13,8 @@ Rectangle {
     property string valueUnit
     property int valueFontSize
     property int labelFontSize
+    property int unitFontSize: valueFontSize
+    property bool unitAnchorBottom: false
 
     gradient: Gradient {
         stops: [
@@ -39,48 +42,56 @@ Rectangle {
         color: labelComponent.labelColor
     }
 
-    Rectangle {
-        id: thermRow
+    RowLayout {
+        id: mainRow
         anchors {
             top: labelText.bottom
+            bottom: parent.bottom
             left: parent.left
             right: parent.right
-            bottom: parent.bottom
-            topMargin: labelComponent.labelVerticalSpacing
             leftMargin: labelComponent.horizontalPadding
             rightMargin: labelComponent.horizontalPadding
             bottomMargin: labelComponent.labelVerticalSpacing
         }
 
-        color: 'transparent'
-
         Loader {
-            id: componentContainer
-            anchors {
-                top: parent.top
-                bottom: parent.bottom
-                left: parent.left
-            }
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            Layout.preferredWidth: 1
+            visible: !!labelComponent.icon
 
             sourceComponent: labelComponent.icon
         }
 
-        ValueText {
-            id: valueText
-            text: labelComponent.value
-            font.pixelSize: labelComponent.valueFontSize
-            anchors.left: componentContainer.item ? componentContainer.item.right : componentContainer.right
-            anchors.leftMargin: labelComponent.horizontalIconSpacing
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.bottom: parent.bottom
-        }
+        RowLayout {
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            Layout.preferredWidth: 3
 
-        LabelText {
-            text: labelComponent.valueUnit
-            anchors.left: valueText.right
-            anchors.top: parent.top
-            color: "#777777"
-            font.pixelSize: labelComponent.valueFontSize
+            Item {
+                Layout.fillWidth: true
+            }
+
+            Row {
+                Layout.alignment: Qt.AlignHCenter
+
+                ValueText {
+                    id: valueText
+                    value: labelComponent.value
+                    font.pixelSize: labelComponent.valueFontSize
+                }
+
+                LabelText {
+                    text: labelComponent.valueUnit
+                    color: "#777777"
+                    font.pixelSize: labelComponent.unitFontSize
+                    anchors.bottom: labelComponent.unitAnchorBottom ? parent.bottom : null
+                }
+            }
+
+            Item {
+                Layout.fillWidth: true
+            }
         }
     }
 }

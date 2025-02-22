@@ -13,6 +13,7 @@ Item {
     property int radius
     property int valueFontSize
     property int labelFontSize
+    property int unitFontSize: valueFontSize
 
     LabeledComponent {
         anchors.fill: parent
@@ -27,9 +28,11 @@ Item {
         labelVerticalSpacing: thermometerComponent.labelVerticalSpacing
         labelColor: thermometerComponent.labelColor
         horizontalPadding: thermometerComponent.horizontalPadding
-        valueUnit: "°"
+        valueUnit: regen ? "Nm" : "°"
         radius: thermometerComponent.radius
         valueFontSize: thermometerComponent.valueFontSize
         labelFontSize: thermometerComponent.labelFontSize
+        unitFontSize: thermometerComponent.unitFontSize
+        unitAnchorBottom: regen ? true : false
     }
 }

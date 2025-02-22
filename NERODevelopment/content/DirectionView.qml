@@ -19,33 +19,32 @@ Item {
             color: forward ? "#55AAFF" : "transparent"
             Layout.fillHeight: true
             Layout.preferredWidth: parent.width / 2 - 20
-            border.color: forward ? "transparent" : "white"  // Outline color
-            border.width: 2      // Outline width
-            radius: directionView.radius          // Border radius to round the corners
-
+            border.color: forward ? "transparent" : "white"
+            border.width: 2
+            radius: directionView.radius
 
             Text {
                 anchors.centerIn: parent
                 font.pixelSize: Math.min(parent.width, parent.height) / 1.5
                 text: "D"
-                color: "black"
+                color: forward ? "black" : 'white'
                 font.family: webFont.name
             }
         }
 
         Rectangle {
             id: rectangle1
-            color: forward ? "transparent" : "Red"
+            color: forward ? "transparent" : "#55AAFF"
             Layout.fillHeight: true
             Layout.preferredWidth: parent.width / 2 - 20
-            border.color: forward ? "#55AAFF" : "transparent"  // Outline color
-            border.width: 2      // Outline width
-            radius: directionView.radius          // Border radius to round the corners
+            border.color: forward ? "white" : "transparent"
+            border.width: 2
+            radius: directionView.radius
 
             Text {
                 anchors.centerIn: parent
                 font.pixelSize: Math.min(parent.width, parent.height) / 1.5
-                color: "white"
+                color: forward ? "white" : 'black'
                 font.family: webFont.name
                 text: "R"
             }

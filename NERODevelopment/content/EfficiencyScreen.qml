@@ -18,6 +18,12 @@ Item {
     property int timerValue: efficiencyController.currentTime
     property int lastRunTime: efficiencyController.lastTime
     property int fastestRunTime: efficiencyController.fastestTime
+    property int xMargin: width / 20
+    property int yMargin: height / 20
+    property int verticalSpacing: height / 40
+    property int borderRadii: 10
+    property int valueFontSize: Math.min(height / 8, width / 8)
+    property int labelFontSize: Math.min(height / 20, width / 20)
 
     width: 800
     height: 480
@@ -33,98 +39,135 @@ Item {
         id: header
     }
 
-    ColumnLayout {
-        id: thermColumn
-        width: parent.width * 0.25
-        anchors.top: header.bottom
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: 10
-
-        ThermometerValueComponent {
-            id: motorTempThermometer
-            anchors.horizontalCenter: parent.horizontalCenter
-            thermometerValue: efficiency.motorTemp
-            Layout.preferredHeight: parent.height / 3
-            title: "MOTOR TEMP"
+    RowLayout {
+        id: mainRow
+        anchors {
+            top: header.bottom
+            bottom: parent.bottom
+            right: parent.right
+            left: parent.left
+            rightMargin: efficiency.xMargin
+            leftMargin: efficiency.xMargin
+            bottomMargin: efficiency.yMargin
         }
+        spacing: 20
 
-        ThermometerValueComponent {
-            id: packTempThermometer
-            anchors.horizontalCenter: parent.horizontalCenter
-            thermometerValue: efficiency.packTemp
-            Layout.preferredHeight: parent.height / 3
-            title: "PACK TEMP"
-        }
+        ColumnLayout {
+            id: thermColumn
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            spacing: efficiency.verticalSpacing
+            Layout.preferredWidth: 2
 
-        ThermometerValueComponent {
-            id: regen
-            regen: true
-            Layout.preferredHeight: parent.height / 3
-            anchors.horizontalCenter: parent.horizontalCenter
-            thermometerValue: efficiency.numRegen
-            title: "REGEN"
-        }
-    }
-
-    Column {
-        anchors.top: parent.top
-        anchors.topMargin: 50
-        anchors.left: thermColumn.right
-        anchors.bottom: parent.bottom
-        id: driveColumn
-        width: efficiency.width * 0.5
-        height: parent.height
-
-        TimerDisplay {
-            id: timerDisplay
-            anchors {
-                horizontalCenter: parent.horizontalCenter
+            ThermometerValueComponent {
+                id: motorTempThermometer
+                thermometerValue: efficiency.motorTemp
+                title: "MOTOR TEMP"
+                Layout.fillHeight: true
+                Layout.fillWidth: true
+                radius: efficiency.borderRadii
+                valueFontSize: efficiency.valueFontSize
+                labelFontSize: efficiency.labelFontSize
             }
-            width: efficiency.width * 0.8
-            height: efficiency.height * 0.08
-            currentRunTime: efficiency.timerValue
-            lastRunTime: efficiency.lastRunTime
-            fastestRunTime: efficiency.fastestRunTime
+
+            ThermometerValueComponent {
+                id: packTempThermometer
+                thermometerValue: efficiency.packTemp
+                title: "PACK TEMP"
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                radius: efficiency.borderRadii
+                valueFontSize: efficiency.valueFontSize
+                labelFontSize: efficiency.labelFontSize
+            }
+
+            ThermometerValueComponent {
+                id: regen
+                regen: true
+                thermometerValue: efficiency.numRegen
+                title: "REGEN"
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                radius: efficiency.borderRadii
+                valueFontSize: efficiency.valueFontSize
+                labelFontSize: efficiency.labelFontSize
+                unitFontSize: efficiency.labelFontSize / 2
+            }
         }
 
-        Radial {
-            id: spedometer
-            width: parent.width
-            value: efficiency.speed
-            anchors.top: timerDisplay.bottom
-            verticalPadding: 10
+        ColumnLayout {
+            id: driveColumn
+            Layout.fillHeight: true
+            Layout.fillWidth: true
+            Layout.preferredWidth: 3
+
+            spacing: efficiency.verticalSpacing
+
+            TimerDisplay {
+                id: timerDisplay
+                currentRunTime: efficiency.timerValue
+                lastRunTime: efficiency.lastRunTime
+                fastestRunTime: efficiency.fastestRunTime
+                vertical: true
+                radius: efficiency.borderRadii
+
+                Layout.preferredHeight: 1
+                Layout.fillHeight: true
+                Layout.fillWidth: true
+            }
+
+            Radial {
+                id: spedometer
+                value: efficiency.speed
+                valueFontSize: efficiency.valueFontSize
+
+                Layout.fillHeight: true
+                Layout.fillWidth: true
+                Layout.preferredHeight: 2
+            }
         }
-    }
 
-    ColumnLayout {
-        id: percentColumn
-        width: efficiency.width * 0.5
-        anchors.top: header.bottom
-        anchors.left: driveColumn.right
-        anchors.right: parent.right
-        anchors.bottom: parent.bottom
+        ColumnLayout {
+            id: percentColumn
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            spacing: efficiency.verticalSpacing
+            Layout.preferredWidth: 2
 
-        TorqueValueComponent {
-            id: torqueValue
-            torqueValue: efficiency.torqueLimit
-            Layout.preferredHeight: parent.height / 4
-            anchors.horizontalCenter: parent.horizontalCenter
-        }
+            BatteryValueComponent {
+                id: battery
+                title: "HV SOC"
+                batteryValue: efficiency.hvSOC
+                Layout.fillHeight: true
+                Layout.fillWidth: true
+                radius: efficiency.borderRadii
+                valueFontSize: efficiency.valueFontSize
+                labelFontSize: efficiency.labelFontSize
+                unitFontSize: efficiency.valueFontSize / 1.5
+            }
 
-        BatteryValueComponent {
-            id: battery
-            title: "HV SOC"
-            batteryValue: efficiency.hvSOC
-            anchors.horizontalCenter: parent.horizontalCenter
-            Layout.preferredHeight: parent.height / 4
-        }
+            BatteryValueComponent {
+                id: battery2
+                title: "LV SOC"
+                batteryValue: efficiency.lvSOC
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                radius: efficiency.borderRadii
+                valueFontSize: efficiency.valueFontSize
+                labelFontSize: efficiency.labelFontSize
+                unitFontSize: efficiency.valueFontSize / 1.5
+            }
 
-        BatteryValueComponent {
-            id: battery2
-            title: "LV SOC"
-            batteryValue: efficiency.lvSOC
-            anchors.horizontalCenter: parent.horizontalCenter
-            Layout.preferredHeight: parent.height / 4
+            TorqueValueComponent {
+                id: torqueValue
+                torqueValue: efficiency.torqueLimit
+                valueFontSize: efficiency.valueFontSize
+                labelFontSize: efficiency.labelFontSize
+                radius: efficiency.borderRadii
+
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+            }
         }
     }
 }

@@ -16,6 +16,7 @@ Item {
     property string color: "purple"
     property string unitLabel: ""
     property int valueFontSize: width / 10
+    property int unitFontSize: valueFontSize / 2
 
     Text {
         id: valueText
@@ -96,7 +97,7 @@ Item {
         text: gauge.label
         color: "gray"
         font.family: webFont.name
-        font.pixelSize: gauge.valueFontSize / 2
+        font.pixelSize: gauge.unitFontSize
         anchors.top: valueText.bottom
         anchors.horizontalCenter: valueText.horizontalCenter
     }

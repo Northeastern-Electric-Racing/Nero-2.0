@@ -96,7 +96,7 @@ void NavigationController::enterButtonPressed() {
 void NavigationController::homeButtonPressed() {
   if (m_gamesSelected) {
     this->setIsGamesOpen(false);
-    this->setSelectedPageIndex(this->m_numPages - 2);
+    this->setSelectedPageIndex(this->m_numPages - 1);
   }
   this->m_model->currentPageIndex = -1;
   this->setIsSelected(false);

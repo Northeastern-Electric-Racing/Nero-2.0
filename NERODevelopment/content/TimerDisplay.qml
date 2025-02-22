@@ -9,11 +9,13 @@ Item {
     property int fastestRunTime: 0
     property int radius: Math.min(timerDisplay.height / 7,
                                   timerDisplay.width / 20)
+    property bool vertical: false
 
     RowLayout {
         width: timerDisplay.width
         height: timerDisplay.height
         spacing: 0
+        visible: !timerDisplay.vertical
 
         anchors {
             top: parent.top
@@ -21,8 +23,6 @@ Item {
         }
 
         RunInfo {
-            Layout.row: 0
-            Layout.column: 0
             Layout.preferredWidth: 6
             Layout.fillWidth: true
             Layout.fillHeight: true
@@ -34,8 +34,6 @@ Item {
         }
 
         RunInfo {
-            Layout.row: 0
-            Layout.column: 1
             Layout.preferredWidth: 5
             Layout.fillWidth: true
             Layout.fillHeight: true
@@ -45,8 +43,6 @@ Item {
         }
 
         RunInfo {
-            Layout.row: 0
-            Layout.column: 2
             Layout.preferredWidth: 6
             Layout.fillWidth: true
             Layout.fillHeight: true
@@ -55,6 +51,43 @@ Item {
             value: timerDisplay.fastestRunTime
             radius: timerDisplay.radius
             isRight: true
+        }
+    }
+
+    ColumnLayout {
+        visible: timerDisplay.vertical
+        spacing: 0
+        anchors.fill: parent
+
+        RunInfo {
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            backgroundColor: "#47A7FF"
+            label: "CURRENT RUN"
+            value: timerDisplay.currentRunTime
+            radius: timerDisplay.radius
+            isTop: true
+            vertical: true
+        }
+
+        RunInfo {
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            backgroundColor: "#ffffff"
+            label: "LAST RUN"
+            value: timerDisplay.lastRunTime
+            vertical: true
+        }
+
+        RunInfo {
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            backgroundColor: "#AD00FF"
+            label: "FASTEST RUN"
+            value: timerDisplay.fastestRunTime
+            radius: timerDisplay.radius
+            isBottom: true
+            vertical: true
         }
     }
 }

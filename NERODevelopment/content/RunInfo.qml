@@ -11,6 +11,9 @@ Item {
     property int radius: 0
     property bool isRight: false
     property bool isLeft: false
+    property bool isTop: false
+    property bool isBottom: false
+    property bool vertical: false
 
     function formatTime(milliseconds) {
         var minutes = Math.floor(milliseconds / 60000)
@@ -26,7 +29,7 @@ Item {
 
     Rectangle {
         id: rightRect
-        visible: runInfo.isRight
+        visible: !runInfo.vertical && runInfo.isRight
         width: runInfo.radius
         height: runInfo.height
         color: runInfo.backgroundColor
@@ -39,13 +42,39 @@ Item {
 
     Rectangle {
         id: leftRect
-        visible: runInfo.isLeft
+        visible: !runInfo.vertical && runInfo.isLeft
         width: runInfo.radius
         height: runInfo.height
         color: runInfo.backgroundColor
 
         anchors {
             right: runInfo.right
+            top: runInfo.top
+        }
+    }
+
+    Rectangle {
+        id: topRect
+        visible: runInfo.vertical && runInfo.isTop
+        width: runInfo.width
+        height: runInfo.radius
+        color: runInfo.backgroundColor
+
+        anchors {
+            left: runInfo.left
+            bottom: runInfo.bottom
+        }
+    }
+
+    Rectangle {
+        id: bottom
+        visible: runInfo.vertical && runInfo.isBottom
+        width: runInfo.width
+        height: runInfo.radius
+        color: runInfo.backgroundColor
+
+        anchors {
+            left: runInfo.left
             top: runInfo.top
         }
     }

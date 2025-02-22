@@ -12,6 +12,7 @@ Item {
     property int radius
     property int valueFontSize
     property int labelFontSize
+    property int unitFontSize: valueFontSize
 
     LabeledComponent {
         anchors.fill: parent
@@ -28,5 +29,6 @@ Item {
         radius: batteryComponent.radius
         valueFontSize: batteryComponent.valueFontSize
         labelFontSize: batteryComponent.labelFontSize
+        unitFontSize: batteryComponent.unitFontSize
     }
 }
