@@ -1,7 +1,33 @@
 #include "navigationcontroller.h"
+#include "../utils/data_type_names.h"
 
 NavigationController::NavigationController(Model *model, QObject *parent)
-    : ButtonController{model, -1, parent} {}
+    : ButtonController{model, -1, parent}, m_isTsOn(false) {
+  connect(m_model, &Model::onCurrentDataChange, this,
+          &NavigationController::currentDataDidChange);
+}
+
+void NavigationController::currentDataDidChange() {
+  if (this->m_pageIndices.contains(this->m_model->currentPageIndex)) {
+    std::optional<float> value = this->m_model->getById(TSMS);
+    if (value) {
+      if (value == 0) {
+        setIsTsOn(false);
+      } else {
+        setIsTsOn(true);
+      }
+    }
+  }
+}
+
+bool NavigationController::isTsOn() const { return m_isTsOn; }
+
+void NavigationController::setIsTsOn(bool isTsOn) {
+  if (m_isTsOn != isTsOn) {
+    m_isTsOn = isTsOn;
+    emit isTsOnChanged(isTsOn);
+  }
+}
 
 int NavigationController::selectedPageIndex() const {
   return this->m_selectedPageIndex;

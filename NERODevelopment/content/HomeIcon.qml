@@ -18,7 +18,7 @@ Rectangle {
         Rectangle {
             id: icon
             Layout.fillWidth: true
-            Layout.fillHeight: true
+            Layout.preferredHeight: root.width
             radius: 15
 
             gradient: Gradient {
@@ -36,6 +36,7 @@ Rectangle {
                 id: iconImage
                 source: root.source
                 width: parent.width * 0.6
+                height: width
                 anchors.centerIn: parent
                 fillMode: Image.PreserveAspectFit
             }
