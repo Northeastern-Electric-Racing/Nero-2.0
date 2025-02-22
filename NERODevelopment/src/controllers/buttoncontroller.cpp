@@ -1,9 +1,13 @@
 #include "buttoncontroller.h"
 
 ButtonController::ButtonController(Model *model, int pageIndex, QObject *parent)
+    : ButtonController(model, QList<int>{pageIndex}, parent) {}
+
+ButtonController::ButtonController(Model *model, QList<int> pageIndices,
+                                   QObject *parent)
     : QObject{parent} {
   this->m_model = model;
-  this->m_pageIndex = pageIndex;
+  this->m_pageIndices = pageIndices;
   connect(model, &Model::onCurrentDataChange, this,
           &ButtonController::buttonUpdate);
 }
@@ -23,88 +27,49 @@ void ButtonController::homeButtonPressed() {
 }
 
 void ButtonController::buttonUpdate() {
-  if (this->m_pageIndex == this->m_model->currentPageIndex) {
-    QDateTime currentDate = QDateTime::currentDateTime();
+  if (this->m_pageIndices.contains(this->m_model->currentPageIndex)) {
+    // QDateTime currentDate = QDateTime::currentDateTime();
     // qDebug() << "Button Pressed"
-    //          << this->m_model->getBackwardButtonPressed().value_or(-1)
-    //          << this->m_model->getDownButtonPressed().value_or(-1)
-    //          << this->m_model->getEnterButtonPressed().value_or(-1)
-    //          << this->m_model->getRightButtonPressed().value_or(-1)
-    //          << this->m_model->getUpButtonPressed().value_or(-1)
-    //          << this->m_model->getHomeButtonPressed().value_or(-1)
-    //          << this->m_model->getForwardButtonPressed().value_or(-1)
+    //          << this->m_model->getBackwardButtonPressed().value_or(false)
+    //          << this->m_model->getDownButtonPressed().value_or(false)
+    //          << this->m_model->getEnterButtonPressed().value_or(false)
+    //          << this->m_model->getRightButtonPressed().value_or(false)
+    //          << this->m_model->getUpButtonPressed().value_or(false)
+    //          << this->m_model->getHomeButtonPressed().value_or(false)
+    //          << this->m_model->getForwardButtonPressed().value_or(false)
     //          << this->m_model->currentPageIndex;
-    if (this->m_model->getBackwardButtonPressed() == 1 &&
-        currentDate.toMSecsSinceEpoch() - this->m_leftButtonDebounce >
-            this->m_debounceOffset) {
-      qDebug() << "Back Button Pressed";
 
+    if (this->m_model->getBackwardButtonPressed() == true) {
+      qDebug() << "Back Button Pressed";
       this->leftButtonPressed();
-      this->m_leftButtonDebounce = currentDate.toMSecsSinceEpoch();
-    } else if (this->m_model->getBackwardButtonPressed() == 0) {
-      this->m_leftButtonDebounce = currentDate.toMSecsSinceEpoch();
     }
 
-    if (this->m_model->getRightButtonPressed() == 1 &&
-        currentDate.toMSecsSinceEpoch() - this->m_rightButtonDebounce >
-            this->m_debounceOffset) {
+    if (this->m_model->getRightButtonPressed() == true) {
       qDebug() << "Right Button Pressed";
 
       this->rightButtonPressed();
-      this->m_rightButtonDebounce = currentDate.toMSecsSinceEpoch();
-    } else if (this->m_model->getRightButtonPressed() == 0) {
-      this->m_rightButtonDebounce = currentDate.toMSecsSinceEpoch();
     }
 
-    // if (this->m_model->getForwardButtonPressed() == 1 &&
-    //     currentDate.toMSecsSinceEpoch() - this->m_rightButtonDebounce >
-    //         this->m_debounceOffset) {
-
-    //   qDebug() << "Forward button pressed";
-    //   this->rightButtonPressed();
-    //   this->m_rightButtonDebounce = currentDate.toMSecsSinceEpoch();
-    // } else if (this->m_model->getForwardButtonPressed() == 0) {
-    //   this->m_rightButtonDebounce = currentDate.toMSecsSinceEpoch();
-    // }
-
-    if (this->m_model->getEnterButtonPressed() == 1 &&
-        currentDate.toMSecsSinceEpoch() - this->m_enterButtonDebounce >
-            this->m_debounceOffset) {
+    if (this->m_model->getEnterButtonPressed() == true) {
       qDebug() << "Enter Button Pressed";
 
       this->enterButtonPressed();
-      this->m_enterButtonDebounce = currentDate.toMSecsSinceEpoch();
-    } else if (this->m_model->getEnterButtonPressed() == 0) {
-      this->m_enterButtonDebounce = currentDate.toMSecsSinceEpoch();
     }
 
-    if (this->m_model->getUpButtonPressed() == 1 &&
-        currentDate.toMSecsSinceEpoch() - this->m_upButtonDebounce >
-            this->m_debounceOffset) {
+    if (this->m_model->getUpButtonPressed() == true) {
       qDebug() << "Up button pressed";
       this->upButtonPressed();
-      this->m_upButtonDebounce = currentDate.toMSecsSinceEpoch();
-    } else if (this->m_model->getUpButtonPressed() == 0) {
-      this->m_upButtonDebounce = currentDate.toMSecsSinceEpoch();
     }
 
-    if (this->m_model->getDownButtonPressed() == 1 &&
-        currentDate.toMSecsSinceEpoch() - this->m_downButtonDebounce >
-            this->m_debounceOffset) {
+    if (this->m_model->getDownButtonPressed() == true) {
       qDebug() << "Down Button Pressed";
 
       this->downButtonPressed();
-      this->m_downButtonDebounce = currentDate.toMSecsSinceEpoch();
-    } else if (this->m_model->getDownButtonPressed() == 0) {
-      this->m_downButtonDebounce = currentDate.toMSecsSinceEpoch();
     }
 
-    if (this->m_model->getHomeButtonPressed() == 1 &&
-        currentDate.toMSecsSinceEpoch() - this->m_homeButtonDebounce >
-            this->m_debounceOffset) {
+    if (this->m_model->getHomeButtonPressed() == true) {
       qDebug() << "Home button pressed";
       this->homeButtonPressed();
-      this->m_homeButtonDebounce = currentDate.toMSecsSinceEpoch();
     }
   }
 }

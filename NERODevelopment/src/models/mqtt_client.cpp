@@ -53,13 +53,15 @@ void MqttClient::brokerDisconnected() {
 void MqttClient::setClientPort(int p) { m_client->setPort(p); }
 
 void MqttClient::subscribe() {
-  QMqttSubscription *subscription = m_client->subscribe(default_topic, QoS);
-  if (!subscription) {
-    qDebug("Could not subscribe. Is there a valid connection?");
-  } else {
-    m_sub = subscription;
-    connect(m_sub, &QMqttSubscription::messageReceived, this,
-            &MqttClient::updateMessage);
+  for (const auto &topic : this->m_topics) {
+    QMqttSubscription *subscription = m_client->subscribe(topic, QoS);
+    if (!subscription) {
+      qDebug("Could not subscribe. Is there a valid connection?");
+    } else {
+      m_sub = subscription;
+      connect(m_sub, &QMqttSubscription::messageReceived, this,
+              &MqttClient::updateMessage);
+    }
   }
 }
 

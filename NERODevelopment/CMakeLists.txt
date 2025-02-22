@@ -20,14 +20,10 @@ set(PROJECT_SOURCES
     src/controllers/offviewcontroller.h
     src/controllers/efficiencycontroller.h
     src/controllers/headercontroller.h
-    src/controllers/debugtablecontroller.h
     src/controllers/offviewcontroller.h
     src/controllers/buttoncontroller.h
     src/controllers/navigationcontroller.h
     src/controllers/flappybirdcontroller.h
-    src/controllers/keyboardcontroller.h
-    src/controllers/configurationcontroller.h
-    src/controllers/debuggraphcontroller.h
 
     src/models/mock_model.h
     src/models/model.h
@@ -45,15 +41,10 @@ set(PROJECT_SOURCES
     src/controllers/chargingcontroller.cpp
     src/controllers/homecontroller.cpp
     src/controllers/headercontroller.cpp
-    src/controllers/debugtablecontroller.cpp
     src/controllers/offviewcontroller.cpp
     src/controllers/buttoncontroller.cpp
     src/controllers/navigationcontroller.cpp
     src/controllers/flappybirdcontroller.cpp
-    src/controllers/keyboardcontroller.cpp
-    src/controllers/configurationcontroller.cpp
-    src/controllers/debuggraphcontroller.cpp
-
     src/models/mock_model.cpp
     src/models/model.cpp
     src/models/raspberry_model.cpp

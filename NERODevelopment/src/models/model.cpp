@@ -97,11 +97,15 @@ QList<DebugTableRowValue> Model::getDebugTableValues() {
 }
 
 std::optional<float> Model::getById(QString id) {
-  bool ok;
   float value = this->currentData.value(id, DataInfo()).values[0];
-  if (ok && value != -9999) {
+  if (value != -9999) {
     return value;
   } else {
     return std::nullopt;
   }
+}
+
+void Model::setValue(QString topic, float value) {
+  this->currentData[topic] = DataInfo(topic, "", {value});
+  // emit this->onCurrentDataChange();
 }

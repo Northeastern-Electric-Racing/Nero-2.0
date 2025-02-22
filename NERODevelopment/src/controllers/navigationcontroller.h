@@ -11,19 +11,29 @@ class NavigationController : public ButtonController {
                  setSelectedPageIndex NOTIFY selectedPageIndexChanged FINAL)
   Q_PROPERTY(bool isSelected READ isSelected WRITE setIsSelected NOTIFY
                  isSelectedChanged FINAL)
+  Q_PROPERTY(bool isGamesOpen READ isGamesOpen WRITE setIsGamesOpen NOTIFY
+                 isGamesOpenChanged FINAL)
+  Q_PROPERTY(bool isTsOn READ isTsOn WRITE setIsTsOn NOTIFY isTsOnChanged FINAL)
 
 public:
   explicit NavigationController(Model *model, QObject *parent = nullptr);
   int selectedPageIndex() const;
   bool isSelected() const;
+  bool isGamesOpen() const;
+  bool isTsOn() const;
 
 signals:
   void selectedPageIndexChanged();
   void isSelectedChanged();
+  void isGamesOpenChanged();
+  void isTsOnChanged(bool);
 
 public slots:
   void setIsSelected(bool);
+  void setIsGamesOpen(bool);
   void setSelectedPageIndex(int);
+  void setIsTsOn(bool);
+  void currentDataDidChange();
   void enterButtonPressed() override;
   void downButtonPressed() override;
   void upButtonPressed() override;
@@ -33,8 +43,11 @@ public slots:
 
 private:
   bool m_isSelected = false;
+  bool m_gamesSelected = false;
+  bool m_isTsOn;
   int m_selectedPageIndex = 0;
-  int m_numPages = 9;
+  int m_numPages = 7;
+  int m_numGames = 2;
 };
 
 #endif // NAVIGATIONCONTROLLER_H
