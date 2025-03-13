@@ -14,8 +14,17 @@ RaspberryModel::RaspberryModel() {}
 
 RaspberryModel::~RaspberryModel() {}
 
-std::optional<float> RaspberryModel::getMpuFault() {
-  return std::nullopt; // TODO: Implement Mpu Faults
+QList<QString> RaspberryModel::getMpuFault() {
+  QRegularExpression regex("^MPU/Fault/.*$");
+
+  QList<QString> faults;
+  for (auto it = this->currentData.begin(); it != this->currentData.end();
+       ++it) {
+    if (regex.match(it.key()).hasMatch() && it.value().values[0] == 1) {
+      faults.append(it.key());
+    }
+  }
+  return faults;
 }
 
 void RaspberryModel::connectToMQTT() {
@@ -228,18 +237,17 @@ std::optional<float> RaspberryModel::getTractionControl() {
   return this->getById(TRACTIONCONTROL);
 }
 
-std::optional<float> RaspberryModel::getBmsFault() {
-  std::optional<float> faultStatus = this->getById(BMSFAULT);
-  if (faultStatus && *faultStatus > 0) {
-    FaultInstance faultInstance(
-        *faultStatus, getMaxCellTemp().value_or(0),
-        getMaxCellVoltage().value_or(0), getAveCellTemp().value_or(0),
-        getAveCellVoltage().value_or(0), getMinCellTemp().value_or(0),
-        getMinCellVoltage().value_or(0), getPackCurrent().value_or(0),
-        getDcl().value_or(0), getCcl().value_or(0));
-    faultInstances.push_back(faultInstance);
+QList<QString> RaspberryModel::getBmsFault() {
+  QRegularExpression regex("^(BMS/Status/F/.*|MPU/Fault/Crit/.*)$");
+
+  QList<QString> faults;
+  for (auto it = this->currentData.begin(); it != this->currentData.end();
+       ++it) {
+    if (regex.match(it.key()).hasMatch() && it.value().values[0] == 1) {
+      faults.append(it.key());
+    }
   }
-  return faultStatus;
+  return faults;
 }
 
 std::optional<bool> RaspberryModel::getForwardButtonPressed() {
@@ -341,20 +349,34 @@ std::optional<bool> RaspberryModel::getIsTalking() {
   return false;
 }
 
-std::optional<int> RaspberryModel::getNumberOfCriticalFaults() {
-  std::optional<float> value = this->getById(CRITICALFAULTS);
-  if (value) {
-    return this->totalNumberOfOnesIn(*value);
+QList<QString> RaspberryModel::getCriticalFaults() {
+  QRegularExpression regex("^(BMS/Status/F/.*|MPU/Fault/Crit/.*)$");
+
+  QList<QString> faults;
+
+  for (auto it = this->currentData.begin(); it != this->currentData.end();
+       ++it) {
+    if (regex.match(it.key()).hasMatch() && it.value().values[0] == 1) {
+      faults.append(it.key());
+    }
   }
-  return std::nullopt;
+
+  return faults;
 }
 
-std::optional<int> RaspberryModel::getNumberOfNonCriticalFaults() {
-  std::optional<float> value = this->getById(NONCRITICALFAULTS);
-  if (value) {
-    return this->totalNumberOfOnesIn(*value);
+QList<QString> RaspberryModel::getNonCriticalFaults() {
+  QRegularExpression regex("^MPU/Fault/[^/]+$");
+
+  QList<QString> faults;
+
+  for (auto it = this->currentData.begin(); it != this->currentData.end();
+       ++it) {
+    if (regex.match(it.key()).hasMatch() && it.value().values[0] == 1) {
+      faults.append(it.key());
+    }
   }
-  return std::nullopt;
+
+  return faults;
 }
 
 int RaspberryModel::totalNumberOfOnesIn(float value) {

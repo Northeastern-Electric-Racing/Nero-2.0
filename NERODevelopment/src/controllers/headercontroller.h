@@ -10,35 +10,34 @@
  */
 class HeaderController : public QObject {
   Q_OBJECT
-  Q_PROPERTY(int numCriticalWarnings READ numCriticalWarnings WRITE
-                 setNumCriticalWarnings NOTIFY numCriticalWarningsChanged FINAL)
-  Q_PROPERTY(
-      int numNonCriticalWarnings READ numNonCriticalWarnings WRITE
-          setNumNonCriticalWarnings NOTIFY numNonCriticalWarningsChanged FINAL)
+  Q_PROPERTY(QList<QString> criticalFaults READ criticalFaults WRITE
+                 setCriticalFaults NOTIFY criticalFaultsChanged FINAL)
+  Q_PROPERTY(QList<QString> nonCriticalFaults READ nonCriticalFaults WRITE
+                 setNonCriticalFaults NOTIFY nonCriticalFaultsChanged FINAL)
   Q_PROPERTY(bool isTalking READ isTalking WRITE setIsTalking NOTIFY
                  isTalkingChanged FINAL)
 
 public:
   explicit HeaderController(Model *model, QObject *parent = nullptr);
-  int numCriticalWarnings() const;
-  int numNonCriticalWarnings() const;
+  QList<QString> criticalFaults() const;
+  QList<QString> nonCriticalFaults() const;
   bool isTalking() const;
 
 signals:
-  void numCriticalWarningsChanged(int);
-  void numNonCriticalWarningsChanged(int);
+  void criticalFaultsChanged(QList<QString>);
+  void nonCriticalFaultsChanged(QList<QString>);
   void isTalkingChanged(bool);
 
 public slots:
-  void setNumCriticalWarnings(int);
-  void setNumNonCriticalWarnings(int);
+  void setCriticalFaults(QList<QString>);
+  void setNonCriticalFaults(QList<QString>);
   void setIsTalking(bool);
   void currentDataDidChange();
 
 private:
   Model *m_model;
-  int m_numCriticalWarnings = 0;
-  int m_numNonCriticalWarnings = 0;
+  QList<QString> m_criticalFaults;
+  QList<QString> m_nonCriticalFaults;
   bool m_isTalking = false;
 };
 

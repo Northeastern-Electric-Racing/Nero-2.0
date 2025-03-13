@@ -7,9 +7,30 @@ Item {
     width: 800
     height: 100
 
-    property int numCriticalWarnings: headerController.numCriticalWarnings
-    property int numNonCriticalWarnings: headerController.numNonCriticalWarnings
+    property var criticalFaults: headerController.criticalFaults
+    property var nonCriticalFaults: headerController.nonCriticalFaults
     property bool isTalking: headerController.isTalking
+
+    Timer {
+        id: timer
+    }
+
+    function delay(delayTime, cb) {
+        timer.interval = delayTime
+        timer.repeat = false
+        timer.triggered.connect(cb)
+        timer.start()
+    }
+
+    onCriticalFaultsChanged: {
+        faultDialog.openModal("Critical Faults", criticalFaults.join("\n"))
+        delay(3000, faultDialog.closeModal)
+    }
+    onNonCriticalFaultsChanged: {
+        faultDialog.openModal("Non Critical Faults",
+                              nonCriticalFaults.join("\n"))
+        delay(3000, faultDialog.closeModal)
+    }
 
     NonCriticalWarning {
         id: nonCriticalWarning
@@ -17,16 +38,18 @@ Item {
         anchors.top: parent.top
         dimension: parent.height / 2
         anchors.leftMargin: nonCriticalWarning.width / 10
-        visible: numNonCriticalWarnings > 0
+        visible: nonCriticalFaults.length > 0
+        numWarnings: nonCriticalFaults.length
     }
 
     CriticalFaultIcon {
         id: criticalFaultIcon
-        visible: numCriticalWarnings > 0
+        visible: criticalFaults.length > 0
         anchors.left: nonCriticalWarning.right
         anchors.top: parent.top
         anchors.topMargin: criticalFaultIcon.height / 5
         dimension: parent.height / 2 * 0.9
+        numWarnings: criticalFaults.length
     }
 
     MicrophoneComponent {
@@ -38,5 +61,10 @@ Item {
         anchors.rightMargin: 5
         anchors.topMargin: 5
         isTalking: header.isTalking
+    }
+
+    FaultDialog {
+        id: faultDialog
+        dimension: 300
     }
 }

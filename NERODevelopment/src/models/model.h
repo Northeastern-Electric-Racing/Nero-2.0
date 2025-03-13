@@ -55,8 +55,8 @@ public:
   virtual std::optional<float> getTorquePower() = 0;
   virtual std::optional<float> getRegenPower() = 0;
   virtual std::optional<float> getBmsState() = 0;
-  virtual std::optional<float> getBmsFault() = 0;
-  virtual std::optional<float> getMpuFault() = 0;
+  virtual QList<QString> getBmsFault() = 0;
+  virtual QList<QString> getMpuFault() = 0;
   virtual std::optional<float> getDcl() = 0;
   virtual std::optional<float> getCcl() = 0;
   virtual std::optional<float> getPackCurrent() = 0;
@@ -76,8 +76,8 @@ public:
   virtual std::optional<float> getSegment3Temp() = 0;
   virtual std::optional<float> getSegment4Temp() = 0;
   virtual std::optional<bool> getIsTalking() = 0;
-  virtual std::optional<int> getNumberOfCriticalFaults() = 0;
-  virtual std::optional<int> getNumberOfNonCriticalFaults() = 0;
+  virtual QList<QString> getCriticalFaults() = 0;
+  virtual QList<QString> getNonCriticalFaults() = 0;
   virtual void sendMessage(QString topic, float value) = 0;
   virtual std::optional<float> getLowVoltageStateOfCharge() = 0;
 

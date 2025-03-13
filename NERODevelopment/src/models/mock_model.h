@@ -25,8 +25,8 @@ public:
   std::optional<float> getMotorTemp() override;
   std::optional<float> getStateOfCharge() override;
   std::optional<float> getCurrent() override;
-  std::optional<float> getBmsFault() override;
-  std::optional<float> getMpuFault() override;
+  QList<QString> getBmsFault() override;
+  QList<QString> getMpuFault() override;
   std::optional<float> getModeIndex() override;
   std::optional<float> getMaxCellVoltage() override;
   std::optional<float> getMaxCellVoltageChipNumber() override;
@@ -71,8 +71,8 @@ public:
   std::optional<float> getTractionControl() override;
   std::optional<float> getCellDelta() override;
   std::optional<bool> getIsTalking() override;
-  std::optional<int> getNumberOfCriticalFaults() override;
-  std::optional<int> getNumberOfNonCriticalFaults() override;
+  QList<QString> getCriticalFaults() override;
+  QList<QString> getNonCriticalFaults() override;
   std::optional<float> getLowVoltageStateOfCharge() override;
 
   void sendMessage(const QString topic, const float value) override;

@@ -223,9 +223,15 @@ std::optional<float> MockModel::getCurrent() {
   return round(current * 10) / 10;
 }
 
-std::optional<float> MockModel::getBmsFault() { return bmsFaults; }
+QList<QString> MockModel::getBmsFault() {
+  QList<QString> faults;
+  return faults;
+}
 
-std::optional<float> MockModel::getMpuFault() { return mpuFaults; }
+QList<QString> MockModel::getMpuFault() {
+  QList<QString> faults;
+  return faults;
+}
 
 std::optional<float> MockModel::getModeIndex() { return std::nullopt; }
 
@@ -351,9 +357,15 @@ std::optional<bool> MockModel::getHomeButtonPressed() { return std::nullopt; }
 
 std::optional<bool> MockModel::getIsTalking() { return true; }
 
-std::optional<int> MockModel::getNumberOfCriticalFaults() { return 1; }
+QList<QString> MockModel::getCriticalFaults() {
+  QList<QString> faults;
+  return faults;
+}
 
-std::optional<int> MockModel::getNumberOfNonCriticalFaults() { return 1; }
+QList<QString> MockModel::getNonCriticalFaults() {
+  QList<QString> faults;
+  return faults;
+}
 
 std::optional<float> MockModel::getLowVoltageStateOfCharge() {
   return lvBattery;

@@ -30,16 +30,16 @@ int main(int argc, char *argv[]) {
 
   Model *model;
 
-  if (osName == "raspberrypi-sta") {
-    model = new RaspberryModel;
-    model->connectToMQTT();
-  } else {
-    model = new MockModel;
-    QThread *dataThread = new QThread;
+  // if (osName == "raspberrypi-sta") {
+  model = new RaspberryModel;
+  model->connectToMQTT();
+  // } else {
+  //   model = new MockModel;
+  //   QThread *dataThread = new QThread;
 
-    model->moveToThread(dataThread);
-    dataThread->start();
-  }
+  //   model->moveToThread(dataThread);
+  //   dataThread->start();
+  // }
 
   HomeController homeController(model);
   HeaderController headerController(model);
