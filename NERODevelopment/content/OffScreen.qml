@@ -55,10 +55,6 @@ Item {
                         }
                     }
 
-    onAttributeStatusMapChanged: {
-        console.log(attributeStatusMap)
-    }
-
     onDidSelectChanged: {
         if (offScreen.didSelect) {
             descriptionModal.openModal(offViewController.selectedName,

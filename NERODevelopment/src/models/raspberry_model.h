@@ -52,8 +52,8 @@ public:
   std::optional<float> getTorquePower() override;
   std::optional<float> getRegenPower() override;
   std::optional<float> getBmsState() override;
-  std::optional<float> getBmsFault() override;
-  std::optional<float> getMpuFault() override;
+  QList<QString> getBmsFault() override;
+  QList<QString> getMpuFault() override;
   std::optional<float> getDcl() override;
   std::optional<float> getCcl() override;
   std::optional<float> getPackCurrent() override;
@@ -73,8 +73,8 @@ public:
   std::optional<float> getSegment3Temp() override;
   std::optional<float> getSegment4Temp() override;
   std::optional<bool> getIsTalking() override;
-  std::optional<int> getNumberOfCriticalFaults() override;
-  std::optional<int> getNumberOfNonCriticalFaults() override;
+  QList<QString> getCriticalFaults() override;
+  QList<QString> getNonCriticalFaults() override;
   std::optional<float> getLowVoltageStateOfCharge() override;
 
   void sendMessage(const QString topic, const float value) override;
