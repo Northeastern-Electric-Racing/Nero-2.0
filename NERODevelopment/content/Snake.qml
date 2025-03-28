@@ -156,7 +156,21 @@ Rectangle {
         }
     }
 
+    Keys.onLeftPressed: {
+        snakeController.leftButtonPressed()
+    }
 
+    Keys.onRightPressed: {
+        snakeController.rightButtonPressed()
+    }
+
+    Keys.onUpPressed: {
+        snakeController.upButtonPressed()
+    }
+
+    Keys.onDownPressed: {
+        snakeController.downButtonPressed()
+    }
 
     ListModel {
         id: snakeModel
