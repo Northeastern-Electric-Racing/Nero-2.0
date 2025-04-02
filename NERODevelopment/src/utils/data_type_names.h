@@ -52,7 +52,7 @@
 #define SEGMENTTEMP2 "segmenttemp2"
 #define SEGMENTTEMP3 "segmenttemp3"
 #define SEGMENTTEMP4 "segmenttemp4"
-#define TORQUEPOWER "torquepower"
+#define TORQUEPOWER "MPU/State/TorqueLimit"
 #define SIDEBRBS "MPU/Fuses/BRB"
 #define BMS "MPU/Shutdown/BMS"
 #define BSPD "MPU/Shutdown/BSPD"

@@ -68,6 +68,7 @@ void NavigationController::downButtonPressed() {
 }
 
 void NavigationController::upButtonPressed() {
+  qDebug() << "up";
   if (m_gamesSelected) {
     if (this->m_selectedPageIndex >= this->m_numPages) {
       this->setSelectedPageIndex(this->m_selectedPageIndex - 1);
@@ -96,7 +97,7 @@ void NavigationController::enterButtonPressed() {
 void NavigationController::homeButtonPressed() {
   if (m_gamesSelected) {
     this->setIsGamesOpen(false);
-    this->setSelectedPageIndex(this->m_numPages - 1);
+    this->setSelectedPageIndex(this->m_numPages - 2);
   }
   this->m_model->currentPageIndex = -1;
   this->setIsSelected(false);

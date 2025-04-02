@@ -6,7 +6,7 @@ Popup {
     id: modal
     property int dimension: 500
     property int offset: (modal.width * .02)
-    focus: true
+    focus: false
     modal: true
     width: dimension * 2
     height: dimension
