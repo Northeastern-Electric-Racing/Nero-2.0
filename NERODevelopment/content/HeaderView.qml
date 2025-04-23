@@ -23,13 +23,17 @@ Item {
     }
 
     onCriticalFaultsChanged: {
-        faultDialog.openModal("Critical Faults", criticalFaults.join("\n"))
-        delay(3000, faultDialog.closeModal)
+        if (criticalFaults.length > 0) {
+            faultDialog.openModal("Critical Faults", criticalFaults.join("\n"))
+            delay(3000, faultDialog.closeModal)
+        }
     }
     onNonCriticalFaultsChanged: {
-        faultDialog.openModal("Non Critical Faults",
-                              nonCriticalFaults.join("\n"))
-        delay(3000, faultDialog.closeModal)
+        if (nonCriticalFaults.length > 0) {
+            faultDialog.openModal("Non Critical Faults",
+                                  nonCriticalFaults.join("\n"))
+            delay(3000, faultDialog.closeModal)
+        }
     }
 
     NonCriticalWarning {

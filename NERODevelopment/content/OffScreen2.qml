@@ -34,6 +34,12 @@ Rectangle {
 
     property bool didSelect: offViewController.didSelect
 
+    property int verticalSpacing: height / 80
+    property int borderRadii: 10
+    property int valueFontSize: Math.min(height / 10, width / 16)
+    property int labelFontSize: Math.min(height / 20, width / 20)
+    property int radialUnitFontSize: valueFontSize / 3
+
     Keys.onPressed: event => {
                         switch (event.key) {
                             case Qt.Key_Up:
@@ -55,10 +61,6 @@ Rectangle {
                             break
                         }
                     }
-
-    onAttributeStatusMapChanged: {
-        console.log(attributeStatusMap["MPU/Fuses/BRB"])
-    }
 
     onDidSelectChanged: {
         if (offScreen.didSelect) {
@@ -433,6 +435,7 @@ Rectangle {
     Rectangle {
         id: tempBatteryContainer
         anchors.left: lvFaultContainer.right
+        anchors.rightMargin: 0
         anchors.top: offHeader.bottom
         anchors.right: parent.right
         anchors.bottom: cpBrbInterlocksTsmsContainer.top
@@ -451,20 +454,26 @@ Rectangle {
                 title: "Pack Temp"
                 thermometerValue: offScreen.packTemp
                 anchors.right: parent.horizontalCenter
-                anchors.rightMargin: parent.width / 20
+                anchors.rightMargin: parent.width / 80
                 anchors.top: parent.top
                 anchors.bottom: parent.bottom
-                width: parent.width * 0.4
+                width: parent.width * 0.45
+                radius: offScreen.borderRadii
+                valueFontSize: offScreen.valueFontSize
+                labelFontSize: offScreen.labelFontSize
             }
 
             ThermometerValueComponent {
                 title: "Motor Temp"
                 thermometerValue: offScreen.motorTemp
                 anchors.left: parent.horizontalCenter
-                anchors.leftMargin: parent.width / 20
+                anchors.leftMargin: parent.width / 80
                 anchors.top: parent.top
                 anchors.bottom: parent.bottom
-                width: parent.width * 0.4
+                width: parent.width * 0.45
+                radius: offScreen.borderRadii
+                valueFontSize: offScreen.valueFontSize
+                labelFontSize: offScreen.labelFontSize
             }
         }
 
@@ -477,6 +486,9 @@ Rectangle {
             anchors.bottom: parent.bottom
             anchors.bottomMargin: parent.height / 10
             width: parent.width / 2
+            radius: offScreen.borderRadii
+            valueFontSize: offScreen.valueFontSize
+            labelFontSize: offScreen.labelFontSize
         }
     }
 

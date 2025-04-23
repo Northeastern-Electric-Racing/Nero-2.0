@@ -21,7 +21,7 @@ Item {
 
     property int xMargin: width / 20
     property int yMargin: height / 20
-    property int verticalSpacing: height / 40
+    property int verticalSpacing: height / 80
     property int borderRadii: 10
     property int valueFontSize: Math.min(height / 6, width / 8)
     property int labelFontSize: Math.min(height / 20, width / 20)
@@ -38,6 +38,7 @@ Item {
         id: tractionControl
         anchors {
             top: speedMode.top
+            topMargin: 20
             horizontalCenter: speedMode.horizontalCenter
         }
         width: speedMode.width * 0.7

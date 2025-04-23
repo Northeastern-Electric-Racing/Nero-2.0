@@ -27,7 +27,7 @@
 #define AVECELLVOLTAGE "BMS/Status/Voltage_Average"
 #define CELLVOLTAGEDELTA "cellvoltagedelta"
 #define BURNINGCELLS "burningcells"
-#define TRACTIONCONTROL "tractioncontrol"
+#define TRACTIONCONTROL "MPU/State/TorqueLimit"
 #define INVERTERTEMP "invertertemp"
 #define MOTORPOWER "motorpower"
 #define FANPOWER "fanpower"
