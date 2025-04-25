@@ -350,7 +350,7 @@ std::optional<bool> RaspberryModel::getIsTalking() {
 }
 
 QList<QString> RaspberryModel::getCriticalFaults() {
-  QRegularExpression regex("^(BMS/Status/F/.*|MPU/Fault/Crit/.*)$");
+  QRegularExpression regex("^(BMS/Status/Faults/.*|MPU/Fault/Critical/.*)$");
 
   QList<QString> faults;
 
@@ -365,7 +365,7 @@ QList<QString> RaspberryModel::getCriticalFaults() {
 }
 
 QList<QString> RaspberryModel::getNonCriticalFaults() {
-  QRegularExpression regex("^MPU/Fault/[^/]+$");
+  QRegularExpression regex("^MPU/Fault/Non-Critical/.*$");
 
   QList<QString> faults;
 
