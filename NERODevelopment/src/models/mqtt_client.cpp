@@ -9,8 +9,11 @@
 #include <chrono>
 #include <serverdata.qpb.h>
 
-MqttClient::MqttClient(QObject *parent) : QObject(parent) {
+MqttClient::MqttClient(QObject *parent, int port, QList<QString> topics)
+    : QObject(parent) {
   m_client = new QMqttClient();
+  m_port = port;
+  m_topics = topics;
 
   connect(m_client, &QMqttClient::stateChanged, this,
           &MqttClient::updateLogStateChange);
@@ -24,7 +27,7 @@ MqttClient::MqttClient(QObject *parent) : QObject(parent) {
   connect(m_client, &QMqttClient::connected, this,
           &MqttClient::brokerConnected);
 
-  setClientPort(port);
+  setClientPort(m_port);
   m_client->setHostname(hostname);
   updateLogStateChange();
 }

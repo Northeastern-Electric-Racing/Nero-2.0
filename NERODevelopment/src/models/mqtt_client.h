@@ -15,7 +15,8 @@ class MqttClient : public QObject {
   Q_OBJECT
 
 public:
-  MqttClient(QObject *parent = nullptr);
+  MqttClient(QObject *parent = nullptr, int port = 1883,
+             QList<QString> topics = {});
   ~MqttClient();
 
 public slots:
@@ -85,77 +86,10 @@ private:
   QMqttClient *m_client;
   QMqttSubscription *m_sub;
   QString hostname = "localhost";
-  int port = 1883;
+  int m_port = 1883;
   qint8 QoS = 0;
   QString default_topic = "#";
   QProtobufSerializer m_serializer;
-  QList<QString> m_topics = {MPH,
-                             KPH,
-                             STATUS,
-                             DIRECTION,
-                             PACKTEMP,
-                             MOTORTEMP,
-                             STATEOFCHARGE,
-                             CURRENT,
-                             BALANCINGCELLS,
-                             PACKVOLTAGE,
-                             MAXCELLTEMP,
-                             MAXCELLTEMPCHIP,
-                             MAXCELLTEMPCELL,
-                             MAXCELLVOLTAGE,
-                             MAXCELLVOLTAGECHIP,
-                             MAXCELLVOLTAGECELL,
-                             MINCELLTEMP,
-                             MINCELLTEMPCHIP,
-                             MINCELLTEMPCELL,
-                             MINCELLVOLTAGE,
-                             MINCELLVOLTAGECHIP,
-                             MINCELLVOLTAGECELL,
-                             AVECELLTEMP,
-                             AVECELLVOLTAGE,
-                             BURNINGCELLS,
-                             TRACTIONCONTROL,
-                             INVERTERTEMP,
-                             MOTORPOWER,
-                             FANPOWER,
-                             REGENPOWER,
-                             BMSSTATE,
-                             BMSFAULT,
-                             MPUFAULT,
-                             DCL,
-                             CCL,
-                             FORWARDBUTTON,
-                             BACKWARDBUTTON,
-                             RIGHTBUTTON,
-                             ENTERBUTTON,
-                             UPBUTTON,
-                             DOWNBUTTON,
-                             HOMEBUTTON,
-                             MODEINDEX,
-                             GFORCEX,
-                             GFORCEY GFORCEZ,
-                             SEGMENTTEMP1,
-                             SEGMENTTEMP2,
-                             SEGMENTTEMP3,
-                             SEGMENTTEMP4,
-                             TORQUEPOWER,
-                             SIDEBRBS,
-                             BMS,
-                             BSPD,
-                             MPU,
-                             BOTS,
-                             INERTIA,
-                             CPBRB,
-                             TSMS,
-                             IMD,
-                             HVDINTRLK,
-                             HVCNCTR,
-                             CRITICALFAULTS,
-                             NONCRITICALFAULTS,
-                             MICROPHONE,
-                             FASTESTTIME,
-                             LASTTIME,
-                             CURRENT_TIME,
-                             LOWVOLTAGESOC};
+  QList<QString> m_topics = {};
 };
 #endif // MQTTCLIENT_H

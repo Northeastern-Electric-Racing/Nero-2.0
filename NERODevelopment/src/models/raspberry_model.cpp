@@ -28,11 +28,80 @@ QList<QString> RaspberryModel::getMpuFault() {
 }
 
 void RaspberryModel::connectToMQTT() {
-  MqttClient *client = new MqttClient();
-  connect(client, &MqttClient::emitServerData, this,
+  QList<QString> client_1_topics = {MPH,
+                                    KPH,
+                                    STATUS,
+                                    DIRECTION,
+                                    PACKTEMP,
+                                    MOTORTEMP,
+                                    STATEOFCHARGE,
+                                    CURRENT,
+                                    BALANCINGCELLS,
+                                    PACKVOLTAGE,
+                                    MAXCELLTEMP,
+                                    MAXCELLTEMPCHIP,
+                                    MAXCELLTEMPCELL,
+                                    MAXCELLVOLTAGE,
+                                    MAXCELLVOLTAGECHIP,
+                                    MAXCELLVOLTAGECELL,
+                                    MINCELLTEMP,
+                                    MINCELLTEMPCHIP,
+                                    MINCELLTEMPCELL,
+                                    MINCELLVOLTAGE,
+                                    MINCELLVOLTAGECHIP,
+                                    MINCELLVOLTAGECELL,
+                                    AVECELLTEMP,
+                                    AVECELLVOLTAGE,
+                                    BURNINGCELLS,
+                                    TRACTIONCONTROL,
+                                    INVERTERTEMP,
+                                    MOTORPOWER,
+                                    FANPOWER,
+                                    REGENPOWER,
+                                    BMSSTATE,
+                                    BMSFAULT,
+                                    MPUFAULT,
+                                    DCL,
+                                    CCL,
+                                    GFORCEX,
+                                    GFORCEY GFORCEZ,
+                                    SEGMENTTEMP1,
+                                    SEGMENTTEMP2,
+                                    SEGMENTTEMP3,
+                                    SEGMENTTEMP4,
+                                    TORQUEPOWER,
+                                    SIDEBRBS,
+                                    BMS,
+                                    BSPD,
+                                    MPU,
+                                    BOTS,
+                                    INERTIA,
+                                    CPBRB,
+                                    TSMS,
+                                    IMD,
+                                    HVDINTRLK,
+                                    HVCNCTR,
+                                    CRITICALFAULTS,
+                                    NONCRITICALFAULTS,
+                                    MICROPHONE,
+                                    FASTESTTIME,
+                                    LASTTIME,
+                                    CURRENT_TIME,
+                                    LOWVOLTAGESOC};
+
+  MqttClient *client_1 = new MqttClient(nullptr, 1883, client_1_topics);
+  connect(client_1, &MqttClient::emitServerData, this,
           &RaspberryModel::receiveServerData);
-  client->connectToHost();
-  this->m_client = client;
+  client_1->connectToHost();
+
+  QList<QString> client_2_topics = {FORWARDBUTTON, BACKWARDBUTTON, RIGHTBUTTON,
+                                    ENTERBUTTON,   UPBUTTON,       DOWNBUTTON,
+                                    HOMEBUTTON,    MODEINDEX};
+  MqttClient *client_2 = new MqttClient(nullptr, 1882, client_2_topics);
+  connect(client_2, &MqttClient::emitServerData, this,
+          &RaspberryModel::receiveServerData);
+  client_2->connectToHost();
+  this->m_client = client_1;
 }
 
 void RaspberryModel::sendMessage(const QString topic, const float value) {
