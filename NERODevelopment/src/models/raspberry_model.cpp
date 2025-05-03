@@ -31,7 +31,6 @@ void RaspberryModel::connectToMQTT() {
   QList<QString> client_1_topics = {MPH,
                                     KPH,
                                     STATUS,
-                                    DIRECTION,
                                     PACKTEMP,
                                     MOTORTEMP,
                                     STATEOFCHARGE,
@@ -94,9 +93,10 @@ void RaspberryModel::connectToMQTT() {
           &RaspberryModel::receiveServerData);
   client_1->connectToHost();
 
-  QList<QString> client_2_topics = {FORWARDBUTTON, BACKWARDBUTTON, RIGHTBUTTON,
-                                    ENTERBUTTON,   UPBUTTON,       DOWNBUTTON,
-                                    HOMEBUTTON,    MODEINDEX};
+  QList<QString> client_2_topics = {
+      FORWARDBUTTON, BACKWARDBUTTON, RIGHTBUTTON, ENTERBUTTON, UPBUTTON,
+      DOWNBUTTON,    HOMEBUTTON,     MODEINDEX,   DIRECTION,
+  };
   MqttClient *client_2 = new MqttClient(nullptr, 1882, client_2_topics);
   connect(client_2, &MqttClient::emitServerData, this,
           &RaspberryModel::receiveServerData);

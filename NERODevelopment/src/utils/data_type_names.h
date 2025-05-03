@@ -4,7 +4,7 @@
 #define MPH "MPU/State/Speed"
 #define KPH "mc/speed/kph"
 #define STATUS "status"
-#define DIRECTION "direction"
+#define DIRECTION "MPU/State/Direction"
 #define PACKTEMP "BMS/Status/Temp_Average"
 #define MOTORTEMP "DTI/Temps/Motor_Temperature"
 #define STATEOFCHARGE "BMS/Pack/SOC"
