@@ -369,7 +369,7 @@ std::optional<bool> RaspberryModel::getEnterButtonPressed() {
 std::optional<bool> RaspberryModel::getUpButtonPressed() {
   std::optional<float> value = this->getById(UPBUTTON);
   if (value) {
-    if (value == 3) {
+    if (value == 4) {
       this->setValue(
           UPBUTTON,
           10); // 10 is an invalid value so basically clearing the old value
@@ -382,9 +382,9 @@ std::optional<bool> RaspberryModel::getUpButtonPressed() {
 std::optional<bool> RaspberryModel::getDownButtonPressed() {
   std::optional<float> value = this->getById(DOWNBUTTON);
   if (value) {
-    if (value == 4) {
+    if (value == 3) {
       this->setValue(
-          UPBUTTON,
+          DOWNBUTTON,
           10); // 10 is an invalid value so basically clearing the old value
       return true;
     }
