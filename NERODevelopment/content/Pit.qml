@@ -12,7 +12,7 @@ Rectangle {
     property int packTempValue: homeController.packTemp
     property int motorTempValue: homeController.motorTemp
     property int currentSpeed: homeController.speed
-    property bool forward: homeController.direction
+    property bool forward: homeController.direction === 1
 
     property int maxSpeed: 5
     property int horizontalMargin: parent.width / 40
