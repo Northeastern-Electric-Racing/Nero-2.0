@@ -132,6 +132,7 @@ std::optional<float> RaspberryModel::getStatus() {
 
 std::optional<float> RaspberryModel::getDir() {
   std::optional<float> dir = this->getById(DIRECTION);
+  qDebug() << "Direction: " << (dir ? *dir : -1);
   return dir ? std::optional<float>((*dir == 1)) : std::nullopt;
 }
 
