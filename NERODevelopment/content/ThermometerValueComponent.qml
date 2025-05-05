@@ -28,7 +28,7 @@ Item {
         labelVerticalSpacing: thermometerComponent.labelVerticalSpacing
         labelColor: thermometerComponent.labelColor
         horizontalPadding: thermometerComponent.horizontalPadding
-        valueUnit: regen ? "Nm" : "°"
+        valueUnit: regen ? "A" : "°"
         radius: thermometerComponent.radius
         valueFontSize: thermometerComponent.valueFontSize
         labelFontSize: thermometerComponent.labelFontSize
