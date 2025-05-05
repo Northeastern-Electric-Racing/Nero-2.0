@@ -31,7 +31,7 @@
 #define INVERTERTEMP "invertertemp"
 #define MOTORPOWER "motorpower"
 #define FANPOWER "fanpower"
-#define REGENPOWER "regenpower"
+#define REGENPOWER "MPU/State/RegenLimit"
 #define BMSSTATE "bmsstate"
 #define BMSFAULT "BMS/Status/F/#"
 #define MPUFAULT "MPU/Fault/#"

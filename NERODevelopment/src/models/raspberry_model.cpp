@@ -56,7 +56,6 @@ void RaspberryModel::connectToMQTT() {
                                     INVERTERTEMP,
                                     MOTORPOWER,
                                     FANPOWER,
-                                    REGENPOWER,
                                     BMSSTATE,
                                     BMSFAULT,
                                     MPUFAULT,
@@ -68,7 +67,6 @@ void RaspberryModel::connectToMQTT() {
                                     SEGMENTTEMP2,
                                     SEGMENTTEMP3,
                                     SEGMENTTEMP4,
-                                    TORQUEPOWER,
                                     SIDEBRBS,
                                     BMS,
                                     BSPD,
@@ -94,8 +92,10 @@ void RaspberryModel::connectToMQTT() {
   client_1->connectToHost();
 
   QList<QString> client_2_topics = {
-      FORWARDBUTTON, BACKWARDBUTTON, RIGHTBUTTON, ENTERBUTTON, UPBUTTON,
-      DOWNBUTTON,    HOMEBUTTON,     MODEINDEX,   DIRECTION,
+      FORWARDBUTTON, BACKWARDBUTTON, RIGHTBUTTON, ENTERBUTTON,
+      UPBUTTON,      DOWNBUTTON,     HOMEBUTTON,  MODEINDEX,
+      DIRECTION,     REGENPOWER,     TORQUEPOWER,
+
   };
   MqttClient *client_2 = new MqttClient(nullptr, 1882, client_2_topics);
   connect(client_2, &MqttClient::emitServerData, this,
