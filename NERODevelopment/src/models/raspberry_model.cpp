@@ -95,7 +95,6 @@ void RaspberryModel::connectToMQTT() {
       FORWARDBUTTON, BACKWARDBUTTON, RIGHTBUTTON, ENTERBUTTON,
       UPBUTTON,      DOWNBUTTON,     HOMEBUTTON,  MODEINDEX,
       DIRECTION,     REGENPOWER,     TORQUEPOWER,
-
   };
   MqttClient *client_2 = new MqttClient(nullptr, 1882, client_2_topics);
   connect(client_2, &MqttClient::emitServerData, this,
