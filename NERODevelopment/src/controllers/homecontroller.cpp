@@ -81,5 +81,6 @@ void HomeController::currentDataDidChange() {
     setStateOfCharge(*m_model->getStateOfCharge());
     setSpeed(*m_model->getMph());
     setStatus(*m_model->getStatus());
+    setLowVoltageStateOfCharge(*m_model->getLowVoltageStateOfCharge());
   }
 }

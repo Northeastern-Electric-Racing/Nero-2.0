@@ -34,11 +34,6 @@ Rectangle {
         height: 100
     }
 
-    onStateOfChargePercentageChanged: () => {
-                                          console.log(
-                                              "Forward: " + pit.forward + homeController.direction)
-                                      }
-
     RowLayout {
         id: mainRow
         anchors {
