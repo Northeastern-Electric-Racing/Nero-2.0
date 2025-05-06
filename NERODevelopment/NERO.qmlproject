@@ -96,7 +96,7 @@ Project {
     quickVersion: "6.2"
 
     /* If any modules the project imports require widgets (e.g. QtCharts), widgetApp must be true */
-    widgetApp: true
+    widgetApp: false
 
     /* args: Specifies command line arguments for qsb tool to generate shaders.
        files: Specifies target files for qsb tool. If path is included, it must be relative to this file.

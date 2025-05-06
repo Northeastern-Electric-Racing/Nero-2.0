@@ -14,7 +14,7 @@
 #include "import_qml_plugins.h"
 #include "src/models/mock_model.h"
 #include "src/models/raspberry_model.h"
-#include <QApplication>
+#include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include <QThread>
@@ -22,7 +22,7 @@
 int main(int argc, char *argv[]) {
   set_qt_environment();
 
-  QApplication app(argc, argv);
+  QGuiApplication app(argc, argv);
 
   QQmlApplicationEngine engine;
 

@@ -93,7 +93,6 @@ target_link_libraries(NEROApp PRIVATE
     Qt6::Mqtt
     Qt6::Quick
     Qt6::Protobuf
-    Qt6::Widgets
 )
 
 if (BUILD_QDS_COMPONENTS)
