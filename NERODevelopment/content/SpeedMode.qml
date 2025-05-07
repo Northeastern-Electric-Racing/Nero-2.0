@@ -44,7 +44,7 @@ Item {
         width: speedMode.width * 0.7
         height: speedMode.height * 0.12
         text: speedMode.tractionControlStatus ? "TRACTION CONTROL - ON" : "TRACTION CONTROL - OFF"
-        color: "#14ff00"
+        color: speedMode.tractionControlStatus ? "#14ff00" : '#ef4545'
         font.pixelSize: Math.min(speedMode.height * 0.09,
                                  speedMode.width * 0.06)
         font.bold: true
