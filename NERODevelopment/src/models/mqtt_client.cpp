@@ -5,7 +5,6 @@
 #include <QTimer>
 #include <QtCore/QDateTime>
 #include <QtMqtt/QMqttClient>
-#include <QtWidgets/QMessageBox>
 #include <chrono>
 #include <serverdata.qpb.h>
 

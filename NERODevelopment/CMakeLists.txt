@@ -61,7 +61,7 @@ set(PROJECT_SOURCES
     src/controllers/speedcontroller.cpp
 )
 
-find_package(Qt6 REQUIRED COMPONENTS Core Gui Qml Quick Network Mqtt Protobuf Widgets)
+find_package(Qt6 REQUIRED COMPONENTS Core Gui Qml Quick Network Mqtt Protobuf)
 
 qt_add_executable(NEROApp ${PROJECT_SOURCES}
     src/controllers/snakecontroller.h
@@ -93,7 +93,6 @@ target_link_libraries(NEROApp PRIVATE
     Qt6::Mqtt
     Qt6::Quick
     Qt6::Protobuf
-    Qt6::Widgets
 )
 
 if (BUILD_QDS_COMPONENTS)
