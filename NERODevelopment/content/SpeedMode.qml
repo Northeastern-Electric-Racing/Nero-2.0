@@ -18,14 +18,15 @@ Item {
     property int currentSpeed: speedController.currentSpeed
     property int maxDraw: speedController.maxCurrent
     property int dcl: speedController.currentDischarge
+    property int regen: speedController.regen
 
     property int xMargin: width / 20
     property int yMargin: height / 20
-    property int verticalSpacing: height / 80
+    property int verticalSpacing: height / 40
     property int borderRadii: 10
-    property int valueFontSize: Math.min(height / 6, width / 8)
-    property int labelFontSize: Math.min(height / 20, width / 20)
-    property int radialUnitFontSize: valueFontSize / 3
+    property int valueFontSize: Math.min(height / 8, width / 10)
+    property int labelFontSize: Math.min(height / 30, width / 20)
+    property int radialUnitFontSize: valueFontSize / 4
 
     Keys.onPressed: event => {
                         if (event.key === Qt.Key_Return
@@ -86,6 +87,18 @@ Item {
             Layout.fillWidth: true
             Layout.preferredWidth: 1
             spacing: parent.height / 20
+
+            ThermometerValueComponent {
+                thermometerValue: speedMode.regen
+                title: "Regen"
+                Layout.fillHeight: true
+                Layout.fillWidth: true
+                Layout.preferredHeight: 1
+                radius: speedMode.borderRadii
+                valueFontSize: speedMode.valueFontSize
+                labelFontSize: speedMode.labelFontSize
+                regen: true
+            }
 
             ThermometerValueComponent {
                 thermometerValue: speedMode.motorTemp

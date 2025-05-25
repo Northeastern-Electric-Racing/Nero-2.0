@@ -17,6 +17,15 @@ void SpeedController::setTractionControl(bool tractionStatus) {
     emit tractionControlChanged(tractionStatus);
   }
 }
+
+int SpeedController::regen() const { return m_regen; }
+void SpeedController::setRegen(int regen) {
+  if (regen != m_regen) {
+    m_regen = regen;
+    emit tractionControlChanged(regen);
+  }
+}
+
 float SpeedController::packTemp() const { return m_packTemp; }
 void SpeedController::setPackTemp(float packTemp) {
   if (packTemp != m_packTemp) {
@@ -144,4 +153,5 @@ void SpeedController::update() {
   setCurrent(*m_model->getCurrent());
   setMaxCurrent(m_model->getMaxDraw());
   setCurrentDischarge(*m_model->getDcl());
+  setRegen(*m_model->getRegenPower());
 }

@@ -25,6 +25,7 @@ class SpeedController : public ButtonController {
       int lastTime READ lastTime WRITE setLastTime NOTIFY lastTimeChanged)
   Q_PROPERTY(int currentSpeed READ currentSpeed WRITE setCurrentSpeed NOTIFY
                  currentSpeedChanged)
+  Q_PROPERTY(int regen READ regen WRITE setRegen NOTIFY regenChanged)
   Q_PROPERTY(
       int maxSpeed READ maxSpeed WRITE setMaxSpeed NOTIFY maxSpeedChanged)
   Q_PROPERTY(float current READ current WRITE setCurrent NOTIFY currentChanged)
@@ -51,6 +52,7 @@ public:
   float maxCurrent() const;
   float currentDischarge() const;
   float maxCurrentDischarge() const;
+  int regen() const;
 
 signals:
   void tractionControlChanged(bool);
@@ -66,6 +68,7 @@ signals:
   void maxCurrentChanged(float);
   void currentDischargeChanged(float);
   void maxCurrentDischargeChanged(float);
+  void regenChanged(int);
 
 public slots:
   void setTractionControl(bool);
@@ -81,6 +84,7 @@ public slots:
   void setMaxCurrent(float);
   void setCurrentDischarge(float);
   void setMaxCurrentDischarge(float);
+  void setRegen(int);
 
   void enterButtonPressed() override;
   void updateCurrentTime();
@@ -101,6 +105,7 @@ private:
   float m_maxCurrent = 0;
   float m_currentDischarge = 0;
   float m_maxCurrentDischarge = 0;
+  int m_regen = 0;
 
   bool m_timerRunning = false;
   QElapsedTimer m_timer;
