@@ -58,6 +58,9 @@ int main(int argc, char *argv[]) {
           QCoreApplication::exit(-1);
       },
       Qt::QueuedConnection);
+  qmlRegisterSingletonType(QUrl("qrc:content/SubwaySurfersGameState.qml"),
+                           "SubwaySurfersGameState", 1, 0,
+                           "SubwaySurfersGameState");
 
   engine.rootContext()->setContextProperty("homeController", &homeController);
   engine.rootContext()->setContextProperty("headerController",

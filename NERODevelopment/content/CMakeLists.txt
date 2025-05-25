@@ -48,6 +48,9 @@ qt6_add_qml_module(content
         LabeledComponent.qml
         HomeIcon.qml
         SubMenuIcon.qml
+        FaultDialog.qml
+        SubwaySurfers.qml
+        SubwaySurfersGameState.qml
 
     RESOURCES
         fonts/fonts.txt
@@ -77,5 +80,5 @@ qt6_add_qml_module(content
 	images/yellowbird-upflap.png
 	images/yellowbird-midflap.png
 	images/yellowbird-downflap.png
-        QML_FILES FaultDialog.qml
+        models/naruto.glb
 )

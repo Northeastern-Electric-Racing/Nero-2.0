@@ -10,10 +10,14 @@ Window {
 
     visible: true
     title: "NERO"
+
     FontLoader {
         id: webFont
         source: "fonts/Roboto-Black.ttf"
     }
 
-    NavigationController {}
+    SubwaySurfers {
+        anchors.fill: parent
+    }
+    // NavigationController {}
 }
