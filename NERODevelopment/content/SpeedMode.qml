@@ -18,7 +18,7 @@ Item {
     property int currentSpeed: speedController.currentSpeed
     property int maxDraw: speedController.maxCurrent
     property int dcl: speedController.currentDischarge
-    property int regen: speedController.regen
+    property double regen: speedController.regen
 
     property int xMargin: width / 20
     property int yMargin: height / 20

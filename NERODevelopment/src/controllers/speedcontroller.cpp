@@ -18,11 +18,11 @@ void SpeedController::setTractionControl(bool tractionStatus) {
   }
 }
 
-int SpeedController::regen() const { return m_regen; }
-void SpeedController::setRegen(int regen) {
+float SpeedController::regen() const { return m_regen; }
+void SpeedController::setRegen(float regen) {
   if (regen != m_regen) {
     m_regen = regen;
-    emit tractionControlChanged(regen);
+    emit regenChanged(regen);
   }
 }
 
