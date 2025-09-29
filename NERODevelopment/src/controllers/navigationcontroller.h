@@ -1,8 +1,8 @@
 #ifndef NAVIGATIONCONTROLLER_H
 #define NAVIGATIONCONTROLLER_H
 
-#include "src/controllers/buttoncontroller.h"
-#include "src/models/model.h"
+#include "../controllers/buttoncontroller.h"
+#include "../models/model.h"
 #include <QObject>
 
 class NavigationController : public ButtonController {

@@ -30,7 +30,7 @@ Rectangle {
         Image {
             id: modalImage
             anchors.fill: parent // This makes the image fill the rectangle
-            source: "qrc:/content/images/neroLogo.png" // Set the image source here
+            source: "/qt/qml/content/images/neroLogo.png" // Set the image source here
             fillMode: Image.PreserveAspectCrop
 
             layer.enabled: true

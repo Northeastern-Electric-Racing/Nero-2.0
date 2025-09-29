@@ -15,4 +15,6 @@ qt6_add_qml_module(NERO
 		DirectoryFontLoader.qml
 		EventListModel.qml
 		EventListSimulator.qml
+	DEPENDENCIES
+	    QtQuick
 )

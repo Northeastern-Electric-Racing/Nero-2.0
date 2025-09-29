@@ -1,34 +1,11 @@
 cmake_minimum_required(VERSION 3.21.1)
 
-option(LINK_INSIGHT "Link Qt Insight Tracker library" ON)
-option(BUILD_QDS_COMPONENTS "Build design studio components" ON)
-
 project(NEROApp LANGUAGES CXX)
 
 # Find Qt6 first before version checks
 find_package(Qt6 REQUIRED COMPONENTS Core Gui Qml Quick Network Mqtt Protobuf)
 
-# Windows-specific AutoMoc fixes
-if(WIN32)
-    # Force response files for long command lines on Windows
-    set(CMAKE_CXX_USE_RESPONSE_FILE_FOR_OBJECTS ON)
-    set(CMAKE_CXX_USE_RESPONSE_FILE_FOR_LIBRARIES ON)
-    set(CMAKE_CXX_RESPONSE_FILE_LINK_FLAG "@")
-
-    # Set AutoMoc to use response files much earlier on Windows
-    set(CMAKE_AUTOGEN_COMMAND_LINE_LENGTH_MAX 2000)
-
-    # Reduce AutoMoc parallel processing on Windows to avoid command line issues
-    set(CMAKE_AUTOGEN_PARALLEL 1)
-endif()
-
-# Enable AutoMoc after Windows-specific settings
-set(CMAKE_AUTOMOC ON)
-
-# Fix Qt version check - use Qt6Core_VERSION instead of Qt6_VERSION
-if (Qt6Core_VERSION VERSION_GREATER_EQUAL "6.5")
-    qt_standard_project_setup()
-endif()
+qt_standard_project_setup(REQUIRES 6.8)
 
 # Consolidate all sources in one place
 set(PROJECT_SOURCES
@@ -91,17 +68,15 @@ set(PROJECT_SOURCES
 
     # Main
     src/main.cpp
+
+    # rss
+    application.qrc
 )
 
+set(CMAKE_AUTORCC ON)
+set(CMAKE_AUTOMOC ON)
 # Create executable with all sources consolidated
 qt_add_executable(NEROApp ${PROJECT_SOURCES})
-
-# Add resources
-qt_add_resources(NEROApp "configuration"
-    PREFIX "/"
-    FILES
-        qtquickcontrols2.conf
-)
 
 # Add protobuf
 qt_add_protobuf(NEROApp
@@ -109,26 +84,6 @@ qt_add_protobuf(NEROApp
     src/proto/serverdata/serverdata.proto
 )
 
-# Fix include directories - remove the broken "src/**" syntax
-target_include_directories(NEROApp PRIVATE
-    include
-    src
-    src/constants
-    src/controllers
-    src/models
-    src/modes/debug_mode
-    src/utils
-    ${CMAKE_CURRENT_BINARY_DIR}  # For AutoMoc generated files
-)
-
-# Windows-specific AutoMoc target properties
-if(WIN32)
-    set_target_properties(NEROApp PROPERTIES
-        AUTOGEN_COMMAND_LINE_LENGTH_MAX 2000
-        AUTOGEN_PARALLEL 1
-        AUTOGEN_BUILD_DIR "${CMAKE_CURRENT_BINARY_DIR}/NEROApp_autogen"
-    )
-endif()
 
 # Link libraries
 target_link_libraries(NEROApp PRIVATE
@@ -141,16 +96,12 @@ target_link_libraries(NEROApp PRIVATE
     Qt6::Protobuf
 )
 
-# Optional components
-if (BUILD_QDS_COMPONENTS)
-    include(${CMAKE_CURRENT_SOURCE_DIR}/qmlcomponents)
-endif()
+set(CMAKE_OBJECT_PATH_MAX 500)
 
+# include the qml config
 include(${CMAKE_CURRENT_SOURCE_DIR}/qmlmodules)
-
-if (LINK_INSIGHT)
-    include(${CMAKE_CURRENT_SOURCE_DIR}/insight)
-endif()
+include(${CMAKE_CURRENT_SOURCE_DIR}/qmlcomponents)
+include(${CMAKE_CURRENT_SOURCE_DIR}/insight)
 
 # Installation
 include(GNUInstallDirs)

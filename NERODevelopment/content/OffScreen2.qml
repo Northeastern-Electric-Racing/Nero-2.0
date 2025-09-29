@@ -508,7 +508,7 @@ Rectangle {
         anchors.right: cpBrbInterlocksTsmsContainer.left
         anchors.rightMargin: parent.width / 30
         anchors.leftMargin: parent.width / 30
-        source: "qrc:/content/images/neroLogo.png"
+        source: "/qt/qml/content/images/neroLogo.png"
         fillMode: Image.PreserveAspectFit
     }
 

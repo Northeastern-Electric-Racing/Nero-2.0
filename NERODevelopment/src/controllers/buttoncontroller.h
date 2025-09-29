@@ -1,7 +1,7 @@
 #ifndef BUTTONCONTROLLER_H
 #define BUTTONCONTROLLER_H
 
-#include "src/models/model.h"
+#include "../models/model.h"
 #include <QObject>
 
 class ButtonController : public QObject {

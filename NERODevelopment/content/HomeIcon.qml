@@ -8,7 +8,7 @@ Rectangle {
 
     property bool highlighted: false
     property string text: "Off"
-    property string source: "qrc:/content/images/zzz.png"
+    property string source: "/qt/qml/content/images/zzz.png"
 
     ColumnLayout {
         id: imageContainer

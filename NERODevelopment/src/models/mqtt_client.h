@@ -5,7 +5,6 @@
 #include <QTcpSocket>
 #include <QtMqtt/QMqttClient>
 #include <serverdata.qpb.h>
-#include <src/utils/data_type_names.h>
 
 /**
  * @brief The MqttClient class, wraps the native QMqtt client to functions we

@@ -15,7 +15,7 @@
 #endif
 #include "import_qml_components_plugins.h"
 #include "import_qml_plugins.h"
-#include "src/models/mock_model.h"
+#include "models/mock_model.h"
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
@@ -54,15 +54,6 @@ int main(int argc, char *argv[]) {
   EfficiencyController efficencyController(model);
   SpeedController speedController(model);
 
-  const QUrl url(u"qrc:Main/main.qml"_qs);
-  QObject::connect(
-      &engine, &QQmlApplicationEngine::objectCreated, &app,
-      [url](QObject *obj, const QUrl &objUrl) {
-        if (!obj && url == objUrl)
-          QCoreApplication::exit(-1);
-      },
-      Qt::QueuedConnection);
-
   engine.rootContext()->setContextProperty("homeController", &homeController);
   engine.rootContext()->setContextProperty("headerController",
                                            &headerController);
@@ -77,16 +68,10 @@ int main(int argc, char *argv[]) {
                                            &efficencyController);
   engine.rootContext()->setContextProperty("speedController", &speedController);
 
-  engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
-
-  engine.addImportPath(QCoreApplication::applicationDirPath() + "/qml");
-  engine.addImportPath(":/");
-
-  engine.load(url);
-
-  if (engine.rootObjects().isEmpty()) {
-    return -1;
-  }
+  QObject::connect(&engine, &QQmlApplicationEngine::objectCreationFailed,
+                   &app, []() { QCoreApplication::exit(-1); },
+                   Qt::QueuedConnection);
+  engine.loadFromModule("content", "App");
 
   return app.exec();
 }
