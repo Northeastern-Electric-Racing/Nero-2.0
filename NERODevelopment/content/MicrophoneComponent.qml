@@ -31,7 +31,7 @@ Item {
         height: parent.height
         width: parent.width
         visible: isTalking
-        source: "qrc:/content/images/microphone.svg"
+        source: "/qt/qml/content/images/microphone.svg"
         fillMode: Image.PreserveAspectFit
     }
 

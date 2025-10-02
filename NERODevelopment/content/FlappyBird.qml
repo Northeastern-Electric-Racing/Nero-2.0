@@ -18,9 +18,9 @@ Item {
     property int xWall1: 200
     property int xWall2: 400
     property int xWall3: 600
-    property string pipeSrc: "qrc:/content/images/pipe.png"
-    property string backgroundSrc: "qrc:/content/images/bg.png"
-    property string birdSrc: "qrc:/content/images/flappy-bird.png"
+    property string pipeSrc: "/qt/qml/content/images/pipe.png"
+    property string backgroundSrc: "/qt/qml/content/images/bg.png"
+    property string birdSrc: "/qt/qml/content/images/flappy-bird.png"
     property bool gameOver: true
     property int score: 0
     property bool jump: false
@@ -32,9 +32,9 @@ Item {
     property double speed: 3
     property int frameRate: 25
     property bool didJump: flappyBirdController.didJump
-    property string birdFrame1: "qrc:/content/images/yellowbird-downflap.png"
-    property string birdFrame2: "qrc:/content/images/yellowbird-midflap.png"
-    property string birdFrame3: "qrc:/content/images/yellowbird-upflap.png"
+    property string birdFrame1: "/qt/qml/content/images/yellowbird-downflap.png"
+    property string birdFrame2: "/qt/qml/content/images/yellowbird-midflap.png"
+    property string birdFrame3: "/qt/qml/content/images/yellowbird-upflap.png"
 
     property int currentBirdFrame: 0
     property bool startFalling: false

@@ -100,7 +100,7 @@ Item {
                 width: navigation.boxSize
                 highlighted: selectedPageIndex === pitDrivePageIndex
                 text: "PIT - DRIVE"
-                source: "qrc:/content/images/flag.png"
+                source: "/qt/qml/content/images/flag.png"
             }
 
             HomeIcon {
@@ -108,7 +108,7 @@ Item {
                 width: navigation.boxSize
                 highlighted: selectedPageIndex === pitReversePageIndex
                 text: "PIT - REVERSE"
-                source: "qrc:/content/images/reverse.png"
+                source: "/qt/qml/content/images/reverse.png"
             }
 
             HomeIcon {
@@ -116,7 +116,7 @@ Item {
                 width: navigation.boxSize
                 highlighted: selectedPageIndex === speedPageIndex
                 text: "PERFORMANCE"
-                source: "qrc:/content/images/hare.png"
+                source: "/qt/qml/content/images/hare.png"
             }
 
             HomeIcon {
@@ -124,7 +124,7 @@ Item {
                 width: navigation.boxSize
                 highlighted: selectedPageIndex === efficiencyPageIndex
                 text: "EFFICIENCY"
-                source: "qrc:/content/images/turtle.png"
+                source: "/qt/qml/content/images/turtle.png"
             }
         }
 
@@ -139,7 +139,7 @@ Item {
                 width: navigation.boxSize
                 highlighted: selectedPageIndex === gamePageIndex
                 text: "GAMES"
-                source: "qrc:/content/images/game.png"
+                source: "/qt/qml/content/images/game.png"
                 visible: !gamePageOpen
             }
 
@@ -165,7 +165,7 @@ Item {
                 width: navigation.boxSize
                 highlighted: selectedPageIndex === exitPageIndex
                 text: "EXIT"
-                source: "qrc:/content/images/exit.png"
+                source: "/qt/qml/content/images/exit.png"
             }
         }
     }

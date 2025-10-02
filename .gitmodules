@@ -1,0 +1,7 @@
+[submodule "deps/qtmqtt"]
+	path = deps/qtmqtt
+	url = https://github.com/qt/qtmqtt
+	ignore = dirty
+[submodule "deps/protobuf"]
+	path = deps/protobuf
+	url = https://github.com/protocolbuffers/protobuf

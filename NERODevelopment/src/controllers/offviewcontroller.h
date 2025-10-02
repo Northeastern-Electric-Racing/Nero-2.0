@@ -89,38 +89,38 @@ private:
       DescriptionInfo("GLVMS",
                       "The master switch that allows for 24 volt to power low "
                       "voltage system.",
-                      "qrc:/content/images/glv.jpg"),
+                      "qrc://qt/qml/content/images/glv.jpg"),
       DescriptionInfo("Side BRBs",
                       "Emergency shutdown switches to fully and immediately "
                       "power down low voltage and tractive.",
-                      "qrc:/content/images/sidebrb.jpg"),
+                      "qrc://qt/qml/content/images/sidebrb.jpg"),
       DescriptionInfo("BMS",
                       "The battery management system to monitor state and "
                       "faults of accumulator.",
-                      "qrc:/content/images/imd.jpg"),
+                      "qrc://qt/qml/content/images/imd.jpg"),
       DescriptionInfo(
           "IMD", "Monitors isolation between the high and low voltage systems.",
-          "qrc:/content/images/imd.jpg"),
+          "qrc://qt/qml/content/images/imd.jpg"),
       DescriptionInfo(
           "CAN", "Monitors the status of intercomputer communication system.",
-          "qrc:/content/images/imd.jpg"),
+          "qrc://qt/qml/content/images/imd.jpg"),
       DescriptionInfo("BSPD",
                       "Brake System Plausibility Device which detects "
                       "inconsistencies in the brake sensor.",
-                      "qrc:/content/images/bspd.jpg"),
+                      "qrc://qt/qml/content/images/bspd.jpg"),
       DescriptionInfo("BOTS",
                       "Brake over travel switch which detects if we have lost "
                       "pressure in the brakes.",
-                      "qrc:/content/images/bots.jpg"),
+                      "qrc://qt/qml/content/images/bots.jpg"),
       DescriptionInfo("INERTIA", "Measures if there is a crash.",
-                      "qrc:/content/images/inertia.jpg"),
+                      "qrc://qt/qml/content/images/inertia.jpg"),
       DescriptionInfo("Pit BRB", "Driver tractive shutdown button.",
-                      "qrc:/content/images/cockpitBrb.jpg"),
+                      "qrc://qt/qml/content/images/cockpitBrb.jpg"),
       DescriptionInfo("INTERLOCKS",
                       "Detects if all high voltage connections are made.",
-                      "qrc:/content/images/interlocks.jpg"),
+                      "qrc://qt/qml/content/images/interlocks.jpg"),
       DescriptionInfo("TSMS", "Toggles tractive system.",
-                      "qrc:/content/images/tsms.jpg"),
+                      "qrc://qt/qml/content/images/tsms.jpg"),
 
   };
 };
