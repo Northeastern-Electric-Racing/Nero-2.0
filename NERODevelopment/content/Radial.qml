@@ -24,7 +24,7 @@ Item {
         anchors.horizontalCenter: parent.horizontalCenter
         font.pixelSize: gauge.valueFontSize
         font.family: webFont.name
-        color: "white"
+        color: Theme.getColor("foreground")
 
         anchors.centerIn: ring
         anchors.verticalCenterOffset: -gauge.height / 20

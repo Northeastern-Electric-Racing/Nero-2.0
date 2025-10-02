@@ -4,7 +4,7 @@ import QtQuick.Controls 2.15
 Item {
     id: runInfo
 
-    property string backgroundColor: "white"
+    property string backgroundColor: Theme.getColor("lastRunBackground")
     property string label: ""
     property int value: 0
     property int topRadius: 0
@@ -94,7 +94,7 @@ Item {
             id: rightBlackRectangle
             width: runInfo.width / 2.3
             height: runInfo.height * 0.8
-            color: "black"
+            color: Theme.getColor("background")
             x: runInfo.width / 1.85
 
             anchors {
@@ -106,7 +106,7 @@ Item {
                 text: formatTime(runInfo.value)
                 font.pixelSize: rightBlackRectangle.height * 0.9
                 anchors.centerIn: parent
-                color: "white"
+                color: Theme.getColor("foreground")
                 font.bold: true
                 font.letterSpacing: 0
             }
@@ -121,7 +121,7 @@ Item {
                 leftMargin: parent.width / 40
             }
             font.pixelSize: Math.min(runInfo.height * 0.45)
-            color: "black"
+            color: Theme.getColor("inverseForeground")
             font.bold: true
         }
     }

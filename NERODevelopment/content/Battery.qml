@@ -1,5 +1,6 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import NERO
 
 Rectangle {
     id: battery
@@ -10,7 +11,7 @@ Rectangle {
     property string fillColor: battery.value > 70 ? "#55FF00" : battery.value
                                                     > 40 ? "orange" : "red"
     width: height / 2
-    color: 'transparent'
+    color: Theme.getColor("transparent")
 
     Rectangle {
         id: topOutlet
@@ -37,7 +38,7 @@ Rectangle {
                 fill: parent
                 margins: battery.fillMargin
             }
-            color: 'black'
+            color: Theme.getColor("fillBackground")
             z: 0
         }
 
@@ -52,7 +53,7 @@ Rectangle {
                     },
                     GradientStop {
                         position: 1.0
-                        color: 'black'
+                        color: Theme.getColor("fillGradientStop")
                     }
                 ]
             }

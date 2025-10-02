@@ -1,13 +1,14 @@
 import QtQuick 2.0
 import QtQuick.Shapes
 import QtQuick
+import NERO
 
 Item {
     id: arrow
     property variant stops: []
     property int arrowWidth: 2
     property real angle: -Math.PI / 6
-    property string arrowColor: "white"
+    property string arrowColor: Theme.getColor("foreground")
 
     property real x1: stops[stops.length - 2].x
     property real y1: stops[stops.length - 2].y

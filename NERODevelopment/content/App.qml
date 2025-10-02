@@ -6,7 +6,7 @@ import NERO
 Window {
     width: 800
     height: 480
-    color: "black"
+    color: Theme.getColor("background")
 
     visible: true
     title: "NERO"

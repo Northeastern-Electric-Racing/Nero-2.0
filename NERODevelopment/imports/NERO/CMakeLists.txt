@@ -2,7 +2,7 @@
 ### Do not change
 
 qt_add_library(NERO STATIC)
-set_source_files_properties(Constants.qml
+set_source_files_properties(Constants.qml Theme.qml
     PROPERTIES
         QT_QML_SINGLETON_TYPE true
     )
@@ -12,9 +12,11 @@ qt6_add_qml_module(NERO
 	VERSION 1.0
 	QML_FILES
 		Constants.qml
+		Theme.qml
 		DirectoryFontLoader.qml
 		EventListModel.qml
 		EventListSimulator.qml
 	DEPENDENCIES
 	    QtQuick
+	    RESOURCES qmldir
 )
