@@ -19,11 +19,15 @@ QtObject {
             fillGradientStop: "#000000"
         },
         "light": {
-            #wip
+            background: "#FFFFFF",
         }
     }
 
     function getColor(prop) {
         return themes[currentTheme][prop];
+    }
+
+    function setTheme(theme) {
+        currentTheme = theme
     }
 }

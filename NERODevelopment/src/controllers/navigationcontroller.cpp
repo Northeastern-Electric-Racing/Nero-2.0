@@ -55,9 +55,21 @@ void NavigationController::setIsGamesOpen(bool isGamesOpen) {
   }
 }
 
+bool NavigationController::isThemeMenuOpen() const { return m_themeMenuOpen; }
+void NavigationController::setIsThemeMenuOpen(bool open) {
+  if (m_themeMenuOpen != open) {
+    m_themeMenuOpen = open;
+    emit isThemeMenuOpenChanged();
+  }
+}
+
 void NavigationController::downButtonPressed() {
   if (m_gamesSelected) {
-    if (this->m_selectedPageIndex + 2 < this->m_numGames + this->m_numPages) {
+    if (this->m_selectedPageIndex < this->m_numPages + 1) {
+      this->setSelectedPageIndex(this->m_selectedPageIndex + 1);
+    }
+  } else if (m_themeMenuOpen) {
+    if (this->m_selectedPageIndex < this->m_numPages) {
       this->setSelectedPageIndex(this->m_selectedPageIndex + 1);
     }
   } else {
@@ -70,7 +82,11 @@ void NavigationController::downButtonPressed() {
 void NavigationController::upButtonPressed() {
   qDebug() << "up";
   if (m_gamesSelected) {
-    if (this->m_selectedPageIndex >= this->m_numPages) {
+    if (this->m_selectedPageIndex > this->m_numPages - 2) {
+      this->setSelectedPageIndex(this->m_selectedPageIndex - 1);
+    }
+  } else if (m_themeMenuOpen) {
+    if (this->m_selectedPageIndex > this->m_numPages - 2) {
       this->setSelectedPageIndex(this->m_selectedPageIndex - 1);
     }
   } else {
@@ -81,22 +97,71 @@ void NavigationController::upButtonPressed() {
 }
 
 void NavigationController::enterButtonPressed() {
-  if (!this->m_gamesSelected &&
-      this->m_selectedPageIndex == this->m_numPages - 1) {
-    this->exitProgram();
-  } else if (this->m_selectedPageIndex == this->m_numPages - 2 &&
-             !this->m_gamesSelected) {
-    this->setIsGamesOpen(true);
-    this->setSelectedPageIndex(this->m_numPages - 1);
-  } else {
-    this->m_model->currentPageIndex = this->m_selectedPageIndex;
-    this->setIsSelected(true);
+  if ((m_gamesSelected && m_selectedPageIndex == m_numPages + 1) ||
+      (m_themeMenuOpen && m_selectedPageIndex == m_numPages) ||
+      (!m_gamesSelected && !m_themeMenuOpen &&
+       m_selectedPageIndex == m_numPages - 1)) {
+    exitProgram();
+    return;
+  }
+
+  if (!m_gamesSelected && !m_themeMenuOpen) {
+    if (m_selectedPageIndex == m_numPages - 3) {
+      setIsGamesOpen(true);
+      setSelectedPageIndex(m_numPages - 2);
+      return;
+    }
+    if (m_selectedPageIndex == m_numPages - 2) {
+      setIsThemeMenuOpen(true);
+      setSelectedPageIndex(m_numPages - 2);
+      return;
+    }
+    m_model->currentPageIndex = m_selectedPageIndex;
+    setIsSelected(true);
+    return;
+  }
+
+  if (m_gamesSelected) {
+    if (m_selectedPageIndex == m_numPages - 2 ||
+        m_selectedPageIndex == m_numPages - 1) {
+      m_model->currentPageIndex = m_selectedPageIndex;
+      setIsSelected(true);
+      return;
+    }
+    if (m_selectedPageIndex == m_numPages) {
+      setIsGamesOpen(false);
+      setIsThemeMenuOpen(true);
+      setSelectedPageIndex(m_numPages - 2);
+      return;
+    }
+  }
+
+  if (m_themeMenuOpen) {
+    if (m_selectedPageIndex == m_numPages - 2 ||
+        m_selectedPageIndex == m_numPages - 1) {
+      QString theme =
+          (m_selectedPageIndex == m_numPages - 2) ? "light" : "dark";
+      emit themeChanged(theme);
+      setIsThemeMenuOpen(false);
+      setSelectedPageIndex(m_numPages - 2);
+      return;
+    }
+    if (m_selectedPageIndex == m_numPages - 3) {
+      setIsThemeMenuOpen(false);
+      setIsGamesOpen(true);
+      setSelectedPageIndex(m_numPages - 2);
+      return;
+    }
   }
 }
 
 void NavigationController::homeButtonPressed() {
   if (m_gamesSelected) {
     this->setIsGamesOpen(false);
+    this->setSelectedPageIndex(this->m_numPages - 3);
+  }
+  if (m_themeMenuOpen) {
+    this->setIsThemeMenuOpen(false);
     this->setSelectedPageIndex(this->m_numPages - 2);
   }
   this->m_model->currentPageIndex = -1;
@@ -130,7 +195,7 @@ void NavigationController::buttonUpdate() {
       if (modeIndex) {
         this->setSelectedPageIndex(*modeIndex);
       }
-    } else if (!this->m_gamesSelected) {
+    } else if (!this->m_gamesSelected && !this->m_themeMenuOpen) {
       this->enterButtonPressed();
     } else {
       if (enterButtonPressed == true) {
