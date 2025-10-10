@@ -1,5 +1,6 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import NERO
 
 Rectangle {
     id: torqueAdj
@@ -7,7 +8,7 @@ Rectangle {
     property bool downSelected: false
     height: 200
     width: 100
-    color: "transparent"
+    color: Theme.getColor("transparent")
 
     Column {
         id: arrowContainer
@@ -31,7 +32,7 @@ Rectangle {
                 onPaint: {
                     var ctx = upCanvas.getContext('2d')
 
-                    ctx.strokeStyle = "white"
+                    ctx.strokeStyle = Theme.getColor("primaryForeground")
                     ctx.lineWidth = upCanvas.height * 0.3
                     ctx.beginPath()
                     ctx.moveTo(upCanvas.width * 0.05, upCanvas.height)
@@ -71,7 +72,7 @@ Rectangle {
             height: parent.height / 3
             width: parent.width
 
-            color: "transparent"
+            color: Theme.getColor("transparent")
         }
 
         Item {
@@ -97,7 +98,7 @@ Rectangle {
                 onPaint: {
                     var ctx = downCanvas.getContext('2d')
 
-                    ctx.strokeStyle = "white"
+                    ctx.strokeStyle = Theme.getColor("primaryForeground")
                     ctx.lineWidth = downCanvas.height * 0.3
                     ctx.beginPath()
                     ctx.moveTo(downCanvas.width * 0.05, downCanvas.height)

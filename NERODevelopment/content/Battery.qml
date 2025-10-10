@@ -8,8 +8,8 @@ Rectangle {
     property int maxValue: 100
     property int fillMargin: height / 20
 
-    property string fillColor: battery.value > 70 ? "#55FF00" : battery.value
-                                                    > 40 ? "orange" : "red"
+    property string fillColor: battery.value > 70 ? Theme.getColor("goodStatus") : battery.value
+                    > 40 ? Theme.getColor("cautionStatus") : Theme.getColor("criticalStatus")
     width: height / 2
     color: Theme.getColor("transparent")
 
@@ -38,7 +38,7 @@ Rectangle {
                 fill: parent
                 margins: battery.fillMargin
             }
-            color: Theme.getColor("fillBackground")
+            color: Theme.getColor("background")
             z: 0
         }
 

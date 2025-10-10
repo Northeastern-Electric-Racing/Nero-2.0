@@ -1,6 +1,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import Qt5Compat.GraphicalEffects
+import NERO
 
 Item {
     width: 100
@@ -14,13 +15,13 @@ Item {
         PropertyAnimation {
             target: overlay
             property: "color"
-            to: "#00AA00"
+            to: Theme.getColor("primaryMicrophone")
             duration: 1000 // Animation duration in milliseconds
         }
         PropertyAnimation {
             target: overlay
             property: "color"
-            to: "#00FF00"
+            to: Theme.getColor("secondaryMicrophone")
             duration: 1000
         }
     }
@@ -39,7 +40,7 @@ Item {
         id: overlay
         anchors.fill: microphone
         source: microphone
-        color: "black"
+        color: Theme.getColor("background")
         transform: rotation
         antialiasing: true
     }

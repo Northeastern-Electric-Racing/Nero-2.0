@@ -1,10 +1,11 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts
+import NERO
 
 Rectangle {
     id: root
-    color: "transparent"
+    color: Theme.getColor("transparent")
 
     property bool highlighted: false
     property string text: "Off"
@@ -24,11 +25,11 @@ Rectangle {
             gradient: Gradient {
                 GradientStop {
                     position: 0.0
-                    color: highlighted ? "#6e6e6e" : "#191919"
+                    color: highlighted ? Theme.getColor("iconBackground") : Theme.getColor("iconGradientStop")
                 }
                 GradientStop {
                     position: 1.0
-                    color: highlighted ? "#333333" : "#111111"
+                    color: highlighted ? Theme.getColor("iconHighlightedBackground") : Theme.getColor("iconHighlightedGradientStop")
                 }
             }
 

@@ -55,11 +55,11 @@ void NavigationController::setIsGamesOpen(bool isGamesOpen) {
   }
 }
 
-bool NavigationController::isThemeMenuOpen() const { return m_themeMenuOpen; }
-void NavigationController::setIsThemeMenuOpen(bool open) {
-  if (m_themeMenuOpen != open) {
-    m_themeMenuOpen = open;
-    emit isThemeMenuOpenChanged();
+bool NavigationController::isThemesOpen() const { return m_themesSelected; }
+void NavigationController::setIsThemesOpen(bool open) {
+  if (m_themesSelected != open) {
+    m_themesSelected = open;
+    emit isThemesOpenChanged();
   }
 }
 
@@ -68,7 +68,7 @@ void NavigationController::downButtonPressed() {
     if (this->m_selectedPageIndex < this->m_numPages + 1) {
       this->setSelectedPageIndex(this->m_selectedPageIndex + 1);
     }
-  } else if (m_themeMenuOpen) {
+  } else if (m_themesSelected) {
     if (this->m_selectedPageIndex < this->m_numPages) {
       this->setSelectedPageIndex(this->m_selectedPageIndex + 1);
     }
@@ -85,7 +85,7 @@ void NavigationController::upButtonPressed() {
     if (this->m_selectedPageIndex > this->m_numPages - 2) {
       this->setSelectedPageIndex(this->m_selectedPageIndex - 1);
     }
-  } else if (m_themeMenuOpen) {
+  } else if (m_themesSelected) {
     if (this->m_selectedPageIndex > this->m_numPages - 2) {
       this->setSelectedPageIndex(this->m_selectedPageIndex - 1);
     }
@@ -98,21 +98,21 @@ void NavigationController::upButtonPressed() {
 
 void NavigationController::enterButtonPressed() {
   if ((m_gamesSelected && m_selectedPageIndex == m_numPages + 1) ||
-      (m_themeMenuOpen && m_selectedPageIndex == m_numPages) ||
-      (!m_gamesSelected && !m_themeMenuOpen &&
+      (m_themesSelected && m_selectedPageIndex == m_numPages) ||
+      (!m_gamesSelected && !m_themesSelected &&
        m_selectedPageIndex == m_numPages - 1)) {
     exitProgram();
     return;
   }
 
-  if (!m_gamesSelected && !m_themeMenuOpen) {
+  if (!m_gamesSelected && !m_themesSelected) {
     if (m_selectedPageIndex == m_numPages - 3) {
       setIsGamesOpen(true);
       setSelectedPageIndex(m_numPages - 2);
       return;
     }
     if (m_selectedPageIndex == m_numPages - 2) {
-      setIsThemeMenuOpen(true);
+      setIsThemesOpen(true);
       setSelectedPageIndex(m_numPages - 2);
       return;
     }
@@ -130,24 +130,24 @@ void NavigationController::enterButtonPressed() {
     }
     if (m_selectedPageIndex == m_numPages) {
       setIsGamesOpen(false);
-      setIsThemeMenuOpen(true);
+      setIsThemesOpen(true);
       setSelectedPageIndex(m_numPages - 2);
       return;
     }
   }
 
-  if (m_themeMenuOpen) {
+  if (m_themesSelected) {
     if (m_selectedPageIndex == m_numPages - 2 ||
         m_selectedPageIndex == m_numPages - 1) {
       QString theme =
           (m_selectedPageIndex == m_numPages - 2) ? "light" : "dark";
       emit themeChanged(theme);
-      setIsThemeMenuOpen(false);
+      setIsThemesOpen(false);
       setSelectedPageIndex(m_numPages - 2);
       return;
     }
     if (m_selectedPageIndex == m_numPages - 3) {
-      setIsThemeMenuOpen(false);
+      setIsThemesOpen(false);
       setIsGamesOpen(true);
       setSelectedPageIndex(m_numPages - 2);
       return;
@@ -160,8 +160,8 @@ void NavigationController::homeButtonPressed() {
     this->setIsGamesOpen(false);
     this->setSelectedPageIndex(this->m_numPages - 3);
   }
-  if (m_themeMenuOpen) {
-    this->setIsThemeMenuOpen(false);
+  if (m_themesSelected) {
+    this->setIsThemesOpen(false);
     this->setSelectedPageIndex(this->m_numPages - 2);
   }
   this->m_model->currentPageIndex = -1;
@@ -195,7 +195,7 @@ void NavigationController::buttonUpdate() {
       if (modeIndex) {
         this->setSelectedPageIndex(*modeIndex);
       }
-    } else if (!this->m_gamesSelected && !this->m_themeMenuOpen) {
+    } else if (!this->m_gamesSelected && !this->m_themesSelected) {
       this->enterButtonPressed();
     } else {
       if (enterButtonPressed == true) {

@@ -1,6 +1,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import Qt5Compat.GraphicalEffects
+import NERO
 
 Rectangle {
     id: modal
@@ -11,7 +12,7 @@ Rectangle {
 
     width: dimension * 2
     height: dimension
-    color: "white"
+    color: Theme.getColor("popoverBackground")
     radius: 20
 
     Rectangle {
@@ -21,9 +22,9 @@ Rectangle {
         x: dimension / 10
         y: -width / 2
         radius: width / 2
-        color: "#cbcaca"
+        color: Theme.getColor("backgroundPicture")
 
-        border.color: "white"
+        border.color: Theme.getColor("popoverBackground")
         border.width: 10
         clip: true // This enables clipping of content outside the rectangle
 
@@ -42,7 +43,7 @@ Rectangle {
                         width: modalPic.width
                         height: modalPic.height
                         radius: modalPic.radius
-                        color: "white"
+                        color: Theme.getColor("popoverBackground")
                     }
                 }
             }
@@ -51,7 +52,7 @@ Rectangle {
 
     Text {
         id: modalTitle
-        color: "black"
+        color: Theme.getColor("inverseForeground")
         font.pixelSize: dimension / 6
         font.bold: true
         wrapMode: Text.WordWrap
@@ -61,7 +62,7 @@ Rectangle {
 
     Text {
         id: modalDescription
-        color: "black"
+        color: Theme.getColor("inverseForeground")
         font.pixelSize: dimension / 11
         wrapMode: Text.WordWrap
         width: (parent.width - modalDescription.x) - modal.offset
@@ -74,8 +75,8 @@ Rectangle {
         height: parent.height / 5
         width: parent.width / 3
         background: Rectangle {
-            color: "black"
-            border.color: "blue"
+            color: Theme.getColor("descriptionButtonBackground")
+            border.color: Theme.getColor("descriptionButtonBorder")
             border.width: 3
             radius: 10
         }
@@ -85,7 +86,7 @@ Rectangle {
         font.pixelSize: parent.height / 15
         onClicked: closeModal()
         Component.onCompleted: {
-            modalButton.contentItem.color = "white"
+            modalButton.contentItem.color = Theme.getColor("descriptionButtonForeground")
         }
     }
 

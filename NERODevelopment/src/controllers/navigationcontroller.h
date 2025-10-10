@@ -13,8 +13,8 @@ class NavigationController : public ButtonController {
                  isSelectedChanged FINAL)
   Q_PROPERTY(bool isGamesOpen READ isGamesOpen WRITE setIsGamesOpen NOTIFY
                  isGamesOpenChanged FINAL)
-  Q_PROPERTY(bool isThemeMenuOpen READ isThemeMenuOpen WRITE setIsThemeMenuOpen
-                 NOTIFY isThemeMenuOpenChanged FINAL)
+  Q_PROPERTY(bool isThemesOpen READ isThemesOpen WRITE setIsThemesOpen NOTIFY
+                 isThemesOpenChanged FINAL)
   Q_PROPERTY(bool isTsOn READ isTsOn WRITE setIsTsOn NOTIFY isTsOnChanged FINAL)
 
 public:
@@ -22,21 +22,21 @@ public:
   int selectedPageIndex() const;
   bool isSelected() const;
   bool isGamesOpen() const;
-  bool isThemeMenuOpen() const;
+  bool isThemesOpen() const;
   bool isTsOn() const;
 
 signals:
   void selectedPageIndexChanged();
   void isSelectedChanged();
   void isGamesOpenChanged();
-  void isThemeMenuOpenChanged();
+  void isThemesOpenChanged();
   void themeChanged(QString theme);
   void isTsOnChanged(bool);
 
 public slots:
   void setIsSelected(bool);
   void setIsGamesOpen(bool);
-  void setIsThemeMenuOpen(bool);
+  void setIsThemesOpen(bool);
   void setSelectedPageIndex(int);
   void setIsTsOn(bool);
   void currentDataDidChange();
@@ -50,7 +50,7 @@ public slots:
 private:
   bool m_isSelected = false;
   bool m_gamesSelected = false;
-  bool m_themeMenuOpen = false;
+  bool m_themesSelected = false;
   bool m_isTsOn;
   int m_selectedPageIndex = 0;
   int m_numPages = 8;

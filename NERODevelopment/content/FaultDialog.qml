@@ -1,6 +1,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import Qt5Compat.GraphicalEffects
+import NERO
 
 Popup {
     id: modal
@@ -16,19 +17,19 @@ Popup {
     rightInset: 0
     bottomInset: 0
     Overlay.modal: Rectangle {
-        color: "transparent"
+        color: Theme.getColor("transparent")
     }
 
     anchors.centerIn: Overlay.overlay
 
     contentItem: Rectangle {
         anchors.fill: parent
-        color: 'white'
+        color: Theme.getColor("popoverBackground")
         radius: 20
 
         Text {
             id: modalTitle
-            color: "black"
+            color: Theme.getColor("inverseForeground")
             font.pixelSize: dimension / 6
             font.bold: true
             wrapMode: Text.WordWrap
@@ -42,7 +43,7 @@ Popup {
 
         Text {
             id: modalDescription
-            color: "black"
+            color: Theme.getColor("inverseForeground")
             font.pixelSize: dimension / 11
             wrapMode: Text.WordWrap
             anchors.left: parent.left

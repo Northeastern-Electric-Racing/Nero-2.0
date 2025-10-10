@@ -10,7 +10,7 @@ Rectangle {
     height: parent.height
     visible: true
     focus: true
-    color: "black"
+    color: Theme.getColor("background")
 
     property variant attributeStatusMap: offViewController.attributeStatus
 
@@ -80,21 +80,21 @@ Rectangle {
 
         LabelText {
             text: "CAR OFF"
-            color: "#ff0101"
+            color: Theme.getColor("offCarForeground")
             font.pixelSize: 40
             font.bold: true
         }
 
         LabelText {
             text: "-"
-            color: "#ffffff"
+            color: Theme.getColor("primaryForeground")
             font.pixelSize: 40
             font.bold: true
         }
 
         LabelText {
             text: "GLVMS ON"
-            color: "#1cff00"
+            color: Theme.getColor("onGLVMSForeground")
             font.pixelSize: 40
             font.bold: true
         }
@@ -108,7 +108,7 @@ Rectangle {
 
         height: parent.height / 2
         width: parent.width / 2
-        color: "transparent"
+        color: Theme.getColor("transparent")
 
         Rectangle {
             id: lvStatusContainer
@@ -116,7 +116,7 @@ Rectangle {
             anchors.top: parent.top
             width: parent.width
             height: parent.height / 5
-            color: "transparent"
+            color: Theme.getColor("transparent")
 
             StatusDisplay {
                 id: glvms
@@ -157,7 +157,7 @@ Rectangle {
             anchors.bottom: parent.bottom
             anchors.right: parent.right
             anchors.left: parent.left
-            color: "transparent"
+            color: Theme.getColor("transparent")
 
             Rectangle {
                 id: bmsimdContainer
@@ -165,7 +165,7 @@ Rectangle {
                 anchors.left: parent.left
                 anchors.bottom: parent.bottom
                 width: parent.width / 3
-                color: "transparent"
+                color: Theme.getColor("transparent")
 
                 StatusDisplay {
                     id: bms
@@ -208,7 +208,7 @@ Rectangle {
                 anchors.top: parent.top
                 anchors.bottom: parent.bottom
                 width: parent.width / 3
-                color: "transparent"
+                color: Theme.getColor("transparent")
 
                 StatusDisplay {
                     id: can
@@ -306,7 +306,7 @@ Rectangle {
         anchors.leftMargin: -latch.width / 2
         width: parent.width * 0.42
         height: parent.height / 10
-        color: "transparent"
+        color: Theme.getColor("transparent")
 
         StatusDisplay {
             id: bots
@@ -361,7 +361,7 @@ Rectangle {
         anchors.topMargin: parent.height / 22
         height: parent.height / 10
         width: parent.width * 0.55
-        color: "transparent"
+        color: Theme.getColor("transparent")
 
         StatusDisplay {
             id: cpBrb
@@ -439,7 +439,7 @@ Rectangle {
         anchors.top: offHeader.bottom
         anchors.right: parent.right
         anchors.bottom: cpBrbInterlocksTsmsContainer.top
-        color: "transparent"
+        color: Theme.getColor("transparent")
 
         Rectangle {
             id: tempContainer
@@ -447,7 +447,7 @@ Rectangle {
             anchors.top: parent.top
             anchors.right: parent.right
             height: parent.height / 2
-            color: "transparent"
+            color: Theme.getColor("transparent")
 
             ThermometerValueComponent {
                 id: packTemp

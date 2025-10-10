@@ -1,5 +1,6 @@
 import QtQuick 2.15
 import QtQuick.Layouts
+import NERO
 
 Rectangle {
     id: labelComponent
@@ -20,11 +21,11 @@ Rectangle {
         stops: [
             GradientStop {
                 position: 1.0
-                color: 'transparent'
+                color: Theme.getColor("transparent")
             },
             GradientStop {
                 position: 0.5
-                color: '#191919'
+                color: Theme.getColor("iconGradientStop")
             }
         ]
     }
@@ -83,7 +84,7 @@ Rectangle {
 
                 LabelText {
                     text: labelComponent.valueUnit
-                    color: "#777777"
+                    color: Theme.getColor("mutedForeground")
                     font.pixelSize: labelComponent.unitFontSize
                     anchors.bottom: labelComponent.unitAnchorBottom ? parent.bottom : null
                 }

@@ -9,7 +9,7 @@ Item {
     property int selectedPageIndex: navigationController.selectedPageIndex
     property bool isSelected: navigationController.isSelected
     property bool gamePageOpen: navigationController.isGamesOpen
-    property bool themeMenuOpen: navigationController.isThemeMenuOpen
+    property bool themesOpen: navigationController.isThemesOpen
 
     property int offPageIndex: 0
     property int pitDrivePageIndex: 1
@@ -23,7 +23,7 @@ Item {
     property int lightThemeIndex: 6
     property int darkThemeIndex: 7
 
-    property int exitPageIndex: gamePageOpen ? 9 : (themeMenuOpen ? 8 : 7)
+    property int exitPageIndex: gamePageOpen ? 9 : (themesOpen ? 8 : 7)
     property int themePageIndex: gamePageOpen ? 8 : 6
 
     height: 480
@@ -172,11 +172,11 @@ Item {
                 highlighted: selectedPageIndex === themePageIndex
                 text: "THEMES"
                 source: "/qt/qml/content/images/themes.png"
-                visible: !themeMenuOpen
+                visible: !themesOpen
             }
 
             ColumnLayout {
-                visible: themeMenuOpen
+                visible: themesOpen
                 spacing: 10
                 Layout.fillHeight: true
                 Layout.fillWidth: true

@@ -1,5 +1,6 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import NERO
 
 Rectangle {
     id: maxSpeedComparator
@@ -12,14 +13,14 @@ Rectangle {
     width: dimension
     height: dimension * 3
     radius: 5
-    color: "black"
-    border.color: "white"
+    color: Theme.getColor("background")
+    border.color: Theme.getColor("primaryForeground")
 
     Text {
         id: maxSpeed
         text: maxSpeedComparator.maxSpeed
         font.pixelSize: parent.width * 0.2
-        color: "white"
+        color: Theme.getColor("primaryForeground")
         x: -(width + dimension / 20)
     }
 
@@ -27,7 +28,7 @@ Rectangle {
         id: lowestSpeed
         text: maxSpeedComparator.lowestSpeed
         font.pixelSize: parent.width * 0.2
-        color: "white"
+        color: Theme.getColor("primaryForeground")
         x: -(width + dimension / 20)
         y: maxSpeedComparator.height - height
     }
@@ -48,11 +49,11 @@ Rectangle {
             GradientStop {
                 position: -5 * (1 - bar.percentageHeight
                                 + 0.1) // Start of gradient relative to parent's height
-                color: "red"
+                color: Theme.getColor("criticalStatus")
             }
             GradientStop {
                 position: 1.0 // End of gradient relative to parent's height
-                color: "#55FF00"
+                color: Theme.getColor("goodStatus")
             }
         }
         transformOrigin: Item.BottomLeft
@@ -67,7 +68,7 @@ Rectangle {
     Text {
         id: topSpeed
         text: qsTr("TOP SPEED")
-        color: "white"
+        color: Theme.getColor("primaryForeground")
         x: -(width + dimension / 20)
         y: maxSpeedComparator.height * (1 - maxSpeedComparator.previousTopSpeed
                                         / maxSpeedComparator.maxSpeed)
@@ -75,7 +76,7 @@ Rectangle {
         Text {
             id: topSpeedNumber
             text: maxSpeedComparator.previousTopSpeed + qsTr("MPH")
-            color: "white"
+            color: Theme.getColor("primaryForeground")
             y: -height
             font.pixelSize: parent.width * 0.2
 
@@ -90,7 +91,7 @@ Rectangle {
         width: maxSpeedComparator.width - dimension / 6
         anchors.horizontalCenter: parent.horizontalCenter
         height: 2
-        color: "white"
+        color: Theme.getColor("primaryForeground")
     }
 
     Behavior on currentSpeed {

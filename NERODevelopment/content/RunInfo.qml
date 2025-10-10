@@ -107,7 +107,7 @@ Item {
                 text: formatTime(runInfo.value)
                 font.pixelSize: rightBlackRectangle.height * 0.9
                 anchors.centerIn: parent
-                color: Theme.getColor("foreground")
+                color: Theme.getColor("primaryForeground")
                 font.bold: true
                 font.letterSpacing: 0
             }
