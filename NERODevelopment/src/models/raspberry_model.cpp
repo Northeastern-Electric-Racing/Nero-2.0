@@ -9,6 +9,7 @@
 #include <sys/types.h>
 #include <sys/un.h>
 #include <unistd.h>
+#include <cstdlib>
 
 RaspberryModel::RaspberryModel() {}
 
@@ -89,7 +90,7 @@ void RaspberryModel::connectToMQTT() {
 
   };
 
-  MqttClient *client_1 = new MqttClient(nullptr, 1883, client_1_topics);
+    MqttClient *client_1 = new MqttClient(nullptr, getenv("CLIENT1_PORT") ? getenv("CLIENT1_PORT") : "1883", client_1_topics);
   connect(client_1, &MqttClient::emitServerData, this,
           &RaspberryModel::receiveServerData);
   client_1->connectToHost();
@@ -99,7 +100,7 @@ void RaspberryModel::connectToMQTT() {
       UPBUTTON,      DOWNBUTTON,     HOMEBUTTON,  MODEINDEX,
       DIRECTION,     REGENPOWER,     TORQUEPOWER,
   };
-  MqttClient *client_2 = new MqttClient(nullptr, 1882, client_2_topics);
+  MqttClient *client_2 = new MqttClient(nullptr, getenv("CLIENT2_PORT") ? getenv("CLIENT2_PORT") : "1882", client_2_topics);
   connect(client_2, &MqttClient::emitServerData, this,
           &RaspberryModel::receiveServerData);
   client_2->connectToHost();
