@@ -84,7 +84,7 @@ private slots:
 private:
   QMqttClient *m_client;
   QMqttSubscription *m_sub;
-  QString hostname = "localhost";
+  QString hostname = getenv("HOST") ? getenv("HOST") : "localhost";
   int m_port = 1883;
   qint8 QoS = 0;
   QString default_topic = "#";
