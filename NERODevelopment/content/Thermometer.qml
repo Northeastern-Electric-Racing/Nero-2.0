@@ -8,8 +8,7 @@ Rectangle {
     property int value: 0
     property int maxValue: 65
     property int minValue: -15
-    property string fillColor: regen ? "red" : value > maxValue - ((Math.abs(maxValue) + Math.abs(
-                                                                        minValue)) / 5) ? "red" : value > maxValue - (((Math.abs(maxValue) + Math.abs(minValue)) / 5) * 2) ? "orange" : value > maxValue - (((Math.abs(maxValue) + Math.abs(minValue)) / 5) * 3) ? "#FFF500" : value > maxValue - (((Math.abs(maxValue) + Math.abs(minValue)) / 5) * 4) ? "blue" : "purple"
+    property string fillColor:regen ? "red" : Qt.hsla((((maxValue-value)/(Math.abs(maxValue) + Math.abs(minValue))) * 290)/360 , 1.0, 0.5,1.0)
     height: 500
     width: height / 2.233
     color: 'transparent'
