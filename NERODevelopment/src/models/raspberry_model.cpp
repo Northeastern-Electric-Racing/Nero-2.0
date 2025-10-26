@@ -7,7 +7,6 @@
 #include <cmath>
 #include <cstdlib>
 
-// Only include Unix-specific headers on non-Windows platforms
 #ifndef _WIN32
 #include <sys/socket.h>
 #include <sys/types.h>

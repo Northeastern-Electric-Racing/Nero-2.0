@@ -30,7 +30,6 @@ int main(int argc, char *argv[]) {
 
   Model *model;
 
-  // COMMENTED OUT CONDITIONAL - ALWAYS USE RASPBERRYMODEL FOR TESTING
   if (osName == "raspberrypi-sta") {
 
   model = new RaspberryModel();
