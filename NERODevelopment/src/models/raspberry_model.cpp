@@ -99,10 +99,6 @@ void RaspberryModel::connectToMQTT() {
     int client1_port = atoi(client1_port_str);
     int client2_port = atoi(client2_port_str);
 
-    qDebug() << "=== MQTT Connection Info ===";
-    qDebug() << "CLIENT1_PORT:" << client1_port;
-    qDebug() << "CLIENT2_PORT:" << client2_port;
-
     MqttClient *client_1 = new MqttClient(nullptr, client1_port, client_1_topics);
     connect(client_1, &MqttClient::emitServerData, this,
             &RaspberryModel::receiveServerData);
