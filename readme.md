@@ -105,3 +105,22 @@ Now under the Clang Format tab Set the path to where you installed your clang-fo
 You can figure out the file directory by running ```which clang-format```
 
 Now you can edit a file and save it to make sure it works
+
+### Testing out Enviornment Variables
+
+First, ssh into godzilla: `ssh godzilla2@192.168.100.57 password <LINUX SERVER PASSWORD>`
+
+Next, update the NERO code: `./update_bin.sh nero <ODY_TPU_ROOT_PASSWORD>`
+
+After it's updated, exit out and ssh into the car: `ssh root@192.168.100.12, use <ODY_TPU_ROOT_PASSWORD>`
+
+Then, nano into the ENV variables: `nano /etc/init.d/S99nero2`
+
+Then, go to the ENV variables and change `CLIENT1_PORT`, `CLIENT2_PORT`, and `HOST`. 
+    (Correct: `CLIENT1_PORT=1883, CLIENT2_PORT=1882, HOST="92.168.100.12"`)
+
+After, exit out and save all the changed variables. 
+
+Then, exit out of the car. In `~/Projects/Odysseus`, run `./update_bin.sh nero <ODY_TPU_ROOT_PASSWORD>`. 
+
+If correct port and host variables, buttons should work. Else, no buttons should work. 
