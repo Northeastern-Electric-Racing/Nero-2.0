@@ -106,7 +106,15 @@ You can figure out the file directory by running ```which clang-format```
 
 Now you can edit a file and save it to make sure it works
 
-### Testing out Enviornment Variables
+### Testing out Enviornment Variables (Locally)
+
+Go into Projects, go into Run, go into Enviornment, and add variables named `ClIENT1_PORT` and `CLIENT2_PORT`. 
+
+Then, change the option from Build Enviornment to System Enviornment. 
+
+Finally, save and run it.
+
+### Testing Out Enviornment Variables (On the Car)
 
 First, ssh into godzilla: `ssh godzilla2@192.168.100.57 password <LINUX SERVER PASSWORD>`
 
