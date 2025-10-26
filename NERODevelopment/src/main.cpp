@@ -31,18 +31,18 @@ int main(int argc, char *argv[]) {
   Model *model;
 
   // COMMENTED OUT CONDITIONAL - ALWAYS USE RASPBERRYMODEL FOR TESTING
-  // if (osName == "raspberrypi-sta") {
+  if (osName == "raspberrypi-sta") {
 
   model = new RaspberryModel();
   model->connectToMQTT();
 
-  // } else {
-  //   model = new MockModel;
-  //   QThread *dataThread = new QThread;
-  //
-  //   model->moveToThread(dataThread);
-  //   dataThread->start();
-  // }
+  } else {
+    model = new MockModel;
+    QThread *dataThread = new QThread;
+
+    model->moveToThread(dataThread);
+    dataThread->start();
+  }
 
   HomeController homeController(model);
   HeaderController headerController(model);
