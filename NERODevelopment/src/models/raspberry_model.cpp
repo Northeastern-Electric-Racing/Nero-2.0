@@ -1,14 +1,18 @@
-#ifndef _WIN32
 #include "raspberry_model.h"
 #include "../utils/data_type_names.h"
 #include "mqtt_client.h"
 #include <QtMqtt/QMqttClient>
+#include <QDebug>
 #include <bitset>
 #include <cmath>
+#include <cstdlib>
+
+#ifndef _WIN32
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <sys/un.h>
 #include <unistd.h>
+#endif
 
 RaspberryModel::RaspberryModel() {}
 
@@ -28,7 +32,7 @@ QList<QString> RaspberryModel::getMpuFault() {
 }
 
 void RaspberryModel::connectToMQTT() {
-  QList<QString> client_1_topics = {
+    QList<QString> client_1_topics = {
       MPH,
       KPH,
       STATUS,
@@ -89,21 +93,27 @@ void RaspberryModel::connectToMQTT() {
 
   };
 
-  MqttClient *client_1 = new MqttClient(nullptr, 1883, client_1_topics);
-  connect(client_1, &MqttClient::emitServerData, this,
-          &RaspberryModel::receiveServerData);
-  client_1->connectToHost();
+    const char* client1_port_str = getenv("CLIENT1_PORT");
+    const char* client2_port_str = getenv("CLIENT2_PORT");
+
+    int client1_port = client1_port_str ? atoi(client1_port_str) : 1883;
+    int client2_port = client2_port_str ? atoi(client2_port_str) : 1882;
+
+    MqttClient *client_1 = new MqttClient(nullptr, client1_port, client_1_topics);
+    connect(client_1, &MqttClient::emitServerData, this,
+            &RaspberryModel::receiveServerData);
+    client_1->connectToHost();
 
   QList<QString> client_2_topics = {
       FORWARDBUTTON, BACKWARDBUTTON, RIGHTBUTTON, ENTERBUTTON,
       UPBUTTON,      DOWNBUTTON,     HOMEBUTTON,  MODEINDEX,
       DIRECTION,     REGENPOWER,     TORQUEPOWER,
   };
-  MqttClient *client_2 = new MqttClient(nullptr, 1882, client_2_topics);
-  connect(client_2, &MqttClient::emitServerData, this,
-          &RaspberryModel::receiveServerData);
-  client_2->connectToHost();
-  this->m_client = client_1;
+    MqttClient *client_2 = new MqttClient(nullptr, client2_port, client_2_topics);
+    connect(client_2, &MqttClient::emitServerData, this,
+            &RaspberryModel::receiveServerData);
+    client_2->connectToHost();
+    this->m_client = client_1;
 }
 
 void RaspberryModel::sendMessage(const QString topic, const float value) {
@@ -464,5 +474,3 @@ int RaspberryModel::totalNumberOfOnesIn(float value) {
 std::optional<float> RaspberryModel::getLowVoltageStateOfCharge() {
   return this->getById(LOWVOLTAGESOC);
 }
-
-#endif

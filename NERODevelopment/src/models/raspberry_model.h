@@ -1,6 +1,5 @@
 #ifndef RASPBERRY_MODEL_H
 #define RASPBERRY_MODEL_H
-#ifndef _WIN32
 
 #include "model.h"
 #include "mqtt_client.h"
@@ -89,4 +88,3 @@ private:
   MqttClient *m_client;
 };
 #endif
-#endif // RASPBERRY_MODEL_H
