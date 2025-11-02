@@ -8,7 +8,21 @@ Rectangle {
     property int value: 0
     property int maxValue: 65
     property int minValue: -15
-    property string fillColor:regen ? "red" : Qt.hsla((((maxValue-value)/(Math.abs(maxValue) + Math.abs(minValue))) * 290)/360 , 1.0, 0.5,1.0)
+
+    property real percentage: (value - minValue) / (maxValue - minValue) //Converting value to percentage range between minval -> maxval
+
+    property color fillColor: regen ? Qt.hsla(0, 1, 0.5, 1) :
+                              Qt.hsla(
+                                  percentage > 0.875 ? 0.0 : //Red
+                                  percentage > 0.75 ? 0.08 + (0.0 - 0.08) * ((percentage - 0.75) / 0.125) : //Orange -> Red
+                                  percentage > 0.5 ? 0.16 + (0.08 - 0.16) * ((percentage - 0.5) / 0.25) : // Yellow -> Orange
+                                  percentage > 0.375 ? 0.33 + (0.16 - 0.33) * ((percentage - 0.375) / 0.125) : //Green -> Yellow
+                                  percentage > 0.25 ? 0.55 + (0.33 - 0.55) * ((percentage - 0.25) / 0.125) : //Cyan -> Green
+                                  percentage > 0.125 ? 0.67 + (0.55 - 0.67) * ((percentage - 0.125) / 0.125) : //Blue -> Cyan
+                                  0.83 + (0.67 - 0.83) * (percentage / 0.125), //Purple -> Blue
+                                  1, 0.5, 1 //Saturation, lightness, alpha
+                              )
+
     height: 500
     width: height / 2.233
     color: 'transparent'
