@@ -10,6 +10,7 @@ Item {
     anchors.fill: parent
     property int torqueLimit: efficiencyController.currentMaxTorque
     property int numRegen: efficiencyController.currentRegenStrength
+    property double numRegenPercentage: efficiencyController.currentRegenPercentage
     property int hvSOC: efficiencyController.stateOfCharge
     property int lvSOC: efficiencyController.lowVoltageStateOfCharge
     property int motorTemp: efficiencyController.motorTemp
@@ -84,7 +85,8 @@ Item {
             ThermometerValueComponent {
                 id: regen
                 regen: true
-                thermometerValue: efficiency.numRegen
+                showPercentage: true
+                thermometerValue: showPercentage ? efficiency.numRegenPercentage : efficiency.numRegen
                 title: "REGEN"
                 Layout.fillWidth: true
                 Layout.fillHeight: true

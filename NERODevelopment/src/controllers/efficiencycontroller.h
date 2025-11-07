@@ -33,6 +33,8 @@ class EfficiencyController : public ButtonController {
                  fastestTimeChanged)
   Q_PROPERTY(
       int lastTime READ lastTime WRITE setLastTime NOTIFY lastTimeChanged)
+  Q_PROPERTY(float currentRegenPercentage READ currentRegenPercentage NOTIFY currentRegenPercentageChanged)
+  Q_PROPERTY(float maxRegenCapacity READ maxRegenCapacity WRITE setMaxRegenCapacity NOTIFY maxRegenCapacityChanged)
 
 public:
   explicit EfficiencyController(Model *model, QObject *parent = nullptr);
@@ -46,6 +48,8 @@ public:
   int currentTime() const;
   int fastestTime() const;
   int lastTime() const;
+  float currentRegenPercentage() const;
+  float maxRegenCapacity() const;
 
 signals:
   void currentMaxTorqueChanged(int);
@@ -58,6 +62,8 @@ signals:
   void currentTimeChanged(int);
   void fastestTimeChanged(int);
   void lastTimeChanged(int);
+  void currentRegenPercentageChanged(float);
+  void maxRegenCapacityChanged(float);
 
 public slots:
   void setCurrentMaxTorque(int);
@@ -71,6 +77,7 @@ public slots:
   void setCurrentTime(int);
   void setFastestTime(int);
   void setLastTime(int);
+  void setMaxRegenCapacity(float);
 
   void enterButtonPressed() override;
   void updateCurrentTime();
@@ -78,6 +85,7 @@ public slots:
 private:
   int m_currentMaxTorque = 0;        // torque percentage [0,100]
   int m_currentRegenStrength = 0;    // regen strength [1,3]
+  float m_maxRegenCapacity = 10.0f;
   int m_stateOfCharge = 0;           // charge percentage [0,100]
   int m_motorTemp = 0;               // Celsius
   int m_packTemp = 0;                // Celsius

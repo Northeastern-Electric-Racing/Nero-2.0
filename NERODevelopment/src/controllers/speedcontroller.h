@@ -35,6 +35,8 @@ class SpeedController : public ButtonController {
                  setCurrentDischarge NOTIFY currentDischargeChanged)
   Q_PROPERTY(float maxCurrentDischarge READ maxCurrentDischarge WRITE
                  setMaxCurrentDischarge NOTIFY maxCurrentDischargeChanged)
+  Q_PROPERTY(float regenPercentage READ regenPercentage NOTIFY regenPercentageChanged)
+  Q_PROPERTY(float maxRegenCapacity READ maxRegenCapacity WRITE setMaxRegenCapacity NOTIFY maxRegenCapacityChanged)
 
 public:
   explicit SpeedController(Model *model, QObject *parent = nullptr);
@@ -53,6 +55,8 @@ public:
   float currentDischarge() const;
   float maxCurrentDischarge() const;
   float regen() const;
+  float regenPercentage() const;
+  float maxRegenCapacity() const;
 
 signals:
   void tractionControlChanged(bool);
@@ -69,6 +73,8 @@ signals:
   void currentDischargeChanged(float);
   void maxCurrentDischargeChanged(float);
   void regenChanged(float);
+  void regenPercentageChanged(float);
+  void maxRegenCapacityChanged(float);
 
 public slots:
   void setTractionControl(bool);
@@ -85,6 +91,7 @@ public slots:
   void setCurrentDischarge(float);
   void setMaxCurrentDischarge(float);
   void setRegen(float);
+  void setMaxRegenCapacity(float);
 
   void enterButtonPressed() override;
   void updateCurrentTime();
@@ -106,6 +113,7 @@ private:
   float m_currentDischarge = 0;
   float m_maxCurrentDischarge = 0;
   float m_regen = 0;
+  float m_maxRegenCapacity = 10.0f;
 
   bool m_timerRunning = false;
   QElapsedTimer m_timer;

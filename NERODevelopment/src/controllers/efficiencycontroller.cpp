@@ -23,10 +23,30 @@ void EfficiencyController::setCurrentMaxTorque(int torque) {
 int EfficiencyController::currentRegenStrength() const {
   return m_currentRegenStrength;
 }
+
+float EfficiencyController::currentRegenPercentage() const {
+    if (m_maxRegenCapacity > 0) {
+        return (m_currentRegenStrength / m_maxRegenCapacity) * 100.0f;
+    }
+    return 0.0f;
+}
+
+float EfficiencyController::maxRegenCapacity() const {
+    return m_maxRegenCapacity;
+}
+
+void EfficiencyController::setMaxRegenCapacity(float capacity) {
+    if (capacity != m_maxRegenCapacity) {
+        m_maxRegenCapacity = capacity;
+        emit maxRegenCapacityChanged(capacity);
+        emit currentRegenPercentageChanged(currentRegenPercentage());
+    }
+}
 void EfficiencyController::setCurrentRegenStrength(int strength) {
   if (strength != m_currentRegenStrength) {
     m_currentRegenStrength = strength;
     emit currentRegenStrengthChanged(strength);
+    emit currentRegenPercentageChanged(currentRegenPercentage());
   }
 }
 

@@ -19,6 +19,7 @@ Item {
     property int maxDraw: speedController.maxCurrent
     property int dcl: speedController.currentDischarge
     property double regen: speedController.regen
+    property double regenPercentage: speedController.regenPercentage
 
     property int xMargin: width / 20
     property int yMargin: height / 20
@@ -89,8 +90,9 @@ Item {
             spacing: parent.height / 20
 
             ThermometerValueComponent {
-                thermometerValue: speedMode.regen
-                title: "Regen"
+                showPercentage: true
+                thermometerValue: showPercentage ? speedMode.regenPercentage : speedMode.regen
+                title: "REGEN"
                 Layout.fillHeight: true
                 Layout.fillWidth: true
                 Layout.preferredHeight: 1

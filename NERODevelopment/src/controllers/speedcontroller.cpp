@@ -23,7 +23,27 @@ void SpeedController::setRegen(float regen) {
   if (regen != m_regen) {
     m_regen = regen;
     emit regenChanged(regen);
+    emit regenPercentageChanged(regenPercentage());
   }
+}
+
+float SpeedController::regenPercentage() const {
+    if (m_maxRegenCapacity > 0) {
+        return (m_regen / m_maxRegenCapacity) * 100.0f;
+    }
+    return 0.0f;
+}
+
+float SpeedController::maxRegenCapacity() const {
+    return m_maxRegenCapacity;
+}
+
+void SpeedController::setMaxRegenCapacity(float capacity) {
+    if (capacity != m_maxRegenCapacity) {
+        m_maxRegenCapacity = capacity;
+        emit maxRegenCapacityChanged(capacity);
+        emit regenPercentageChanged(regenPercentage());
+    }
 }
 
 float SpeedController::packTemp() const { return m_packTemp; }
