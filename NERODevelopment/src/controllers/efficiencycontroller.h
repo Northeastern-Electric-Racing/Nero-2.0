@@ -85,7 +85,7 @@ public slots:
 private:
   int m_currentMaxTorque = 0;        // torque percentage [0,100]
   int m_currentRegenStrength = 0;    // regen strength [1,3]
-  float m_maxRegenCapacity = 10.0f;
+  float m_maxRegenCapacity = 10.0f;  // max amounts of regen
   int m_stateOfCharge = 0;           // charge percentage [0,100]
   int m_motorTemp = 0;               // Celsius
   int m_packTemp = 0;                // Celsius
