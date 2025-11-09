@@ -23,6 +23,7 @@ public:
   std::optional<float> getDir() override;
   std::optional<float> getPackTemp() override;
   std::optional<float> getMotorTemp() override;
+  std::optional<float> getMaxRegenCapacity() override;
   std::optional<float> getStateOfCharge() override;
   std::optional<float> getCurrent() override;
   QList<QString> getBmsFault() override;
@@ -87,6 +88,7 @@ private:
   bool dir;
   float packTemp;
   float motorTemp;
+  float maxRegenCapacity;
   float stateOfCharge;
   float lvBattery;
   float current;

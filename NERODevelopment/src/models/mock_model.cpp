@@ -4,7 +4,7 @@
 #include <math.h>
 
 MockModel::MockModel()
-    : mph(60), status(true), dir(true), packTemp(30), motorTemp(40),
+    : mph(60), status(true), dir(true), packTemp(30), motorTemp(40), maxRegenCapacity(10.0f),
       stateOfCharge(55), lvBattery(88), current(7.6), isBurning(0), isDebug(0),
       bmsFaults(0), mpuFaults(0), maxCellVoltage(3.5),
       maxCellVoltageChipNumber(1), maxCellVoltageCellNumber(10),
@@ -37,6 +37,11 @@ void MockModel::connectToMQTT() {
     motorTemp += 1;
   else if (rng >= 985 && rng < 988)
     motorTemp -= 1;
+
+  if (rng >= 610 && rng < 615)
+      maxRegenCapacity += 0.5;
+  else if (rng >= 620 && rng < 625)
+      maxRegenCapacity -= 0.5;
 
   if (rng < 2)
     packTemp += 1;
@@ -217,6 +222,8 @@ std::optional<float> MockModel::getPackTemp() { return packTemp; }
 
 std::optional<float> MockModel::getMotorTemp() { return motorTemp; }
 
+std::optional<float> MockModel::getMaxRegenCapacity() { return maxRegenCapacity; }
+
 std::optional<float> MockModel::getStateOfCharge() { return stateOfCharge; }
 
 std::optional<float> MockModel::getCurrent() {
@@ -395,6 +402,9 @@ void MockModel::updateCurrentData() {
   this->currentData.insert(
       MOTORTEMP,
       DataInfo(MOTORTEMP, "", convertNumberToDataInfoValue(motorTemp)));
+  this->currentData.insert(
+      MAXREGENCAPACITY,
+      DataInfo(MAXREGENCAPACITY, "A", convertNumberToDataInfoValue(maxRegenCapacity)));
   this->currentData.insert(
       STATEOFCHARGE, DataInfo(STATEOFCHARGE, "%",
                               convertNumberToDataInfoValue(stateOfCharge)));

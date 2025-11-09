@@ -38,6 +38,7 @@ void RaspberryModel::connectToMQTT() {
       STATUS,
       PACKTEMP,
       MOTORTEMP,
+      MAXREGENCAPACITY,
       STATEOFCHARGE,
       CURRENT,
       BALANCINGCELLS,
@@ -156,6 +157,12 @@ std::optional<float> RaspberryModel::getMotorTemp() {
   std::optional<float> motorTemp = this->getById(MOTORTEMP);
   return motorTemp ? std::optional<float>(std::round(*motorTemp))
                    : std::nullopt;
+}
+
+std::optional<float> RaspberryModel::getMaxRegenCapacity() {
+    std::optional<float> maxRegenCapacity = this->getById(MAXREGENCAPACITY);
+    return maxRegenCapacity ? std::optional<float>(std::round(*maxRegenCapacity))
+                            : std::nullopt;
 }
 
 std::optional<float> RaspberryModel::getStateOfCharge() {

@@ -93,7 +93,7 @@ Item {
                 radius: efficiency.borderRadii
                 valueFontSize: efficiency.valueFontSize
                 labelFontSize: efficiency.labelFontSize
-                unitFontSize: efficiency.labelFontSize / 2
+                unitFontSize: efficiency.valueFontSize / 1.5
             }
         }
 

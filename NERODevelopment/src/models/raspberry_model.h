@@ -24,6 +24,7 @@ public:
   std::optional<float> getDir() override;
   std::optional<float> getPackTemp() override;
   std::optional<float> getMotorTemp() override;
+  std::optional<float> getMaxRegenCapacity() override;
   std::optional<float> getStateOfCharge() override;
   std::optional<float> getCurrent() override;
   std::optional<float> getBalancingCells() override;

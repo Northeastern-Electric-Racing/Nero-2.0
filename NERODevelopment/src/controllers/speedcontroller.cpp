@@ -4,10 +4,11 @@
 
 SpeedController::SpeedController(Model *model, QObject *parent)
     : ButtonController{model, 3, parent}, m_updateTimer(new QTimer(this)) {
-  connect(m_model, &Model::onCurrentDataChange, this, &SpeedController::update);
-  connect(m_updateTimer, &QTimer::timeout, this,
-          &SpeedController::updateCurrentTime);
-  m_updateTimer->setInterval(1);
+    connect(m_model, &Model::onCurrentDataChange, this, &SpeedController::update);
+    connect(m_updateTimer, &QTimer::timeout, this,
+            &SpeedController::updateCurrentTime);
+    m_updateTimer->setInterval(1);
+    update();
 }
 
 bool SpeedController::tractionControl() const { return m_tractionControl; }
@@ -29,7 +30,8 @@ void SpeedController::setRegen(float regen) {
 
 float SpeedController::regenPercentage() const {
     if (m_maxRegenCapacity > 0) {
-        return (m_regen / m_maxRegenCapacity) * 100.0f;
+        float result = (m_regen / m_maxRegenCapacity) * 100.0f;
+        return result;
     }
     return 0.0f;
 }
@@ -164,14 +166,15 @@ void SpeedController::updateCurrentTime() {
 }
 
 void SpeedController::update() {
-  setTractionControl(*m_model->getTractionControl());
-  setPackTemp(*m_model->getPackTemp());
-  setMotorTemp(*m_model->getMotorTemp());
-  setChargeState(*m_model->getStateOfCharge());
-  setCurrentSpeed(*m_model->getMph());
-  setMaxSpeed(m_model->getMaxSpeed());
-  setCurrent(*m_model->getCurrent());
-  setMaxCurrent(m_model->getMaxDraw());
-  setCurrentDischarge(*m_model->getDcl());
-  setRegen(*m_model->getRegenPower());
+    setTractionControl(*m_model->getTractionControl());
+    setPackTemp(*m_model->getPackTemp());
+    setMotorTemp(*m_model->getMotorTemp());
+    setChargeState(*m_model->getStateOfCharge());
+    setCurrentSpeed(*m_model->getMph());
+    setMaxSpeed(m_model->getMaxSpeed());
+    setCurrent(*m_model->getCurrent());
+    setMaxCurrent(m_model->getMaxDraw());
+    setCurrentDischarge(*m_model->getDcl());
+    setRegen(*m_model->getRegenPower());
+    setMaxRegenCapacity(*m_model->getMaxRegenCapacity());
 }

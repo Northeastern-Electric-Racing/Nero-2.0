@@ -2,12 +2,13 @@
 
 EfficiencyController::EfficiencyController(Model *model, QObject *parent)
     : ButtonController{model, 4, parent}, m_updateTimer(new QTimer(this)),
-      m_timerRunning(false) {
-  connect(m_model, &Model::onCurrentDataChange, this,
-          &EfficiencyController::currentDataDidChange);
-  connect(m_updateTimer, &QTimer::timeout, this,
-          &EfficiencyController::updateCurrentTime);
-  m_updateTimer->setInterval(1);
+    m_timerRunning(false) {
+    connect(m_model, &Model::onCurrentDataChange, this,
+            &EfficiencyController::currentDataDidChange);
+    connect(m_updateTimer, &QTimer::timeout, this,
+            &EfficiencyController::updateCurrentTime);
+    m_updateTimer->setInterval(1);
+    currentDataDidChange();
 }
 
 int EfficiencyController::currentMaxTorque() const {
@@ -93,35 +94,39 @@ void EfficiencyController::setSpeed(int speed) {
 }
 
 void EfficiencyController::currentDataDidChange() {
-  std::optional<float> torque = m_model->getTorquePower();
-  std::optional<float> regen = m_model->getRegenPower();
-  std::optional<float> soc = m_model->getStateOfCharge();
-  std::optional<float> motorTemp = m_model->getMotorTemp();
-  std::optional<float> packTemp = m_model->getPackTemp();
-  std::optional<float> lowVoltageSoc = m_model->getLowVoltageStateOfCharge();
-  std::optional<float> speed = m_model->getMph();
+    std::optional<float> torque = m_model->getTorquePower();
+    std::optional<float> regen = m_model->getRegenPower();
+    std::optional<float> soc = m_model->getStateOfCharge();
+    std::optional<float> motorTemp = m_model->getMotorTemp();
+    std::optional<float> packTemp = m_model->getPackTemp();
+    std::optional<float> lowVoltageSoc = m_model->getLowVoltageStateOfCharge();
+    std::optional<float> speed = m_model->getMph();
+    std::optional<float> maxRegenCapacity = m_model->getMaxRegenCapacity();
 
-  if (torque) {
-    setCurrentMaxTorque(*torque);
-  }
-  if (regen) {
-    setCurrentRegenStrength(*regen);
-  }
-  if (soc) {
-    setStateOfCharge(*soc);
-  }
-  if (motorTemp) {
-    setMotorTemp(*motorTemp);
-  }
-  if (packTemp) {
-    setPackTemp(*packTemp);
-  }
-  if (lowVoltageSoc) {
-    setLowVoltageStateOfCharge(*lowVoltageSoc);
-  }
-  if (speed) {
-    setSpeed(*speed);
-  }
+    if (torque) {
+        setCurrentMaxTorque(*torque);
+    }
+    if (regen) {
+        setCurrentRegenStrength(*regen);
+    }
+    if (soc) {
+        setStateOfCharge(*soc);
+    }
+    if (motorTemp) {
+        setMotorTemp(*motorTemp);
+    }
+    if (packTemp) {
+        setPackTemp(*packTemp);
+    }
+    if (lowVoltageSoc) {
+        setLowVoltageStateOfCharge(*lowVoltageSoc);
+    }
+    if (speed) {
+        setSpeed(*speed);
+    }
+    if (maxRegenCapacity) {
+        setMaxRegenCapacity(*maxRegenCapacity);
+    }
 }
 
 int EfficiencyController::currentTime() const { return m_currentTime; }

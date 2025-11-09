@@ -114,7 +114,6 @@ private:
   float m_maxCurrentDischarge = 0;
   float m_regen = 0;
   float m_maxRegenCapacity = 10.0f;
-
   bool m_timerRunning = false;
   QElapsedTimer m_timer;
   QTimer *m_updateTimer;

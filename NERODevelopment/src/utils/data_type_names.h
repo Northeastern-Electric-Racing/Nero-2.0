@@ -7,6 +7,7 @@
 #define DIRECTION "MPU/State/Direction"
 #define PACKTEMP "BMS/Status/Temp_Average"
 #define MOTORTEMP "DTI/Temps/Motor_Temperature"
+#define MAXREGENCAPACITY "BMS/Commands/Max_DC_Brake_Current_Target"
 #define STATEOFCHARGE "BMS/Pack/SOC"
 #define CURRENT "DTI/Power/AC_Current"
 #define BALANCINGCELLS "balancingcells"
