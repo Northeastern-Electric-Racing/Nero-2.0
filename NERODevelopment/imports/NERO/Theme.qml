@@ -9,6 +9,7 @@ QtObject {
                                     primaryForeground: "#FFFFFF",
                                     accentForeground: "#47A7FF",
                                     inverseForeground: "#000000",
+                                    blackForeground: "#000000",
                                     mutedForeground: "#777777",
                                     offCarForeground: "#ff0101",
                                     onGLVMSForeground: "#1cff00",
@@ -61,6 +62,7 @@ QtObject {
                                     primaryForeground: "#000000",
                                     accentForeground: "#47A7FF",
                                     inverseForeground: "#FFFFFF",
+                                    blackForeground: "#000000",
                                     mutedForeground: "#777777",
                                     offCarForeground: "#ff0101",
                                     onGLVMSForeground: "#1cff00",
@@ -68,15 +70,15 @@ QtObject {
                                     transparent: "transparent",
 
                                     currentRunBackground: "#47A7FF",
-                                    lastRunBackground: "#FFFFFF",
+                                    lastRunBackground: "#000000",
                                     fastestRunBackground: "#AD00FF",
 
                                     directionBackground: "#55AAFF",
 
-                                    iconBackground: "#6E6E6E",
-                                    iconGradientStop: "#191919",
-                                    iconHighlightedBackground: "#333333",
-                                    iconHighlightedGradientStop:"#111111",
+                                    iconBackground: "#19191959",
+                                    iconGradientStop: "#1919190A",
+                                    iconHighlightedBackground: "#19191959",
+                                    iconHighlightedGradientStop:"#1919190A",
 
                                     goodStatus: "#55FF00",
                                     cautionStatus: "orange",
@@ -88,7 +90,7 @@ QtObject {
                                     blueThermoStatus: "blue",
                                     purpleThermoStatus: "purple",
 
-                                    fillGradientStop: "#000000",
+                                    fillGradientStop: "#FFFFFF",
 
                                     backgroundPicture: "#CBCACA",
                                     popoverBackground: "#FFFFFF",

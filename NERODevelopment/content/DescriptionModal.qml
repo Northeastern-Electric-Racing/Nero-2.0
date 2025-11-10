@@ -31,7 +31,9 @@ Rectangle {
         Image {
             id: modalImage
             anchors.fill: parent // This makes the image fill the rectangle
-            source: "/qt/qml/content/images/neroLogo.png" // Set the image source here
+            source: Theme.currentTheme === "dark"
+                        ? "/qt/qml/content/images/darkNeroLogo.png"
+                        : "/qt/qml/content/images/lightNeroLogo.png"
             fillMode: Image.PreserveAspectCrop
 
             layer.enabled: true
@@ -52,7 +54,7 @@ Rectangle {
 
     Text {
         id: modalTitle
-        color: Theme.getColor("inverseForeground")
+        color: Theme.getColor("blackForeground")
         font.pixelSize: dimension / 6
         font.bold: true
         wrapMode: Text.WordWrap
@@ -62,7 +64,7 @@ Rectangle {
 
     Text {
         id: modalDescription
-        color: Theme.getColor("inverseForeground")
+        color: Theme.getColor("blackForeground")
         font.pixelSize: dimension / 11
         wrapMode: Text.WordWrap
         width: (parent.width - modalDescription.x) - modal.offset

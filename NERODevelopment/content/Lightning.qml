@@ -6,7 +6,7 @@ Item {
     id: lightning
     property int dimension: 150
     property string primaryColor: Theme.getColor("accentGreen")
-    property string secondaryColor: Theme.getColor("inverseForeground")
+    property string secondaryColor: Theme.getColor("blackForeground")
 
     width: dimension
     height: dimension
