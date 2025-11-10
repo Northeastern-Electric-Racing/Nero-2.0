@@ -175,6 +175,6 @@ void SpeedController::update() {
     setCurrent(*m_model->getCurrent());
     setMaxCurrent(m_model->getMaxDraw());
     setCurrentDischarge(*m_model->getDcl());
-    setMaxRegenCapacity(*m_model->getMaxRegenCapacity());
     setRegen(*m_model->getRegenPower());
+    setMaxRegenCapacity(*m_model->getMaxRegenCapacity());
 }
