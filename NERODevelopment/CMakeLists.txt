@@ -76,8 +76,7 @@ set(PROJECT_SOURCES
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOMOC ON)
 # Create executable with all sources consolidated
-qt_add_executable(NEROApp ${PROJECT_SOURCES}
-)
+qt_add_executable(NEROApp ${PROJECT_SOURCES})
 
 # Add protobuf
 qt_add_protobuf(NEROApp

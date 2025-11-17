@@ -10,9 +10,7 @@
 #include "controllers/offviewcontroller.h"
 #include "controllers/snakecontroller.h"
 #include "controllers/speedcontroller.h"
-#ifndef _WIN32
 #include "models/raspberry_model.h"
-#endif
 #include "import_qml_components_plugins.h"
 #include "import_qml_plugins.h"
 #include "models/mock_model.h"
@@ -33,10 +31,10 @@ int main(int argc, char *argv[]) {
   Model *model;
 
   if (osName == "raspberrypi-sta") {
-#ifndef _WIN32
-      model = new RaspberryModel;
-#endif
-    model->connectToMQTT();
+
+  model = new RaspberryModel();
+  model->connectToMQTT();
+
   } else {
     model = new MockModel;
     QThread *dataThread = new QThread;
