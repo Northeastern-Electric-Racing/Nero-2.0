@@ -15,9 +15,6 @@ Item {
     property int motorTemp: efficiencyController.motorTemp
     property int packTemp: efficiencyController.packTemp
     property int speed: efficiencyController.speed
-    property int timerValue: efficiencyController.currentTime
-    property int lastRunTime: efficiencyController.lastTime
-    property int fastestRunTime: efficiencyController.fastestTime
     property int xMargin: width / 20
     property int yMargin: height / 20
     property int verticalSpacing: height / 40
@@ -99,22 +96,7 @@ Item {
             id: driveColumn
             Layout.fillHeight: true
             Layout.fillWidth: true
-            Layout.preferredWidth: 3
-
-            spacing: efficiency.verticalSpacing
-
-            TimerDisplay {
-                id: timerDisplay
-                currentRunTime: efficiency.timerValue
-                lastRunTime: efficiency.lastRunTime
-                fastestRunTime: efficiency.fastestRunTime
-                vertical: true
-                radius: efficiency.borderRadii
-
-                Layout.preferredHeight: 1
-                Layout.fillHeight: true
-                Layout.fillWidth: true
-            }
+            Layout.preferredWidth: 2
 
             Radial {
                 id: spedometer
@@ -123,7 +105,6 @@ Item {
 
                 Layout.fillHeight: true
                 Layout.fillWidth: true
-                Layout.preferredHeight: 2
             }
         }
 
