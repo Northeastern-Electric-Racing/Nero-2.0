@@ -8,28 +8,22 @@
 #include <chrono>
 #include <serverdata.qpb.h>
 
-MqttClient::MqttClient(QObject *parent, int port, QList<QString> topics, QString hostname)
-    : QObject(parent) {
-  m_client = new QMqttClient();
-  m_port = port;
-  m_topics = topics;
-  m_hostname = hostname;
-
-  connect(m_client, &QMqttClient::stateChanged, this,
-          &MqttClient::updateLogStateChange);
-
-  connect(m_client, &QMqttClient::disconnected, this,
-          &MqttClient::brokerDisconnected);
-
-  connect(m_client, &QMqttClient::messageReceived, this,
-          &MqttClient::receiveMessage);
-
-  connect(m_client, &QMqttClient::connected, this,
-          &MqttClient::brokerConnected);
-
-  setClientPort(m_port);
-  m_client->setHostname(m_hostname);
-  updateLogStateChange();
+MqttClient::MqttClient(QObject *parent, int port, QList<QString> topics)
+    : QObject(parent) {  // Initialize hostname with host parameter
+    m_client = new QMqttClient();
+    m_port = port;
+    m_topics = topics;
+    connect(m_client, &QMqttClient::stateChanged, this,
+            &MqttClient::updateLogStateChange);
+    connect(m_client, &QMqttClient::disconnected, this,
+            &MqttClient::brokerDisconnected);
+    connect(m_client, &QMqttClient::messageReceived, this,
+            &MqttClient::receiveMessage);
+    connect(m_client, &QMqttClient::connected, this,
+            &MqttClient::brokerConnected);
+    setClientPort(m_port);
+    m_client->setHostname(hostname);  // This now uses the passed host
+    updateLogStateChange();
 }
 
 MqttClient::~MqttClient() {
