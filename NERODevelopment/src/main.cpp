@@ -13,11 +13,9 @@
 #include "models/raspberry_model.h"
 #include "import_qml_components_plugins.h"
 #include "import_qml_plugins.h"
-#include "models/mock_model.h"
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
-#include <QThread>
 
 int main(int argc, char *argv[]) {
   set_qt_environment();
@@ -26,22 +24,8 @@ int main(int argc, char *argv[]) {
 
   QQmlApplicationEngine engine;
 
-  QString osName = QSysInfo::machineHostName();
-
-  Model *model;
-
-  if (osName == "raspberrypi-sta") {
-
-  model = new RaspberryModel();
+  Model *model = new RaspberryModel();
   model->connectToMQTT();
-
-  } else {
-    model = new MockModel;
-    QThread *dataThread = new QThread;
-
-    model->moveToThread(dataThread);
-    dataThread->start();
-  }
 
   HomeController homeController(model);
   HeaderController headerController(model);
