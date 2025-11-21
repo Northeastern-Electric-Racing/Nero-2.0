@@ -32,9 +32,7 @@ MqttClient::~MqttClient() {
   }
 }
 
-void MqttClient::connectToHost() { 
-  m_client->connectToHost(); 
-}
+void MqttClient::connectToHost() { m_client->connectToHost(); }
 
 void MqttClient::updateLogStateChange() {
   const QString content =
