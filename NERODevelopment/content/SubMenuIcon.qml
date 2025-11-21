@@ -12,8 +12,8 @@ Rectangle {
     property string text: "FLAPPY BIRD"
 
     gradient: Gradient {
-        GradientStop { position: 0.0; color: highlighted ? Theme.getColor("iconBackground") : Theme.getColor("iconGradientStop") }
-        GradientStop { position: 1.0; color: highlighted ? Theme.getColor("iconHighlightedBackground") : Theme.getColor("iconHighlightedGradientStop") }
+        GradientStop { position: 0.0; color: highlighted ? Theme.getColor("iconHighlightedBackground") : Theme.getColor("iconBackground") }
+        GradientStop { position: 1.0; color: highlighted ? Theme.getColor("iconHighlightedGradientStop") : Theme.getColor("iconGradientStop") }
     }
 
     LabelText {

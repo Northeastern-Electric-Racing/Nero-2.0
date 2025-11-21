@@ -22,10 +22,10 @@ QtObject {
 
                                     directionBackground: "#55AAFF",
 
-                                    iconBackground: "#6E6E6E",
-                                    iconGradientStop: "#191919",
-                                    iconHighlightedBackground: "#333333",
-                                    iconHighlightedGradientStop:"#111111",
+                                    iconHighlightedBackground: "#6E6E6E",
+                                    iconBackground: "#191919",
+                                    iconHighlightedGradientStop: "#333333",
+                                    iconGradientStop:"#111111",
 
                                     goodStatus: "#55FF00",
                                     cautionStatus: "orange",
@@ -75,10 +75,10 @@ QtObject {
 
                                     directionBackground: "#55AAFF",
 
-                                    iconBackground: "#19191959",
-                                    iconGradientStop: "#1919190A",
-                                    iconHighlightedBackground: "#19191959",
-                                    iconHighlightedGradientStop:"#1919190A",
+                                    iconHighlightedBackground: "#DCDCDC",
+                                    iconBackground: "#1919190A",
+                                    iconHighlightedGradientStop: "#C4C4C4",
+                                    iconGradientStop:"#1111110A",
 
                                     goodStatus: "#55FF00",
                                     cautionStatus: "orange",

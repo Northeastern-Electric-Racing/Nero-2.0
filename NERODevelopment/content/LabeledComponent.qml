@@ -25,7 +25,7 @@ Rectangle {
             },
             GradientStop {
                 position: 0.5
-                color: Theme.getColor("iconGradientStop")
+                color: Theme.getColor("iconBackground")
             }
         ]
     }
