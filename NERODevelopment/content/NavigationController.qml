@@ -9,16 +9,22 @@ Item {
     property int selectedPageIndex: navigationController.selectedPageIndex
     property bool isSelected: navigationController.isSelected
     property bool gamePageOpen: navigationController.isGamesOpen
+    property bool themesOpen: navigationController.isThemesOpen
+
     property int offPageIndex: 0
     property int pitDrivePageIndex: 1
     property int pitReversePageIndex: 2
     property int speedPageIndex: 3
     property int efficiencyPageIndex: 4
     property int gamePageIndex: 5
-    property int exitPageIndex: gamePageOpen ? 8 : 6
 
     property int flappyPageIndex: 6
     property int snakePageIndex: 7
+    property int lightThemeIndex: 6
+    property int darkThemeIndex: 7
+
+    property int exitPageIndex: gamePageOpen ? 9 : (themesOpen ? 8 : 7)
+    property int themePageIndex: gamePageOpen ? 8 : 6
 
     height: 480
     width: 800
@@ -163,6 +169,32 @@ Item {
             HomeIcon {
                 height: navigation.boxSize
                 width: navigation.boxSize
+                highlighted: selectedPageIndex === themePageIndex
+                text: "THEMES"
+                source: "/qt/qml/content/images/themes.png"
+                visible: !themesOpen
+            }
+
+            ColumnLayout {
+                visible: themesOpen
+                spacing: 10
+                Layout.fillHeight: true
+                Layout.fillWidth: true
+
+                SubMenuIcon {
+                    highlighted: selectedPageIndex === lightThemeIndex
+                    text: "LIGHT"
+                }
+
+                SubMenuIcon {
+                    highlighted: selectedPageIndex === darkThemeIndex
+                    text: "DARK"
+                }
+            }
+
+            HomeIcon {
+                height: navigation.boxSize
+                width: navigation.boxSize
                 highlighted: selectedPageIndex === exitPageIndex
                 text: "EXIT"
                 source: "/qt/qml/content/images/exit.png"
@@ -203,5 +235,11 @@ Item {
     Snake {
         visible: selectedPageIndex === snakePageIndex && isSelected
         isFocused: selectedPageIndex === snakePageIndex && isSelected
+    }
+    Connections {
+        target: navigationController
+        function onThemeChanged(theme) {
+            Theme.setTheme(theme)
+        }
     }
 }

@@ -1,6 +1,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
+import NERO
 
 Rectangle {
     id: background
@@ -10,7 +11,7 @@ Rectangle {
     width: dimension
     height: dimension
 
-    color: "transparent"
+    color: Theme.getColor("transparent")
 
     property int value: 130
 
@@ -27,7 +28,7 @@ Rectangle {
 
             ctx.beginPath()
             ctx.arc(centerX, centerY, radius, startAngle, endAngle, false)
-            ctx.strokeStyle = '#14f804'
+            ctx.strokeStyle = Theme.getColor("primaryLightning")
             ctx.lineWidth = 0.06 * background.dimension
             ctx.stroke()
         }
@@ -40,14 +41,14 @@ Rectangle {
             text: value.toString()
             font.pixelSize: 0.25 * background.dimension
             font.bold: true
-            color: "white"
+            color: Theme.getColor("accentGreen")
         }
 
         LabelText {
             text: "A"
             font.pixelSize: 0.15 * background.dimension
             font.bold: true
-            color: "white"
+            color: Theme.getColor("accentGreen")
             Layout.topMargin: 0.06 * background.dimension
         }
     }
