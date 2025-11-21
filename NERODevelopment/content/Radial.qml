@@ -93,6 +93,13 @@ Item {
         }
     }
 
+    Connections {
+        target: Theme
+        function onCurrentThemeChanged() {
+            ring.requestPaint()
+        }
+    }
+
     Text {
         id: mph
         text: gauge.label

@@ -78,7 +78,7 @@ Rectangle {
         width: parent.width / 3
         background: Rectangle {
             color: Theme.getColor("descriptionButtonBackground")
-            border.color: Theme.getColor("descriptionButtonBorder")
+            border.color: Theme.getColor("accentBlue")
             border.width: 3
             radius: 10
         }

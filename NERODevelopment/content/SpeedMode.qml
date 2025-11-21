@@ -144,7 +144,7 @@ Item {
                 Layout.preferredHeight: 9
                 Layout.fillHeight: true
                 Layout.fillWidth: true
-                color: "blue"
+                color: Theme.getColor("accentBlue")
                 valueFontSize: speedMode.valueFontSize
                 unitFontSize: speedMode.radialUnitFontSize
             }

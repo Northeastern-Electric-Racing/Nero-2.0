@@ -43,8 +43,8 @@ QtObject {
                                     popoverBackground: "#FFFFFF",
                                     descriptionButtonBackground: "#000000",
                                     descriptionButtonForeground: "#FFFFFF",
-                                    descriptionButtonBorder: "blue",
 
+                                    accentBlue: "blue",
                                     accentGreen: "#14F504",
                                     accentPurple: "purple",
 
@@ -96,8 +96,8 @@ QtObject {
                                     popoverBackground: "#FFFFFF",
                                     descriptionButtonBackground: "#000000",
                                     descriptionButtonForeground: "#FFFFFF",
-                                    descriptionButtonBorder: "blue",
 
+                                    accentBlue: "blue",
                                     accentGreen: "#14F504",
                                     accentPurple: "purple",
 
