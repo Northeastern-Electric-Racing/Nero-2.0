@@ -10,9 +10,9 @@
 #include "controllers/offviewcontroller.h"
 #include "controllers/snakecontroller.h"
 #include "controllers/speedcontroller.h"
-#include "models/raspberry_model.h"
 #include "import_qml_components_plugins.h"
 #include "import_qml_plugins.h"
+#include "models/raspberry_model.h"
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
@@ -50,9 +50,9 @@ int main(int argc, char *argv[]) {
                                            &efficencyController);
   engine.rootContext()->setContextProperty("speedController", &speedController);
 
-  QObject::connect(&engine, &QQmlApplicationEngine::objectCreationFailed,
-                   &app, []() { QCoreApplication::exit(-1); },
-                   Qt::QueuedConnection);
+  QObject::connect(
+      &engine, &QQmlApplicationEngine::objectCreationFailed, &app,
+      []() { QCoreApplication::exit(-1); }, Qt::QueuedConnection);
   engine.loadFromModule("content", "App");
 
   return app.exec();
