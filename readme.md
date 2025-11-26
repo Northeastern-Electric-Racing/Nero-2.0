@@ -78,6 +78,8 @@ docker compose -f compose.nero-dev.yml down
 
 ### Troubleshooting
 
+Make sure you don't have any env vars set if running locally.
+
 ```bash
 # View logs
 docker compose -f compose.nero-dev.yml logs -f
