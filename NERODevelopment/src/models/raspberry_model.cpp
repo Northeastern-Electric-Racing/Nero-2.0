@@ -32,7 +32,14 @@ QList<QString> RaspberryModel::getMpuFault() {
 }
 
 void RaspberryModel::connectToMQTT() {
-    QList<QString> client_1_topics = {
+  // Determine MQTT broker hostname based on environment
+  // Priority: 1. MQTT_HOST env var, 2. Default localhost for development
+  QString mqttHost =
+      getenv("HOST") ? QString(getenv("HOST")) : QString("localhost");
+
+  qInfo() << "RaspberryModel connecting to MQTT broker:" << mqttHost;
+
+  QList<QString> client_1_topics = {
       MPH,
       KPH,
       STATUS,
@@ -68,7 +75,8 @@ void RaspberryModel::connectToMQTT() {
       DCL,
       CCL,
       GFORCEX,
-      GFORCEY GFORCEZ,
+      GFORCEY, 
+      GFORCEZ,
       SEGMENTTEMP1,
       SEGMENTTEMP2,
       SEGMENTTEMP3,
@@ -100,21 +108,23 @@ void RaspberryModel::connectToMQTT() {
     int client1_port = client1_port_str ? atoi(client1_port_str) : 1883;
     int client2_port = client2_port_str ? atoi(client2_port_str) : 1882;
 
-    MqttClient *client_1 = new MqttClient(nullptr, client1_port, client_1_topics);
-    connect(client_1, &MqttClient::emitServerData, this,
-            &RaspberryModel::receiveServerData);
-    client_1->connectToHost();
+    MqttClient *client_1 =
+      new MqttClient(nullptr, client1_port, client_1_topics, mqttHost);
+  connect(client_1, &MqttClient::emitServerData, this,
+          &RaspberryModel::receiveServerData);
+  client_1->connectToHost();
 
   QList<QString> client_2_topics = {
       FORWARDBUTTON, BACKWARDBUTTON, RIGHTBUTTON, ENTERBUTTON,
       UPBUTTON,      DOWNBUTTON,     HOMEBUTTON,  MODEINDEX,
       DIRECTION,     REGENPOWER,     TORQUEPOWER,
   };
-    MqttClient *client_2 = new MqttClient(nullptr, client2_port, client_2_topics);
-    connect(client_2, &MqttClient::emitServerData, this,
-            &RaspberryModel::receiveServerData);
-    client_2->connectToHost();
-    this->m_client = client_1;
+    MqttClient *client_2 =
+      new MqttClient(nullptr, client2_port, client_2_topics, mqttHost);
+  connect(client_2, &MqttClient::emitServerData, this,
+          &RaspberryModel::receiveServerData);
+  client_2->connectToHost();
+  this->m_client = client_1;
 }
 
 void RaspberryModel::sendMessage(const QString topic, const float value) {

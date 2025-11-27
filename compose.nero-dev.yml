@@ -1,0 +1,22 @@
+name: nero-2
+
+services:
+  siren-dev:
+    container_name: nero-siren-dev
+    image: eclipse-mosquitto:latest
+    ports:
+      - "1883:1883"
+    volumes:
+      - ./dev-config/mosquitto.conf:/mosquitto/config/mosquitto.conf:ro
+
+  calypso-mock:
+    container_name: nero-calypso-mock
+    image: ghcr.io/northeastern-electric-racing/calypso:Develop
+    depends_on:
+      - siren-dev
+    environment:
+      - CALYPSO_SIREN_HOST_URL=siren-dev:1883
+    command:
+      - "simulate"
+      - "--disable-topic"
+      - ".*Fault.*"

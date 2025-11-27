@@ -26,7 +26,6 @@ set(PROJECT_SOURCES
     src/controllers/tankcontroller.h
 
     # Headers - Models
-    src/models/mock_model.h
     src/models/model.h
     src/models/raspberry_model.h
     src/models/mqtt_client.h
@@ -54,7 +53,6 @@ set(PROJECT_SOURCES
     src/controllers/tankcontroller.cpp
 
     # Implementation - Models
-    src/models/mock_model.cpp
     src/models/model.cpp
     src/models/raspberry_model.cpp
     src/models/mqtt_client.cpp
