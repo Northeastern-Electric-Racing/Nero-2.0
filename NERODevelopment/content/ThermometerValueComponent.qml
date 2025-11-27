@@ -35,6 +35,6 @@ Item {
         valueFontSize: thermometerComponent.valueFontSize
         labelFontSize: thermometerComponent.labelFontSize
         unitFontSize: thermometerComponent.unitFontSize
-        unitAnchorBottom: false
+        unitAnchorBottom: showPercentage ? false : true
     }
 }
