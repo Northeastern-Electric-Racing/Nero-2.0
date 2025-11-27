@@ -1,6 +1,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Particles
+import NERO
 
 Rectangle {
     id: detailDisplay
@@ -10,7 +11,7 @@ Rectangle {
     property bool highlight: false
     height: 60
     width: 250
-    color: "black"
+    color: Theme.getColor("background")
 
     onStatusChanged: {
         console.log("Changing status")
@@ -40,13 +41,13 @@ Rectangle {
                     SequentialAnimation on color {
                         loops: Animation.Infinite
                         ColorAnimation {
-                            from: "black"
-                            to: "#969696"
+                            from: Theme.getColor("primaryDetailGradient")
+                            to: Theme.getColor("secondaryDetailGradient")
                             duration: 1500
                         }
                         ColorAnimation {
-                            from: "#969696"
-                            to: "black"
+                            from: Theme.getColor("secondaryDetailGradient")
+                            to: Theme.getColor("primaryDetailGradient")
                             duration: 3000
                         }
                     }
@@ -57,27 +58,27 @@ Rectangle {
                     SequentialAnimation on color {
                         loops: Animation.Infinite
                         ColorAnimation {
-                            from: "black"
-                            to: "black"
+                            from: Theme.getColor("primaryDetailGradient")
+                            to: Theme.getColor("primaryDetailGradient")
                             duration: 1500
                         }
                         ColorAnimation {
-                            from: "black"
-                            to: "#969696"
+                            from: Theme.getColor("primaryDetailGradient")
+                            to: Theme.getColor("secondaryDetailGradient")
                             duration: 1500
                         }
                         ColorAnimation {
-                            from: "#969696"
-                            to: "black"
+                            from: Theme.getColor("secondaryDetailGradient")
+                            to: Theme.getColor("primaryDetailGradient")
                             duration: 1500
                         }
                     }
                 }
             }
         }
-        color: "transparent"
+        color: Theme.getColor("transparent")
 
-        border.color: "transparent"
+        border.color: Theme.getColor("transparent")
         width: Math.max(parent.width * 0.6,
                         taskText.implicitWidth) // Ensure minimum width
         height: parent.height
@@ -85,7 +86,7 @@ Rectangle {
 
         LabelText {
             id: taskText
-            color: "white"
+            color: Theme.getColor("primaryForeground")
             text: detailDisplay.shutdownFlowTask
             anchors.verticalCenter: parent.verticalCenter
             anchors.left: parent.left
@@ -96,19 +97,19 @@ Rectangle {
 
     Rectangle {
         id: statusDisplayContainer
-        color: status == 0 ? "transparent" : (status === 1 ? "#14FF00" : (status === 2 ? "#FF0000" : "transparent"))
+        color: status == 0 ? Theme.getColor("transparent") : (status === 1 ? Theme.getColor("goodStatus") : (status === 2 ? Theme.getColor("criticalStatus") : Theme.getColor("transparent")))
         width: Math.max(parent.width * 0.4,
                         statusText.implicitWidth + 20) // Ensure minimum width
         height: parent.height
         anchors.left: taskDisplay.right
         radius: 10
-        border.color: status == 0 ? "white" : "transparent"
+        border.color: status == 0 ? Theme.getColor("primaryForeground") : Theme.getColor("transparent")
         border.width: status == 0 ? 3 : 0
 
         LabelText {
             id: statusText
             visible: !clear
-            color: "black"
+            color: Theme.getColor("inverseForeground")
             text: detailDisplay.statusDisplay
             anchors.centerIn: parent
         }

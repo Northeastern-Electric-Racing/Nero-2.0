@@ -1,8 +1,8 @@
 #include "raspberry_model.h"
 #include "../utils/data_type_names.h"
 #include "mqtt_client.h"
-#include <QtMqtt/QMqttClient>
 #include <QDebug>
+#include <QtMqtt/QMqttClient>
 #include <bitset>
 #include <cmath>
 #include <cstdlib>
@@ -102,11 +102,11 @@ void RaspberryModel::connectToMQTT() {
 
   };
 
-    const char* client1_port_str = getenv("CLIENT1_PORT");
-    const char* client2_port_str = getenv("CLIENT2_PORT");
+  const char *client1_port_str = getenv("CLIENT1_PORT");
+  const char *client2_port_str = getenv("CLIENT2_PORT");
 
-    int client1_port = client1_port_str ? atoi(client1_port_str) : 1883;
-    int client2_port = client2_port_str ? atoi(client2_port_str) : 1882;
+  int client1_port = client1_port_str ? atoi(client1_port_str) : 1883;
+  int client2_port = client2_port_str ? atoi(client2_port_str) : 1882;
 
     MqttClient *client_1 =
       new MqttClient(nullptr, client1_port, client_1_topics, mqttHost);

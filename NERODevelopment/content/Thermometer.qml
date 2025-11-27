@@ -1,6 +1,7 @@
 import QtQuick 6.5
 import QtQuick.Controls 6.5
 import QtQuick.Layouts
+import NERO
 
 Rectangle {
     id: thermometer
@@ -8,11 +9,11 @@ Rectangle {
     property int value: 0
     property int maxValue: 65
     property int minValue: -15
-    property string fillColor: regen ? "red" : value > maxValue - ((Math.abs(maxValue) + Math.abs(
-                                                                        minValue)) / 5) ? "red" : value > maxValue - (((Math.abs(maxValue) + Math.abs(minValue)) / 5) * 2) ? "orange" : value > maxValue - (((Math.abs(maxValue) + Math.abs(minValue)) / 5) * 3) ? "#FFF500" : value > maxValue - (((Math.abs(maxValue) + Math.abs(minValue)) / 5) * 4) ? "blue" : "purple"
+    property string fillColor: regen ? Theme.getColor("redThermoStatus") : value > maxValue - ((Math.abs(maxValue) + Math.abs(
+                                                                        minValue)) / 5) ? Theme.getColor("redThermoStatus") : value > maxValue - (((Math.abs(maxValue) + Math.abs(minValue)) / 5) * 2) ? Theme.getColor("orangeThermoStatus") : value > maxValue - (((Math.abs(maxValue) + Math.abs(minValue)) / 5) * 3) ? Theme.getColor("yellowThermoStatus") : value > maxValue - (((Math.abs(maxValue) + Math.abs(minValue)) / 5) * 4) ? Theme.getColor("blueThermoStatus") : Theme.getColor("purpleThermoStatus")
     height: 500
     width: height / 2.233
-    color: 'transparent'
+    color: Theme.getColor("transparent")
 
     property int thermometerWidth: thermometer.height / 2.233
     property int horizontalPadding: thermometer.thermometerWidth / 10
@@ -75,7 +76,7 @@ Rectangle {
             stops: [
                 GradientStop {
                     position: 1.0
-                    color: "black"
+                    color: Theme.getColor("fillGradientStop")
                 },
                 GradientStop {
                     position: -0.8
@@ -97,7 +98,7 @@ Rectangle {
             stops: [
                 GradientStop {
                     position: 1.5
-                    color: "black"
+                    color: Theme.getColor("fillGradientStop")
                 },
                 GradientStop {
                     position: 0.0
@@ -116,7 +117,7 @@ Rectangle {
             right: fillRectangle.right
             bottom: fillRectangle.top
         }
-        color: "black"
+        color: Theme.getColor("background")
     }
 
     Lightning {

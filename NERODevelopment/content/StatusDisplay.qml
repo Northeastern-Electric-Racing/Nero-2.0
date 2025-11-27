@@ -1,6 +1,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Particles
+import NERO
 
 Item {
     id: detailDisplay
@@ -17,8 +18,8 @@ Item {
         id: background
         anchors.fill: parent
         radius: 5
-        color: detailDisplay.status == 0 ? "black" : (detailDisplay.status == 1 ? "#14FF00" : (detailDisplay.status == 2 ? "#FF0000" : "transparent"))
-        border.color: "white"
+        color: detailDisplay.status == 0 ? Theme.getColor("background") : (detailDisplay.status == 1 ? Theme.getColor("goodStatus") : (detailDisplay.status == 2 ? Theme.getColor("criticalStatus") : Theme.getColor("transparent")))
+        border.color: Theme.getColor("primaryForeground")
         border.width: 1
 
         Behavior on border.width {
@@ -40,7 +41,7 @@ Item {
 
         LabelText {
             id: taskText
-            color: detailDisplay.status == 0 ? "white" : "black"
+            color: detailDisplay.status == 0 ? Theme.getColor("primaryForeground") : Theme.getColor("inverseForeground")
             text: detailDisplay.shutdownFlowTask
             anchors.centerIn: parent
             font.bold: true

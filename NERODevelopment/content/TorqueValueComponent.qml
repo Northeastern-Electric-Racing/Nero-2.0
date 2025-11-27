@@ -1,5 +1,6 @@
 import QtQuick 2.15
 import QtQuick.Layouts
+import NERO
 
 Item {
     id: torqueComponent
@@ -8,7 +9,7 @@ Item {
     property int valueFontSize
     property int labelFontSize
     property int radius
-    property string labelColor: "#47AFFF"
+    property string labelColor: Theme.getColor("accentForeground")
     property int horizontalIconSpacing: width * 0.1
     property int labelVerticalSpacing: height * 0.1
     property int unitFontSize: valueFontSize / 1.5

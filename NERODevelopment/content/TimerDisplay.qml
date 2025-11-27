@@ -1,6 +1,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 2.15
+import NERO
 
 Item {
     id: timerDisplay
@@ -26,7 +27,7 @@ Item {
             Layout.preferredWidth: 6
             Layout.fillWidth: true
             Layout.fillHeight: true
-            backgroundColor: "#47A7FF"
+            backgroundColor: Theme.getColor("currentRunBackground")
             label: "CURRENT RUN"
             value: timerDisplay.currentRunTime
             radius: timerDisplay.radius
@@ -37,7 +38,7 @@ Item {
             Layout.preferredWidth: 5
             Layout.fillWidth: true
             Layout.fillHeight: true
-            backgroundColor: "#ffffff"
+            backgroundColor: Theme.getColor("lastRunBackground")
             label: "LAST RUN"
             value: timerDisplay.lastRunTime
         }
@@ -46,7 +47,7 @@ Item {
             Layout.preferredWidth: 6
             Layout.fillWidth: true
             Layout.fillHeight: true
-            backgroundColor: "#AD00FF"
+            backgroundColor: Theme.getColor("fastestRunBackground")
             label: "FASTEST RUN"
             value: timerDisplay.fastestRunTime
             radius: timerDisplay.radius
@@ -62,7 +63,7 @@ Item {
         RunInfo {
             Layout.fillWidth: true
             Layout.fillHeight: true
-            backgroundColor: "#47A7FF"
+            backgroundColor: Theme.getColor("currentRunBackground")
             label: "CURRENT RUN"
             value: timerDisplay.currentRunTime
             radius: timerDisplay.radius
@@ -73,7 +74,7 @@ Item {
         RunInfo {
             Layout.fillWidth: true
             Layout.fillHeight: true
-            backgroundColor: "#ffffff"
+            backgroundColor: Theme.getColor("lastRunBackground")
             label: "LAST RUN"
             value: timerDisplay.lastRunTime
             vertical: true
@@ -82,7 +83,7 @@ Item {
         RunInfo {
             Layout.fillWidth: true
             Layout.fillHeight: true
-            backgroundColor: "#AD00FF"
+            backgroundColor: Theme.getColor("fastestRunBackground")
             label: "FASTEST RUN"
             value: timerDisplay.fastestRunTime
             radius: timerDisplay.radius

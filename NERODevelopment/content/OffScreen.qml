@@ -73,21 +73,21 @@ Item {
 
         LabelText {
             text: "CAR OFF"
-            color: "#ff0101"
+            color: Theme.getColor("offCarForeground")
             font.pixelSize: 40
             font.bold: true
         }
 
         LabelText {
             text: "-"
-            color: "#ffffff"
+            color: Theme.getColor("primaryForeground")
             font.pixelSize: 40
             font.bold: true
         }
 
         LabelText {
             text: "GLVMS ON"
-            color: "#1cff00"
+            color: Theme.getColor("onGLVMSForeground")
             font.pixelSize: 40
             font.bold: true
         }
