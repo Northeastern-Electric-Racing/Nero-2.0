@@ -176,12 +176,15 @@ void NavigationController::buttonUpdate() {
   if (!m_pageIndices.contains(m_model->currentPageIndex))
     return;
 
-  auto home = m_model->getHomeButtonPressed();
-  if (home && *home) {
+  std::optional<bool> home = m_model->getHomeButtonPressed();
+  if (!home.has_value())
+    return;
+
+  if (*home) {
     homeButtonPressed();
-    auto mode = m_model->getModeIndex();
-    if (mode && *mode >= 0 && *mode < m_navOrder.size()) {
-      setSelectedIndex(m_navOrder[static_cast<int>(*mode)]);
+    std::optional<int> mode = m_model->getModeIndex();
+    if (mode.has_value() && *mode >= 0 && *mode < m_navOrder.size()) {
+      setSelectedIndex(m_navOrder[*mode]);
     }
     return;
   }
