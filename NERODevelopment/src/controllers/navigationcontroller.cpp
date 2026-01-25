@@ -1,10 +1,42 @@
 #include "navigationcontroller.h"
 #include "../utils/data_type_names.h"
 
+namespace Menu {
+
+const std::vector<Item> &getPages() {
+  static const std::vector<Item> pages = {
+      {"OFF", Type::Page, 1, "zzz.png", "OffScreen2.qml", nullptr},
+      {"PIT - DRIVE", Type::Page, 1, "flag.png", "Pit.qml", nullptr},
+      {"PIT - REVERSE", Type::Page, 1, "reverse.png", "Pit.qml", nullptr},
+      {"PERFORMANCE", Type::Page, 1, "hare.png", "SpeedMode.qml", nullptr},
+      {"EFFICIENCY", Type::Page, 1, "turtle.png", "EfficiencyScreen.qml",
+       nullptr},
+      {"GAMES", Type::Category, 2, "game.png", nullptr, nullptr},
+      {"FLAPPY BIRD", Type::SubPage, 2, nullptr, "FlappyBird.qml", nullptr},
+      {"SNAKE", Type::SubPage, 2, nullptr, "Snake.qml", nullptr},
+      {"THEMES", Type::Category, 2, "themes.png", nullptr, nullptr},
+      {"LIGHT", Type::SubAction, 2, nullptr, nullptr,
+       [](NavigationController *c) {
+         emit c->themeChanged("light");
+         c->collapse();
+       }},
+      {"DARK", Type::SubAction, 2, nullptr, nullptr,
+       [](NavigationController *c) {
+         emit c->themeChanged("dark");
+         c->collapse();
+       }},
+      {"EXIT", Type::Action, 2, "exit.png", nullptr,
+       [](NavigationController *c) { emit c->exitRequested(); }},
+  };
+  return pages;
+}
+
+} // namespace Menu
+
 NavigationController::NavigationController(Model *model, QObject *parent)
     : ButtonController(model, -1, parent) {
   connect(m_model, &Model::onCurrentDataChange, this, [this]() {
-    auto val = m_model->getById(TSMS);
+    std::optional<int> val = m_model->getById(TSMS);
     if (val) {
       bool newVal = (*val != 0);
       if (m_isTsOn != newVal) {
@@ -42,7 +74,7 @@ void NavigationController::setExpanded(int i) {
 void NavigationController::rebuildNavOrder() {
   m_navOrder.clear();
 
-  for (int i = 0; i < Menu::COUNT; ++i) {
+  for (int i = 0; i < Menu::count(); ++i) {
     if (!Menu::isTopLevel(i))
       continue;
 
@@ -105,7 +137,7 @@ void NavigationController::activate() {
   if (!Menu::valid(m_selected))
     return;
 
-  Menu::Type type = Menu::PAGES[m_selected].type;
+  Menu::Type type = Menu::get(m_selected).type;
 
   switch (type) {
   case Menu::Type::Page:
@@ -154,16 +186,9 @@ void NavigationController::collapse() {
 }
 
 void NavigationController::executeAction(int i) {
-  QString lbl = Menu::label(i);
-
-  if (lbl == "EXIT") {
-    emit exitRequested();
-  } else if (lbl == "LIGHT") {
-    emit themeChanged("light");
-    collapse();
-  } else if (lbl == "DARK") {
-    emit themeChanged("dark");
-    collapse();
+  const auto &action = Menu::get(i).action;
+  if (action) {
+    action(this);
   }
 }
 

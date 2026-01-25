@@ -4,11 +4,15 @@
 #include "../controllers/buttoncontroller.h"
 #include "../models/model.h"
 
+class NavigationController;
+
 namespace Menu {
 Q_NAMESPACE
 
 enum class Type { Page, Category, Action, SubPage, SubAction };
 Q_ENUM_NS(Type)
+
+using ActionFunc = std::function<void(NavigationController *)>;
 
 struct Item {
   const char *label;
@@ -16,67 +20,54 @@ struct Item {
   int row;
   const char *icon;
   const char *qml;
+  ActionFunc action;
 };
 
-constexpr Item PAGES[] = {
-    {"OFF", Type::Page, 1, "zzz.png", "OffScreen2.qml"},
-    {"PIT - DRIVE", Type::Page, 1, "flag.png", "Pit.qml"},
-    {"PIT - REVERSE", Type::Page, 1, "reverse.png", "Pit.qml"},
-    {"PERFORMANCE", Type::Page, 1, "hare.png", "SpeedMode.qml"},
-    {"EFFICIENCY", Type::Page, 1, "turtle.png", "EfficiencyScreen.qml"},
-    {"GAMES", Type::Category, 2, "game.png", nullptr},
-    {"FLAPPY BIRD", Type::SubPage, 2, nullptr, "FlappyBird.qml"},
-    {"SNAKE", Type::SubPage, 2, nullptr, "Snake.qml"},
-    {"THEMES", Type::Category, 2, "themes.png", nullptr},
-    {"LIGHT", Type::SubAction, 2, nullptr, nullptr},
-    {"DARK", Type::SubAction, 2, nullptr, nullptr},
-    {"EXIT", Type::Action, 2, "exit.png", nullptr},
-};
+const std::vector<Item> &getPages();
 
-constexpr int COUNT = sizeof(PAGES) / sizeof(PAGES[0]);
+inline int count() { return static_cast<int>(getPages().size()); }
+inline bool valid(int i) { return i >= 0 && i < count(); }
+inline const Item &get(int i) { return getPages()[i]; }
 
-constexpr bool valid(int i) { return i >= 0 && i < COUNT; }
-
-constexpr bool isSubItem(int i) {
+inline bool isSubItem(int i) {
   return valid(i) &&
-         (PAGES[i].type == Type::SubPage || PAGES[i].type == Type::SubAction);
+         (get(i).type == Type::SubPage || get(i).type == Type::SubAction);
 }
 
-constexpr bool isTopLevel(int i) { return valid(i) && !isSubItem(i); }
+inline bool isTopLevel(int i) { return valid(i) && !isSubItem(i); }
 
-constexpr bool isCategory(int i) {
-  return valid(i) && PAGES[i].type == Type::Category;
+inline bool isCategory(int i) {
+  return valid(i) && get(i).type == Type::Category;
 }
 
-constexpr int firstChildOf(int parent) {
+inline int firstChildOf(int parent) {
   if (!valid(parent) || !isCategory(parent))
     return -1;
   int next = parent + 1;
   return (valid(next) && isSubItem(next)) ? next : -1;
 }
 
-constexpr bool hasChildren(int i) { return firstChildOf(i) >= 0; }
+inline bool hasChildren(int i) { return firstChildOf(i) >= 0; }
 
 inline QString label(int i) {
-  return valid(i) && PAGES[i].label ? QString::fromUtf8(PAGES[i].label)
-                                    : QString();
+  return valid(i) && get(i).label ? QString::fromUtf8(get(i).label) : QString();
 }
 
 inline QString icon(int i) {
-  if (!valid(i) || !PAGES[i].icon)
+  if (!valid(i) || !get(i).icon)
     return QString();
   return QStringLiteral("/qt/qml/content/images/%1")
-      .arg(QString::fromUtf8(PAGES[i].icon));
+      .arg(QString::fromUtf8(get(i).icon));
 }
 
 inline QString qml(int i) {
-  return valid(i) && PAGES[i].qml ? QString::fromUtf8(PAGES[i].qml) : QString();
+  return valid(i) && get(i).qml ? QString::fromUtf8(get(i).qml) : QString();
 }
 
 inline QVector<int> topLevelInRow(int row) {
   QVector<int> r;
-  for (int i = 0; i < COUNT; ++i)
-    if (isTopLevel(i) && PAGES[i].row == row)
+  for (int i = 0; i < count(); ++i)
+    if (isTopLevel(i) && get(i).row == row)
       r.append(i);
   return r;
 }
@@ -85,7 +76,7 @@ inline QVector<int> childrenOf(int parent) {
   QVector<int> r;
   if (!isCategory(parent))
     return r;
-  for (int i = parent + 1; i < COUNT && isSubItem(i); ++i)
+  for (int i = parent + 1; i < count() && isSubItem(i); ++i)
     r.append(i);
   return r;
 }
@@ -117,6 +108,8 @@ public:
   Q_INVOKABLE QVariantList getRow2Items() const;
   Q_INVOKABLE QVariantList getChildrenOf(int parent) const;
 
+  void collapse();
+
 public slots:
   void setSelectedIndex(int i);
   void activate();
@@ -142,7 +135,6 @@ private:
   void setActivePage(int i);
   void setExpanded(int i);
   void expand(int i);
-  void collapse();
   void executeAction(int i);
   void rebuildNavOrder();
   QVariantMap buildItem(int i) const;
