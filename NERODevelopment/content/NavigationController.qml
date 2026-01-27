@@ -11,6 +11,7 @@ Item {
     width: 800
 
     property int boxSize: Math.min(height / 3, width / 6)
+    property int itemSpacing: 15
 
     Keys.onPressed: event => {
         switch (event.key) {
@@ -44,6 +45,7 @@ Item {
     }
 
     ColumnLayout {
+        id: navContainer
         anchors {
             top: header.bottom
             bottom: parent.bottom
@@ -53,64 +55,69 @@ Item {
             bottomMargin: parent.height * 0.1
         }
         visible: !navigationController.isPageActive
-        spacing: 15
+        spacing: itemSpacing
 
-        RowLayout {
-            Layout.fillHeight: true
-            Layout.fillWidth: true
-            spacing: 15
-            Layout.alignment: Qt.AlignHCenter
+        property var allItems: navigationController.getTopLevelItems()
+        property int maxPerRow: Math.max(1, Math.floor((width + itemSpacing) / (navigation.boxSize + itemSpacing)))
 
-            Repeater {
-                id: row1Repeater
-                model: navigationController.getRow1Items()
-
-                HomeIcon {
-                    height: navigation.boxSize
-                    width: navigation.boxSize
-                    highlighted: navigationController.selectedIndex === modelData.index
-                    text: modelData.label
-                    source: modelData.icon || "/qt/qml/content/images/zzz.png"
-                }
+        function getRowItems(rowIndex) {
+            var start = rowIndex * maxPerRow
+            var end = Math.min(start + maxPerRow, allItems.length)
+            var items = []
+            for (var i = start; i < end; i++) {
+                items.push(allItems[i])
             }
+            return items
         }
 
-        RowLayout {
-            Layout.fillHeight: true
-            Layout.fillWidth: true
-            spacing: 15
-            Layout.alignment: Qt.AlignHCenter
+        function getRowCount() {
+            return Math.ceil(allItems.length / maxPerRow)
+        }
 
-            Repeater {
-                id: row2Repeater
-                model: navigationController.getRow2Items()
+        Repeater {
+            id: rowRepeater
+            model: navContainer.getRowCount()
 
-                Item {
-                    width: navigation.boxSize
-                    height: navigation.boxSize
+            RowLayout {
+                id: rowItem
+                Layout.fillHeight: true
+                Layout.fillWidth: true
+                spacing: itemSpacing
+                Layout.alignment: Qt.AlignHCenter
 
-                    property int itemIndex: modelData.index
-                    property bool isItemExpanded: navigationController.expandedIndex === itemIndex
+                property int rowIndex: index
+                property var rowItems: navContainer.getRowItems(rowIndex)
 
-                    HomeIcon {
-                        anchors.fill: parent
-                        visible: !isItemExpanded
-                        highlighted: navigationController.selectedIndex === itemIndex
-                        text: modelData.label
-                        source: modelData.icon || "/qt/qml/content/images/zzz.png"
-                    }
+                Repeater {
+                    model: rowItem.rowItems
 
-                    ColumnLayout {
-                        anchors.centerIn: parent
-                        visible: isItemExpanded
-                        spacing: 10
+                    Item {
+                        width: navigation.boxSize
+                        height: navigation.boxSize
 
-                        Repeater {
-                            model: isItemExpanded ? navigationController.getChildrenOf(itemIndex) : []
+                        property int itemIndex: modelData.index
+                        property bool isItemExpanded: navigationController.expandedIndex === itemIndex
 
-                            SubMenuIcon {
-                                highlighted: navigationController.selectedIndex === modelData.index
-                                text: modelData.label
+                        HomeIcon {
+                            anchors.fill: parent
+                            visible: !isItemExpanded
+                            highlighted: navigationController.selectedIndex === itemIndex
+                            text: modelData.label
+                            source: modelData.icon || "/qt/qml/content/images/zzz.png"
+                        }
+
+                        ColumnLayout {
+                            anchors.centerIn: parent
+                            visible: isItemExpanded
+                            spacing: 10
+
+                            Repeater {
+                                model: isItemExpanded ? navigationController.getChildrenOf(itemIndex) : []
+
+                                SubMenuIcon {
+                                    highlighted: navigationController.selectedIndex === modelData.index
+                                    text: modelData.label
+                                }
                             }
                         }
                     }
@@ -119,7 +126,6 @@ Item {
         }
     }
 
-    // Dynamic page loader
     Loader {
         id: pageLoader
         anchors.fill: parent
@@ -159,7 +165,7 @@ Item {
         }
 
         function onExpandedChanged() {
-            row2Repeater.model = navigationController.getRow2Items()
+            navContainer.allItems = navigationController.getTopLevelItems()
         }
     }
 }

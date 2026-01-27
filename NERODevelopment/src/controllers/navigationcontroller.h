@@ -17,7 +17,6 @@ using ActionFunc = std::function<void(NavigationController *)>;
 struct Item {
   const char *label;
   Type type;
-  int row;
   const char *icon;
   const char *qml;
   ActionFunc action;
@@ -64,10 +63,10 @@ inline QString qml(int i) {
   return valid(i) && get(i).qml ? QString::fromUtf8(get(i).qml) : QString();
 }
 
-inline QVector<int> topLevelInRow(int row) {
+inline QVector<int> topLevelIndices() {
   QVector<int> r;
   for (int i = 0; i < count(); ++i)
-    if (isTopLevel(i) && get(i).row == row)
+    if (isTopLevel(i))
       r.append(i);
   return r;
 }
@@ -104,8 +103,7 @@ public:
   Q_INVOKABLE QString iconFor(int i) const { return Menu::icon(i); }
   Q_INVOKABLE QString qmlFor(int i) const { return Menu::qml(i); }
 
-  Q_INVOKABLE QVariantList getRow1Items() const;
-  Q_INVOKABLE QVariantList getRow2Items() const;
+  Q_INVOKABLE QVariantList getTopLevelItems() const;
   Q_INVOKABLE QVariantList getChildrenOf(int parent) const;
 
   void collapse();
