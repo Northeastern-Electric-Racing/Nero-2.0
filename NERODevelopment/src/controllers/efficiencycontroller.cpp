@@ -27,7 +27,7 @@ int EfficiencyController::currentRegenStrength() const {
 
 float EfficiencyController::currentRegenPercentage() const {
     if (m_maxRegenCapacity > 0) {
-        return (m_currentRegenStrength / m_maxRegenCapacity) * 100.0f;
+        return (abs(m_currentRegenStrength) / abs(m_maxRegenCapacity)) * 100.0f;
     }
     return 0.0f;
 }

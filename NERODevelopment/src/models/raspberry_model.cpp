@@ -91,7 +91,7 @@ void RaspberryModel::connectToMQTT() {
       LASTTIME,
       CURRENT_TIME,
       LOWVOLTAGESOC,
-
+      REGENPOWER
   };
 
     const char* client1_port_str = getenv("CLIENT1_PORT");
@@ -108,7 +108,7 @@ void RaspberryModel::connectToMQTT() {
   QList<QString> client_2_topics = {
       FORWARDBUTTON, BACKWARDBUTTON, RIGHTBUTTON, ENTERBUTTON,
       UPBUTTON,      DOWNBUTTON,     HOMEBUTTON,  MODEINDEX,
-      DIRECTION,     REGENPOWER,     TORQUEPOWER,
+      DIRECTION,     TORQUEPOWER,
   };
     MqttClient *client_2 = new MqttClient(nullptr, client2_port, client_2_topics);
     connect(client_2, &MqttClient::emitServerData, this,

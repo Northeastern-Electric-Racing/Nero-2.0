@@ -30,7 +30,7 @@ void SpeedController::setRegen(float regen) {
 
 float SpeedController::regenPercentage() const {
     if (m_maxRegenCapacity > 0) {
-        float result = (m_regen / m_maxRegenCapacity) * 100.0f;
+        float result = (abs(m_regen) / abs(m_maxRegenCapacity)) * 100.0f;
         return result;
     }
     return 0.0f;
