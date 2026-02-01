@@ -65,7 +65,7 @@ Select the kit for your respective desktop and press build and run
 1. Start mock telemetry (Docker required)
 
 ```bash
-    docker compose -f compose.nero-dev.yml up -d
+docker compose -f compose.nero-dev.yml up -d
 ```
 
 2. Run NERO in Qt Creator

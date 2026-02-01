@@ -5,64 +5,32 @@ import NERO
 Item {
     id: navigation
     anchors.fill: parent
-    focus: !navigation.isSelected
-    property int selectedPageIndex: navigationController.selectedPageIndex
-    property bool isSelected: navigationController.isSelected
-    property bool gamePageOpen: navigationController.isGamesOpen
-    property bool themesOpen: navigationController.isThemesOpen
-
-    property int offPageIndex: 0
-    property int pitDrivePageIndex: 1
-    property int pitReversePageIndex: 2
-    property int speedPageIndex: 3
-    property int efficiencyPageIndex: 4
-    property int gamePageIndex: 5
-
-    property int flappyPageIndex: 6
-    property int snakePageIndex: 7
-    property int lightThemeIndex: 6
-    property int darkThemeIndex: 7
-
-    property int exitPageIndex: gamePageOpen ? 9 : (themesOpen ? 8 : 7)
-    property int themePageIndex: gamePageOpen ? 8 : 6
+    focus: true
 
     height: 480
     width: 800
 
     property int boxSize: Math.min(height / 3, width / 6)
+    property int itemSpacing: 15
 
     Keys.onPressed: event => {
-                        switch (event.key) {
-                            case Qt.Key_Escape:
-                            navigationController.homeButtonPressed()
-                            break
-                            case Qt.Key_Right:
-                            if (!this.isSelected) {
-                                navigationController.downButtonPressed()
-                            }
-                            break
-                            case Qt.Key_Left:
-                            if (!this.isSelected) {
-                                navigationController.upButtonPressed()
-                            }
-                            break
-                            case Qt.Key_Down:
-                            if (!this.isSelected) {
-                                navigationController.downButtonPressed()
-                            }
-                            break
-                            case Qt.Key_Up:
-                            if (!this.isSelected) {
-                                navigationController.upButtonPressed()
-                            }
-                            break
-                            case Qt.Key_Return:
-                            if (!this.isSelected) {
-                                navigationController.enterButtonPressed()
-                            }
-                            break
-                        }
-                    }
+        switch (event.key) {
+        case Qt.Key_Escape:
+            navigationController.goHome()
+            break
+        case Qt.Key_Right:
+        case Qt.Key_Down:
+            if (!navigationController.isPageActive) navigationController.moveNext()
+            break
+        case Qt.Key_Left:
+        case Qt.Key_Up:
+            if (!navigationController.isPageActive) navigationController.movePrev()
+            break
+        case Qt.Key_Return:
+            if (!navigationController.isPageActive) navigationController.activate()
+            break
+        }
+    }
 
     HeaderView {
         id: header
@@ -77,6 +45,7 @@ Item {
     }
 
     ColumnLayout {
+        id: navContainer
         anchors {
             top: header.bottom
             bottom: parent.bottom
@@ -85,161 +54,118 @@ Item {
             margins: parent.width * 0.02
             bottomMargin: parent.height * 0.1
         }
-        visible: !navigation.isSelected
-        spacing: 15
+        visible: !navigationController.isPageActive
+        spacing: itemSpacing
 
-        RowLayout {
-            Layout.fillHeight: true
-            Layout.fillWidth: true
-            spacing: 15
-            Layout.alignment: Qt.AlignHCenter
+        property var allItems: navigationController.getTopLevelItems()
+        property int maxPerRow: Math.max(1, Math.floor((width + itemSpacing) / (navigation.boxSize + itemSpacing)))
 
-            HomeIcon {
-                height: navigation.boxSize
-                width: navigation.boxSize
-                highlighted: selectedPageIndex === offPageIndex
-                text: "OFF"
+        function getRowItems(rowIndex) {
+            var start = rowIndex * maxPerRow
+            var end = Math.min(start + maxPerRow, allItems.length)
+            var items = []
+            for (var i = start; i < end; i++) {
+                items.push(allItems[i])
             }
-
-            HomeIcon {
-                height: navigation.boxSize
-                width: navigation.boxSize
-                highlighted: selectedPageIndex === pitDrivePageIndex
-                text: "PIT - DRIVE"
-                source: "/qt/qml/content/images/flag.png"
-            }
-
-            HomeIcon {
-                height: navigation.boxSize
-                width: navigation.boxSize
-                highlighted: selectedPageIndex === pitReversePageIndex
-                text: "PIT - REVERSE"
-                source: "/qt/qml/content/images/reverse.png"
-            }
-
-            HomeIcon {
-                height: navigation.boxSize
-                width: navigation.boxSize
-                highlighted: selectedPageIndex === speedPageIndex
-                text: "PERFORMANCE"
-                source: "/qt/qml/content/images/hare.png"
-            }
-
-            HomeIcon {
-                height: navigation.boxSize
-                width: navigation.boxSize
-                highlighted: selectedPageIndex === efficiencyPageIndex
-                text: "EFFICIENCY"
-                source: "/qt/qml/content/images/turtle.png"
-            }
+            return items
         }
 
-        RowLayout {
-            visible: !navigation.isSelected
-            spacing: 15
-            Layout.fillHeight: true
-            Layout.alignment: Qt.AlignHCenter
+        function getRowCount() {
+            return Math.ceil(allItems.length / maxPerRow)
+        }
 
-            HomeIcon {
-                height: navigation.boxSize
-                width: navigation.boxSize
-                highlighted: selectedPageIndex === gamePageIndex
-                text: "GAMES"
-                source: "/qt/qml/content/images/game.png"
-                visible: !gamePageOpen
-            }
+        Repeater {
+            id: rowRepeater
+            model: navContainer.getRowCount()
 
-            ColumnLayout {
-                visible: gamePageOpen
-                spacing: 10
+            RowLayout {
+                id: rowItem
                 Layout.fillHeight: true
                 Layout.fillWidth: true
+                spacing: itemSpacing
+                Layout.alignment: Qt.AlignHCenter
 
-                SubMenuIcon {
-                    highlighted: selectedPageIndex === flappyPageIndex
-                    text: "FLAPPY BIRD"
+                property int rowIndex: index
+                property var rowItems: navContainer.getRowItems(rowIndex)
+
+                Repeater {
+                    model: rowItem.rowItems
+
+                    Item {
+                        width: navigation.boxSize
+                        height: navigation.boxSize
+
+                        property int itemIndex: modelData.index
+                        property bool isItemExpanded: navigationController.expandedIndex === itemIndex
+
+                        HomeIcon {
+                            anchors.fill: parent
+                            visible: !isItemExpanded
+                            highlighted: navigationController.selectedIndex === itemIndex
+                            text: modelData.label
+                            source: modelData.icon || "/qt/qml/content/images/zzz.png"
+                        }
+
+                        ColumnLayout {
+                            anchors.centerIn: parent
+                            visible: isItemExpanded
+                            spacing: 10
+
+                            Repeater {
+                                model: isItemExpanded ? navigationController.getChildrenOf(itemIndex) : []
+
+                                SubMenuIcon {
+                                    highlighted: navigationController.selectedIndex === modelData.index
+                                    text: modelData.label
+                                }
+                            }
+                        }
+                    }
                 }
-
-                SubMenuIcon {
-                    highlighted: selectedPageIndex === snakePageIndex
-                    text: "SNAKE"
-                }
-            }
-
-            HomeIcon {
-                height: navigation.boxSize
-                width: navigation.boxSize
-                highlighted: selectedPageIndex === themePageIndex
-                text: "THEMES"
-                source: "/qt/qml/content/images/themes.png"
-                visible: !themesOpen
-            }
-
-            ColumnLayout {
-                visible: themesOpen
-                spacing: 10
-                Layout.fillHeight: true
-                Layout.fillWidth: true
-
-                SubMenuIcon {
-                    highlighted: selectedPageIndex === lightThemeIndex
-                    text: "LIGHT"
-                }
-
-                SubMenuIcon {
-                    highlighted: selectedPageIndex === darkThemeIndex
-                    text: "DARK"
-                }
-            }
-
-            HomeIcon {
-                height: navigation.boxSize
-                width: navigation.boxSize
-                highlighted: selectedPageIndex === exitPageIndex
-                text: "EXIT"
-                source: "/qt/qml/content/images/exit.png"
             }
         }
     }
 
-    OffScreen2 {
-        visible: selectedPageIndex === offPageIndex && isSelected
-        focus: selectedPageIndex === offPageIndex && isSelected
+    Loader {
+        id: pageLoader
+        anchors.fill: parent
+        active: navigationController.isPageActive
+
+        source: {
+            if (!navigationController.isPageActive) return ""
+            var qmlFile = navigationController.qmlFor(navigationController.activePageIndex)
+            return qmlFile ? "/qt/qml/content/" + qmlFile : ""
+        }
+
+        onLoaded: {
+            if (item) {
+                item.forceActiveFocus()
+                if (typeof item.isFocused !== "undefined") {
+                    item.isFocused = true
+                }
+            }
+        }
     }
 
-    Pit {
-        visible: selectedPageIndex === pitDrivePageIndex && isSelected
-        focus: selectedPageIndex === pitDrivePageIndex && isSelected
-    }
-
-    Pit {
-        visible: selectedPageIndex === pitReversePageIndex && isSelected
-        focus: selectedPageIndex === pitReversePageIndex && isSelected
-    }
-
-    SpeedMode {
-        visible: selectedPageIndex === speedPageIndex && isSelected
-        focus: selectedPageIndex === speedPageIndex && isSelected
-    }
-
-    EfficiencyScreen {
-        visible: selectedPageIndex === efficiencyPageIndex && isSelected
-        focus: selectedPageIndex === efficiencyPageIndex && isSelected
-    }
-
-    FlappyBird {
-        visible: selectedPageIndex === flappyPageIndex && isSelected
-        isFocused: selectedPageIndex === flappyPageIndex && isSelected
-    }
-
-    Snake {
-        visible: selectedPageIndex === snakePageIndex && isSelected
-        isFocused: selectedPageIndex === snakePageIndex && isSelected
-    }
     Connections {
         target: navigationController
+
+        function onActivePageChanged() {
+            if (!navigationController.isPageActive) {
+                navigation.forceActiveFocus()
+            }
+        }
+
         function onThemeChanged(theme) {
             Theme.setTheme(theme)
+        }
+
+        function onExitRequested() {
+            Qt.quit()
+        }
+
+        function onExpandedChanged() {
+            navContainer.allItems = navigationController.getTopLevelItems()
         }
     }
 }
