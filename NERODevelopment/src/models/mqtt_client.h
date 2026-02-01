@@ -14,8 +14,9 @@ class MqttClient : public QObject {
   Q_OBJECT
 
 public:
+  // Updated constructor to accept optional hostname
   MqttClient(QObject *parent = nullptr, int port = 1883,
-             QList<QString> topics = {});
+             QList<QString> topics = {}, QString hostname = QString());
   ~MqttClient();
 
 public slots:
@@ -84,7 +85,7 @@ private slots:
 private:
   QMqttClient *m_client;
   QMqttSubscription *m_sub;
-  QString hostname = getenv("HOST") ? QString(getenv("HOST")) : QString("localhost");
+  QString m_hostname;
   int m_port = 1883;
   qint8 QoS = 0;
   QString default_topic = "#";

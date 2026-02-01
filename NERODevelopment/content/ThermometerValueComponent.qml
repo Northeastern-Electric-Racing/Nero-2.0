@@ -1,5 +1,6 @@
 import QtQuick 2.15
 import QtQuick.Layouts
+import NERO
 
 Item {
     id: thermometerComponent
@@ -8,7 +9,7 @@ Item {
     property int horizontalIconSpacing: width * 0.1
     property int labelVerticalSpacing: height * 0.1
     property bool regen: false
-    property string labelColor: "#47A7FF"
+    property string labelColor: Theme.getColor("accentForeground")
     property int horizontalPadding: width * 0.1
     property int radius
     property int valueFontSize
@@ -34,6 +35,6 @@ Item {
         valueFontSize: thermometerComponent.valueFontSize
         labelFontSize: thermometerComponent.labelFontSize
         unitFontSize: thermometerComponent.unitFontSize
-        unitAnchorBottom: false
+        unitAnchorBottom: showPercentage ? false : true
     }
 }
