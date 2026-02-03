@@ -1,5 +1,6 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import NERO
 
 Item {
     property int dimension: 200
@@ -15,11 +16,11 @@ Item {
         y: (parent.height - dimension) / 2
         width: dimension
         height: dimension
-        color: "#ffca62"
+        color: Theme.getColor("nonCriticalBackground")
 
         Text {
             id: exclamation
-            color: "#ffffff"
+            color: Theme.getColor("nonCriticalForeground")
             text: qsTr("!")
             font.pixelSize: 0.625 * parent.width
             horizontalAlignment: Text.AlignHCenter
@@ -35,7 +36,7 @@ Item {
             radius: dimension / 4
             width: dimension / 2
             height: dimension / 2
-            color: "#ffffff"
+            color: Theme.getColor("nonCriticalForeground")
             visible: numWarnings > 0
 
             Text {

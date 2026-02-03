@@ -1,11 +1,12 @@
 import QtQuick 2.15
 import QtQuick.Shapes
+import NERO
 
 Item {
     id: lightning
     property int dimension: 150
-    property string primaryColor: "#14f504"
-    property string secondaryColor: "black"
+    property string primaryColor: Theme.getColor("accentGreen")
+    property string secondaryColor: Theme.getColor("blackForeground")
 
     width: dimension
     height: dimension
@@ -19,7 +20,7 @@ Item {
         ShapePath {
             id: background
             fillColor: lightning.secondaryColor
-            strokeColor: "transparent"
+            strokeColor: Theme.getColor("transparent")
             strokeWidth: 1
 
             startX: 47 / 80 * shape2.width
@@ -77,7 +78,7 @@ Item {
         ShapePath {
             id: foreground
             fillColor: lightning.primaryColor
-            strokeColor: "transparent"
+            strokeColor: Theme.getColor("transparent")
             strokeWidth: 1
 
             startX: 45 / 80 * shape.width

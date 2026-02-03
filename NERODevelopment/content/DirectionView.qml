@@ -1,6 +1,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.0
+import NERO
 
 Item {
     id: directionView
@@ -16,10 +17,10 @@ Item {
 
         Rectangle {
             id: rectangle
-            color: forward ? "#55AAFF" : "transparent"
+            color: forward ? Theme.getColor("directionBackground") : Theme.getColor("transparent")
             Layout.fillHeight: true
             Layout.preferredWidth: parent.width / 2 - 20
-            border.color: forward ? "transparent" : "white"
+            border.color: forward ? Theme.getColor("transparent") : Theme.getColor("primaryForeground")
             border.width: 2
             radius: directionView.radius
 
@@ -27,24 +28,24 @@ Item {
                 anchors.centerIn: parent
                 font.pixelSize: Math.min(parent.width, parent.height) / 1.5
                 text: "D"
-                color: forward ? "black" : 'white'
+                color: forward ? Theme.getColor("inverseForeground") : Theme.getColor("primaryForeground")
                 font.family: webFont.name
             }
         }
 
         Rectangle {
             id: rectangle1
-            color: forward ? "transparent" : "#55AAFF"
+            color: forward ? Theme.getColor("transparent") : Theme.getColor("directionBackground")
             Layout.fillHeight: true
             Layout.preferredWidth: parent.width / 2 - 20
-            border.color: forward ? "white" : "transparent"
+            border.color: forward ? Theme.getColor("primaryForeground") : Theme.getColor("transparent")
             border.width: 2
             radius: directionView.radius
 
             Text {
                 anchors.centerIn: parent
                 font.pixelSize: Math.min(parent.width, parent.height) / 1.5
-                color: forward ? "white" : 'black'
+                color: forward ? Theme.getColor("primaryForeground") : Theme.getColor("inverseForeground")
                 font.family: webFont.name
                 text: "R"
             }

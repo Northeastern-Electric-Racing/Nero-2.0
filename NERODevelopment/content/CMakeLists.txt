@@ -63,7 +63,9 @@ qt6_add_qml_module(content
         images/game.png
         images/reverse.png
         images/exit.png
-        images/neroLogo.png
+        images/darkNeroLogo.png
+        images/lightNeroLogo.png
+        images/themes.png
         images/bots.jpg
         images/bspd.jpg
         images/cockpitBrb.jpg

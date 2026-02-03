@@ -1,5 +1,6 @@
 import QtQuick 2.15
 import QtQuick.Layouts
+import NERO
 
 Item {
     id: batteryComponent
@@ -7,7 +8,7 @@ Item {
     property string title: "Charge State"
     property int horizontalIconSpacing: width * 0.1
     property int labelVerticalSpacing: height * 0.1
-    property string labelColor: "#47AFFF"
+    property string labelColor: Theme.getColor("accentForeground")
     property int horizontalPadding: width * 0.1
     property int radius
     property int valueFontSize

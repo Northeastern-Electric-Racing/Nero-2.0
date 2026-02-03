@@ -1,147 +1,216 @@
 #include "navigationcontroller.h"
 #include "../utils/data_type_names.h"
 
-NavigationController::NavigationController(Model *model, QObject *parent)
-    : ButtonController{model, -1, parent}, m_isTsOn(false) {
-  connect(m_model, &Model::onCurrentDataChange, this,
-          &NavigationController::currentDataDidChange);
+namespace Menu {
+
+const std::vector<Item> &getPages() {
+  static const std::vector<Item> pages = {
+      {"OFF", Type::Page, "zzz.png", "OffScreen2.qml", nullptr},
+      {"PIT - DRIVE", Type::Page, "flag.png", "Pit.qml", nullptr},
+      {"PIT - REVERSE", Type::Page, "reverse.png", "Pit.qml", nullptr},
+      {"PERFORMANCE", Type::Page, "hare.png", "SpeedMode.qml", nullptr},
+      {"EFFICIENCY", Type::Page, "turtle.png", "EfficiencyScreen.qml", nullptr},
+      {"GAMES", Type::Category, "game.png", nullptr, nullptr},
+      {"FLAPPY BIRD", Type::SubPage, nullptr, "FlappyBird.qml", nullptr},
+      {"SNAKE", Type::SubPage, nullptr, "Snake.qml", nullptr},
+      {"THEMES", Type::Category, "themes.png", nullptr, nullptr},
+      {"LIGHT", Type::SubAction, nullptr, nullptr,
+       [](NavigationController *c) {
+         emit c->themeChanged("light");
+         c->collapse();
+       }},
+      {"DARK", Type::SubAction, nullptr, nullptr,
+       [](NavigationController *c) {
+         emit c->themeChanged("dark");
+         c->collapse();
+       }},
+      {"EXIT", Type::Action, "exit.png", nullptr,
+       [](NavigationController *c) { emit c->exitRequested(); }},
+  };
+  return pages;
 }
 
-void NavigationController::currentDataDidChange() {
-  if (this->m_pageIndices.contains(this->m_model->currentPageIndex)) {
-    std::optional<float> value = this->m_model->getById(TSMS);
-    if (value) {
-      if (value == 0) {
-        setIsTsOn(false);
-      } else {
-        setIsTsOn(true);
+} // namespace Menu
+
+NavigationController::NavigationController(Model *model, QObject *parent)
+    : ButtonController(model, -1, parent) {
+  connect(m_model, &Model::onCurrentDataChange, this, [this]() {
+    std::optional<int> val = m_model->getById(TSMS);
+    if (val) {
+      bool newVal = (*val != 0);
+      if (m_isTsOn != newVal) {
+        m_isTsOn = newVal;
+        emit isTsOnChanged(m_isTsOn);
       }
     }
+  });
+  rebuildNavOrder();
+}
+
+void NavigationController::setSelectedIndex(int i) {
+  if (m_selected != i) {
+    m_selected = i;
+    emit selectionChanged();
   }
 }
 
-bool NavigationController::isTsOn() const { return m_isTsOn; }
-
-void NavigationController::setIsTsOn(bool isTsOn) {
-  if (m_isTsOn != isTsOn) {
-    m_isTsOn = isTsOn;
-    emit isTsOnChanged(isTsOn);
+void NavigationController::setActivePage(int i) {
+  if (m_activePage != i) {
+    m_activePage = i;
+    m_model->currentPageIndex = i;
+    emit activePageChanged();
   }
 }
 
-int NavigationController::selectedPageIndex() const {
-  return this->m_selectedPageIndex;
-}
-void NavigationController::setSelectedPageIndex(int index) {
-  if (index != this->m_selectedPageIndex) {
-    this->m_selectedPageIndex = index;
-    emit this->selectedPageIndexChanged();
+void NavigationController::setExpanded(int i) {
+  if (m_expanded != i) {
+    m_expanded = i;
+    rebuildNavOrder();
+    emit expandedChanged();
   }
 }
 
-bool NavigationController::isSelected() const { return this->m_isSelected; }
-void NavigationController::setIsSelected(bool isSelected) {
-  if (isSelected != this->m_isSelected) {
-    this->m_isSelected = isSelected;
-    emit this->isSelectedChanged();
-  }
-}
+void NavigationController::rebuildNavOrder() {
+  m_navOrder.clear();
 
-bool NavigationController::isGamesOpen() const { return this->m_gamesSelected; }
-void NavigationController::setIsGamesOpen(bool isGamesOpen) {
-  if (isGamesOpen != this->m_gamesSelected) {
-    this->m_gamesSelected = isGamesOpen;
-    emit this->isGamesOpenChanged();
-  }
-}
+  for (int i = 0; i < Menu::count(); ++i) {
+    if (!Menu::isTopLevel(i))
+      continue;
 
-void NavigationController::downButtonPressed() {
-  if (m_gamesSelected) {
-    if (this->m_selectedPageIndex + 2 < this->m_numGames + this->m_numPages) {
-      this->setSelectedPageIndex(this->m_selectedPageIndex + 1);
-    }
-  } else {
-    if (this->m_selectedPageIndex + 1 < this->m_numPages) {
-      this->setSelectedPageIndex(this->m_selectedPageIndex + 1);
+    if (i == m_expanded && Menu::hasChildren(i)) {
+      for (int c : Menu::childrenOf(i)) {
+        m_navOrder.append(c);
+      }
+    } else {
+      m_navOrder.append(i);
     }
   }
 }
 
-void NavigationController::upButtonPressed() {
-  qDebug() << "up";
-  if (m_gamesSelected) {
-    if (this->m_selectedPageIndex >= this->m_numPages) {
-      this->setSelectedPageIndex(this->m_selectedPageIndex - 1);
+QVariantMap NavigationController::buildItem(int i) const {
+  return {{"index", i},
+          {"label", Menu::label(i)},
+          {"icon", Menu::icon(i)},
+          {"hasChildren", Menu::hasChildren(i)}};
+}
+
+QVariantList NavigationController::getTopLevelItems() const {
+  QVariantList list;
+  for (int i : Menu::topLevelIndices()) {
+    list.append(buildItem(i));
+  }
+  return list;
+}
+
+QVariantList NavigationController::getChildrenOf(int parent) const {
+  QVariantList list;
+  for (int i : Menu::childrenOf(parent)) {
+    list.append(buildItem(i));
+  }
+  return list;
+}
+
+void NavigationController::moveNext() {
+  int pos = m_navOrder.indexOf(m_selected);
+  if (pos + 1 < m_navOrder.size()) {
+    setSelectedIndex(m_navOrder[pos + 1]);
+  }
+}
+
+void NavigationController::movePrev() {
+  int pos = m_navOrder.indexOf(m_selected);
+  if (pos > 0) {
+    setSelectedIndex(m_navOrder[pos - 1]);
+  }
+}
+
+void NavigationController::activate() {
+  if (!Menu::valid(m_selected))
+    return;
+
+  Menu::Type type = Menu::get(m_selected).type;
+
+  switch (type) {
+  case Menu::Type::Page:
+  case Menu::Type::SubPage:
+    setActivePage(m_selected);
+    break;
+
+  case Menu::Type::Category:
+    if (m_expanded == m_selected) {
+      collapse();
+    } else {
+      expand(m_selected);
     }
-  } else {
-    if (this->m_selectedPageIndex - 1 >= 0) {
-      this->setSelectedPageIndex(this->m_selectedPageIndex - 1);
-    }
+    break;
+
+  case Menu::Type::Action:
+  case Menu::Type::SubAction:
+    executeAction(m_selected);
+    break;
   }
 }
 
-void NavigationController::enterButtonPressed() {
-  if (!this->m_gamesSelected &&
-      this->m_selectedPageIndex == this->m_numPages - 1) {
-    this->exitProgram();
-  } else if (this->m_selectedPageIndex == this->m_numPages - 2 &&
-             !this->m_gamesSelected) {
-    this->setIsGamesOpen(true);
-    this->setSelectedPageIndex(this->m_numPages - 1);
-  } else {
-    this->m_model->currentPageIndex = this->m_selectedPageIndex;
-    this->setIsSelected(true);
+void NavigationController::goHome() {
+  setActivePage(-1);
+  if (m_expanded >= 0) {
+    collapse();
   }
 }
 
-void NavigationController::homeButtonPressed() {
-  if (m_gamesSelected) {
-    this->setIsGamesOpen(false);
-    this->setSelectedPageIndex(this->m_numPages - 2);
+void NavigationController::expand(int i) {
+  setExpanded(i);
+
+  int firstChild = Menu::firstChildOf(i);
+  if (firstChild >= 0) {
+    setSelectedIndex(firstChild);
   }
-  this->m_model->currentPageIndex = -1;
-  this->setIsSelected(false);
 }
 
-void NavigationController::exitProgram() { exit(0); }
+void NavigationController::collapse() {
+  int wasExpanded = m_expanded;
+  setExpanded(-1);
+
+  if (wasExpanded >= 0) {
+    setSelectedIndex(wasExpanded);
+  }
+}
+
+void NavigationController::executeAction(int i) {
+  const auto &action = Menu::get(i).action;
+  if (action) {
+    action(this);
+  }
+}
+
+void NavigationController::enterButtonPressed() { activate(); }
+void NavigationController::downButtonPressed() { moveNext(); }
+void NavigationController::upButtonPressed() { movePrev(); }
+void NavigationController::homeButtonPressed() { goHome(); }
 
 void NavigationController::buttonUpdate() {
-  if (this->m_pageIndices.contains(this->m_model->currentPageIndex)) {
-    std::optional<float> modeIndex = this->m_model->getModeIndex();
-    // qDebug() << "Mode Index: " << modeIndex.value_or(-999);
+  if (!m_pageIndices.contains(m_model->currentPageIndex))
+    return;
 
-    std::optional<bool> homeButtonPressed =
-        this->m_model->getHomeButtonPressed();
+  std::optional<bool> home = m_model->getHomeButtonPressed();
+  if (!home.has_value())
+    return;
 
-    // qDebug() << "Home button: " << homeButtonPressed.value_or(-999);
-
-    std::optional<bool> enterButtonPressed =
-        this->m_model->getEnterButtonPressed();
-    std::optional<bool> downButtonPressed =
-        this->m_model->getDownButtonPressed();
-    std::optional<bool> upButtonPressed = this->m_model->getUpButtonPressed();
-
-    if (!homeButtonPressed.has_value()) {
-      return;
+  if (*home) {
+    homeButtonPressed();
+    std::optional<int> mode = m_model->getModeIndex();
+    if (mode.has_value() && *mode >= 0 && *mode < m_navOrder.size()) {
+      setSelectedIndex(m_navOrder[*mode]);
     }
+    return;
+  }
 
-    if (homeButtonPressed == true) {
-      this->homeButtonPressed();
-      if (modeIndex) {
-        this->setSelectedPageIndex(*modeIndex);
-      }
-    } else if (!this->m_gamesSelected) {
-      this->enterButtonPressed();
-    } else {
-      if (enterButtonPressed == true) {
-        this->enterButtonPressed();
-      }
-      if (downButtonPressed) {
-        this->downButtonPressed();
-      }
-      if (upButtonPressed) {
-        this->upButtonPressed();
-      }
-    }
+  if (!isPageActive()) {
+    if (m_model->getEnterButtonPressed() == true)
+      enterButtonPressed();
+    if (m_model->getDownButtonPressed() == true)
+      downButtonPressed();
+    if (m_model->getUpButtonPressed() == true)
+      upButtonPressed();
   }
 }
