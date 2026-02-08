@@ -90,7 +90,6 @@ Item {
             spacing: parent.height / 20
 
             ThermometerValueComponent {
-                showPercentage: true
                 thermometerValue: showPercentage ? speedMode.regenPercentage : speedMode.regen
                 title: "REGEN"
                 Layout.fillHeight: true

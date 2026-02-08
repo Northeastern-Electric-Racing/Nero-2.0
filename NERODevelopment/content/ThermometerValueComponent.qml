@@ -15,7 +15,6 @@ Item {
     property int valueFontSize
     property int labelFontSize
     property int unitFontSize: valueFontSize
-    property bool showPercentage: false
 
     LabeledComponent {
         anchors.fill: parent
@@ -30,7 +29,7 @@ Item {
         labelVerticalSpacing: thermometerComponent.labelVerticalSpacing
         labelColor: thermometerComponent.labelColor
         horizontalPadding: thermometerComponent.horizontalPadding
-        valueUnit: regen ? (showPercentage ? "%" : "A") : "°"
+        valueUnit: regen ? "A" : "°"
         radius: thermometerComponent.radius
         valueFontSize: thermometerComponent.valueFontSize
         labelFontSize: thermometerComponent.labelFontSize

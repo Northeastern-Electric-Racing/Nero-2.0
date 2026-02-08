@@ -85,7 +85,6 @@ Item {
             ThermometerValueComponent {
                 id: regen
                 regen: true
-                showPercentage: false
                 thermometerValue: showPercentage ? efficiency.numRegenPercentage : efficiency.numRegen
                 title: "REGEN"
                 Layout.fillWidth: true
