@@ -13,6 +13,7 @@
 #include "import_qml_components_plugins.h"
 #include "import_qml_plugins.h"
 #include "models/raspberry_model.h"
+#include "models/socket_reciever.h"
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
@@ -26,6 +27,36 @@ int main(int argc, char *argv[]) {
 
   Model *model = new RaspberryModel();
   model->connectToMQTT();
+
+  const char *button_port_str = getenv("BUTTON_PORT");
+  int button_port = button_port_str ? atoi(button_port_str) : 1884;
+  QString mqttHost = getenv("HOST") ? QString(getenv("HOST")) : QString("localhost");
+
+  QList<QString> button_topics = {};
+  MqttClient *buttonMqttClient = new MqttClient(nullptr, button_port, button_topics, mqttHost);
+  buttonMqttClient->connectToHost();
+
+  ButtonSocketReceiver *buttonReceiver = new ButtonSocketReceiver(buttonMqttClient);
+
+  QObject::connect(buttonReceiver, &ButtonSocketReceiver::buttonEventReceived,
+                   [](const QString &button, const QString &state) {
+                       qInfo() << "Button event:" << button << state;
+                   });
+
+  QObject::connect(buttonReceiver, &ButtonSocketReceiver::errorOccurred,
+                   [](const QString &error) {
+                       qCritical() << "Button receiver error:" << error;
+                   });
+
+  if (!buttonReceiver->start()) {
+    #ifdef _WIN32
+          qInfo() << "Button socket receiver skipped on Windows - will work on Raspberry Pi";
+    #else
+          qCritical() << "Failed to start button socket receiver";
+    #endif
+    } else {
+        qInfo() << "Button socket receiver started successfully";
+    }
 
   HomeController homeController(model);
   HeaderController headerController(model);
