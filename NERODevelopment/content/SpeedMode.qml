@@ -19,6 +19,7 @@ Item {
     property int maxDraw: speedController.maxCurrent
     property int dcl: speedController.currentDischarge
     property double regen: speedController.regen
+    property int powerDrawPercent: speedController.powerDrawPercent
 
     property int xMargin: width / 20
     property int yMargin: height / 20
@@ -120,6 +121,18 @@ Item {
                 radius: speedMode.borderRadii
                 valueFontSize: speedMode.valueFontSize
                 labelFontSize: speedMode.labelFontSize
+            }
+
+            BatteryValueComponent {
+                title: "PWR DRAW"
+                batteryValue: speedMode.powerDrawPercent
+                Layout.fillHeight: true
+                Layout.fillWidth: true
+                Layout.preferredHeight: 1
+                radius: speedMode.borderRadii
+                valueFontSize: speedMode.valueFontSize
+                labelFontSize: speedMode.labelFontSize
+                unitFontSize: speedMode.valueFontSize / 1.5
             }
         }
 
