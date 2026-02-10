@@ -47,6 +47,8 @@ void RaspberryModel::connectToMQTT() {
       MOTORTEMP,
       STATEOFCHARGE,
       CURRENT,
+      DCCURRENT,
+      MAXDCCURRENTTARGET,
       BALANCINGCELLS,
       PACKVOLTAGE,
       MAXCELLTEMP,
@@ -174,6 +176,14 @@ std::optional<float> RaspberryModel::getStateOfCharge() {
 
 std::optional<float> RaspberryModel::getCurrent() {
   return this->getById(CURRENT);
+}
+
+std::optional<float> RaspberryModel::getDCCurrent() {
+  return this->getById(DCCURRENT);
+}
+
+std::optional<float> RaspberryModel::getMaxDCCurrentTarget() {
+  return this->getById(MAXDCCURRENTTARGET);
 }
 
 std::optional<float> RaspberryModel::getMaxCellVoltage() {
