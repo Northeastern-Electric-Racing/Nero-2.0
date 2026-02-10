@@ -30,6 +30,8 @@ public:
   virtual std::optional<float> getMotorTemp() = 0;
   virtual std::optional<float> getStateOfCharge() = 0;
   virtual std::optional<float> getCurrent() = 0;
+  virtual std::optional<float> getDCCurrent() = 0;
+  virtual std::optional<float> getMaxDCCurrentTarget() = 0;
   virtual std::optional<float> getBalancingCells() = 0;
   virtual std::optional<float> getPackVoltage() = 0;
   virtual std::optional<float> getMaxCellTemp() = 0;
