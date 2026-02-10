@@ -18,6 +18,7 @@ Item {
     property int timerValue: efficiencyController.currentTime
     property int lastRunTime: efficiencyController.lastTime
     property int fastestRunTime: efficiencyController.fastestTime
+    property int powerDrawPercent: efficiencyController.powerDrawPercent
     property int xMargin: width / 20
     property int yMargin: height / 20
     property int verticalSpacing: height / 40
@@ -150,6 +151,18 @@ Item {
                 id: battery2
                 title: "LV SOC"
                 batteryValue: efficiency.lvSOC
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                radius: efficiency.borderRadii
+                valueFontSize: efficiency.valueFontSize
+                labelFontSize: efficiency.labelFontSize
+                unitFontSize: efficiency.valueFontSize / 1.5
+            }
+
+            BatteryValueComponent {
+                id: powerDraw
+                title: "PWR DRAW"
+                batteryValue: efficiency.powerDrawPercent
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 radius: efficiency.borderRadii
