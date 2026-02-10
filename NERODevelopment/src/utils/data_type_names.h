@@ -9,6 +9,8 @@
 #define MOTORTEMP "DTI/Temps/Motor_Temperature"
 #define STATEOFCHARGE "BMS/Pack/SOC"
 #define CURRENT "DTI/Power/AC_Current"
+#define DCCURRENT "DTI/Power/DC_Current"
+#define MAXDCCURRENTTARGET "BMS/Commands/Max_DC_Current_Target"
 #define BALANCINGCELLS "balancingcells"
 #define PACKVOLTAGE "BMS/Pack/Voltage"
 #define MAXCELLTEMP "BMS/Cells/Temp_High_Value"
