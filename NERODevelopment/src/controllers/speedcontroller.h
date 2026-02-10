@@ -35,6 +35,10 @@ class SpeedController : public ButtonController {
                  setCurrentDischarge NOTIFY currentDischargeChanged)
   Q_PROPERTY(float maxCurrentDischarge READ maxCurrentDischarge WRITE
                  setMaxCurrentDischarge NOTIFY maxCurrentDischargeChanged)
+  Q_PROPERTY(int powerDrawPercent READ powerDrawPercent WRITE
+                 setPowerDrawPercent NOTIFY powerDrawPercentChanged)
+  Q_PROPERTY(int maxDCCurrentTarget READ maxDCCurrentTarget WRITE
+                 setMaxDCCurrentTarget NOTIFY maxDCCurrentTargetChanged)
 
 public:
   explicit SpeedController(Model *model, QObject *parent = nullptr);
@@ -53,6 +57,8 @@ public:
   float currentDischarge() const;
   float maxCurrentDischarge() const;
   float regen() const;
+  int powerDrawPercent() const;
+  int maxDCCurrentTarget() const;
 
 signals:
   void tractionControlChanged(bool);
@@ -69,6 +75,8 @@ signals:
   void currentDischargeChanged(float);
   void maxCurrentDischargeChanged(float);
   void regenChanged(float);
+  void powerDrawPercentChanged(int);
+  void maxDCCurrentTargetChanged(int);
 
 public slots:
   void setTractionControl(bool);
@@ -85,6 +93,8 @@ public slots:
   void setCurrentDischarge(float);
   void setMaxCurrentDischarge(float);
   void setRegen(float);
+  void setPowerDrawPercent(int);
+  void setMaxDCCurrentTarget(int);
 
   void enterButtonPressed() override;
   void updateCurrentTime();
@@ -106,6 +116,8 @@ private:
   float m_currentDischarge = 0;
   float m_maxCurrentDischarge = 0;
   float m_regen = 0;
+  int m_powerDrawPercent = 0;
+  int m_maxDCCurrentTarget = 0;
 
   bool m_timerRunning = false;
   QElapsedTimer m_timer;
