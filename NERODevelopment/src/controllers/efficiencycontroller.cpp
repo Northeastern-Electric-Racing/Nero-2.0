@@ -72,6 +72,26 @@ void EfficiencyController::setSpeed(int speed) {
   }
 }
 
+int EfficiencyController::powerDrawPercent() const {
+  return m_powerDrawPercent;
+}
+void EfficiencyController::setPowerDrawPercent(int percent) {
+  if (percent != m_powerDrawPercent) {
+    m_powerDrawPercent = percent;
+    emit powerDrawPercentChanged(percent);
+  }
+}
+
+int EfficiencyController::maxDCCurrentTarget() const {
+  return m_maxDCCurrentTarget;
+}
+void EfficiencyController::setMaxDCCurrentTarget(int target) {
+  if (target != m_maxDCCurrentTarget) {
+    m_maxDCCurrentTarget = target;
+    emit maxDCCurrentTargetChanged(target);
+  }
+}
+
 void EfficiencyController::currentDataDidChange() {
   std::optional<float> torque = m_model->getTorquePower();
   std::optional<float> regen = m_model->getRegenPower();
@@ -80,6 +100,8 @@ void EfficiencyController::currentDataDidChange() {
   std::optional<float> packTemp = m_model->getPackTemp();
   std::optional<float> lowVoltageSoc = m_model->getLowVoltageStateOfCharge();
   std::optional<float> speed = m_model->getMph();
+  std::optional<float> dcCurrent = m_model->getDCCurrent();
+  std::optional<float> maxDCTarget = m_model->getMaxDCCurrentTarget();
 
   if (torque) {
     setCurrentMaxTorque(*torque);
@@ -101,6 +123,18 @@ void EfficiencyController::currentDataDidChange() {
   }
   if (speed) {
     setSpeed(*speed);
+  }
+  if (maxDCTarget) {
+    setMaxDCCurrentTarget(static_cast<int>(std::round(std::abs(*maxDCTarget))));
+  }
+  if (dcCurrent && maxDCTarget && std::abs(*maxDCTarget) > 0) {
+    int percent = static_cast<int>(
+        std::round(std::abs(*dcCurrent) / std::abs(*maxDCTarget) * 100.0f));
+    if (percent > 100)
+      percent = 100;
+    if (percent < 0)
+      percent = 0;
+    setPowerDrawPercent(percent);
   }
 }
 
