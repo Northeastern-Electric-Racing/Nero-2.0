@@ -75,9 +75,8 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOMOC ON)
 # Create executable with all sources consolidated
 qt_add_executable(NEROApp ${PROJECT_SOURCES}
-
-
-
+    src/models/socket_reciever.cpp
+    src/models/socket_reciever.h
 )
 
 # Add protobuf

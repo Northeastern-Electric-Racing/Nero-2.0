@@ -97,12 +97,15 @@ QList<DebugTableRowValue> Model::getDebugTableValues() {
 }
 
 std::optional<float> Model::getById(QString id) {
-  float value = this->currentData.value(id, DataInfo()).values[0];
-  if (value != -9999) {
-    return value;
-  } else {
+    auto it = currentData.find(id);
+    if (it != currentData.end()) {
+        if (it->values.isEmpty()) {
+            qWarning() << "Empty values for topic:" << id;
+            return std::nullopt;
+        }
+        return it->values[0];
+    }
     return std::nullopt;
-  }
 }
 
 void Model::setValue(QString topic, float value) {

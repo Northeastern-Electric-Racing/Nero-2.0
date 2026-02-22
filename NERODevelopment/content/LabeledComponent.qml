@@ -86,7 +86,7 @@ Rectangle {
                     text: labelComponent.valueUnit
                     color: Theme.getColor("mutedForeground")
                     font.pixelSize: labelComponent.unitFontSize
-                    anchors.bottom: labelComponent.unitAnchorBottom ? parent.bottom : null
+                    anchors.bottom: labelComponent.unitAnchorBottom ? parent.bottom : undefined
                 }
             }
 
