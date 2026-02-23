@@ -8,17 +8,30 @@ find_package(Qt6 REQUIRED COMPONENTS Core Gui Qml Quick Network Mqtt Protobuf)
 qt_standard_project_setup(REQUIRES 6.8)
 
 # ============================================================
-# DOOM Integration — doomgeneric engine sources
+# DOOM Integration — auto-download doomgeneric engine
 # ============================================================
-set(DOOMGENERIC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/third_party/doomgeneric/doomgeneric)
+include(FetchContent)
+FetchContent_Declare(
+    doomgeneric
+    GIT_REPOSITORY https://github.com/ozkl/doomgeneric.git
+    GIT_SHALLOW TRUE
+)
+FetchContent_MakeAvailable(doomgeneric)
+
+set(DOOMGENERIC_DIR ${doomgeneric_SOURCE_DIR}/doomgeneric)
 
 file(GLOB DOOM_SOURCES ${DOOMGENERIC_DIR}/*.c)
 
+# Remove platform backends we don't use (we provide our own in doomcontroller.cpp)
+# Remove ALL platform backends (doomgeneric_*.c) — we provide our own in doomcontroller.cpp
+# The core engine file is doomgeneric.c (no underscore) so it's kept
 list(FILTER DOOM_SOURCES EXCLUDE REGEX "doomgeneric_[a-z].*\\.c$")
 
+# Remove SDL and Allegro sound/music backends — we don't have those libraries
 list(FILTER DOOM_SOURCES EXCLUDE REGEX "i_sdl.*\\.c$")
 list(FILTER DOOM_SOURCES EXCLUDE REGEX "i_allegro.*\\.c$")
 
+# Suppress warnings in third-party DOOM code
 set_source_files_properties(${DOOM_SOURCES} PROPERTIES COMPILE_FLAGS "-w")
 
 # ============================================================
@@ -92,8 +105,10 @@ set(PROJECT_SOURCES
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOMOC ON)
 
+# Create executable with all sources + DOOM engine
 qt_add_executable(NEROApp ${PROJECT_SOURCES} ${DOOM_SOURCES})
 
+# Add doomgeneric headers to include path
 target_include_directories(NEROApp PRIVATE ${DOOMGENERIC_DIR})
 
 # Add protobuf
