@@ -1,11 +1,27 @@
 cmake_minimum_required(VERSION 3.21.1)
 
-project(NEROApp LANGUAGES CXX)
+project(NEROApp LANGUAGES CXX C)
 
 # Find Qt6 first before version checks
 find_package(Qt6 REQUIRED COMPONENTS Core Gui Qml Quick Network Mqtt Protobuf)
 
 qt_standard_project_setup(REQUIRES 6.8)
+
+# ============================================================
+# DOOM Integration — doomgeneric engine sources
+# ============================================================
+set(DOOMGENERIC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/third_party/doomgeneric/doomgeneric)
+
+file(GLOB DOOM_SOURCES ${DOOMGENERIC_DIR}/*.c)
+
+list(FILTER DOOM_SOURCES EXCLUDE REGEX "doomgeneric_[a-z].*\\.c$")
+
+list(FILTER DOOM_SOURCES EXCLUDE REGEX "i_sdl.*\\.c$")
+list(FILTER DOOM_SOURCES EXCLUDE REGEX "i_allegro.*\\.c$")
+
+set_source_files_properties(${DOOM_SOURCES} PROPERTIES COMPILE_FLAGS "-w")
+
+# ============================================================
 
 # Consolidate all sources in one place
 set(PROJECT_SOURCES
@@ -24,6 +40,7 @@ set(PROJECT_SOURCES
     src/controllers/speedcontroller.h
     src/controllers/snakecontroller.h
     src/controllers/tankcontroller.h
+    src/controllers/doomcontroller.h
 
     # Headers - Models
     src/models/model.h
@@ -51,6 +68,7 @@ set(PROJECT_SOURCES
     src/controllers/speedcontroller.cpp
     src/controllers/snakecontroller.cpp
     src/controllers/tankcontroller.cpp
+    src/controllers/doomcontroller.cpp
 
     # Implementation - Models
     src/models/model.cpp
@@ -73,19 +91,16 @@ set(PROJECT_SOURCES
 
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOMOC ON)
-# Create executable with all sources consolidated
-qt_add_executable(NEROApp ${PROJECT_SOURCES}
 
+qt_add_executable(NEROApp ${PROJECT_SOURCES} ${DOOM_SOURCES})
 
-
-)
+target_include_directories(NEROApp PRIVATE ${DOOMGENERIC_DIR})
 
 # Add protobuf
 qt_add_protobuf(NEROApp
     PROTO_FILES
     src/proto/serverdata/serverdata.proto
 )
-
 
 # Link libraries
 target_link_libraries(NEROApp PRIVATE
@@ -99,6 +114,13 @@ target_link_libraries(NEROApp PRIVATE
 )
 
 set(CMAKE_OBJECT_PATH_MAX 500)
+
+# Copy WAD file to build directory if it exists
+if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/resources/doom/DOOM1.WAD)
+    file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/resources/doom/DOOM1.WAD
+         DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+    message(STATUS "DOOM: WAD file copied to build directory")
+endif()
 
 # include the qml config
 include(${CMAKE_CURRENT_SOURCE_DIR}/qmlmodules)
