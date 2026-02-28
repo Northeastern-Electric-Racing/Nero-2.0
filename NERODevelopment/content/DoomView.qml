@@ -27,7 +27,6 @@ Item {
         repeat: false
         onTriggered: {
             doomView.escHeld = true
-            doomController.sendKey(doomKeyEscape, false)
             if (doomController.running) {
                 doomController.stopGame()
             }
@@ -113,7 +112,6 @@ Item {
                 break
             case Qt.Key_Escape:
                 if (doomController.running) {
-                    doomController.sendKey(doomKeyEscape, true)
                     escExitTimer.start()
                 } else {
                     navigationController.goHome()
@@ -152,6 +150,7 @@ Item {
             case Qt.Key_Escape:
                 escExitTimer.stop()
                 if (!escHeld && doomController.running) {
+                    doomController.sendKey(doomKeyEscape, true)
                     doomController.sendKey(doomKeyEscape, false)
                 }
                 escHeld = false
