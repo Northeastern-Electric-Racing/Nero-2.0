@@ -1,7 +1,5 @@
-import QtQuick 2.15
-
-import QtQuick 2.9
-import QtQuick.Window 2.2
+import QtQuick
+import QtQuick.Window
 import NERO
 
 Item {

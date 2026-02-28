@@ -1,5 +1,5 @@
 pragma Singleton
-import QtQuick 6.2
+import QtQuick
 
 QtObject {
             property string currentTheme: "dark"
