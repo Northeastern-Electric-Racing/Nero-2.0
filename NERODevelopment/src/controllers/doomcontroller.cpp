@@ -22,6 +22,7 @@
 extern "C" {
 #include "doomgeneric.h"
 #include "doomkeys.h"
+extern int joybspeed;
 }
 
 /* ============================================================
@@ -197,6 +198,9 @@ void DoomWorker::start()
     qInfo() << "[DOOM] Starting engine with WAD:" << m_wadPath;
 
     doomgeneric_Create(argc, argv);
+
+    // Enable autorun (tricks engine into always run)
+    joybspeed = 29;
 
     m_running = true;
     emit started();
