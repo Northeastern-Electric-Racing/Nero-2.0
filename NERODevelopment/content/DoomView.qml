@@ -14,8 +14,8 @@ Item {
     readonly property int doomKeyLeft:   0xAC
     readonly property int doomKeyRight:  0xAE
     readonly property int doomKeyEnter:  0x0D
-    readonly property int doomKeyUse:    0x9D
-    readonly property int doomKeyFire:   0x20
+    readonly property int doomKeyUse:    0xA2
+    readonly property int doomKeyFire:   0xA3
     readonly property int doomKeyEscape: 0x1B
 
     // Hold to exit
@@ -100,12 +100,15 @@ Item {
                 doomController.sendKey(doomKeyRight, true)
                 event.accepted = true
                 break
+            case Qt.Key_Space:
+                doomController.sendKey(doomKeyUse, true)
+                event.accepted = true
+                break
             case Qt.Key_Return:
                 if (!doomController.running) {
                     doomController.startGame()
                 } else {
                     doomController.sendKey(doomKeyEnter, true)
-                    doomController.sendKey(doomKeyUse, true)
                     doomController.sendKey(doomKeyFire, true)
                 }
                 event.accepted = true
@@ -141,9 +144,12 @@ Item {
                 doomController.sendKey(doomKeyRight, false)
                 event.accepted = true
                 break
+            case Qt.Key_Space:
+                doomController.sendKey(doomKeyUse, false)
+                event.accepted = true
+                break
             case Qt.Key_Return:
                 doomController.sendKey(doomKeyEnter, false)
-                doomController.sendKey(doomKeyUse, false)
                 doomController.sendKey(doomKeyFire, false)
                 event.accepted = true
                 break
