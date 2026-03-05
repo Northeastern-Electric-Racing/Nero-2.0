@@ -9,6 +9,7 @@
 #include "controllers/navigationcontroller.h"
 #include "controllers/offviewcontroller.h"
 #include "controllers/snakecontroller.h"
+#include "controllers/game2048controller.h"
 #include "controllers/speedcontroller.h"
 #include "import_qml_components_plugins.h"
 #include "import_qml_plugins.h"
@@ -33,6 +34,7 @@ int main(int argc, char *argv[]) {
   NavigationController navigationController(model);
   FlappyBirdController flappyBirdController(model);
   SnakeController snakeController(model);
+  Game2048Controller game2048Controller(model);
   EfficiencyController efficencyController(model);
   SpeedController speedController(model);
 
@@ -46,6 +48,8 @@ int main(int argc, char *argv[]) {
   engine.rootContext()->setContextProperty("flappyBirdController",
                                            &flappyBirdController);
   engine.rootContext()->setContextProperty("snakeController", &snakeController);
+  engine.rootContext()->setContextProperty("game2048Controller",
+                                           &game2048Controller);
   engine.rootContext()->setContextProperty("efficiencyController",
                                            &efficencyController);
   engine.rootContext()->setContextProperty("speedController", &speedController);
