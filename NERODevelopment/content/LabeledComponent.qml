@@ -21,11 +21,11 @@ Rectangle {
         stops: [
             GradientStop {
                 position: 1.0
-                color: Theme.getColor("transparent")
+                color: "transparent"
             },
             GradientStop {
                 position: 0.5
-                color: Theme.getColor("iconBackground")
+                color: Theme.iconBackground
             }
         ]
     }
@@ -84,7 +84,7 @@ Rectangle {
 
                 LabelText {
                     text: labelComponent.valueUnit
-                    color: Theme.getColor("mutedForeground")
+                    color: Theme.mutedForeground
                     font.pixelSize: labelComponent.unitFontSize
                     anchors.bottom: labelComponent.unitAnchorBottom ? parent.bottom : null
                 }
