@@ -114,11 +114,11 @@ protected:
   QList<FaultInstance> faultInstances;
   QList<float> averageCellTemps;
   QList<float> stateOfChargeDeltas;
-  int m_currentTime;
-  int m_fastestTime;
-  int m_lastTime;
-  int m_maxSpeed;
-  float m_maxDraw;
+  int m_currentTime = 0;
+  int m_fastestTime = 0;
+  int m_lastTime = 0;
+  int m_maxSpeed = 0;
+  float m_maxDraw = 0;
 };
 
 #define ModelInterfaceId "com.ner.model"

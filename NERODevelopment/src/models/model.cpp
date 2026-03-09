@@ -1,5 +1,6 @@
 #include "model.h"
 #include "QVector"
+#include <cmath>
 
 Model::Model() : pageHeight(480), pageWidth(800) {
   connect(this, &Model::onCurrentDataChange, this, &Model::updateStoredValues);
@@ -21,8 +22,9 @@ void Model::updateStoredValues() {
   }
   std::optional<float> draw = this->getCurrent();
   if (draw) {
-    if (draw.value() > m_maxDraw) {
-      m_maxDraw = draw.value();
+    float absDraw = std::fabs(draw.value());
+    if (absDraw > m_maxDraw) {
+      m_maxDraw = absDraw;
     }
   }
 }

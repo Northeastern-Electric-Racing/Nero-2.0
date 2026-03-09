@@ -1,13 +1,13 @@
 #ifndef DATATYPENAMES_H
 #define DATATYPENAMES_H
 
-#define MPH "MPU/State/Speed"
+#define MPH "VCU/CarState/speed"
 #define STATUS "MPU/State/TSMS"
 #define DIRECTION "MPU/State/Direction"
 #define PACKTEMP "BMS/Status/Temp_Average"
 #define MOTORTEMP "DTI/Temps/Motor_Temperature"
 #define STATEOFCHARGE "BMS/Pack/SOC"
-#define CURRENT "DTI/Power/AC_Current"
+#define CURRENT "DTI/Power/DC_Current"
 #define BALANCINGCELLS "BMS/Status/Balancing"
 #define PACKVOLTAGE "BMS/Pack/Voltage"
 #define MAXCELLTEMP "BMS/Cells/Temp_High_Value"
