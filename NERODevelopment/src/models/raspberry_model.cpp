@@ -415,11 +415,6 @@ std::optional<float> RaspberryModel::getModeIndex() {
 
 void RaspberryModel::updateCurrentData() { emit this->onCurrentDataChange(); }
 
-std::optional<bool> RaspberryModel::getIsTalking() {
-  // No microphone topic exists in Odyssey definitions.
-  return false;
-}
-
 QList<QString> RaspberryModel::getCriticalFaults() {
   QRegularExpression regex(
       "^(BMS/Faults/Critical/.*|MPU/Fault/Critical/.*)$");

@@ -69,7 +69,6 @@ public:
   std::optional<float> getSegment2Temp() override;
   std::optional<float> getSegment3Temp() override;
   std::optional<float> getSegment4Temp() override;
-  std::optional<bool> getIsTalking() override;
   QList<QString> getCriticalFaults() override;
   QList<QString> getNonCriticalFaults() override;
   std::optional<float> getLowVoltageStateOfCharge() override;
