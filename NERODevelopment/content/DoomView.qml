@@ -16,6 +16,8 @@ Item {
     readonly property int doomKeyEnter:  0x0D
     readonly property int doomKeyUse:    0xA2
     readonly property int doomKeyFire:   0xA3
+    readonly property int doomKeyStrafeL: 0xA0
+    readonly property int doomKeyStrafeR: 0xA1
     readonly property int doomKeyEscape: 0x1B
 
     // Hold to exit
@@ -104,6 +106,14 @@ Item {
                 doomController.sendKey(doomKeyUse, true)
                 event.accepted = true
                 break
+            case Qt.Key_Comma:
+                doomController.sendKey(doomKeyStrafeL, true)
+                event.accepted = true
+                break
+            case Qt.Key_Period:
+                doomController.sendKey(doomKeyStrafeR, true)
+                event.accepted = true
+                break
             case Qt.Key_Return:
                 if (!doomController.running) {
                     doomController.startGame()
@@ -146,6 +156,14 @@ Item {
                 break
             case Qt.Key_Space:
                 doomController.sendKey(doomKeyUse, false)
+                event.accepted = true
+                break
+            case Qt.Key_Comma:
+                doomController.sendKey(doomKeyStrafeL, false)
+                event.accepted = true
+                break
+            case Qt.Key_Period:
+                doomController.sendKey(doomKeyStrafeR, false)
                 event.accepted = true
                 break
             case Qt.Key_Return:
