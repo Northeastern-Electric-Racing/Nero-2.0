@@ -23,7 +23,6 @@ public:
 
   virtual void connectToMQTT() = 0;
   virtual std::optional<float> getMph() = 0;
-  virtual std::optional<float> getKph() = 0;
   virtual std::optional<float> getStatus() = 0;
   virtual std::optional<float> getDir() = 0;
   virtual std::optional<float> getPackTemp() = 0;
@@ -47,7 +46,6 @@ public:
   virtual std::optional<float> getAveCellTemp() = 0;
   virtual std::optional<float> getAveCellVoltage() = 0;
   virtual std::optional<float> getCellDelta() = 0;
-  virtual std::optional<float> getBurningCells() = 0;
   virtual std::optional<float> getTractionControl() = 0;
   virtual std::optional<float> getInverterTemp() = 0;
   virtual std::optional<float> getMotorPower() = 0;
@@ -94,7 +92,7 @@ public:
   void updatePinnedData();
   QMap<QString, DebugPlotValue> getPinnedData();
   void updateAverageCellTemps();
-  std::optional<float> getById(QString id);
+  std::optional<float> getById(QString id, int valueIndex = 0);
 
   int pageHeight;
   int pageWidth;

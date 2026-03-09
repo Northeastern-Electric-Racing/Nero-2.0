@@ -19,7 +19,6 @@ public:
   // Implementations of virtual functions from the Model class
   void connectToMQTT() override;
   std::optional<float> getMph() override;
-  std::optional<float> getKph() override;
   std::optional<float> getStatus() override;
   std::optional<float> getDir() override;
   std::optional<float> getPackTemp() override;
@@ -43,7 +42,6 @@ public:
   std::optional<float> getAveCellTemp() override;
   std::optional<float> getAveCellVoltage() override;
   std::optional<float> getCellDelta() override;
-  std::optional<float> getBurningCells() override;
   std::optional<float> getTractionControl() override;
   std::optional<float> getInverterTemp() override;
   std::optional<float> getMotorPower() override;
