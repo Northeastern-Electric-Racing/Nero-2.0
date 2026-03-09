@@ -69,6 +69,8 @@ void RaspberryModel::connectToMQTT() {
       MPUFAULT,
       DCL,
       CCL,
+      REGENPOWER,
+      TORQUEPOWER,
       GFORCE,
       SEGMENTTEMP1,
       SEGMENTTEMP2,
@@ -108,7 +110,7 @@ void RaspberryModel::connectToMQTT() {
   QList<QString> client_2_topics = {
       FORWARDBUTTON, BACKWARDBUTTON, RIGHTBUTTON, ENTERBUTTON,
       UPBUTTON,      DOWNBUTTON,     HOMEBUTTON,  MODEINDEX,
-      DIRECTION,     REGENPOWER,     TORQUEPOWER,
+      DIRECTION,
   };
   MqttClient *client_2 =
       new MqttClient(nullptr, client2_port, client_2_topics, mqttHost);
