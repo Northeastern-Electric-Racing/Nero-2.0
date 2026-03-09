@@ -8,10 +8,10 @@ Rectangle {
     property int maxValue: 100
     property int fillMargin: height / 20
 
-    property string fillColor: battery.value > 70 ? Theme.getColor("goodStatus") : battery.value
-                    > 40 ? Theme.getColor("cautionStatus") : Theme.getColor("criticalStatus")
+    property string fillColor: battery.value > 70 ? Theme.goodStatus : battery.value
+                    > 40 ? Theme.cautionStatus : Theme.criticalStatus
     width: height / 2
-    color: Theme.getColor("transparent")
+    color: "transparent"
 
     Rectangle {
         id: topOutlet
@@ -38,7 +38,7 @@ Rectangle {
                 fill: parent
                 margins: battery.fillMargin
             }
-            color: Theme.getColor("background")
+            color: Theme.background
             z: 0
         }
 
@@ -53,7 +53,7 @@ Rectangle {
                     },
                     GradientStop {
                         position: 1.0
-                        color: Theme.getColor("fillGradientStop")
+                        color: Theme.fillGradientStop
                     }
                 ]
             }
