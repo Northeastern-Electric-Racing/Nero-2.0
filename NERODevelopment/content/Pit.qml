@@ -22,7 +22,7 @@ Rectangle {
     property int labelFontSize: Math.min(height / 20, width / 20)
     property int unitFontSize: valueFontSize / 1.5
 
-    color: Theme.background
+    color: Theme.getColor("background")
     height: 480
     width: 800
 

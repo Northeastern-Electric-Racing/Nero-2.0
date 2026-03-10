@@ -52,7 +52,6 @@ set(PROJECT_SOURCES
     src/controllers/flappybirdcontroller.h
     src/controllers/speedcontroller.h
     src/controllers/snakecontroller.h
-    src/controllers/game2048controller.h
     src/controllers/tankcontroller.h
     src/controllers/doomcontroller.h
 
@@ -81,7 +80,6 @@ set(PROJECT_SOURCES
     src/controllers/flappybirdcontroller.cpp
     src/controllers/speedcontroller.cpp
     src/controllers/snakecontroller.cpp
-    src/controllers/game2048controller.cpp
     src/controllers/tankcontroller.cpp
     src/controllers/doomcontroller.cpp
 

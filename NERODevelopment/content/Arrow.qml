@@ -8,7 +8,7 @@ Item {
     property variant stops: []
     property int arrowWidth: 2
     property real angle: -Math.PI / 6
-    property string arrowColor: Theme.primaryForeground
+    property string arrowColor: Theme.getColor("primaryForeground")
 
     property real x1: stops[stops.length - 2].x
     property real y1: stops[stops.length - 2].y

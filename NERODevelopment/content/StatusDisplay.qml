@@ -18,8 +18,8 @@ Item {
         id: background
         anchors.fill: parent
         radius: 5
-        color: detailDisplay.status == 0 ? Theme.background : (detailDisplay.status == 1 ? Theme.goodStatus : (detailDisplay.status == 2 ? Theme.criticalStatus : "transparent"))
-        border.color: Theme.primaryForeground
+        color: detailDisplay.status == 0 ? Theme.getColor("background") : (detailDisplay.status == 1 ? Theme.getColor("goodStatus") : (detailDisplay.status == 2 ? Theme.getColor("criticalStatus") : Theme.getColor("transparent")))
+        border.color: Theme.getColor("primaryForeground")
         border.width: 1
 
         Behavior on border.width {
@@ -41,7 +41,7 @@ Item {
 
         LabelText {
             id: taskText
-            color: detailDisplay.status == 0 ? Theme.primaryForeground : Theme.inverseForeground
+            color: detailDisplay.status == 0 ? Theme.getColor("primaryForeground") : Theme.getColor("inverseForeground")
             text: detailDisplay.shutdownFlowTask
             anchors.centerIn: parent
             font.bold: true

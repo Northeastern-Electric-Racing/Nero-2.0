@@ -19,8 +19,8 @@ Item {
         ShapePath {
             id: triangle
             dashPattern: 5.6
-            fillColor: Theme.criticalStatus
-            strokeColor: "transparent"
+            fillColor: Theme.getColor("criticalStatus")
+            strokeColor: Theme.getColor("transparent")
             strokeWidth: 1
             capStyle: ShapePath.RoundCap
 
@@ -45,7 +45,7 @@ Item {
             id: text1
             x: (shape.width) / 2 - font.pixelSize / 8
             y: (shape.height - (font.pixelSize * 1.2))
-            color: Theme.primaryForeground
+            color: Theme.getColor("primaryForeground")
             text: qsTr("!")
             font.pixelSize: .75 * shape.width
         }

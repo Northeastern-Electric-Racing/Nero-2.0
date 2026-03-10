@@ -4,10 +4,10 @@ import NERO
 Rectangle {
     property bool highlighted: false
     property string text: "Off"
-    color: "transparent"
+    color: Theme.getColor("transparent")
     border.width: highlighted ? 2 : 1
 
-    border.color: highlighted ? Theme.primaryForeground : "transparent"
+    border.color: highlighted ? Theme.getColor("primaryForeground") : Theme.getColor("transparent")
     height: label.implicitHeight
     width: parent.width
 

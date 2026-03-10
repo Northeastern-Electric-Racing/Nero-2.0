@@ -16,11 +16,11 @@ Item {
         y: (parent.height - dimension) / 2
         width: dimension
         height: dimension
-        color: Theme.nonCriticalBackground
+        color: Theme.getColor("nonCriticalBackground")
 
         Text {
             id: exclamation
-            color: Theme.nonCriticalForeground
+            color: Theme.getColor("nonCriticalForeground")
             text: qsTr("!")
             font.pixelSize: 0.625 * parent.width
             horizontalAlignment: Text.AlignHCenter
@@ -36,7 +36,7 @@ Item {
             radius: dimension / 4
             width: dimension / 2
             height: dimension / 2
-            color: Theme.nonCriticalForeground
+            color: Theme.getColor("nonCriticalForeground")
             visible: numWarnings > 0
 
             Text {

@@ -15,13 +15,13 @@ Item {
         PropertyAnimation {
             target: overlay
             property: "color"
-            to: Theme.primaryMicrophone
+            to: Theme.getColor("primaryMicrophone")
             duration: 1000 // Animation duration in milliseconds
         }
         PropertyAnimation {
             target: overlay
             property: "color"
-            to: Theme.secondaryMicrophone
+            to: Theme.getColor("secondaryMicrophone")
             duration: 1000
         }
     }
@@ -40,7 +40,7 @@ Item {
         id: overlay
         anchors.fill: microphone
         source: microphone
-        color: Theme.background
+        color: Theme.getColor("background")
         transform: rotation
         antialiasing: true
     }

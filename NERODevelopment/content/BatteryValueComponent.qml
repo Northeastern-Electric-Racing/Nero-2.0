@@ -8,7 +8,7 @@ Item {
     property string title: "Charge State"
     property int horizontalIconSpacing: width * 0.1
     property int labelVerticalSpacing: height * 0.1
-    property string labelColor: Theme.accentForeground
+    property string labelColor: Theme.getColor("accentForeground")
     property int horizontalPadding: width * 0.1
     property int radius
     property int valueFontSize

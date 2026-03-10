@@ -9,7 +9,6 @@
 #include "controllers/navigationcontroller.h"
 #include "controllers/offviewcontroller.h"
 #include "controllers/snakecontroller.h"
-#include "controllers/game2048controller.h"
 #include "controllers/speedcontroller.h"
 #include "controllers/doomcontroller.h"
 #include "import_qml_components_plugins.h"
@@ -62,45 +61,4 @@ int main(int argc, char *argv[]) {
     engine.loadFromModule("content", "App");
 
     return app.exec();
-  set_qt_environment();
-
-  QGuiApplication app(argc, argv);
-
-  QQmlApplicationEngine engine;
-
-  Model *model = new RaspberryModel();
-  model->connectToMQTT();
-
-  HomeController homeController(model);
-  HeaderController headerController(model);
-  OffViewController offViewController(model);
-  NavigationController navigationController(model);
-  FlappyBirdController flappyBirdController(model);
-  SnakeController snakeController(model);
-  Game2048Controller game2048Controller(model);
-  EfficiencyController efficencyController(model);
-  SpeedController speedController(model);
-
-  engine.rootContext()->setContextProperty("homeController", &homeController);
-  engine.rootContext()->setContextProperty("headerController",
-                                           &headerController);
-  engine.rootContext()->setContextProperty("offViewController",
-                                           &offViewController);
-  engine.rootContext()->setContextProperty("navigationController",
-                                           &navigationController);
-  engine.rootContext()->setContextProperty("flappyBirdController",
-                                           &flappyBirdController);
-  engine.rootContext()->setContextProperty("snakeController", &snakeController);
-  engine.rootContext()->setContextProperty("game2048Controller",
-                                           &game2048Controller);
-  engine.rootContext()->setContextProperty("efficiencyController",
-                                           &efficencyController);
-  engine.rootContext()->setContextProperty("speedController", &speedController);
-
-  QObject::connect(
-      &engine, &QQmlApplicationEngine::objectCreationFailed, &app,
-      []() { QCoreApplication::exit(-1); }, Qt::QueuedConnection);
-  engine.loadFromModule("content", "App");
-
-  return app.exec();
 }

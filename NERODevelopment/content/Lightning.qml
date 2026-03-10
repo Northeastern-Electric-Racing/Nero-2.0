@@ -5,8 +5,8 @@ import NERO
 Item {
     id: lightning
     property int dimension: 150
-    property string primaryColor: Theme.accentGreen
-    property string secondaryColor: Theme.blackForeground
+    property string primaryColor: Theme.getColor("accentGreen")
+    property string secondaryColor: Theme.getColor("blackForeground")
 
     width: dimension
     height: dimension
@@ -20,7 +20,7 @@ Item {
         ShapePath {
             id: background
             fillColor: lightning.secondaryColor
-            strokeColor: "transparent"
+            strokeColor: Theme.getColor("transparent")
             strokeWidth: 1
 
             startX: 47 / 80 * shape2.width
@@ -78,7 +78,7 @@ Item {
         ShapePath {
             id: foreground
             fillColor: lightning.primaryColor
-            strokeColor: "transparent"
+            strokeColor: Theme.getColor("transparent")
             strokeWidth: 1
 
             startX: 45 / 80 * shape.width

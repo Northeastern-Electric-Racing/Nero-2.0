@@ -17,19 +17,19 @@ Popup {
     rightInset: 0
     bottomInset: 0
     Overlay.modal: Rectangle {
-        color: "transparent"
+        color: Theme.getColor("transparent")
     }
 
     anchors.centerIn: Overlay.overlay
 
     contentItem: Rectangle {
         anchors.fill: parent
-        color: Theme.popoverBackground
+        color: Theme.getColor("popoverBackground")
         radius: 20
 
         Text {
             id: modalTitle
-            color: Theme.inverseForeground
+            color: Theme.getColor("inverseForeground")
             font.pixelSize: dimension / 6
             font.bold: true
             wrapMode: Text.WordWrap
@@ -43,7 +43,7 @@ Popup {
 
         Text {
             id: modalDescription
-            color: Theme.inverseForeground
+            color: Theme.getColor("inverseForeground")
             font.pixelSize: dimension / 11
             wrapMode: Text.WordWrap
             anchors.left: parent.left

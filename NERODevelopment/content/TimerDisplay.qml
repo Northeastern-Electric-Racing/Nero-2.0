@@ -27,7 +27,7 @@ Item {
             Layout.preferredWidth: 6
             Layout.fillWidth: true
             Layout.fillHeight: true
-            backgroundColor: Theme.currentRunBackground
+            backgroundColor: Theme.getColor("currentRunBackground")
             label: "CURRENT RUN"
             value: timerDisplay.currentRunTime
             radius: timerDisplay.radius
@@ -38,7 +38,7 @@ Item {
             Layout.preferredWidth: 5
             Layout.fillWidth: true
             Layout.fillHeight: true
-            backgroundColor: Theme.lastRunBackground
+            backgroundColor: Theme.getColor("lastRunBackground")
             label: "LAST RUN"
             value: timerDisplay.lastRunTime
         }
@@ -47,7 +47,7 @@ Item {
             Layout.preferredWidth: 6
             Layout.fillWidth: true
             Layout.fillHeight: true
-            backgroundColor: Theme.fastestRunBackground
+            backgroundColor: Theme.getColor("fastestRunBackground")
             label: "FASTEST RUN"
             value: timerDisplay.fastestRunTime
             radius: timerDisplay.radius
@@ -63,7 +63,7 @@ Item {
         RunInfo {
             Layout.fillWidth: true
             Layout.fillHeight: true
-            backgroundColor: Theme.currentRunBackground
+            backgroundColor: Theme.getColor("currentRunBackground")
             label: "CURRENT RUN"
             value: timerDisplay.currentRunTime
             radius: timerDisplay.radius
@@ -74,7 +74,7 @@ Item {
         RunInfo {
             Layout.fillWidth: true
             Layout.fillHeight: true
-            backgroundColor: Theme.lastRunBackground
+            backgroundColor: Theme.getColor("lastRunBackground")
             label: "LAST RUN"
             value: timerDisplay.lastRunTime
             vertical: true
@@ -83,7 +83,7 @@ Item {
         RunInfo {
             Layout.fillWidth: true
             Layout.fillHeight: true
-            backgroundColor: Theme.fastestRunBackground
+            backgroundColor: Theme.getColor("fastestRunBackground")
             label: "FASTEST RUN"
             value: timerDisplay.fastestRunTime
             radius: timerDisplay.radius

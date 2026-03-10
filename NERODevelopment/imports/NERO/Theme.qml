@@ -1,76 +1,121 @@
 pragma Singleton
-import QtQuick
+import QtQuick 6.2
 
 QtObject {
-    id: root
+            property string currentTheme: "dark"
+            property var themes: {
+                        "dark": {
+                                    background: "#000000",
+                                    primaryForeground: "#FFFFFF",
+                                    accentForeground: "#47A7FF",
+                                    inverseForeground: "#000000",
+                                    blackForeground: "#000000",
+                                    mutedForeground: "#777777",
+                                    offCarForeground: "#ff0101",
+                                    onGLVMSForeground: "#1cff00",
 
-    property string currentTheme: "dark"
-    readonly property bool isDark: currentTheme === "dark"
+                                    transparent: "transparent",
 
-    // Core foregrounds
-    readonly property color background:           isDark ? "#000000" : "#FFFFFF"
-    readonly property color primaryForeground:     isDark ? "#FFFFFF" : "#000000"
-    readonly property color accentForeground:      "#47A7FF"
-    readonly property color inverseForeground:     isDark ? "#000000" : "#FFFFFF"
-    readonly property color blackForeground:       "#000000"
-    readonly property color mutedForeground:       "#777777"
-    readonly property color offCarForeground:      "#ff0101"
-    readonly property color onGLVMSForeground:     "#1cff00"
+                                    currentRunBackground: "#47A7FF",
+                                    lastRunBackground: "#FFFFFF",
+                                    fastestRunBackground: "#AD00FF",
 
-    // Run timer backgrounds
-    readonly property color currentRunBackground:  "#47A7FF"
-    readonly property color lastRunBackground:     isDark ? "#FFFFFF" : "#000000"
-    readonly property color fastestRunBackground:  "#AD00FF"
+                                    directionBackground: "#55AAFF",
 
-    // Direction
-    readonly property color directionBackground:   "#55AAFF"
+                                    iconHighlightedBackground: "#6E6E6E",
+                                    iconBackground: "#191919",
+                                    iconHighlightedGradientStop: "#333333",
+                                    iconGradientStop:"#111111",
 
-    // Icon backgrounds
-    readonly property color iconHighlightedBackground:   isDark ? "#6E6E6E" : "#DCDCDC"
-    readonly property color iconBackground:              isDark ? "#191919" : "#1919190A"
-    readonly property color iconHighlightedGradientStop: isDark ? "#333333" : "#C4C4C4"
-    readonly property color iconGradientStop:            isDark ? "#111111" : "#1111110A"
+                                    goodStatus: "#55FF00",
+                                    cautionStatus: "orange",
+                                    criticalStatus: "red",
 
-    // Status colors
-    readonly property color goodStatus:     "#55FF00"
-    readonly property color cautionStatus:  "orange"
-    readonly property color criticalStatus: "red"
+                                    redThermoStatus: "red",
+                                    orangeThermoStatus: "orange",
+                                    yellowThermoStatus: "#FFF500",
+                                    blueThermoStatus: "blue",
+                                    purpleThermoStatus: "purple",
 
-    // Thermometer status
-    readonly property color redThermoStatus:    "red"
-    readonly property color orangeThermoStatus: "orange"
-    readonly property color yellowThermoStatus: "#FFF500"
-    readonly property color blueThermoStatus:   "blue"
-    readonly property color purpleThermoStatus: "purple"
+                                    fillGradientStop: "#000000",
 
-    // Gradients / fills
-    readonly property color fillGradientStop: isDark ? "#000000" : "#FFFFFF"
+                                    backgroundPicture: "#CBCACA",
+                                    popoverBackground: "#FFFFFF",
+                                    descriptionButtonBackground: "#000000",
+                                    descriptionButtonForeground: "#FFFFFF",
 
-    // Popover / modal
-    readonly property color backgroundPicture:           "#CBCACA"
-    readonly property color popoverBackground:           "#FFFFFF"
-    readonly property color descriptionButtonBackground: "#000000"
-    readonly property color descriptionButtonForeground: "#FFFFFF"
+                                    accentBlue: "blue",
+                                    accentGreen: "#14F504",
+                                    accentPurple: "purple",
 
-    // Accent colors
-    readonly property color accentBlue:   "blue"
-    readonly property color accentGreen:  "#14F504"
-    readonly property color accentPurple: "purple"
+                                    primaryMicrophone: "#00AA00",
+                                    secondaryMicrophone: "#00FF000",
 
-    // Microphone
-    readonly property color primaryMicrophone:   "#00AA00"
-    readonly property color secondaryMicrophone: "#00FF00"
+                                    primaryDetailGradient: "black",
+                                    secondaryDetailGradient: "#969696",
 
-    // Detail display gradient
-    readonly property color primaryDetailGradient:   "black"
-    readonly property color secondaryDetailGradient: "#969696"
+                                    nonCriticalBackground: "#ffca62",
+                                    nonCriticalForeground: "white"
+                        },
+                        "light": {
+                                    background: "#FFFFFF",
+                                    primaryForeground: "#000000",
+                                    accentForeground: "#47A7FF",
+                                    inverseForeground: "#FFFFFF",
+                                    blackForeground: "#000000",
+                                    mutedForeground: "#777777",
+                                    offCarForeground: "#ff0101",
+                                    onGLVMSForeground: "#1cff00",
 
-    // Non-critical warning
-    readonly property color nonCriticalBackground: "#ffca62"
-    readonly property color nonCriticalForeground: "white"
+                                    transparent: "transparent",
 
-    // Theme switching
-    function setTheme(theme: string) {
-        currentTheme = theme
-    }
+                                    currentRunBackground: "#47A7FF",
+                                    lastRunBackground: "#000000",
+                                    fastestRunBackground: "#AD00FF",
+
+                                    directionBackground: "#55AAFF",
+
+                                    iconHighlightedBackground: "#DCDCDC",
+                                    iconBackground: "#1919190A",
+                                    iconHighlightedGradientStop: "#C4C4C4",
+                                    iconGradientStop:"#1111110A",
+
+                                    goodStatus: "#55FF00",
+                                    cautionStatus: "orange",
+                                    criticalStatus: "red",
+
+                                    redThermoStatus: "red",
+                                    orangeThermoStatus: "orange",
+                                    yellowThermoStatus: "#FFF500",
+                                    blueThermoStatus: "blue",
+                                    purpleThermoStatus: "purple",
+
+                                    fillGradientStop: "#FFFFFF",
+
+                                    backgroundPicture: "#CBCACA",
+                                    popoverBackground: "#FFFFFF",
+                                    descriptionButtonBackground: "#000000",
+                                    descriptionButtonForeground: "#FFFFFF",
+
+                                    accentBlue: "blue",
+                                    accentGreen: "#14F504",
+                                    accentPurple: "purple",
+
+                                    primaryMicrophone: "#00AA00",
+                                    secondaryMicrophone: "#00FF000",
+
+                                    primaryDetailGradient: "black",
+                                    secondaryDetailGradient: "#969696",
+
+                                    nonCriticalBackground: "#ffca62",
+                                    nonCriticalForeground: "white"
+                        }
+            }
+            function getColor(prop) {
+                        return themes[currentTheme][prop];
+            }
+
+            function setTheme(theme) {
+                        currentTheme = theme
+            }
 }

@@ -5,7 +5,7 @@ import NERO
 
 Rectangle {
     id: root
-    color: "transparent"
+    color: Theme.getColor("transparent")
 
     property bool highlighted: false
     property string text: "Off"
@@ -25,11 +25,11 @@ Rectangle {
             gradient: Gradient {
                 GradientStop {
                     position: 0.0
-                    color: highlighted ? Theme.iconHighlightedBackground : Theme.iconBackground
+                    color: highlighted ? Theme.getColor("iconHighlightedBackground") : Theme.getColor("iconBackground")
                 }
                 GradientStop {
                     position: 1.0
-                    color: highlighted ? Theme.iconHighlightedGradientStop : Theme.iconGradientStop
+                    color: highlighted ? Theme.getColor("iconHighlightedGradientStop") : Theme.getColor("iconGradientStop")
                 }
             }
 
