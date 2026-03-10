@@ -4,49 +4,7 @@ The Cars Dashboard Written in C++ With Qt Framework
 
 ### Onboarding
 
-Download Qt Installer For Open Source (https://www.qt.io/download-qt-installer-oss?hsCtaTracking=99d9dd4f-5681-48d2-b096-470725510d34%7C074ddad0-fdef-4e53-8aa8-5e8a876d6ab4)
-
-Open Qt Installer.
-
-Create a Qt account if you do not already have one.
-
-Accept the open source licensing agreement
-
-Select the Default options for installing components
-
-- Select Qt version 6.5.3
-
-Select Next Until You start downloading Qt (Should be around 30 GB)
-
-### Install protobuf for your machine
-
-#### Mac Os
-
-`brew install protobuf@3`
-
-`brew link --overwrite protobuf@3`
-
-#### Linux
-
-`sudo apt update`
-
-`sudo apt install protobuf-compiler`
-
-`protoc`
-
-### Compiling QtMqtt for your Qt version
-
-1 load QtCreator -> Load Project c:\Qt\6.5.3\Src\QtMqtt\CMakeList.txt
-
-2 Build Release and Debug
-
-3 Exit QtCreator
-
-4 Go to C:\Qt\6.5.3\Src\qtmqtt\build\build-qtmqtt-Desktop_Qt_6_5_3_MinGW_64_bit-Release
-
-5 cmake --install . (see the point at the end)
-
-Done
+> For initial installation, visit here: https://nerdocs.atlassian.net/wiki/x/CIBORQ
 
 #### Opening the Project
 
