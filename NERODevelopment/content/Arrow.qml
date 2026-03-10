@@ -1,6 +1,5 @@
-import QtQuick 2.0
-import QtQuick.Shapes
 import QtQuick
+import QtQuick.Shapes
 import NERO
 
 Item {
