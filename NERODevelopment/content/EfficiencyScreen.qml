@@ -146,18 +146,6 @@ Item {
                 unitFontSize: efficiency.valueFontSize / 1.5
             }
 
-            BatteryValueComponent {
-                id: battery2
-                title: "LV SOC"
-                batteryValue: efficiency.lvSOC
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                radius: efficiency.borderRadii
-                valueFontSize: efficiency.valueFontSize
-                labelFontSize: efficiency.labelFontSize
-                unitFontSize: efficiency.valueFontSize / 1.5
-            }
-
             TorqueValueComponent {
                 id: torqueValue
                 torqueValue: efficiency.torqueLimit
