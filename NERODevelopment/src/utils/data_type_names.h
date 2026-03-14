@@ -62,5 +62,6 @@
 #define CRITICALFAULTS "BMS/Faults/Critical/#"
 #define NONCRITICALFAULTS "BMS/Faults/Non-Critical/#"
 #define LOWVOLTAGESOC "MPU/Sense/SOC"
+#define LEDMODE "Control/Mode"
 
 #endif // DATATYPENAMES_H
