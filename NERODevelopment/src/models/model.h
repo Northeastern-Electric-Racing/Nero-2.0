@@ -23,7 +23,6 @@ public:
 
   virtual void connectToMQTT() = 0;
   virtual std::optional<float> getMph() = 0;
-  virtual std::optional<float> getKph() = 0;
   virtual std::optional<float> getStatus() = 0;
   virtual std::optional<float> getDir() = 0;
   virtual std::optional<float> getPackTemp() = 0;
@@ -47,7 +46,6 @@ public:
   virtual std::optional<float> getAveCellTemp() = 0;
   virtual std::optional<float> getAveCellVoltage() = 0;
   virtual std::optional<float> getCellDelta() = 0;
-  virtual std::optional<float> getBurningCells() = 0;
   virtual std::optional<float> getTractionControl() = 0;
   virtual std::optional<float> getInverterTemp() = 0;
   virtual std::optional<float> getMotorPower() = 0;
@@ -75,7 +73,6 @@ public:
   virtual std::optional<float> getSegment2Temp() = 0;
   virtual std::optional<float> getSegment3Temp() = 0;
   virtual std::optional<float> getSegment4Temp() = 0;
-  virtual std::optional<bool> getIsTalking() = 0;
   virtual QList<QString> getCriticalFaults() = 0;
   virtual QList<QString> getNonCriticalFaults() = 0;
   virtual void sendMessage(QString topic, float value) = 0;
@@ -94,7 +91,7 @@ public:
   void updatePinnedData();
   QMap<QString, DebugPlotValue> getPinnedData();
   void updateAverageCellTemps();
-  std::optional<float> getById(QString id);
+  std::optional<float> getById(QString id, int valueIndex = 0);
 
   int pageHeight;
   int pageWidth;
@@ -117,11 +114,11 @@ protected:
   QList<FaultInstance> faultInstances;
   QList<float> averageCellTemps;
   QList<float> stateOfChargeDeltas;
-  int m_currentTime;
-  int m_fastestTime;
-  int m_lastTime;
-  int m_maxSpeed;
-  float m_maxDraw;
+  int m_currentTime = 0;
+  int m_fastestTime = 0;
+  int m_lastTime = 0;
+  int m_maxSpeed = 0;
+  float m_maxDraw = 0;
 };
 
 #define ModelInterfaceId "com.ner.model"
