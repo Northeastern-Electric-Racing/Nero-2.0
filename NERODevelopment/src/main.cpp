@@ -35,7 +35,7 @@ int main(int argc, char *argv[]) {
   FlappyBirdController flappyBirdController(model);
   SnakeController snakeController(model);
   DoomController doomController(model);
-  // Game2048Controller game2048Controller(model);
+  Game2048Controller game2048Controller(model);
   EnduranceController enduranceController(model);
   SpeedController speedController(model);
 
