@@ -9,7 +9,7 @@ Item {
     property int valueFontSize
     property int labelFontSize
     property int radius
-    property string labelColor: Theme.getColor("accentForeground")
+    property string labelColor: Theme.accentForeground
     property int horizontalIconSpacing: width * 0.1
     property int labelVerticalSpacing: height * 0.1
     property int unitFontSize: valueFontSize / 1.5

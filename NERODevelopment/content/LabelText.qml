@@ -5,5 +5,5 @@ import NERO
 Text {
     font.family: webFont.name
     font.pixelSize: 24
-    color: Theme.getColor("primaryForeground")
+    color: Theme.primaryForeground
 }

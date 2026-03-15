@@ -8,7 +8,7 @@ Rectangle {
     property bool downSelected: false
     height: 200
     width: 100
-    color: Theme.getColor("transparent")
+    color: "transparent"
 
     Column {
         id: arrowContainer
@@ -32,7 +32,7 @@ Rectangle {
                 onPaint: {
                     var ctx = upCanvas.getContext('2d')
 
-                    ctx.strokeStyle = Theme.getColor("primaryForeground")
+                    ctx.strokeStyle = Theme.primaryForeground
                     ctx.lineWidth = upCanvas.height * 0.3
                     ctx.beginPath()
                     ctx.moveTo(upCanvas.width * 0.05, upCanvas.height)
@@ -72,7 +72,7 @@ Rectangle {
             height: parent.height / 3
             width: parent.width
 
-            color: Theme.getColor("transparent")
+            color: "transparent"
         }
 
         Item {
@@ -98,7 +98,7 @@ Rectangle {
                 onPaint: {
                     var ctx = downCanvas.getContext('2d')
 
-                    ctx.strokeStyle = Theme.getColor("primaryForeground")
+                    ctx.strokeStyle = Theme.primaryForeground
                     ctx.lineWidth = downCanvas.height * 0.3
                     ctx.beginPath()
                     ctx.moveTo(downCanvas.width * 0.05, downCanvas.height)

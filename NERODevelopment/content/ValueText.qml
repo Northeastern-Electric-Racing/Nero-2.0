@@ -8,5 +8,5 @@ Text {
     font.family: webFont.name
     font.pixelSize: 85
     font.letterSpacing: -3
-    color: Theme.getColor("primaryForeground")
+    color: Theme.primaryForeground
 }

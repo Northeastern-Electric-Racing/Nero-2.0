@@ -34,7 +34,7 @@ qt6_add_qml_module(content
         TorqueAdj.qml
         SpeedMode.qml
         Snake.qml
-        DoomView.qml
+        Game2048.qml
         TimerDisplay.qml
         MaxSpeedComparator.qml
         MaxDrawGraph.qml
