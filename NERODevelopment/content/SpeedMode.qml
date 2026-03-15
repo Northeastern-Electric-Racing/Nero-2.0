@@ -1,5 +1,5 @@
-import QtQuick 2.15
-import QtQuick.Controls 2.15
+import QtQuick
+import QtQuick.Controls
 import QtQuick.Layouts
 
 import NERO
@@ -45,7 +45,7 @@ Item {
         width: speedMode.width * 0.7
         height: speedMode.height * 0.12
         text: speedMode.tractionControlStatus ? "TRACTION CONTROL - ON" : "TRACTION CONTROL - OFF"
-        color: speedMode.tractionControlStatus ? Theme.getColor("goodStatus") : Theme.getColor("criticalStatus")
+        color: speedMode.tractionControlStatus ? Theme.goodStatus : Theme.criticalStatus
         font.pixelSize: Math.min(speedMode.height * 0.09,
                                  speedMode.width * 0.06)
         font.bold: true
@@ -129,7 +129,7 @@ Item {
             Layout.preferredWidth: 1
 
             LabelText {
-                color: Theme.getColor("accentForeground")
+                color: Theme.accentForeground
                 text: "TOP SPEED"
                 Layout.preferredHeight: 2
                 Layout.fillWidth: true
@@ -144,7 +144,7 @@ Item {
                 Layout.preferredHeight: 9
                 Layout.fillHeight: true
                 Layout.fillWidth: true
-                color: Theme.getColor("accentBlue")
+                color: Theme.accentBlue
                 valueFontSize: speedMode.valueFontSize
                 unitFontSize: speedMode.radialUnitFontSize
             }
@@ -157,7 +157,7 @@ Item {
             clip: false
 
             LabelText {
-                color: Theme.getColor("accentForeground")
+                color: Theme.accentForeground
                 text: "MAX DRAW"
                 Layout.preferredHeight: 2
                 Layout.fillWidth: true

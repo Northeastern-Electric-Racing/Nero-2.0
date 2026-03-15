@@ -1,5 +1,5 @@
-import QtQuick 2.15
-import QtQuick.Controls 2.15
+import QtQuick
+import QtQuick.Controls
 import NERO
 
 Item {
@@ -9,7 +9,6 @@ Item {
 
     property var criticalFaults: headerController.criticalFaults
     property var nonCriticalFaults: headerController.nonCriticalFaults
-    property bool isTalking: headerController.isTalking
 
     Timer {
         id: timer
@@ -54,17 +53,6 @@ Item {
         anchors.topMargin: criticalFaultIcon.height / 5
         dimension: parent.height / 2 * 0.9
         numWarnings: criticalFaults.length
-    }
-
-    MicrophoneComponent {
-        id: microphoneComponent
-        height: parent.height / 2 + 10
-        width: parent.height / 2 + 10
-        anchors.right: parent.right
-        anchors.top: parent.top
-        anchors.rightMargin: 5
-        anchors.topMargin: 5
-        isTalking: header.isTalking
     }
 
     FaultDialog {

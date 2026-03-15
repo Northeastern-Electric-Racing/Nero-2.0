@@ -1,6 +1,6 @@
-import QtQuick 2.15
-import QtQuick.Controls 2.15
-import QtQuick.Layouts 1.15
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
 
 import NERO
 
@@ -10,21 +10,21 @@ Rectangle {
     height: parent.height
     visible: true
     focus: true
-    color: Theme.getColor("background")
+    color: Theme.background
 
     property variant attributeStatusMap: offViewController.attributeStatus
 
-    property int sideBrbStatus: attributeStatusMap["MPU/Fuses/BRB"]
-    property int bmsStatus: attributeStatusMap["MPU/Shutdown/BMS"]
-    property int imdStatus: attributeStatusMap["MPU/Shutdown/IMD"]
-    property int bspdStatus: attributeStatusMap["MPU/Shutdown/BSPD"]
-    property int botsStatus: attributeStatusMap["MPU/Shutdown/BOTS"]
-    property int inertiaStatus: attributeStatusMap["MPU/Shutdown/Inertia"]
-    property int cockPitBrbStatus: attributeStatusMap["MPU/Shutdown/CockpitBRB"]
+    property int sideBrbStatus: attributeStatusMap["MPU/Fuses/SD_TO_BRB_FUSE_STAT"]
+    property int bmsStatus: attributeStatusMap["MPU/Shutdown/BMS_GOOD"]
+    property int imdStatus: attributeStatusMap["MPU/Shutdown/IMD_GOOD"]
+    property int bspdStatus: attributeStatusMap["MPU/Shutdown/BSPD_GOOD"]
+    property int botsStatus: attributeStatusMap["MPU/Shutdown/BOTS_GOOD"]
+    property int inertiaStatus: attributeStatusMap["MPU/Shutdown/INERTIA_SW_GOOD"]
+    property int cockPitBrbStatus: attributeStatusMap["MPU/GPIO_EXPANDER_DEBUG/SHUTDOWN/CKPT_BRB_CLR"]
     property int tsmsStatus: attributeStatusMap["MPU/State/TSMS"]
-    property int hvdInterlockStatus: attributeStatusMap["MPU/Shutdown/HVC_Interlock"]
-    property int hvdConnectorStatus: attributeStatusMap["MPU/Shutdown/HVD_Interlock"]
-    property int mpuStatus: attributeStatusMap["MPU/Fault/Severity"]
+    property int hvdInterlockStatus: attributeStatusMap["MPU/Shutdown/HVD_INTLK_GOOD"]
+    property int hvdConnectorStatus: attributeStatusMap["MPU/Shutdown/HVC_INTLK_GOOD"]
+    property int mpuStatus: attributeStatusMap["MPU/Shutdown/MC_STAT"]
 
     property double packTemp: offViewController.packTemp
     property double motorTemp: offViewController.motorTemp
@@ -80,21 +80,21 @@ Rectangle {
 
         LabelText {
             text: "CAR OFF"
-            color: Theme.getColor("offCarForeground")
+            color: Theme.offCarForeground
             font.pixelSize: 40
             font.bold: true
         }
 
         LabelText {
             text: "-"
-            color: Theme.getColor("primaryForeground")
+            color: Theme.primaryForeground
             font.pixelSize: 40
             font.bold: true
         }
 
         LabelText {
             text: "GLVMS ON"
-            color: Theme.getColor("onGLVMSForeground")
+            color: Theme.onGLVMSForeground
             font.pixelSize: 40
             font.bold: true
         }
@@ -108,7 +108,7 @@ Rectangle {
 
         height: parent.height / 2
         width: parent.width / 2
-        color: Theme.getColor("transparent")
+        color: "transparent"
 
         Rectangle {
             id: lvStatusContainer
@@ -116,7 +116,7 @@ Rectangle {
             anchors.top: parent.top
             width: parent.width
             height: parent.height / 5
-            color: Theme.getColor("transparent")
+            color: "transparent"
 
             StatusDisplay {
                 id: glvms
@@ -157,7 +157,7 @@ Rectangle {
             anchors.bottom: parent.bottom
             anchors.right: parent.right
             anchors.left: parent.left
-            color: Theme.getColor("transparent")
+            color: "transparent"
 
             Rectangle {
                 id: bmsimdContainer
@@ -165,7 +165,7 @@ Rectangle {
                 anchors.left: parent.left
                 anchors.bottom: parent.bottom
                 width: parent.width / 3
-                color: Theme.getColor("transparent")
+                color: "transparent"
 
                 StatusDisplay {
                     id: bms
@@ -208,7 +208,7 @@ Rectangle {
                 anchors.top: parent.top
                 anchors.bottom: parent.bottom
                 width: parent.width / 3
-                color: Theme.getColor("transparent")
+                color: "transparent"
 
                 StatusDisplay {
                     id: can
@@ -306,7 +306,7 @@ Rectangle {
         anchors.leftMargin: -latch.width / 2
         width: parent.width * 0.42
         height: parent.height / 10
-        color: Theme.getColor("transparent")
+        color: "transparent"
 
         StatusDisplay {
             id: bots
@@ -361,7 +361,7 @@ Rectangle {
         anchors.topMargin: parent.height / 22
         height: parent.height / 10
         width: parent.width * 0.55
-        color: Theme.getColor("transparent")
+        color: "transparent"
 
         StatusDisplay {
             id: cpBrb
@@ -439,7 +439,7 @@ Rectangle {
         anchors.top: offHeader.bottom
         anchors.right: parent.right
         anchors.bottom: cpBrbInterlocksTsmsContainer.top
-        color: Theme.getColor("transparent")
+        color: "transparent"
 
         Rectangle {
             id: tempContainer
@@ -447,7 +447,7 @@ Rectangle {
             anchors.top: parent.top
             anchors.right: parent.right
             height: parent.height / 2
-            color: Theme.getColor("transparent")
+            color: "transparent"
 
             ThermometerValueComponent {
                 id: packTemp
