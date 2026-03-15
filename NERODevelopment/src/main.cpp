@@ -10,6 +10,7 @@
 #include "controllers/offviewcontroller.h"
 #include "controllers/snakecontroller.h"
 #include "controllers/speedcontroller.h"
+#include "controllers/game2048controller.h"
 #include "controllers/doomcontroller.h"
 #include "import_qml_components_plugins.h"
 #include "import_qml_plugins.h"
