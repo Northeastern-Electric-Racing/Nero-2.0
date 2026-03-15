@@ -1,23 +1,12 @@
 #include "socket_reciever.h"
 #include <QDebug>
-#include <cstring>
 
-#ifndef _WIN32
-#include <unistd.h>
-#include <sys/socket.h>
-#include <sys/un.h>
-#endif
-
-ButtonSocketReceiver::ButtonSocketReceiver(MqttClient *mqttClient,
-                                           const QString &socketPath,
+ButtonSocketReceiver::ButtonSocketReceiver(const QString &serverName,
                                            QObject *parent)
     : QObject(parent),
-    m_mqttClient(mqttClient),
-    m_socketPath(socketPath),
-    m_serverFd(-1),
-    m_clientFd(-1),
-    m_serverNotifier(nullptr),
-    m_clientNotifier(nullptr),
+    m_server(nullptr),
+    m_client(nullptr),
+    m_serverName(serverName),
     m_running(false) {
 }
 
@@ -26,225 +15,127 @@ ButtonSocketReceiver::~ButtonSocketReceiver() {
 }
 
 bool ButtonSocketReceiver::start() {
-#ifdef _WIN32
-    qWarning() << "ButtonSocketReceiver not supported on Windows";
-    return false;
-#else
     if (m_running) {
         qWarning() << "ButtonSocketReceiver already running";
         return true;
     }
 
-    qInfo() << "Starting ButtonSocketReceiver on path:" << m_socketPath;
+    m_server = new QLocalServer(this);
+    QLocalServer::removeServer(m_serverName);
+    m_server->setSocketOptions(QLocalServer::WorldAccessOption);
 
-    unlink(m_socketPath.toStdString().c_str());
-
-    m_serverFd = socket(AF_UNIX, SOCK_STREAM, 0);
-    if (m_serverFd == -1) {
-        QString error = QString("Failed to create socket: %1").arg(strerror(errno));
+    if (!m_server->listen(m_serverName)) {
+        QString error = QString("Failed to start button socket: %1")
+        .arg(m_server->errorString());
         qCritical() << error;
         emit errorOccurred(error);
+        delete m_server;
+        m_server = nullptr;
         return false;
     }
 
-    struct sockaddr_un addr;
-    memset(&addr, 0, sizeof(addr));
-    addr.sun_family = AF_UNIX;
-    strncpy(addr.sun_path, m_socketPath.toStdString().c_str(), sizeof(addr.sun_path) - 1);
-
-    if (bind(m_serverFd, (struct sockaddr*)&addr, sizeof(addr)) == -1) {
-        QString error = QString("Failed to bind socket: %1").arg(strerror(errno));
-        qCritical() << error;
-        close(m_serverFd);
-        m_serverFd = -1;
-        emit errorOccurred(error);
-        return false;
-    }
-
-    if (listen(m_serverFd, 1) == -1) {
-        QString error = QString("Failed to listen on socket: %1").arg(strerror(errno));
-        qCritical() << error;
-        close(m_serverFd);
-        m_serverFd = -1;
-        emit errorOccurred(error);
-        return false;
-    }
-
-    m_serverNotifier = new QSocketNotifier(m_serverFd, QSocketNotifier::Read, this);
-    connect(m_serverNotifier, &QSocketNotifier::activated, this, &ButtonSocketReceiver::handleNewConnection);
-    m_serverNotifier->setEnabled(true);
+    connect(m_server, &QLocalServer::newConnection,
+            this, &ButtonSocketReceiver::handleNewConnection);
 
     m_running = true;
-    qInfo() << "ButtonSocketReceiver listening on:" << m_socketPath;
-
+    qInfo() << "ButtonSocketReceiver listening on:" << m_server->fullServerName();
     return true;
-#endif
 }
 
 void ButtonSocketReceiver::stop() {
-#ifndef _WIN32
-    if (!m_running) {
-        return;
-    }
+    if (!m_running) return;
 
     qInfo() << "Stopping ButtonSocketReceiver";
 
-    if (m_clientNotifier) {
-        m_clientNotifier->setEnabled(false);
-        m_clientNotifier->deleteLater();
-        m_clientNotifier = nullptr;
+    if (m_client) {
+        m_client->disconnectFromServer();
+        m_client->deleteLater();
+        m_client = nullptr;
     }
-
-    if (m_clientFd != -1) {
-        close(m_clientFd);
-        m_clientFd = -1;
+    if (m_server) {
+        m_server->close();
+        m_server->deleteLater();
+        m_server = nullptr;
     }
-
-    if (m_serverNotifier) {
-        m_serverNotifier->setEnabled(false);
-        m_serverNotifier->deleteLater();
-        m_serverNotifier = nullptr;
-    }
-
-    if (m_serverFd != -1) {
-        close(m_serverFd);
-        m_serverFd = -1;
-    }
-
-    unlink(m_socketPath.toStdString().c_str());
 
     m_running = false;
-    qInfo() << "ButtonSocketReceiver stopped";
-#endif
 }
 
 void ButtonSocketReceiver::handleNewConnection() {
-#ifndef _WIN32
-    qInfo() << "New client connection attempt";
+    QLocalSocket *newClient = m_server->nextPendingConnection();
+    if (!newClient) return;
 
-    if (m_clientFd != -1) {
-        qWarning() << "Closing existing client connection for new client";
-        if (m_clientNotifier) {
-            m_clientNotifier->setEnabled(false);
-            m_clientNotifier->deleteLater();
-            m_clientNotifier = nullptr;
-        }
-        close(m_clientFd);
-        m_clientFd = -1;
+    if (m_client) {
+        qWarning() << "Replacing existing button client";
+        m_client->disconnectFromServer();
+        m_client->deleteLater();
     }
 
-    m_clientFd = accept(m_serverFd, nullptr, nullptr);
-    if (m_clientFd == -1) {
-        QString error = QString("Failed to accept connection: %1").arg(strerror(errno));
-        qWarning() << error;
-        emit errorOccurred(error);
-        return;
-    }
+    m_client = newClient;
+    m_buffer.clear();
 
-    qInfo() << "Client connected, fd:" << m_clientFd;
+    connect(m_client, &QLocalSocket::readyRead,
+            this, &ButtonSocketReceiver::handleClientData);
+    connect(m_client, &QLocalSocket::disconnected,
+            this, &ButtonSocketReceiver::handleClientDisconnected);
 
-    m_clientNotifier = new QSocketNotifier(m_clientFd, QSocketNotifier::Read, this);
-    connect(m_clientNotifier, &QSocketNotifier::activated, this, &ButtonSocketReceiver::handleClientData);
-    m_clientNotifier->setEnabled(true);
-#endif
+    qInfo() << "Button client connected";
 }
 
 void ButtonSocketReceiver::handleClientData() {
-#ifndef _WIN32
-    char buffer[BUFFER_SIZE];
-    ssize_t nBytes = read(m_clientFd, buffer, BUFFER_SIZE - 1);
+    if (!m_client) return;
 
-    if (nBytes > 0) {
-        buffer[nBytes] = '\0';
-        QString message = QString::fromUtf8(buffer).trimmed();
+    m_buffer.append(m_client->readAll());
 
-        qDebug() << "Received button message:" << message;
-        processButtonMessage(message);
+    while (m_buffer.contains('\n')) {
+        int idx = m_buffer.indexOf('\n');
+        QString message = QString::fromUtf8(m_buffer.left(idx)).trimmed();
+        m_buffer.remove(0, idx + 1);
 
-    } else if (nBytes == 0) {
-        qInfo() << "Client disconnected gracefully";
-        handleClientDisconnected();
-    } else {
-        QString error = QString("Error reading from client: %1").arg(strerror(errno));
-        qWarning() << error;
-        emit errorOccurred(error);
-        handleClientDisconnected();
+        if (!message.isEmpty()) {
+            processMessage(message);
+        }
     }
-#endif
 }
 
 void ButtonSocketReceiver::handleClientDisconnected() {
-#ifndef _WIN32
-    if (m_clientNotifier) {
-        m_clientNotifier->setEnabled(false);
-        m_clientNotifier->deleteLater();
-        m_clientNotifier = nullptr;
+    qInfo() << "Button client disconnected";
+    if (m_client) {
+        m_client->deleteLater();
+        m_client = nullptr;
     }
-
-    if (m_clientFd != -1) {
-        close(m_clientFd);
-        m_clientFd = -1;
-    }
-
-    qInfo() << "Client cleanup complete, ready for new connection";
-#endif
+    m_buffer.clear();
 }
 
-void ButtonSocketReceiver::processButtonMessage(const QString &message) {
+void ButtonSocketReceiver::processMessage(const QString &message) {
+    // Format: "button_{N}_{state}"
+    // Examples: "button_0_down", "button_3_up"
     QStringList parts = message.split('_');
 
-    if (parts.size() != 2) {
-        qWarning() << "Invalid button message format:" << message;
+    if (parts.size() != 3 || parts[0] != "button") {
+        qWarning() << "Invalid button message:" << message;
         return;
     }
 
-    QString buttonName = parts[0].toLower();
-    QString state = parts[1].toLower();
+    bool ok;
+    int buttonNumber = parts[1].toInt(&ok);
+    if (!ok) {
+        qWarning() << "Invalid button number:" << parts[1];
+        return;
+    }
 
+    QString state = parts[2].toLower();
     if (state != "down" && state != "up") {
         qWarning() << "Invalid button state:" << state;
         return;
     }
 
-    QString topic = getMqttTopicForButton(buttonName, state);
-    float value = getButtonValue(buttonName, state);
+    // On down: value = button number. On up: value = 10 (released).
+    float value = (state == "down") ? static_cast<float>(buttonNumber) : 10.0f;
+    QString topic = "Wheel/Buttons/button_id";
 
-    if (topic.isEmpty()) {
-        qWarning() << "Unknown button name:" << buttonName;
-        return;
-    }
+    qDebug() << "Button:" << buttonNumber << state << "-> value:" << value;
 
-    qDebug() << "Publishing button event:" << topic << "=" << value;
-    m_mqttClient->sendMessage(topic, value);
-
-    emit buttonEventReceived(buttonName, state);
-}
-
-QString ButtonSocketReceiver::getMqttTopicForButton(const QString &buttonName, const QString &state) {
-    QMap<QString, QString> buttonTopicMap = {
-        {"forward", "Button/Forward"},
-        {"backward", "Button/Backward"},
-        {"right", "Button/Right"},
-        {"enter", "Button/Enter"},
-        {"up", "Button/Up"},
-        {"down", "Button/Down"},
-        {"home", "Button/Home"}
-    };
-
-    return buttonTopicMap.value(buttonName, "");
-}
-
-float ButtonSocketReceiver::getButtonValue(const QString &buttonName, const QString &state) {
-    if (state == "down") {
-        if (buttonName == "backward") return 0;
-        if (buttonName == "right") return 1;
-        if (buttonName == "enter") return 5;
-        if (buttonName == "up") return 4;
-        if (buttonName == "down") return 3;
-        if (buttonName == "home") return 1;
-        if (buttonName == "forward") return 1;
-        return 1;
-    } else {
-        return 10;
-    }
+    emit buttonDataReceived(topic, value);
+    emit buttonEventReceived(QString::number(buttonNumber), state);
 }

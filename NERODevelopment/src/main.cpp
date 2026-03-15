@@ -20,75 +20,63 @@
 #include <QQmlContext>
 
 int main(int argc, char *argv[]) {
-  set_qt_environment();
+    set_qt_environment();
 
-  QGuiApplication app(argc, argv);
+    QGuiApplication app(argc, argv);
 
-  QQmlApplicationEngine engine;
+    QQmlApplicationEngine engine;
 
-  Model *model = new RaspberryModel();
-  model->connectToMQTT();
+    RaspberryModel *raspModel = new RaspberryModel();
+    raspModel->connectToMQTT();
+    Model *model = raspModel;
 
-  const char *button_port_str = getenv("BUTTON_PORT");
-  int button_port = button_port_str ? atoi(button_port_str) : 1884;
-  QString mqttHost = getenv("HOST") ? QString(getenv("HOST")) : QString("localhost");
+    // Button input via local socket — bypasses MQTT for fast response.
+    // Home/exit buttons still come through MQTT (client_2 in RaspberryModel).
+    ButtonSocketReceiver *buttonReceiver = new ButtonSocketReceiver();
 
-  QList<QString> button_topics = {};
-  MqttClient *buttonMqttClient = new MqttClient(nullptr, button_port, button_topics, mqttHost);
-  buttonMqttClient->connectToHost();
+    QObject::connect(buttonReceiver, &ButtonSocketReceiver::buttonDataReceived,
+                     raspModel, &RaspberryModel::receiveButtonInput);
 
-  ButtonSocketReceiver *buttonReceiver = new ButtonSocketReceiver(buttonMqttClient);
+    QObject::connect(buttonReceiver, &ButtonSocketReceiver::buttonEventReceived,
+                     [](const QString &button, const QString &state) {
+                         qInfo() << "Button event:" << button << state;
+                     });
 
-  QObject::connect(buttonReceiver, &ButtonSocketReceiver::buttonEventReceived,
-                   [](const QString &button, const QString &state) {
-                       qInfo() << "Button event:" << button << state;
-                   });
+    QObject::connect(buttonReceiver, &ButtonSocketReceiver::errorOccurred,
+                     [](const QString &error) {
+                         qCritical() << "Button receiver error:" << error;
+                     });
 
-  QObject::connect(buttonReceiver, &ButtonSocketReceiver::errorOccurred,
-                   [](const QString &error) {
-                       qCritical() << "Button receiver error:" << error;
-                   });
-
-  if (!buttonReceiver->start()) {
-    #ifdef _WIN32
-          qInfo() << "Button socket receiver skipped on Windows - will work on Raspberry Pi";
-    #else
-          qCritical() << "Failed to start button socket receiver";
-    #endif
+    if (!buttonReceiver->start()) {
+        qCritical() << "Failed to start button socket receiver";
     } else {
         qInfo() << "Button socket receiver started successfully";
     }
 
-  HomeController homeController(model);
-  HeaderController headerController(model);
-  OffViewController offViewController(model);
-  NavigationController navigationController(model);
-  FlappyBirdController flappyBirdController(model);
-  SnakeController snakeController(model);
-  Game2048Controller game2048Controller(model);
-  EfficiencyController efficencyController(model);
-  SpeedController speedController(model);
+    HomeController homeController(model);
+    HeaderController headerController(model);
+    OffViewController offViewController(model);
+    NavigationController navigationController(model);
+    FlappyBirdController flappyBirdController(model);
+    SnakeController snakeController(model);
+    Game2048Controller game2048Controller(model);
+    EfficiencyController efficencyController(model);
+    SpeedController speedController(model);
 
-  engine.rootContext()->setContextProperty("homeController", &homeController);
-  engine.rootContext()->setContextProperty("headerController",
-                                           &headerController);
-  engine.rootContext()->setContextProperty("offViewController",
-                                           &offViewController);
-  engine.rootContext()->setContextProperty("navigationController",
-                                           &navigationController);
-  engine.rootContext()->setContextProperty("flappyBirdController",
-                                           &flappyBirdController);
-  engine.rootContext()->setContextProperty("snakeController", &snakeController);
-  engine.rootContext()->setContextProperty("game2048Controller",
-                                           &game2048Controller);
-  engine.rootContext()->setContextProperty("efficiencyController",
-                                           &efficencyController);
-  engine.rootContext()->setContextProperty("speedController", &speedController);
+    engine.rootContext()->setContextProperty("homeController", &homeController);
+    engine.rootContext()->setContextProperty("headerController", &headerController);
+    engine.rootContext()->setContextProperty("offViewController", &offViewController);
+    engine.rootContext()->setContextProperty("navigationController", &navigationController);
+    engine.rootContext()->setContextProperty("flappyBirdController", &flappyBirdController);
+    engine.rootContext()->setContextProperty("snakeController", &snakeController);
+    engine.rootContext()->setContextProperty("game2048Controller", &game2048Controller);
+    engine.rootContext()->setContextProperty("efficiencyController", &efficencyController);
+    engine.rootContext()->setContextProperty("speedController", &speedController);
 
-  QObject::connect(
-      &engine, &QQmlApplicationEngine::objectCreationFailed, &app,
-      []() { QCoreApplication::exit(-1); }, Qt::QueuedConnection);
-  engine.loadFromModule("content", "App");
+    QObject::connect(
+        &engine, &QQmlApplicationEngine::objectCreationFailed, &app,
+        []() { QCoreApplication::exit(-1); }, Qt::QueuedConnection);
+    engine.loadFromModule("content", "App");
 
-  return app.exec();
+    return app.exec();
 }
