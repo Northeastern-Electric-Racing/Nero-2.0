@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
 
 #include "app_environment.h"
-#include "controllers/efficiencycontroller.h"
+#include "controllers/endurancecontroller.h"
 #include "controllers/flappybirdcontroller.h"
 #include "controllers/headercontroller.h"
 #include "controllers/homecontroller.h"
@@ -28,17 +28,33 @@ int main(int argc, char *argv[]) {
     Model *model = new RaspberryModel();
     model->connectToMQTT();
 
-    HomeController homeController(model);
-    HeaderController headerController(model);
-    OffViewController offViewController(model);
-    NavigationController navigationController(model);
-    FlappyBirdController flappyBirdController(model);
-    SnakeController snakeController(model);
-    DoomController doomController(model);
-    EfficiencyController efficencyController(model);
-    SpeedController speedController(model);
+  HomeController homeController(model);
+  HeaderController headerController(model);
+  OffViewController offViewController(model);
+  NavigationController navigationController(model);
+  FlappyBirdController flappyBirdController(model);
+  SnakeController snakeController(model);
+  DoomController doomController(model);
+  // Game2048Controller game2048Controller(model);
+  EnduranceController enduranceController(model);
+  SpeedController speedController(model);
 
-    engine.addImageProvider("doom", doomController.createImageProvider());
+  engine.rootContext()->setContextProperty("homeController", &homeController);
+  engine.rootContext()->setContextProperty("headerController",
+                                           &headerController);
+  engine.rootContext()->setContextProperty("offViewController",
+                                           &offViewController);
+  engine.rootContext()->setContextProperty("navigationController",
+                                           &navigationController);
+  engine.rootContext()->setContextProperty("flappyBirdController",
+                                           &flappyBirdController);
+  engine.rootContext()->setContextProperty("snakeController", &snakeController);
+  engine.rootContext()->setContextProperty("game2048Controller",
+                                           &game2048Controller);
+  engine.addImageProvider("doom", doomController.createImageProvider());
+  engine.rootContext()->setContextProperty("enduranceController",
+                                           &enduranceController);
+  engine.rootContext()->setContextProperty("speedController", &speedController);
 
     engine.rootContext()->setContextProperty("homeController", &homeController);
     engine.rootContext()->setContextProperty("headerController",
