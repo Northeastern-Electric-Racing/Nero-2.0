@@ -124,6 +124,10 @@ void RaspberryModel::sendMessage(const QString topic, const float value) {
   this->m_client->sendMessage(topic, value);
 }
 
+void RaspberryModel::sendMessage(const QString topic, const QList<float> values) {
+  this->m_client->sendMessage(topic, values);
+}
+
 void RaspberryModel::receiveServerData(const serverdata::v2::ServerData data,
                                        const QString topic) {
   // qDebug() << "Topic: " << topic << "Data" << data.values();
