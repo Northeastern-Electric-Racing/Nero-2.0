@@ -4,31 +4,31 @@
 namespace Menu {
 
 const std::vector<Item> &getPages() {
-    static const std::vector<Item> pages = {
-                                            {"OFF", Type::Page, "zzz.png", "OffScreen2.qml", nullptr},
-                                            {"PIT - DRIVE", Type::Page, "flag.png", "Pit.qml", nullptr},
-                                            {"PIT - REVERSE", Type::Page, "reverse.png", "Pit.qml", nullptr},
-                                            {"PERFORMANCE", Type::Page, "hare.png", "SpeedMode.qml", nullptr},
-                                            {"EFFICIENCY", Type::Page, "turtle.png", "EfficiencyScreen.qml", nullptr},
-                                            {"GAMES", Type::Category, "game.png", nullptr, nullptr},
-                                            {"FLAPPY BIRD", Type::SubPage, nullptr, "FlappyBird.qml", nullptr},
-                                            {"SNAKE", Type::SubPage, nullptr, "Snake.qml", nullptr},
-                                            {"2048", Type::SubPage, nullptr, "Game2048.qml", nullptr},
-                                            {"THEMES", Type::Category, "themes.png", nullptr, nullptr},
-                                            {"LIGHT", Type::SubAction, nullptr, nullptr,
-                                             [](NavigationController *c) {
-                                                 emit c->themeChanged("light");
-                                                 c->collapse();
-                                             }},
-                                            {"DARK", Type::SubAction, nullptr, nullptr,
-                                             [](NavigationController *c) {
-                                                 emit c->themeChanged("dark");
-                                                 c->collapse();
-                                             }},
-                                            {"EXIT", Type::Action, "exit.png", nullptr,
-                                             [](NavigationController *c) { emit c->exitRequested(); }},
-                                            };
-    return pages;
+  static const std::vector<Item> pages = {
+      {"OFF", Type::Page, "zzz.png", "OffScreen2.qml", nullptr},
+      {"PIT - DRIVE", Type::Page, "flag.png", "Pit.qml", nullptr},
+      {"PIT - REVERSE", Type::Page, "reverse.png", "Pit.qml", nullptr},
+      {"PERFORMANCE", Type::Page, "hare.png", "SpeedMode.qml", nullptr},
+      {"ENDURANCE", Type::Page, "turtle.png", "EnduranceScreen.qml", nullptr},
+      {"GAMES", Type::Category, "game.png", nullptr, nullptr},
+      {"FLAPPY BIRD", Type::SubPage, nullptr, "FlappyBird.qml", nullptr},
+      {"SNAKE", Type::SubPage, nullptr, "Snake.qml", nullptr},
+      {"2048", Type::SubPage, nullptr, "Game2048.qml", nullptr},
+      {"THEMES", Type::Category, "themes.png", nullptr, nullptr},
+      {"LIGHT", Type::SubAction, nullptr, nullptr,
+       [](NavigationController *c) {
+         emit c->themeChanged("light");
+         c->collapse();
+       }},
+      {"DARK", Type::SubAction, nullptr, nullptr,
+       [](NavigationController *c) {
+         emit c->themeChanged("dark");
+         c->collapse();
+       }},
+      {"EXIT", Type::Action, "exit.png", nullptr,
+       [](NavigationController *c) { emit c->exitRequested(); }},
+  };
+  return pages;
 }
 
 } // namespace Menu
