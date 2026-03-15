@@ -1,5 +1,5 @@
-import QtQuick 2.11
-import QtQuick.Shapes 1.15
+import QtQuick
+import QtQuick.Shapes
 import NERO
 
 Item {
@@ -14,7 +14,7 @@ Item {
     property int mainTextTopPadding: 0
     property int heightOffset: 100
     property string label: "mph"
-    property string color: Theme.getColor("accentPurple")
+    property string color: Theme.accentPurple
     property string unitLabel: ""
     property int valueFontSize: width / 10
     property int unitFontSize: valueFontSize / 2
@@ -25,7 +25,7 @@ Item {
         anchors.horizontalCenter: parent.horizontalCenter
         font.pixelSize: gauge.valueFontSize
         font.family: webFont.name
-        color: Theme.getColor("primaryForeground")
+        color: Theme.primaryForeground
 
         anchors.centerIn: ring
         anchors.verticalCenterOffset: -gauge.height / 20
@@ -69,7 +69,7 @@ Item {
 
             // Draw the progress ring
             const gradient = context.createLinearGradient(0, 0, ring.width, 0)
-            gradient.addColorStop(0, Theme.getColor("fillGradientStop"))
+            gradient.addColorStop(0, Theme.fillGradientStop)
             gradient.addColorStop(1, gauge.color)
             context.fillStyle = gradient
             context.strokeStyle = gradient
@@ -103,7 +103,7 @@ Item {
     Text {
         id: mph
         text: gauge.label
-        color: Theme.getColor("mutedForeground")
+        color: Theme.mutedForeground
         font.family: webFont.name
         font.pixelSize: gauge.unitFontSize
         anchors.top: valueText.bottom

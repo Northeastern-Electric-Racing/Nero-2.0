@@ -1,5 +1,5 @@
-import QtQuick 2.15
-import QtQuick.Controls 2.15
+import QtQuick
+import QtQuick.Controls
 import QtQuick.Layouts
 
 import NERO
@@ -22,7 +22,7 @@ Rectangle {
     property int labelFontSize: Math.min(height / 20, width / 20)
     property int unitFontSize: valueFontSize / 1.5
 
-    color: Theme.getColor("background")
+    color: Theme.background
     height: 480
     width: 800
 
