@@ -16,7 +16,7 @@ set(PROJECT_SOURCES
     src/controllers/chargingcontroller.h
     src/controllers/homecontroller.h
     src/controllers/offviewcontroller.h
-    src/controllers/endurancecontroller.h
+    src/controllers/efficiencycontroller.h
     src/controllers/headercontroller.h
     src/controllers/buttoncontroller.h
     src/controllers/navigationcontroller.h
@@ -41,7 +41,7 @@ set(PROJECT_SOURCES
     src/utils/descriptioninfo.h
 
     # Implementation - Controllers
-    src/controllers/endurancecontroller.cpp
+    src/controllers/efficiencycontroller.cpp
     src/controllers/chargingcontroller.cpp
     src/controllers/homecontroller.cpp
     src/controllers/headercontroller.cpp

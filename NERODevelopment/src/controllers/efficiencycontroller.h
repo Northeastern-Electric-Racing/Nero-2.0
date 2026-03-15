@@ -1,5 +1,5 @@
-#ifndef ENDURANCECONTROLLER_H
-#define ENDURANCECONTROLLER_H
+#ifndef EFFICIENCYCONTROLLER_H
+#define EFFICIENCYCONTROLLER_H
 
 #include "buttoncontroller.h"
 #include <QElapsedTimer>
@@ -7,10 +7,10 @@
 #include <QTimer>
 
 /**
- * @brief The EnduranceController class
- * Controller for the endurance view
+ * @brief The EfficiencyController class
+ * Controller for the efficiency view
  */
-class EnduranceController : public ButtonController {
+class EfficiencyController : public ButtonController {
   Q_OBJECT
   Q_PROPERTY(int currentMaxTorque READ currentMaxTorque WRITE
                  setCurrentMaxTorque NOTIFY currentMaxTorqueChanged FINAL)
@@ -35,7 +35,7 @@ class EnduranceController : public ButtonController {
       int lastTime READ lastTime WRITE setLastTime NOTIFY lastTimeChanged)
 
 public:
-  explicit EnduranceController(Model *model, QObject *parent = nullptr);
+  explicit EfficiencyController(Model *model, QObject *parent = nullptr);
   int currentMaxTorque() const;
   int currentRegenStrength() const;
   int stateOfCharge() const;
@@ -91,4 +91,4 @@ private:
   QTimer *m_updateTimer;
 };
 
-#endif // ENDURANCECONTROLLER_H
+#endif // EFFICIENCYCONTROLLER_H

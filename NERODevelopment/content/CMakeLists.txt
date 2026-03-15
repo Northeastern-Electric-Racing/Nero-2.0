@@ -29,7 +29,7 @@ qt6_add_qml_module(content
         HeaderView.qml
         CriticalFaultIcon.qml
         NonCriticalWarning.qml
-        EnduranceScreen.qml
+        EfficiencyScreen.qml
         TorqueValueComponent.qml
         TorqueAdj.qml
         SpeedMode.qml

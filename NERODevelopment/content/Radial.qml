@@ -38,102 +38,65 @@ Item {
         }
     }
 
-    Shape {
+    onValueChanged: ring.requestPaint()
+
+    Canvas {
         id: ring
         anchors.bottom: parent.bottom
         anchors.top: parent.top
         anchors.left: parent.left
         anchors.right: parent.right
         antialiasing: true
-        visible: ring.arcVisible
 
         property real centerX: ring.width / 2
         property real centerY: ring.height / 2
+        property real borderWidth: gauge.outerStrokeWidth
         property real ringRadius: Math.sqrt(
                                       Math.pow(
                                           ring.height - gauge.verticalPadding * 2,
                                           2) + Math.pow(
                                           ring.width - gauge.horizontalPadding * 2,
                                           2)) / 3
-        property real startAngle: Math.PI / 2
-        property real rawStep: ((gauge.value - gauge.minValue)
-                                / (gauge.maxValue - gauge.minValue)) * 2 * Math.PI
-        property real clampedStep: Math.min(rawStep, 2 * Math.PI - 0.001)
-        property bool arcVisible: clampedStep > 0.001
-        property bool largeArc: clampedStep > Math.PI
+        property real pi: Math.PI
+        property double startAngle: pi / 2
+        property double endAngle: (5 * pi) / 2
+        property double step: ((gauge.value - gauge.minValue)
+                               / (gauge.maxValue - gauge.minValue) * (endAngle - startAngle))
 
-        property real outerR: ringRadius + gauge.outerStrokeWidth / 2
-        property real innerR: ringRadius - gauge.outerStrokeWidth / 2
+        onPaint: {
+            const context = getContext("2d")
+            context.reset()
 
-        function polarX(r, angle) {
-            return centerX + r * Math.cos(angle)
+            // Draw the progress ring
+            const gradient = context.createLinearGradient(0, 0, ring.width, 0)
+            gradient.addColorStop(0, Theme.fillGradientStop)
+            gradient.addColorStop(1, gauge.color)
+            context.fillStyle = gradient
+            context.strokeStyle = gradient
+
+            context.lineWidth = ring.borderWidth
+            context.beginPath()
+            context.clearRect(0, 0, ring.width, ring.height)
+            context.arc(ring.centerX, ring.centerY, ring.ringRadius,
+                        ring.startAngle, ring.startAngle + ring.step, false)
+            context.stroke()
+
+            // Draw the inner border
+            const innerBorderRadius = ring.ringRadius - ring.borderWidth / 2
+            context.strokeStyle = gauge.color
+            context.lineWidth = gauge.innerStrokeWidth
+
+            context.beginPath()
+            context.arc(ring.centerX, ring.centerY, innerBorderRadius,
+                        ring.startAngle, ring.startAngle + ring.step, false)
+            context.stroke()
         }
+    }
 
-        function polarY(r, angle) {
-            return centerY + r * Math.sin(angle)
-        }
-
-        ShapePath {
-            fillColor: gauge.color
-            strokeColor: "transparent"
-            strokeWidth: -1
-
-            fillGradient: LinearGradient {
-                x1: 0; y1: 0
-                x2: ring.width; y2: 0
-                GradientStop { position: 0.0; color: Theme.fillGradientStop }
-                GradientStop { position: 1.0; color: gauge.color }
-            }
-
-            startX: ring.polarX(ring.outerR, ring.startAngle)
-            startY: ring.polarY(ring.outerR, ring.startAngle)
-
-            PathArc {
-                x: ring.polarX(ring.outerR, ring.startAngle + ring.clampedStep)
-                y: ring.polarY(ring.outerR, ring.startAngle + ring.clampedStep)
-                radiusX: ring.outerR
-                radiusY: ring.outerR
-                useLargeArc: ring.largeArc
-                direction: PathArc.Clockwise
-            }
-
-            PathLine {
-                x: ring.polarX(ring.innerR, ring.startAngle + ring.clampedStep)
-                y: ring.polarY(ring.innerR, ring.startAngle + ring.clampedStep)
-            }
-
-            PathArc {
-                x: ring.polarX(ring.innerR, ring.startAngle)
-                y: ring.polarY(ring.innerR, ring.startAngle)
-                radiusX: ring.innerR
-                radiusY: ring.innerR
-                useLargeArc: ring.largeArc
-                direction: PathArc.Counterclockwise
-            }
-
-            PathLine {
-                x: ring.polarX(ring.outerR, ring.startAngle)
-                y: ring.polarY(ring.outerR, ring.startAngle)
-            }
-        }
-
-        ShapePath {
-            fillColor: "transparent"
-            strokeColor: gauge.color
-            strokeWidth: gauge.innerStrokeWidth
-            capStyle: ShapePath.FlatCap
-
-            startX: ring.polarX(ring.innerR, ring.startAngle)
-            startY: ring.polarY(ring.innerR, ring.startAngle)
-
-            PathArc {
-                x: ring.polarX(ring.innerR, ring.startAngle + ring.clampedStep)
-                y: ring.polarY(ring.innerR, ring.startAngle + ring.clampedStep)
-                radiusX: ring.innerR
-                radiusY: ring.innerR
-                useLargeArc: ring.largeArc
-                direction: PathArc.Clockwise
-            }
+    Connections {
+        target: Theme
+        function onCurrentThemeChanged() {
+            ring.requestPaint()
         }
     }
 
