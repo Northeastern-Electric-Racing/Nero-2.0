@@ -70,8 +70,8 @@ int main(int argc, char *argv[]) {
                                              &flappyBirdController);
     engine.rootContext()->setContextProperty("snakeController", &snakeController);
     engine.rootContext()->setContextProperty("doomController", &doomController);
-    engine.rootContext()->setContextProperty("efficiencyController",
-                                             &efficencyController);
+    engine.rootContext()->setContextProperty("enduranceController",
+                                             &enduranceController);
     engine.rootContext()->setContextProperty("speedController", &speedController);
 
     QObject::connect(
