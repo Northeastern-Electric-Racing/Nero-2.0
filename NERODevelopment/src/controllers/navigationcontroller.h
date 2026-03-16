@@ -107,6 +107,7 @@ public:
   Q_INVOKABLE QVariantList getChildrenOf(int parent) const;
 
   void collapse();
+  void sendLedMode(QList<float> values);
 
 public slots:
   void setSelectedIndex(int i);

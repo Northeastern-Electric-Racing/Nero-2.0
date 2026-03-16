@@ -25,6 +25,13 @@ const std::vector<Item> &getPages() {
          emit c->themeChanged("dark");
          c->collapse();
        }},
+      {"WHEEL LED", Type::Category, "led.png", nullptr, nullptr},
+      {"RGB", Type::SubAction, nullptr, nullptr,
+       [](NavigationController *c) { c->sendLedMode({1.0f}); }},
+      {"SPEED", Type::SubAction, nullptr, nullptr,
+       [](NavigationController *c) { c->sendLedMode({2.0f, 1.0f, 1.0f}); }},
+      {"TEMP", Type::SubAction, nullptr, nullptr,
+       [](NavigationController *c) { c->sendLedMode({2.0f, 0.0f, 0.0f}); }},
       {"EXIT", Type::Action, "exit.png", nullptr,
        [](NavigationController *c) { emit c->exitRequested(); }},
   };
@@ -166,6 +173,12 @@ void NavigationController::expand(int i) {
   if (firstChild >= 0) {
     setSelectedIndex(firstChild);
   }
+}
+
+void NavigationController::sendLedMode(QList<float> values) {
+  m_model->sendMessage(LEDMODE, values);
+  qDebug() << "LED mode sent:" << values;
+  collapse();
 }
 
 void NavigationController::collapse() {
