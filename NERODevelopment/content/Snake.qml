@@ -30,7 +30,7 @@ Rectangle {
     property bool gameOver: snakeController.gameOver
     property int score: 0
 
-    Component.onCompleted: startGame()
+    Component.onCompleted: snakeController.resetGame()
 
     onDidStartChanged: {
         console.log(direction)
@@ -212,11 +212,4 @@ Rectangle {
         anchors.topMargin: 10
     }
 
-    Connections {
-        target: snakeController
-        onDirectionChanged: {
-            direction = newDirection
-            console.log("Direction updated to:", direction)
-        }
-    }
 }
