@@ -21,9 +21,6 @@ class HomeController : public ButtonController {
                  motorTempChanged FINAL)
   Q_PROPERTY(int stateOfCharge READ stateOfCharge WRITE setStateOfCharge NOTIFY
                  stateOfChargeChanged FINAL)
-  Q_PROPERTY(int lowVoltageStateOfCharge READ lowVoltageStateOfCharge WRITE
-                 setLowVoltageStateOfCharge NOTIFY
-                     lowVoltageStateOfChargeChanged FINAL)
 
 public:
   explicit HomeController(Model *model, QObject *parent = nullptr);
@@ -33,7 +30,6 @@ public:
   float packTemp() const;
   float motorTemp() const;
   int stateOfCharge() const;
-  int lowVoltageStateOfCharge() const;
 
 signals:
   void speedChanged(int);
@@ -42,7 +38,6 @@ signals:
   void packTempChanged(float);
   void motorTempChanged(float);
   void stateOfChargeChanged(int);
-  void lowVoltageStateOfChargeChanged(int);
 
 public slots:
   void setSpeed(int);
@@ -52,7 +47,6 @@ public slots:
   void setMotorTemp(float);
   void currentDataDidChange();
   void setStateOfCharge(int);
-  void setLowVoltageStateOfCharge(int);
 
 private:
   int m_speed;
@@ -61,7 +55,6 @@ private:
   float m_packTemp;
   float m_motorTemp;
   int m_stateOfCharge;
-  int m_lowVoltageStateOfCharge;
 };
 
 #endif // HOMECONTROLLER_H

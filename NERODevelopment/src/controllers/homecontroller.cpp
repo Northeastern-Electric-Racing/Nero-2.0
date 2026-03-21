@@ -62,17 +62,6 @@ void HomeController::setStateOfCharge(int charge) {
   }
 }
 
-int HomeController::lowVoltageStateOfCharge() const {
-  return m_lowVoltageStateOfCharge;
-}
-
-void HomeController::setLowVoltageStateOfCharge(int charge) {
-  if (charge != m_lowVoltageStateOfCharge) {
-    m_lowVoltageStateOfCharge = charge;
-    emit lowVoltageStateOfChargeChanged(charge);
-  }
-}
-
 void HomeController::currentDataDidChange() {
   if (this->m_pageIndices.contains(this->m_model->currentPageIndex)) {
     setPackTemp(*m_model->getPackTemp());
@@ -81,6 +70,5 @@ void HomeController::currentDataDidChange() {
     setStateOfCharge(*m_model->getStateOfCharge());
     setSpeed(*m_model->getMph());
     setStatus(*m_model->getStatus());
-    setLowVoltageStateOfCharge(*m_model->getLowVoltageStateOfCharge());
   }
 }

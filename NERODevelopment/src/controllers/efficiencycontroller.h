@@ -23,9 +23,6 @@ class EfficiencyController : public ButtonController {
                  motorTempChanged FINAL)
   Q_PROPERTY(
       int packTemp READ packTemp WRITE setPackTemp NOTIFY packTempChanged FINAL)
-  Q_PROPERTY(int lowVoltageStateOfCharge READ lowVoltageStateOfCharge WRITE
-                 setLowVoltageStateOfCharge NOTIFY
-                     lowVoltageStateOfChargeChanged FINAL)
   Q_PROPERTY(int speed READ speed WRITE setSpeed NOTIFY speedChanged FINAL)
   Q_PROPERTY(int currentTime READ currentTime WRITE setCurrentTime NOTIFY
                  currentTimeChanged)
@@ -41,7 +38,6 @@ public:
   int stateOfCharge() const;
   int motorTemp() const;
   int packTemp() const;
-  int lowVoltageStateOfCharge() const;
   int speed() const;
   int currentTime() const;
   int fastestTime() const;
@@ -53,7 +49,6 @@ signals:
   void stateOfChargeChanged(int);
   void motorTempChanged(int);
   void packTempChanged(int);
-  void lowVoltageStateOfChargeChanged(int);
   void speedChanged(int);
   void currentTimeChanged(int);
   void fastestTimeChanged(int);
@@ -65,7 +60,6 @@ public slots:
   void setStateOfCharge(int);
   void setMotorTemp(int);
   void setPackTemp(int);
-  void setLowVoltageStateOfCharge(int);
   void setSpeed(int);
   void currentDataDidChange();
   void setCurrentTime(int);
@@ -81,7 +75,6 @@ private:
   int m_stateOfCharge = 0;           // charge percentage [0,100]
   int m_motorTemp = 0;               // Celsius
   int m_packTemp = 0;                // Celsius
-  int m_lowVoltageStateOfCharge = 0; // charge percentage [0,100]
   int m_speed = 0;                   // speed in mph
   int m_currentTime = 0;
   int m_fastestTime = 0;

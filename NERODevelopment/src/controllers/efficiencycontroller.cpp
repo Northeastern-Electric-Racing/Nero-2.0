@@ -54,16 +54,6 @@ void EfficiencyController::setPackTemp(int temp) {
   }
 }
 
-int EfficiencyController::lowVoltageStateOfCharge() const {
-  return m_lowVoltageStateOfCharge;
-}
-void EfficiencyController::setLowVoltageStateOfCharge(int charge) {
-  if (charge != m_lowVoltageStateOfCharge) {
-    m_lowVoltageStateOfCharge = charge;
-    emit lowVoltageStateOfChargeChanged(charge);
-  }
-}
-
 int EfficiencyController::speed() const { return m_speed; }
 void EfficiencyController::setSpeed(int speed) {
   if (speed != m_speed) {
@@ -95,9 +85,6 @@ void EfficiencyController::currentDataDidChange() {
   }
   if (packTemp) {
     setPackTemp(*packTemp);
-  }
-  if (lowVoltageSoc) {
-    setLowVoltageStateOfCharge(*lowVoltageSoc);
   }
   if (speed) {
     setSpeed(*speed);
