@@ -36,25 +36,36 @@ Item {
                     }
 
     LabelText {
+        id: screenTitle
+        anchors {
+            top: parent.top
+            topMargin: 30
+            horizontalCenter: parent.horizontalCenter
+        }
+        text: "PERFORMANCE"
+        color: Theme.offCarForeground
+        font.pixelSize: 36
+        font.bold: true
+    }
+
+    LabelText {
         id: tractionControl
         anchors {
-            top: speedMode.top
-            topMargin: 20
-            horizontalCenter: speedMode.horizontalCenter
+            top: parent.top
+            topMargin: 10
+            right: parent.right
+            rightMargin: speedMode.xMargin
         }
-        width: speedMode.width * 0.7
-        height: speedMode.height * 0.12
         text: speedMode.tractionControlStatus ? "TRACTION CONTROL - ON" : "TRACTION CONTROL - OFF"
         color: speedMode.tractionControlStatus ? Theme.goodStatus : Theme.criticalStatus
-        font.pixelSize: Math.min(speedMode.height * 0.09,
-                                 speedMode.width * 0.06)
+        font.pixelSize: 18
         font.bold: true
     }
 
     TimerDisplay {
         id: timerDisplay
         anchors {
-            top: tractionControl.bottom
+            top: screenTitle.bottom
             left: parent.left
             right: parent.right
             rightMargin: speedMode.xMargin

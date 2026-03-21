@@ -21,114 +21,122 @@ Rectangle {
     property int valueFontSize: Math.min(height / 7.5, width / 7.5)
     property int labelFontSize: Math.min(height / 20, width / 20)
     property int unitFontSize: valueFontSize / 1.5
+    property int titleFontSize: Math.min(height * 0.09, width * 0.06)
 
     color: Theme.background
     height: 480
     width: 800
 
-    HeaderView {
-        id: headerView
-        anchors.top: parent.top
-        anchors.left: parent.left
-        anchors.right: parent.right
-        height: 100
-    }
+    ColumnLayout {
+        anchors.fill: parent
+        spacing: 0
 
-    RowLayout {
-        id: mainRow
-        anchors {
-            leftMargin: pit.horizontalMargin
-            rightMargin: pit.horizontalMargin
-            topMargin: 0
-            bottomMargin: pit.bottomMargin
-            top: headerView.bottom
-            left: parent.left
-            right: parent.right
-            bottom: parent.bottom
-        }
-        spacing: parent.width / 40
-
-        ColumnLayout {
+        HeaderView {
             Layout.fillWidth: true
-            Layout.fillHeight: true
-            Layout.preferredWidth: 5
-            spacing: parent.height / 20
-
-            ThermometerValueComponent {
-                thermometerValue: pit.motorTempValue
-                title: 'MOTOR TEMP'
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                radius: pit.componentRadii
-                valueFontSize: pit.valueFontSize
-                labelFontSize: pit.labelFontSize
-            }
-
-            ThermometerValueComponent {
-                thermometerValue: pit.packTempValue
-                title: 'PACK TEMP'
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                radius: pit.componentRadii
-                valueFontSize: pit.valueFontSize
-                labelFontSize: pit.labelFontSize
-            }
+            height: 100
         }
 
-        ColumnLayout {
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-            Layout.preferredWidth: 6
-            spacing: parent.height / 20
-
-            Radial {
-                value: pit.currentSpeed
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                Layout.preferredHeight: 3
-                valueFontSize: pit.valueFontSize
-                maxValue: pit.maxSpeed
-            }
-
-            DirectionView {
-                forward: pit.forward
-                radius: 10
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                Layout.preferredHeight: 1
-                Layout.leftMargin: 20
-                Layout.rightMargin: 20
-            }
+        LabelText {
+            Layout.alignment: Qt.AlignHCenter
+            Layout.topMargin: -70
+            text: pit.forward ? "PIT - DRIVE" : "PIT - REVERSE"
+            color: Theme.offCarForeground
+            font.pixelSize: pit.titleFontSize
+            font.bold: true
         }
 
-        ColumnLayout {
+        RowLayout {
+            id: mainRow
             Layout.fillWidth: true
             Layout.fillHeight: true
-            Layout.preferredWidth: 5
-            spacing: parent.height / 20
+            Layout.leftMargin: pit.horizontalMargin
+            Layout.rightMargin: pit.horizontalMargin
+            Layout.bottomMargin: pit.bottomMargin
 
-            BatteryValueComponent {
+            spacing: pit.width / 40
+
+            ColumnLayout {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
+                Layout.preferredWidth: 5
+                spacing: parent.height / 20
 
-                batteryValue: pit.stateOfChargePercentage
-                title: "HV SOC"
-                radius: pit.componentRadii
-                valueFontSize: pit.valueFontSize
-                labelFontSize: pit.labelFontSize
-                unitFontSize: pit.unitFontSize
+                ThermometerValueComponent {
+                    thermometerValue: pit.motorTempValue
+                    title: 'MOTOR TEMP'
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                    radius: pit.componentRadii
+                    valueFontSize: pit.valueFontSize
+                    labelFontSize: pit.labelFontSize
+                }
+
+                ThermometerValueComponent {
+                    thermometerValue: pit.packTempValue
+                    title: 'PACK TEMP'
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                    radius: pit.componentRadii
+                    valueFontSize: pit.valueFontSize
+                    labelFontSize: pit.labelFontSize
+                }
             }
 
-            BatteryValueComponent {
+            ColumnLayout {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
+                Layout.preferredWidth: 6
+                spacing: parent.height / 20
 
-                batteryValue: pit.lvStateOfChargePercentage
-                title: "LV SOC"
-                radius: pit.componentRadii
-                valueFontSize: pit.valueFontSize
-                labelFontSize: pit.labelFontSize
-                unitFontSize: pit.unitFontSize
+                Radial {
+                    value: pit.currentSpeed
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                    Layout.preferredHeight: 3
+                    valueFontSize: pit.valueFontSize
+                    maxValue: pit.maxSpeed
+                }
+
+                DirectionView {
+                    forward: pit.forward
+                    radius: 10
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                    Layout.preferredHeight: 1
+                    Layout.leftMargin: 20
+                    Layout.rightMargin: 20
+                }
+            }
+
+            ColumnLayout {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                Layout.preferredWidth: 5
+                spacing: parent.height / 20
+
+                BatteryValueComponent {
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+
+                    batteryValue: pit.stateOfChargePercentage
+                    title: "HV SOC"
+                    radius: pit.componentRadii
+                    valueFontSize: pit.valueFontSize
+                    labelFontSize: pit.labelFontSize
+                    unitFontSize: pit.unitFontSize
+                }
+
+                BatteryValueComponent {
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+
+                    batteryValue: pit.lvStateOfChargePercentage
+                    title: "LV SOC"
+                    radius: pit.componentRadii
+                    valueFontSize: pit.valueFontSize
+                    labelFontSize: pit.labelFontSize
+                    unitFontSize: pit.unitFontSize
+                }
             }
         }
     }
