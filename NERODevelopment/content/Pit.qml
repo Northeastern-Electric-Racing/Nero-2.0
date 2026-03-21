@@ -21,7 +21,6 @@ Rectangle {
     property int valueFontSize: Math.min(height / 7.5, width / 7.5)
     property int labelFontSize: Math.min(height / 20, width / 20)
     property int unitFontSize: valueFontSize / 1.5
-    property int titleFontSize: Math.min(height * 0.09, width * 0.06)
 
     color: Theme.background
     height: 480
@@ -34,15 +33,7 @@ Rectangle {
         HeaderView {
             Layout.fillWidth: true
             height: 100
-        }
-
-        LabelText {
-            Layout.alignment: Qt.AlignHCenter
-            Layout.topMargin: -70
-            text: pit.forward ? "PIT - DRIVE" : "PIT - REVERSE"
-            color: Theme.offCarForeground
-            font.pixelSize: pit.titleFontSize
-            font.bold: true
+            modeTitle: pit.forward ? "PIT - DRIVE" : "PIT - REVERSE"
         }
 
         RowLayout {
