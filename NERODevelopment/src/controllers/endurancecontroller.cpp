@@ -1,68 +1,68 @@
-#include "efficiencycontroller.h"
+#include "endurancecontroller.h"
 
-EfficiencyController::EfficiencyController(Model *model, QObject *parent)
+EnduranceController::EnduranceController(Model *model, QObject *parent)
     : ButtonController{model, 4, parent}, m_updateTimer(new QTimer(this)),
       m_timerRunning(false) {
   connect(m_model, &Model::onCurrentDataChange, this,
-          &EfficiencyController::currentDataDidChange);
+          &EnduranceController::currentDataDidChange);
   connect(m_updateTimer, &QTimer::timeout, this,
-          &EfficiencyController::updateCurrentTime);
+          &EnduranceController::updateCurrentTime);
   m_updateTimer->setInterval(1);
 }
 
-int EfficiencyController::currentMaxTorque() const {
+int EnduranceController::currentMaxTorque() const {
   return m_currentMaxTorque;
 }
-void EfficiencyController::setCurrentMaxTorque(int torque) {
+void EnduranceController::setCurrentMaxTorque(int torque) {
   if (torque != m_currentMaxTorque) {
     m_currentMaxTorque = torque;
     emit currentMaxTorqueChanged(torque);
   }
 }
 
-int EfficiencyController::currentRegenStrength() const {
+int EnduranceController::currentRegenStrength() const {
   return m_currentRegenStrength;
 }
-void EfficiencyController::setCurrentRegenStrength(int strength) {
+void EnduranceController::setCurrentRegenStrength(int strength) {
   if (strength != m_currentRegenStrength) {
     m_currentRegenStrength = strength;
     emit currentRegenStrengthChanged(strength);
   }
 }
 
-int EfficiencyController::stateOfCharge() const { return m_stateOfCharge; }
-void EfficiencyController::setStateOfCharge(int charge) {
+int EnduranceController::stateOfCharge() const { return m_stateOfCharge; }
+void EnduranceController::setStateOfCharge(int charge) {
   if (charge != m_stateOfCharge) {
     m_stateOfCharge = charge;
     emit stateOfChargeChanged(charge);
   }
 }
 
-int EfficiencyController::motorTemp() const { return m_motorTemp; }
-void EfficiencyController::setMotorTemp(int temp) {
+int EnduranceController::motorTemp() const { return m_motorTemp; }
+void EnduranceController::setMotorTemp(int temp) {
   if (temp != m_motorTemp) {
     m_motorTemp = temp;
     emit motorTempChanged(temp);
   }
 }
 
-int EfficiencyController::packTemp() const { return m_packTemp; }
-void EfficiencyController::setPackTemp(int temp) {
+int EnduranceController::packTemp() const { return m_packTemp; }
+void EnduranceController::setPackTemp(int temp) {
   if (temp != m_packTemp) {
     m_packTemp = temp;
     emit packTempChanged(temp);
   }
 }
 
-int EfficiencyController::speed() const { return m_speed; }
-void EfficiencyController::setSpeed(int speed) {
+int EnduranceController::speed() const { return m_speed; }
+void EnduranceController::setSpeed(int speed) {
   if (speed != m_speed) {
     m_speed = speed;
     emit speedChanged(speed);
   }
 }
 
-void EfficiencyController::currentDataDidChange() {
+void EnduranceController::currentDataDidChange() {
   std::optional<float> torque = m_model->getTorquePower();
   std::optional<float> regen = m_model->getRegenPower();
   std::optional<float> soc = m_model->getStateOfCharge();
@@ -91,29 +91,29 @@ void EfficiencyController::currentDataDidChange() {
   }
 }
 
-int EfficiencyController::currentTime() const { return m_currentTime; }
-void EfficiencyController::setCurrentTime(int currentTime) {
+int EnduranceController::currentTime() const { return m_currentTime; }
+void EnduranceController::setCurrentTime(int currentTime) {
   if (currentTime != m_currentTime) {
     m_currentTime = currentTime;
     emit currentTimeChanged(currentTime);
   }
 }
-int EfficiencyController::fastestTime() const { return m_fastestTime; }
-void EfficiencyController::setFastestTime(int fastTime) {
+int EnduranceController::fastestTime() const { return m_fastestTime; }
+void EnduranceController::setFastestTime(int fastTime) {
   if (fastTime != m_fastestTime) {
     m_fastestTime = fastTime;
     emit fastestTimeChanged(fastTime);
   }
 }
-int EfficiencyController::lastTime() const { return m_lastTime; }
-void EfficiencyController::setLastTime(int lastTime) {
+int EnduranceController::lastTime() const { return m_lastTime; }
+void EnduranceController::setLastTime(int lastTime) {
   if (lastTime != m_lastTime) {
     m_lastTime = lastTime;
     emit lastTimeChanged(lastTime);
   }
 }
 
-void EfficiencyController::enterButtonPressed() {
+void EnduranceController::enterButtonPressed() {
   if (m_timerRunning) {
     int runTime = static_cast<int>(m_timer.elapsed());
     m_timerRunning = false;
@@ -143,7 +143,7 @@ void EfficiencyController::enterButtonPressed() {
   }
 }
 
-void EfficiencyController::updateCurrentTime() {
+void EnduranceController::updateCurrentTime() {
   if (m_timerRunning) {
     setCurrentTime(static_cast<int>(m_timer.elapsed()));
   }
