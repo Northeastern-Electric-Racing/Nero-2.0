@@ -43,8 +43,15 @@ Item {
             id: header
             Layout.fillWidth: true
             modeTitle: "PERFORMANCE"
-            statusText: speedMode.tractionControlStatus ? "TRACTION CONTROL - ON" : "TRACTION CONTROL - OFF"
-            statusColor: speedMode.tractionControlStatus ? Theme.goodStatus : Theme.criticalStatus
+        }
+
+        LabelText {
+            Layout.alignment: Qt.AlignHCenter
+            Layout.topMargin: -30
+            text: speedMode.tractionControlStatus ? "TRACTION CONTROL - ON" : "TRACTION CONTROL - OFF"
+            color: speedMode.tractionControlStatus ? Theme.goodStatus : Theme.criticalStatus
+            font.pixelSize: 18
+            font.bold: true
         }
 
         TimerDisplay {

@@ -10,8 +10,6 @@ Item {
     property var criticalFaults: headerController.criticalFaults
     property var nonCriticalFaults: headerController.nonCriticalFaults
     property string modeTitle: ""
-    property string statusText: ""
-    property color statusColor: Theme.offCarForeground
 
     Timer {
         id: timer
@@ -65,17 +63,6 @@ Item {
         anchors.centerIn: parent
         color: Theme.offCarForeground
         font.pixelSize: 36
-        font.bold: true
-    }
-
-    LabelText {
-        visible: statusText !== ""
-        text: statusText
-        anchors.right: parent.right
-        anchors.rightMargin: 20
-        anchors.verticalCenter: parent.verticalCenter
-        color: statusColor
-        font.pixelSize: 18
         font.bold: true
     }
 
