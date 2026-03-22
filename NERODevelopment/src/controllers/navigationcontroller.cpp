@@ -214,20 +214,20 @@ void NavigationController::buttonUpdate() {
 
     // Directional/action buttons — read ONCE, dispatch by value
     if (!isPageActive()) {
-        std::optional<float> buttonValue = m_model->getById(ENTERBUTTON);
+        std::optional<float> buttonValue = m_model->getById(SOCKETBUTTON);
         if (buttonValue.has_value()) {
             float val = buttonValue.value();
 
             if (val == 5) {
-                m_model->setValue(ENTERBUTTON, 10);
+                m_model->setValue(SOCKETBUTTON, 10);
                 enterButtonPressed();
             } else if (val == 3 || val == 1) {
                 // down or right = move next (forward)
-                m_model->setValue(ENTERBUTTON, 10);
+                m_model->setValue(SOCKETBUTTON, 10);
                 downButtonPressed();
             } else if (val == 4 || val == 0) {
                 // up or left = move prev (backward)
-                m_model->setValue(ENTERBUTTON, 10);
+                m_model->setValue(SOCKETBUTTON, 10);
                 upButtonPressed();
             }
         }

@@ -39,29 +39,29 @@ void ButtonController::buttonUpdate() {
     }
 
     // Read shared button key ONCE, dispatch by value
-    std::optional<float> buttonValue = this->m_model->getById(ENTERBUTTON);
+    std::optional<float> buttonValue = this->m_model->getById(SOCKETBUTTON);
     if (buttonValue.has_value()) {
         float val = buttonValue.value();
 
         if (val == 0) {
             qDebug() << "Back Button Pressed (socket)";
-            this->m_model->setValue(ENTERBUTTON, 10);
+            this->m_model->setValue(SOCKETBUTTON, 10);
             this->leftButtonPressed();
         } else if (val == 1) {
             qDebug() << "Right Button Pressed (socket)";
-            this->m_model->setValue(ENTERBUTTON, 10);
+            this->m_model->setValue(SOCKETBUTTON, 10);
             this->rightButtonPressed();
         } else if (val == 3) {
             qDebug() << "Down Button Pressed (socket)";
-            this->m_model->setValue(ENTERBUTTON, 10);
+            this->m_model->setValue(SOCKETBUTTON, 10);
             this->downButtonPressed();
         } else if (val == 4) {
             qDebug() << "Up Button Pressed (socket)";
-            this->m_model->setValue(ENTERBUTTON, 10);
+            this->m_model->setValue(SOCKETBUTTON, 10);
             this->upButtonPressed();
         } else if (val == 5) {
             qDebug() << "Enter Button Pressed (socket)";
-            this->m_model->setValue(ENTERBUTTON, 10);
+            this->m_model->setValue(SOCKETBUTTON, 10);
             this->enterButtonPressed();
         }
     }

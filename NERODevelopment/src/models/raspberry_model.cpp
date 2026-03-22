@@ -108,9 +108,7 @@ void RaspberryModel::connectToMQTT() {
     client_1->connectToHost();
 
     QList<QString> client_2_topics = {
-        FORWARDBUTTON, BACKWARDBUTTON, RIGHTBUTTON, ENTERBUTTON,
-        UPBUTTON,      DOWNBUTTON,     HOMEBUTTON,  MODEINDEX,
-        DIRECTION,
+        HOMEBUTTON,  MODEINDEX, DIRECTION, SOCKETBUTTON
     };
     MqttClient *client_2 =
         new MqttClient(nullptr, client2_port, client_2_topics, mqttHost);
@@ -351,10 +349,10 @@ std::optional<bool> RaspberryModel::getForwardButtonPressed() {
 }
 
 std::optional<bool> RaspberryModel::getBackwardButtonPressed() {
-    std::optional<float> value = this->getById(BACKWARDBUTTON);
+    std::optional<float> value = this->getById(SOCKETBUTTON);
     if (value == 0) {
         this->setValue(
-            UPBUTTON,
+            SOCKETBUTTON,
             10); // 10 is an invalid value so basically clearing the old value
         return true;
     }
@@ -362,10 +360,10 @@ std::optional<bool> RaspberryModel::getBackwardButtonPressed() {
 }
 
 std::optional<bool> RaspberryModel::getRightButtonPressed() {
-    std::optional<float> value = this->getById(RIGHTBUTTON);
+    std::optional<float> value = this->getById(SOCKETBUTTON);
     if (value == 1) {
         this->setValue(
-            UPBUTTON,
+            SOCKETBUTTON,
             10); // 10 is an invalid value so basically clearing the old value
         return true;
     }
@@ -373,11 +371,11 @@ std::optional<bool> RaspberryModel::getRightButtonPressed() {
 }
 
 std::optional<bool> RaspberryModel::getEnterButtonPressed() {
-    std::optional<float> value = this->getById(ENTERBUTTON);
+    std::optional<float> value = this->getById(SOCKETBUTTON);
     if (value) {
         if (value == 5) {
             this->setValue(
-                UPBUTTON,
+                SOCKETBUTTON,
                 10); // 10 is an invalid value so basically clearing the old value
             return true;
         }
@@ -386,11 +384,11 @@ std::optional<bool> RaspberryModel::getEnterButtonPressed() {
 }
 
 std::optional<bool> RaspberryModel::getUpButtonPressed() {
-    std::optional<float> value = this->getById(UPBUTTON);
+    std::optional<float> value = this->getById(SOCKETBUTTON);
     if (value) {
         if (value == 4) {
             this->setValue(
-                UPBUTTON,
+                SOCKETBUTTON,
                 10); // 10 is an invalid value so basically clearing the old value
             return true;
         }
@@ -399,11 +397,11 @@ std::optional<bool> RaspberryModel::getUpButtonPressed() {
 }
 
 std::optional<bool> RaspberryModel::getDownButtonPressed() {
-    std::optional<float> value = this->getById(DOWNBUTTON);
+    std::optional<float> value = this->getById(SOCKETBUTTON);
     if (value) {
         if (value == 3) {
             this->setValue(
-                DOWNBUTTON,
+                SOCKETBUTTON,
                 10); // 10 is an invalid value so basically clearing the old value
             return true;
         }
