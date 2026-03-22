@@ -190,22 +190,29 @@ void NavigationController::upButtonPressed() { movePrev(); }
 void NavigationController::homeButtonPressed() { goHome(); }
 
 void NavigationController::buttonUpdate() {
+    // Home/esc ALWAYS works from any page, MQTT only
+    if (!m_model->lastButtonFromSocket) {
+        std::optional<float> homeValue = m_model->getById(HOMEBUTTON);
+        if (homeValue.has_value() && homeValue.value() == 1) {
+            m_model->setValue(HOMEBUTTON, 10);
+            homeButtonPressed();
+            std::optional<float> mode = m_model->getModeIndex();
+            if (mode.has_value() && *mode >= 0 && *mode < m_navOrder.size()) {
+                setSelectedIndex(m_navOrder[static_cast<int>(*mode)]);
+            }
+            return;
+        }
+    }
+
+    // Navigation buttons only on home screen (page -1)
     if (!m_pageIndices.contains(m_model->currentPageIndex))
         return;
 
-    // Home button uses separate topic (MQTT only)
-    std::optional<float> homeValue = m_model->getById(HOMEBUTTON);
-    if (homeValue.has_value() && homeValue.value() == 1) {
-        m_model->setValue(HOMEBUTTON, 10);
-        homeButtonPressed();
-        std::optional<float> mode = m_model->getModeIndex();
-        if (mode.has_value() && *mode >= 0 && *mode < m_navOrder.size()) {
-            setSelectedIndex(m_navOrder[static_cast<int>(*mode)]);
-        }
+    // On home screen: MQTT only — ignore socket buttons
+    if (m_model->lastButtonFromSocket)
         return;
-    }
 
-    // Directional/action buttons share one key — read ONCE, dispatch by value
+    // Directional/action buttons — read ONCE, dispatch by value
     if (!isPageActive()) {
         std::optional<float> buttonValue = m_model->getById(ENTERBUTTON);
         if (buttonValue.has_value()) {
@@ -214,14 +221,15 @@ void NavigationController::buttonUpdate() {
             if (val == 5) {
                 m_model->setValue(ENTERBUTTON, 10);
                 enterButtonPressed();
-            } else if (val == 3) {
+            } else if (val == 3 || val == 1) {
+                // down or right = move next (forward)
                 m_model->setValue(ENTERBUTTON, 10);
                 downButtonPressed();
-            } else if (val == 4) {
+            } else if (val == 4 || val == 0) {
+                // up or left = move prev (backward)
                 m_model->setValue(ENTERBUTTON, 10);
                 upButtonPressed();
             }
-            // val == 10 = released, ignore
         }
     }
 }

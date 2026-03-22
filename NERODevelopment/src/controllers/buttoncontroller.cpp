@@ -32,41 +32,37 @@ void ButtonController::buttonUpdate() {
         return;
     }
 
-    // All 6 directional/action buttons share one key: "Wheel/Buttons/button_id".
-    // Read it ONCE and dispatch by value to avoid consume-on-read race conditions.
+    // Inside tabs (page >= 0): directional buttons from SOCKET only
+    // Ignore MQTT-sourced directional buttons when inside a tab
+    if (!this->m_model->lastButtonFromSocket) {
+        return;
+    }
+
+    // Read shared button key ONCE, dispatch by value
     std::optional<float> buttonValue = this->m_model->getById(ENTERBUTTON);
     if (buttonValue.has_value()) {
         float val = buttonValue.value();
 
         if (val == 0) {
-            qDebug() << "Back Button Pressed";
+            qDebug() << "Back Button Pressed (socket)";
             this->m_model->setValue(ENTERBUTTON, 10);
             this->leftButtonPressed();
         } else if (val == 1) {
-            qDebug() << "Right Button Pressed";
+            qDebug() << "Right Button Pressed (socket)";
             this->m_model->setValue(ENTERBUTTON, 10);
             this->rightButtonPressed();
         } else if (val == 3) {
-            qDebug() << "Down Button Pressed";
+            qDebug() << "Down Button Pressed (socket)";
             this->m_model->setValue(ENTERBUTTON, 10);
             this->downButtonPressed();
         } else if (val == 4) {
-            qDebug() << "Up Button Pressed";
+            qDebug() << "Up Button Pressed (socket)";
             this->m_model->setValue(ENTERBUTTON, 10);
             this->upButtonPressed();
         } else if (val == 5) {
-            qDebug() << "Enter Button Pressed";
+            qDebug() << "Enter Button Pressed (socket)";
             this->m_model->setValue(ENTERBUTTON, 10);
             this->enterButtonPressed();
         }
-        // val == 10 = released, ignore
-    }
-
-    // Home/exit uses a different topic — still comes via MQTT (client_2)
-    std::optional<float> homeValue = this->m_model->getById(HOMEBUTTON);
-    if (homeValue.has_value() && homeValue.value() == 1) {
-        qDebug() << "Home Button Pressed";
-        this->m_model->setValue(HOMEBUTTON, 10);
-        this->homeButtonPressed();
     }
 }

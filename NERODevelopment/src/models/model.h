@@ -98,6 +98,9 @@ public:
     int pageWidth;
     int currentPageIndex = -1;
 
+    // Tracks whether the last button data came from socket (true) or MQTT (false)
+    bool lastButtonFromSocket = false;
+
 signals:
     void onCurrentDataChange();
 

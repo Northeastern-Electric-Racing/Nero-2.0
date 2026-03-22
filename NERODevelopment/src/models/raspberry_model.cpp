@@ -125,14 +125,16 @@ void RaspberryModel::sendMessage(const QString topic, const float value) {
 }
 
 void RaspberryModel::receiveButtonInput(const QString &topic, float value) {
-    qDebug() << "Button input -> topic:" << topic << "value:" << value;
+    qDebug() << "Button input (socket) -> topic:" << topic << "value:" << value;
+    lastButtonFromSocket = true;
     currentData[topic] = DataInfo(topic, "", {value});
     emit onCurrentDataChange();
 }
 
 void RaspberryModel::receiveServerData(const serverdata::v2::ServerData data,
                                        const QString topic) {
-    // qDebug() << "Topic: " << topic << "Data" << data.values();
+    qDebug() << "Topic: " << topic << "Data" << data.values();
+    lastButtonFromSocket = false;
     this->currentData[topic] = DataInfo(topic, data.unit(), data.values());
     emit this->onCurrentDataChange();
 }
