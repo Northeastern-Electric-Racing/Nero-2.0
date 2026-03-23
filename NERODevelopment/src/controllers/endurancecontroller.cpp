@@ -68,7 +68,6 @@ void EnduranceController::currentDataDidChange() {
   std::optional<float> soc = m_model->getStateOfCharge();
   std::optional<float> motorTemp = m_model->getMotorTemp();
   std::optional<float> packTemp = m_model->getPackTemp();
-  std::optional<float> lowVoltageSoc = m_model->getLowVoltageStateOfCharge();
   std::optional<float> speed = m_model->getMph();
 
   if (torque) {

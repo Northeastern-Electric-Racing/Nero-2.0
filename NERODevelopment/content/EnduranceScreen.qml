@@ -11,7 +11,6 @@ Item {
     property int torqueLimit: enduranceController.currentMaxTorque
     property int numRegen: enduranceController.currentRegenStrength
     property int hvSOC: enduranceController.stateOfCharge
-    property int lvSOC: enduranceController.lowVoltageStateOfCharge
     property int motorTemp: enduranceController.motorTemp
     property int packTemp: enduranceController.packTemp
     property int speed: enduranceController.speed
