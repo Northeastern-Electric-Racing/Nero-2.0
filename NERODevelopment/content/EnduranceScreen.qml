@@ -11,7 +11,6 @@ Item {
     property int torqueLimit: enduranceController.currentMaxTorque
     property int numRegen: enduranceController.currentRegenStrength
     property int hvSOC: enduranceController.stateOfCharge
-    property int lvSOC: enduranceController.lowVoltageStateOfCharge
     property int motorTemp: enduranceController.motorTemp
     property int packTemp: enduranceController.packTemp
     property int speed: enduranceController.speed
@@ -142,18 +141,6 @@ Item {
                     batteryValue: endurance.hvSOC
                     Layout.fillHeight: true
                     Layout.fillWidth: true
-                    radius: endurance.borderRadii
-                    valueFontSize: endurance.valueFontSize
-                    labelFontSize: endurance.labelFontSize
-                    unitFontSize: endurance.valueFontSize / 1.5
-                }
-
-                BatteryValueComponent {
-                    id: battery2
-                    title: "LV SOC"
-                    batteryValue: endurance.lvSOC
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
                     radius: endurance.borderRadii
                     valueFontSize: endurance.valueFontSize
                     labelFontSize: endurance.labelFontSize
