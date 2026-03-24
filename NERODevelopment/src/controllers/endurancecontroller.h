@@ -70,12 +70,12 @@ public slots:
   void updateCurrentTime();
 
 private:
-  int m_currentMaxTorque = 0;        // torque percentage [0,100]
-  int m_currentRegenStrength = 0;    // regen strength [1,3]
-  int m_stateOfCharge = 0;           // charge percentage [0,100]
-  int m_motorTemp = 0;               // Celsius
-  int m_packTemp = 0;                // Celsius
-  int m_speed = 0;                   // speed in mph
+  int m_currentMaxTorque = 0;     // torque percentage [0,100]
+  int m_currentRegenStrength = 0; // regen strength [1,3]
+  int m_stateOfCharge = 0;        // charge percentage [0,100]
+  int m_motorTemp = 0;            // Celsius
+  int m_packTemp = 0;             // Celsius
+  int m_speed = 0;                // speed in mph
   int m_currentTime = 0;
   int m_fastestTime = 0;
   int m_lastTime = 0;

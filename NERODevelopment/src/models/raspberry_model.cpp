@@ -108,9 +108,8 @@ void RaspberryModel::connectToMQTT() {
   client_1->connectToHost();
 
   QList<QString> client_2_topics = {
-      FORWARDBUTTON, BACKWARDBUTTON, RIGHTBUTTON, ENTERBUTTON,
-      UPBUTTON,      DOWNBUTTON,     HOMEBUTTON,  MODEINDEX,
-      DIRECTION,
+      FORWARDBUTTON, BACKWARDBUTTON, RIGHTBUTTON, ENTERBUTTON, UPBUTTON,
+      DOWNBUTTON,    HOMEBUTTON,     MODEINDEX,   DIRECTION,
   };
   MqttClient *client_2 =
       new MqttClient(nullptr, client2_port, client_2_topics, mqttHost);
@@ -418,8 +417,7 @@ std::optional<float> RaspberryModel::getModeIndex() {
 void RaspberryModel::updateCurrentData() { emit this->onCurrentDataChange(); }
 
 QList<QString> RaspberryModel::getCriticalFaults() {
-  QRegularExpression regex(
-      "^(BMS/Faults/Critical/.*|MPU/Fault/Critical/.*)$");
+  QRegularExpression regex("^(BMS/Faults/Critical/.*|MPU/Fault/Critical/.*)$");
 
   QList<QString> faults;
 
