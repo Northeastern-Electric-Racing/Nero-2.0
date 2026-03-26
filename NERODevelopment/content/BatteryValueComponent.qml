@@ -4,13 +4,13 @@ import NERO
 
 Item {
     id: batteryComponent
-    property int batteryValue
+                property int batteryValue
     property string title: "Charge State"
     property int horizontalIconSpacing: width * 0.1
     property int labelVerticalSpacing: height * 0.1
     property string labelColor: Theme.accentForeground
     property int horizontalPadding: width * 0.1
-    property int radius
+                    property int radius
     property int valueFontSize
     property int labelFontSize
     property int unitFontSize: valueFontSize
@@ -26,7 +26,7 @@ Item {
         labelVerticalSpacing: batteryComponent.labelVerticalSpacing
         labelColor: batteryComponent.labelColor
         horizontalPadding: batteryComponent.horizontalPadding
-        valueUnit: "%"
+                        valueUnit: "%"
         radius: batteryComponent.radius
         valueFontSize: batteryComponent.valueFontSize
         labelFontSize: batteryComponent.labelFontSize
