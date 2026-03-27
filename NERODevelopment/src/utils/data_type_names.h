@@ -59,6 +59,8 @@
 #define FANPOWER "VCU/eFuses/Fanbatt/Current" // Current (A) flowing through battbox fan eFuse.
 #define EFUSE_SHUTDOWN_ENABLED "VCU/eFuses/Shutdown/Enabled?" // '1' if the Shutdown eFuse is enabled (i.e., current is allowed to flow through it). '0' if the Shutdown eFuse is disabled (i.e., current can't flow through it).
 #define EFUSE_SHUTDOWN_FAULTED "VCU/eFuses/Shutdown/Faulted?" // '1' if the Shutdown eFuse has been tripped (i.e., it detected overcurrent and is now blocking all current from flowing through it). '0' if the Shutdown eFuse is not faulted.
+#define EFUSE_MC_ENABLED "VCU/eFuses/MC/Enabled?" // '1' if the Motor Controller eFuse is enabled (i.e., current is allowed to flow through it). '0' if the Motor Controller eFuse is disabled (i.e., current can't flow through it).
+#define EFUSE_MC_FAULTED "VCU/eFuses/MC/Faulted?" // '1' if the Motor Controller eFuse has been tripped (i.e., it detected overcurrent and is now blocking all current from flowing through it). '0' if the Motor Controller eFuse is not faulted.
 #define BMS "VCU/Shutdown/BMS_GPIO"
 #define BSPD "VCU/Shutdown/BSPD_GPIO"
 #define BOTS "VCU/Shutdown/BOTS_GPIO"
