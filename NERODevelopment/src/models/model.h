@@ -54,7 +54,7 @@ public:
   virtual std::optional<float> getRegenPower() = 0;
   virtual std::optional<float> getBmsState() = 0;
   virtual QList<QString> getBmsFault() = 0;
-  virtual QList<QString> getMpuFault() = 0;
+  virtual QList<QString> getVcuFault() = 0;
   virtual std::optional<float> getDcl() = 0;
   virtual std::optional<float> getCcl() = 0;
   virtual std::optional<float> getPackCurrent() = 0;

@@ -25,7 +25,6 @@
 #define INVERTERTEMP "DTI/Temps/Controller_Temperature"
 #define BMSSTATE "BMS/Status/State"
 #define BMSFAULT "BMS/Faults/Critical/#"
-//#define MPUFAULT "MPU/Fault/#" - see VCUFAULT (literally just a name change for the define, everything else should be structured the same)
 #define DCL "BMS/Commands/Max_DC_Current_Target"
 #define CCL "BMS/Commands/Max_DC_Brake_Current_Target"
 #define FORWARDBUTTON "Wheel/Buttons/button_id"
