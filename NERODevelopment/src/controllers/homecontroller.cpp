@@ -75,25 +75,12 @@ void HomeController::setLowVoltageStateOfCharge(int charge) {
 
 void HomeController::currentDataDidChange() {
     if (this->m_pageIndices.contains(this->m_model->currentPageIndex)) {
-        auto packTemp = m_model->getPackTemp();
-        if (packTemp) setPackTemp(*packTemp);
-
-        auto motorTemp = m_model->getMotorTemp();
-        if (motorTemp) setMotorTemp(*motorTemp);
-
-        auto dir = m_model->getDir();
-        if (dir) setDirection(*dir);
-
-        auto soc = m_model->getStateOfCharge();
-        if (soc) setStateOfCharge(*soc);
-
-        auto speed = m_model->getMph();
-        if (speed) setSpeed(*speed);
-
-        auto status = m_model->getStatus();
-        if (status) setStatus(*status);
-
-        auto lvSoc = m_model->getLowVoltageStateOfCharge();
-        if (lvSoc) setLowVoltageStateOfCharge(*lvSoc);
+        setPackTemp(*m_model->getPackTemp());
+        setMotorTemp(*m_model->getMotorTemp());
+        setDirection(*m_model->getDir());
+        setStateOfCharge(*m_model->getStateOfCharge());
+        setSpeed(*m_model->getMph());
+        setStatus(*m_model->getStatus());
+        setLowVoltageStateOfCharge(*m_model->getLowVoltageStateOfCharge());
     }
 }
