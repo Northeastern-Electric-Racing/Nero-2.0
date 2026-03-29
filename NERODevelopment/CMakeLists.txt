@@ -79,9 +79,6 @@ set(CMAKE_AUTOMOC ON)
 qt_add_executable(NEROApp ${PROJECT_SOURCES}
     src/models/socket_reciever.h
     src/models/socket_reciever.cpp
-
-
-
 )
 
 # Add protobuf
