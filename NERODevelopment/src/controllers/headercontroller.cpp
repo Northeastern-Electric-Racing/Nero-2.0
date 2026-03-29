@@ -1,7 +1,7 @@
 #include "headercontroller.h"
 
 HeaderController::HeaderController(Model *model, QObject *parent)
-    : QObject{parent}, m_isTalking(false) {
+    : QObject{parent} {
   this->m_model = model;
   connect(m_model, &Model::onCurrentDataChange, this,
           &HeaderController::currentDataDidChange);
@@ -27,17 +27,7 @@ void HeaderController::setNonCriticalFaults(QList<QString> nonCriticalFaults) {
   }
 }
 
-bool HeaderController::isTalking() const { return m_isTalking; }
-
-void HeaderController::setIsTalking(bool isTalking) {
-  if (m_isTalking != isTalking) {
-    m_isTalking = isTalking;
-    emit isTalkingChanged(isTalking);
-  }
-}
-
 void HeaderController::currentDataDidChange() {
   setCriticalFaults(m_model->getCriticalFaults());
   setNonCriticalFaults(m_model->getNonCriticalFaults());
-  setIsTalking(*m_model->getIsTalking());
 }

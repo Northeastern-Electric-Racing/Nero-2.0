@@ -2,13 +2,14 @@
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
 
 #include "app_environment.h"
-#include "controllers/efficiencycontroller.h"
+#include "controllers/endurancecontroller.h"
 #include "controllers/flappybirdcontroller.h"
 #include "controllers/headercontroller.h"
 #include "controllers/homecontroller.h"
 #include "controllers/navigationcontroller.h"
 #include "controllers/offviewcontroller.h"
 #include "controllers/snakecontroller.h"
+#include "controllers/game2048controller.h"
 #include "controllers/speedcontroller.h"
 #include "import_qml_components_plugins.h"
 #include "import_qml_plugins.h"
@@ -33,7 +34,8 @@ int main(int argc, char *argv[]) {
   NavigationController navigationController(model);
   FlappyBirdController flappyBirdController(model);
   SnakeController snakeController(model);
-  EfficiencyController efficencyController(model);
+  Game2048Controller game2048Controller(model);
+  EnduranceController enduranceController(model);
   SpeedController speedController(model);
 
   engine.rootContext()->setContextProperty("homeController", &homeController);
@@ -46,8 +48,10 @@ int main(int argc, char *argv[]) {
   engine.rootContext()->setContextProperty("flappyBirdController",
                                            &flappyBirdController);
   engine.rootContext()->setContextProperty("snakeController", &snakeController);
-  engine.rootContext()->setContextProperty("efficiencyController",
-                                           &efficencyController);
+  engine.rootContext()->setContextProperty("game2048Controller",
+                                           &game2048Controller);
+  engine.rootContext()->setContextProperty("enduranceController",
+                                           &enduranceController);
   engine.rootContext()->setContextProperty("speedController", &speedController);
 
   QObject::connect(

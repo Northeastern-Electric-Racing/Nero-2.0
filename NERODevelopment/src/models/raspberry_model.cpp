@@ -41,7 +41,6 @@ void RaspberryModel::connectToMQTT() {
 
   QList<QString> client_1_topics = {
       MPH,
-      KPH,
       STATUS,
       PACKTEMP,
       MOTORTEMP,
@@ -65,23 +64,22 @@ void RaspberryModel::connectToMQTT() {
       MINCELLVOLTAGECELL,
       AVECELLTEMP,
       AVECELLVOLTAGE,
-      BURNINGCELLS,
       TRACTIONCONTROL,
       INVERTERTEMP,
-      MOTORPOWER,
-      FANPOWER,
       BMSSTATE,
       BMSFAULT,
       MPUFAULT,
       DCL,
       CCL,
-      GFORCEX,
-      GFORCEY,
-      GFORCEZ,
+      REGENPOWER,
+      TORQUEPOWER,
+      GFORCE,
       SEGMENTTEMP1,
       SEGMENTTEMP2,
       SEGMENTTEMP3,
       SEGMENTTEMP4,
+      MOTORPOWER,
+      FANPOWER,
       SIDEBRBS,
       BMS,
       BSPD,
@@ -95,10 +93,6 @@ void RaspberryModel::connectToMQTT() {
       HVCNCTR,
       CRITICALFAULTS,
       NONCRITICALFAULTS,
-      MICROPHONE,
-      FASTESTTIME,
-      LASTTIME,
-      CURRENT_TIME,
       LOWVOLTAGESOC,
 
   };
@@ -118,7 +112,7 @@ void RaspberryModel::connectToMQTT() {
   QList<QString> client_2_topics = {
       FORWARDBUTTON, BACKWARDBUTTON, RIGHTBUTTON, ENTERBUTTON,
       UPBUTTON,      DOWNBUTTON,     HOMEBUTTON,  MODEINDEX,
-      DIRECTION,     REGENPOWER,     TORQUEPOWER,
+      DIRECTION,
   };
   MqttClient *client_2 =
       new MqttClient(nullptr, client2_port, client_2_topics, mqttHost);
@@ -142,11 +136,6 @@ void RaspberryModel::receiveServerData(const serverdata::v2::ServerData data,
 std::optional<float> RaspberryModel::getMph() {
   std::optional<float> mph = this->getById(MPH);
   return mph ? std::optional<float>(std::round(*mph)) : std::nullopt;
-}
-
-std::optional<float> RaspberryModel::getKph() {
-  std::optional<float> mph = this->getById(KPH);
-  return mph ? std::optional<float>(std::round(*mph * 1.601)) : std::nullopt;
 }
 
 std::optional<float> RaspberryModel::getStatus() {
@@ -287,15 +276,15 @@ std::optional<float> RaspberryModel::getInverterTemp() {
 }
 
 std::optional<float> RaspberryModel::getGForceX() {
-  return this->getById(GFORCEX);
+  return this->getById(GFORCE, 0);
 }
 
 std::optional<float> RaspberryModel::getGForceY() {
-  return this->getById(GFORCEY);
+  return this->getById(GFORCE, 1);
 }
 
 std::optional<float> RaspberryModel::getGForceZ() {
-  return this->getById(GFORCEZ);
+  return this->getById(GFORCE, 2);
 }
 
 std::optional<float> RaspberryModel::getBalancingCells() {
@@ -339,7 +328,7 @@ std::optional<float> RaspberryModel::getTractionControl() {
 }
 
 QList<QString> RaspberryModel::getBmsFault() {
-  QRegularExpression regex("^(BMS/Status/F/.*|MPU/Fault/Crit/.*)$");
+  QRegularExpression regex("^BMS/Faults/Critical/.*$");
 
   QList<QString> faults;
   for (auto it = this->currentData.begin(); it != this->currentData.end();
@@ -436,22 +425,11 @@ std::optional<float> RaspberryModel::getModeIndex() {
   return this->getById(MODEINDEX);
 }
 
-std::optional<float> RaspberryModel::getBurningCells() {
-  return std::nullopt; // TODO: Implement Burning Cells
-}
-
 void RaspberryModel::updateCurrentData() { emit this->onCurrentDataChange(); }
 
-std::optional<bool> RaspberryModel::getIsTalking() {
-  std::optional<float> value = this->getById(MICROPHONE);
-  if (value && value > 0) {
-    return true;
-  }
-  return false;
-}
-
 QList<QString> RaspberryModel::getCriticalFaults() {
-  QRegularExpression regex("^(BMS/Status/Faults/.*|MPU/Fault/Critical/.*)$");
+  QRegularExpression regex(
+      "^(BMS/Faults/Critical/.*|MPU/Fault/Critical/.*)$");
 
   QList<QString> faults;
 
@@ -466,7 +444,8 @@ QList<QString> RaspberryModel::getCriticalFaults() {
 }
 
 QList<QString> RaspberryModel::getNonCriticalFaults() {
-  QRegularExpression regex("^MPU/Fault/Non-Critical/.*$");
+  QRegularExpression regex(
+      "^(BMS/Faults/Non-Critical/.*|MPU/Fault/Non-Critical/.*)$");
 
   QList<QString> faults;
 
