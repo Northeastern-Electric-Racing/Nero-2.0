@@ -3,7 +3,7 @@
 HomeController::HomeController(Model *model, QObject *parent)
     : ButtonController{model, {1, 2}, parent}, m_speed(0), m_status(false),
     m_direction(true), m_packTemp(0.0), m_motorTemp(0.0),
-    m_stateOfCharge(0), m_lowVoltageStateOfCharge(0) {
+    m_stateOfCharge(0.0) {
     connect(m_model, &Model::onCurrentDataChange, this,
             &HomeController::currentDataDidChange);
 }

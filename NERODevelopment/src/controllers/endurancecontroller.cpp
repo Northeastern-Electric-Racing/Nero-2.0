@@ -54,16 +54,6 @@ void EnduranceController::setPackTemp(int temp) {
   }
 }
 
-int EnduranceController::lowVoltageStateOfCharge() const {
-  return m_lowVoltageStateOfCharge;
-}
-void EnduranceController::setLowVoltageStateOfCharge(int charge) {
-  if (charge != m_lowVoltageStateOfCharge) {
-    m_lowVoltageStateOfCharge = charge;
-    emit lowVoltageStateOfChargeChanged(charge);
-  }
-}
-
 int EnduranceController::speed() const { return m_speed; }
 void EnduranceController::setSpeed(int speed) {
   if (speed != m_speed) {
@@ -78,7 +68,6 @@ void EnduranceController::currentDataDidChange() {
   std::optional<float> soc = m_model->getStateOfCharge();
   std::optional<float> motorTemp = m_model->getMotorTemp();
   std::optional<float> packTemp = m_model->getPackTemp();
-  std::optional<float> lowVoltageSoc = m_model->getLowVoltageStateOfCharge();
   std::optional<float> speed = m_model->getMph();
 
   if (torque) {
@@ -95,9 +84,6 @@ void EnduranceController::currentDataDidChange() {
   }
   if (packTemp) {
     setPackTemp(*packTemp);
-  }
-  if (lowVoltageSoc) {
-    setLowVoltageStateOfCharge(*lowVoltageSoc);
   }
   if (speed) {
     setSpeed(*speed);

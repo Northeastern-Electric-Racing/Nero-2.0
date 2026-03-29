@@ -9,6 +9,7 @@ Item {
 
     property var criticalFaults: headerController.criticalFaults
     property var nonCriticalFaults: headerController.nonCriticalFaults
+    property string modeTitle: ""
 
     Timer {
         id: timer
@@ -27,6 +28,7 @@ Item {
             delay(3000, faultDialog.closeModal)
         }
     }
+
     onNonCriticalFaultsChanged: {
         if (nonCriticalFaults.length > 0) {
             faultDialog.openModal("Non Critical Faults",
@@ -53,6 +55,15 @@ Item {
         anchors.topMargin: criticalFaultIcon.height / 5
         dimension: parent.height / 2 * 0.9
         numWarnings: criticalFaults.length
+    }
+
+    LabelText {
+        visible: modeTitle !== ""
+        text: modeTitle
+        anchors.centerIn: parent
+        color: Theme.offCarForeground
+        font.pixelSize: 36
+        font.bold: true
     }
 
     FaultDialog {
