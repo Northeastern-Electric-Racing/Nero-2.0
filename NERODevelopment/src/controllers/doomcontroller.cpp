@@ -4,9 +4,20 @@
  * DOOM integration for the NERO dashboard.
  * Bridges the doomgeneric C engine with Qt's C++ framework.
  *
- * The doomgeneric platform callbacks (DG_DrawFrame, DG_GetKey, etc.)
- * are implemented directly in this file via extern "C" — no separate
- * .c file needed.
+ * The doomgeneric engine is a direct port of the original DOOM source code,
+ * provided by: https://github.com/ozkl/doomgeneric
+ *
+ * The engine code itself (all .c files pulled in via FetchContent) is a direct
+ * rip from that repository and is NOT custom NERO code. Do not modify the
+ * engine sources — they should stay as-is from upstream.
+ *
+ * What IS custom NERO code is everything in this file: the platform callbacks
+ * (DG_DrawFrame, DG_GetKey, etc.) implemented via extern "C", the
+ * DoomImageProvider, DoomWorker, and DoomController classes. These bridge
+ * the unmodified engine into Qt/QML for our dashboard.
+ *
+ * The doomgeneric platform callbacks are implemented directly in this file
+ * via extern "C" blocks — no separate .c file is needed.
  */
 
 #include "doomcontroller.h"
@@ -18,6 +29,8 @@
 
 /* ============================================================
  * doomgeneric C headers
+ * Source: https://github.com/ozkl/doomgeneric/tree/master/doomgeneric
+ * These headers are from the upstream repo and should not be modified.
  * ============================================================ */
 extern "C" {
 #include "doomgeneric.h"
@@ -36,8 +49,14 @@ static int platform_getkey_callback(unsigned char *pressed, unsigned char *doomK
 /* ============================================================
  * doomgeneric platform callbacks (extern "C")
  *
- * These are the functions doomgeneric calls at runtime.
- * This replaces the need for a separate doom_platform.c file.
+ * These are the functions the doomgeneric engine calls at runtime.
+ * The engine expects these symbols to exist at link time — without them
+ * the build will fail with undefined references.
+ *
+ * This is the NERO-specific platform backend, equivalent to the
+ * doomgeneric_sdl.c or doomgeneric_xlib.c files in the upstream repo.
+ * We implement them here in C++ (via extern "C") to avoid needing a
+ * separate .c file and to directly access Qt APIs.
  * ============================================================ */
 extern "C" {
 
@@ -145,6 +164,19 @@ void DoomImageProvider::updateFrame(const QImage &frame)
 
 /* ============================================================
  * DoomWorker — Runs the game loop on a dedicated thread
+ *
+ * Thread lifecycle:
+ *   - Created and started in DoomController::startGame()
+ *   - The game loop runs in start() until m_running is set to false
+ *   - DoomController::stopGame() sets m_running = false, causing the
+ *     game loop to exit, which emits stopped() → triggers QThread::quit()
+ *   - The QThread::finished signal triggers deleteLater() on this worker
+ *   - DoomView.qml also calls stopGame() on destruction and when
+ *     isFocused becomes false (navigating away from the DOOM page)
+ *
+ * This ensures the thread is always cleaned up when DOOM is not being
+ * played — whether the user presses Esc, navigates away, or the view
+ * is destroyed.
  * ============================================================ */
 
 DoomWorker::DoomWorker(const QString &wadPath, QObject *parent)
@@ -207,6 +239,8 @@ void DoomWorker::start()
 
     qInfo() << "[DOOM] Engine running, entering game loop";
 
+    // This loop blocks the worker thread until m_running is set to false
+    // by stop(), which is called from DoomController::stopGame()
     while (m_running) {
         doomgeneric_Tick();
     }
@@ -223,6 +257,13 @@ void DoomWorker::stop()
 
 /* ============================================================
  * DoomController — Main QML-facing controller
+ *
+ * Thread cleanup guarantees:
+ *   1. stopGame() sets m_running=false → game loop exits → emits stopped()
+ *   2. stopped() signal is connected to QThread::quit() → event loop ends
+ *   3. QThread::finished is connected to worker->deleteLater() → worker freed
+ *   4. stopGame() also calls m_gameThread->wait(3000) as a safety net
+ *   5. If the thread still hasn't stopped after 3s, terminate() is called
  * ============================================================ */
 
 DoomController::DoomController(Model *model, QObject *parent)
@@ -287,6 +328,10 @@ void DoomController::startGame()
     m_worker = new DoomWorker(m_wadPath);
     m_worker->moveToThread(m_gameThread);
 
+    // Wire up thread lifecycle:
+    //   thread started → worker starts game loop
+    //   worker stopped → thread quits its event loop
+    //   thread finished → worker is deleted
     connect(m_gameThread, &QThread::started, m_worker, &DoomWorker::start);
     connect(m_worker, &DoomWorker::frameReady, this, &DoomController::onFrameReady, Qt::QueuedConnection);
     connect(m_worker, &DoomWorker::started, this, &DoomController::onWorkerStarted, Qt::QueuedConnection);
@@ -303,11 +348,18 @@ void DoomController::stopGame()
     if (!m_running || !m_worker) return;
 
     qInfo() << "[DOOM] Stopping game...";
+
+    // Signal the game loop to exit
     m_worker->stop();
 
     if (m_gameThread) {
+        // Ask the thread's event loop to quit
         m_gameThread->quit();
+
+        // Wait up to 3 seconds for the game loop to finish
         m_gameThread->wait(3000);
+
+        // If still running after 3s, force kill as a last resort
         if (m_gameThread->isRunning()) {
             qWarning() << "[DOOM] Force terminating game thread";
             m_gameThread->terminate();

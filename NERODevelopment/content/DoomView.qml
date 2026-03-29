@@ -1,40 +1,28 @@
-import QtQuick
-import QtQuick.Controls
+import QtQuick 2.15
+import QtQuick.Controls 2.15
 
 Item {
     id: doomView
     anchors.fill: parent
-    focus: doomView.isFocused
     visible: true
 
+    // isFocused is set externally by the navigation system (NavigationController).
+    // When this page becomes the active page, isFocused is set to true, granting
+    // keyboard focus. This matches the pattern used by FlappyBird.qml and Snake.qml.
     property bool isFocused: false
+    focus: doomView.isFocused
 
-    readonly property int doomKeyUp:     0xAD
-    readonly property int doomKeyDown:   0xAF
-    readonly property int doomKeyLeft:   0xAC
-    readonly property int doomKeyRight:  0xAE
-    readonly property int doomKeyEnter:  0x0D
-    readonly property int doomKeyUse:    0xA2
-    readonly property int doomKeyFire:   0xA3
-    readonly property int doomKeyStrafeL: 0xA0
-    readonly property int doomKeyStrafeR: 0xA1
-    readonly property int doomKeyEscape: 0x1B
-
-    // Hold to exit
-    property bool escHeld: false
-
-    Timer {
-        id: escExitTimer
-        interval: 1000
-        repeat: false
-        onTriggered: {
-            doomView.escHeld = true
-            if (doomController.running) {
-                doomController.stopGame()
-            }
-            navigationController.goHome()
-        }
-    }
+    // DOOM key codes from doomgeneric's doomkeys.h
+    // (https://github.com/ozkl/doomgeneric/blob/master/doomgeneric/doomkeys.h)
+    // These must match the values defined in the library — they are NOT arbitrary.
+    readonly property int doomKeyUp:      0xAD  // KEY_UPARROW
+    readonly property int doomKeyDown:    0xAF  // KEY_DOWNARROW
+    readonly property int doomKeyLeft:    0xAC  // KEY_LEFTARROW
+    readonly property int doomKeyRight:   0xAE  // KEY_RIGHTARROW
+    readonly property int doomKeyEnter:   0x0D  // KEY_ENTER
+    readonly property int doomKeyFire:    0x9D  // KEY_FIRE (ctrl)
+    readonly property int doomKeyUse:     0x20  // KEY_USE (space — open doors, switches)
+    readonly property int doomKeyEscape:  0x1B  // KEY_ESCAPE
 
     onIsFocusedChanged: {
         if (isFocused) {
@@ -42,8 +30,6 @@ Item {
                 doomController.startGame()
             }
         } else {
-            escExitTimer.stop()
-            escHeld = false
             if (doomController.running) {
                 doomController.stopGame()
             }
@@ -76,9 +62,16 @@ Item {
                 ? "image://doom/frame?" + doomController.frameCounter
                 : ""
 
+        // nearest-neighbor scaling preserves DOOM's original pixel art look
         smooth: false
         fillMode: Image.Stretch
+
+        // cache must be disabled because we reuse the same base URI ("image://doom/frame")
+        // and append a changing frameCounter query param to force QML to re-request.
+        // With caching on, QML may serve a stale frame from its internal image cache
+        // instead of calling DoomImageProvider::requestImage() for the latest frame.
         cache: false
+
         visible: doomController.running
     }
 
@@ -102,33 +95,21 @@ Item {
                 doomController.sendKey(doomKeyRight, true)
                 event.accepted = true
                 break
-            case Qt.Key_Space:
-                doomController.sendKey(doomKeyUse, true)
-                event.accepted = true
-                break
-            case Qt.Key_Comma:
-                doomController.sendKey(doomKeyStrafeL, true)
-                event.accepted = true
-                break
-            case Qt.Key_Period:
-                doomController.sendKey(doomKeyStrafeR, true)
-                event.accepted = true
-                break
             case Qt.Key_Return:
                 if (!doomController.running) {
                     doomController.startGame()
                 } else {
                     doomController.sendKey(doomKeyEnter, true)
                     doomController.sendKey(doomKeyFire, true)
+                    doomController.sendKey(doomKeyUse, true)
                 }
                 event.accepted = true
                 break
             case Qt.Key_Escape:
                 if (doomController.running) {
-                    escExitTimer.start()
-                } else {
-                    navigationController.goHome()
+                    doomController.stopGame()
                 }
+                navigationController.goHome()
                 event.accepted = true
                 break
         }
@@ -154,37 +135,16 @@ Item {
                 doomController.sendKey(doomKeyRight, false)
                 event.accepted = true
                 break
-            case Qt.Key_Space:
-                doomController.sendKey(doomKeyUse, false)
-                event.accepted = true
-                break
-            case Qt.Key_Comma:
-                doomController.sendKey(doomKeyStrafeL, false)
-                event.accepted = true
-                break
-            case Qt.Key_Period:
-                doomController.sendKey(doomKeyStrafeR, false)
-                event.accepted = true
-                break
             case Qt.Key_Return:
                 doomController.sendKey(doomKeyEnter, false)
                 doomController.sendKey(doomKeyFire, false)
-                event.accepted = true
-                break
-            case Qt.Key_Escape:
-                escExitTimer.stop()
-                if (!escHeld && doomController.running) {
-                    doomController.sendKey(doomKeyEscape, true)
-                    doomController.sendKey(doomKeyEscape, false)
-                }
-                escHeld = false
+                doomController.sendKey(doomKeyUse, false)
                 event.accepted = true
                 break
         }
     }
 
     Component.onDestruction: {
-        escExitTimer.stop()
         if (doomController.running) {
             doomController.stopGame()
         }

@@ -1,6 +1,28 @@
 #ifndef DOOMCONTROLLER_H
 #define DOOMCONTROLLER_H
 
+/**
+ * DOOM integration for the NERO dashboard.
+ *
+ * Uses the doomgeneric engine (https://github.com/ozkl/doomgeneric), a minimal
+ * portable DOOM source port designed for embedding. The engine code is pulled
+ * in unmodified via CMake FetchContent — do not edit the engine .c files.
+ *
+ * This header defines the NERO-specific wrapper classes:
+ *   - DoomImageProvider: Serves DOOM frames to QML via "image://doom/..."
+ *   - DoomWorker: Runs the DOOM game loop on a dedicated QThread
+ *   - DoomController: QML-facing controller (same pattern as SnakeController)
+ *
+ * Thread lifecycle:
+ *   startGame() creates a QThread + DoomWorker, moves worker to thread, starts it.
+ *   stopGame() sets m_running=false → game loop exits → thread quits → worker deleted.
+ *   The thread is guaranteed to be stopped when:
+ *     - User presses Esc (DoomView.qml calls stopGame + goHome)
+ *     - User navigates away (DoomView.qml onIsFocusedChanged calls stopGame)
+ *     - DoomView.qml is destroyed (Component.onDestruction calls stopGame)
+ *     - DoomController is destroyed (destructor calls stopGame)
+ */
+
 #include <QObject>
 #include <QThread>
 #include <QImage>
@@ -17,7 +39,10 @@ struct DoomKeyEvent {
 };
 
 /**
- * @brief Image provider that serves the current DOOM frame to QML
+ * @brief Image provider that serves the current DOOM frame to QML.
+ *
+ * QML references frames via: Image { source: "image://doom/frame?" + frameCounter }
+ * The changing query param forces QML to re-request each new frame.
  */
 class DoomImageProvider : public QQuickImageProvider
 {
@@ -32,7 +57,11 @@ private:
 };
 
 /**
- * @brief Worker that runs the DOOM game loop on a separate thread
+ * @brief Worker that runs the DOOM game loop on a separate thread.
+ *
+ * Created by DoomController::startGame(), destroyed automatically when the
+ * thread finishes (via QThread::finished → deleteLater connection).
+ * The game loop in start() blocks until stop() sets m_running to false.
  */
 class DoomWorker : public QObject
 {

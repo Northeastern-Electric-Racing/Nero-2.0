@@ -8,30 +8,45 @@ find_package(Qt6 REQUIRED COMPONENTS Core Gui Qml Quick Network Mqtt Protobuf)
 qt_standard_project_setup(REQUIRES 6.8)
 
 # ============================================================
-# DOOM Integration — auto-download doomgeneric engine
+# DOOM Integration — doomgeneric engine
+# Source: https://github.com/ozkl/doomgeneric
+#
+# Strategy: Check for a local copy in third_party/ first. If none
+# exists, use FetchContent to auto-download from GitHub.
+# This ensures offline builds work if someone has cloned the repo
+# manually, while still being zero-friction for fresh clones.
 # ============================================================
-include(FetchContent)
-FetchContent_Declare(
-    doomgeneric
-    GIT_REPOSITORY https://github.com/ozkl/doomgeneric.git
-    GIT_SHALLOW TRUE
-)
-FetchContent_MakeAvailable(doomgeneric)
+set(DOOMGENERIC_LOCAL_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src/third_party/doomgeneric/doomgeneric)
 
-set(DOOMGENERIC_DIR ${doomgeneric_SOURCE_DIR}/doomgeneric)
+if(EXISTS ${DOOMGENERIC_LOCAL_DIR}/doomgeneric.h)
+    # Local copy found — use it directly, skip download
+    set(DOOMGENERIC_DIR ${DOOMGENERIC_LOCAL_DIR})
+    message(STATUS "DOOM: Using local source at ${DOOMGENERIC_DIR}")
+else()
+    # No local copy — download via FetchContent
+    message(STATUS "DOOM: No local source found, downloading via FetchContent...")
+    include(FetchContent)
+    FetchContent_Declare(
+        doomgeneric
+        GIT_REPOSITORY https://github.com/ozkl/doomgeneric.git
+        GIT_SHALLOW TRUE
+    )
+    FetchContent_MakeAvailable(doomgeneric)
+    set(DOOMGENERIC_DIR ${doomgeneric_SOURCE_DIR}/doomgeneric)
+    message(STATUS "DOOM: Downloaded to ${DOOMGENERIC_DIR}")
+endif()
 
 file(GLOB DOOM_SOURCES ${DOOMGENERIC_DIR}/*.c)
 
-# Remove platform backends we don't use (we provide our own in doomcontroller.cpp)
 # Remove ALL platform backends (doomgeneric_*.c) — we provide our own in doomcontroller.cpp
-# The core engine file is doomgeneric.c (no underscore) so it's kept
+# The core engine file is doomgeneric.c (no underscore suffix) so it is kept
 list(FILTER DOOM_SOURCES EXCLUDE REGEX "doomgeneric_[a-z].*\\.c$")
 
 # Remove SDL and Allegro sound/music backends — we don't have those libraries
 list(FILTER DOOM_SOURCES EXCLUDE REGEX "i_sdl.*\\.c$")
 list(FILTER DOOM_SOURCES EXCLUDE REGEX "i_allegro.*\\.c$")
 
-# Suppress warnings in third-party DOOM code
+# Suppress warnings in third-party DOOM code (unmodified upstream C from the 90s)
 set_source_files_properties(${DOOM_SOURCES} PROPERTIES COMPILE_FLAGS "-w")
 
 # ============================================================

@@ -40,6 +40,16 @@ int main(int argc, char *argv[]) {
     EnduranceController enduranceController(model);
     SpeedController speedController(model);
 
+    // Register DOOM's custom image provider with the QML engine.
+    // Unlike other controllers which just expose properties/methods to QML,
+    // DOOM renders frames to a raw pixel buffer that needs to be served to
+    // QML as an image. QQuickImageProvider lets QML load frames via:
+    //   Image { source: "image://doom/frame?" + frameCounter }
+    // The "doom" string here is the provider ID that maps to that URI scheme.
+    // This must be registered BEFORE engine.loadFromModule() so the QML
+    // engine can resolve "image://doom/..." when DoomView.qml is loaded.
+    engine.addImageProvider("doom", doomController.createImageProvider());
+
     engine.rootContext()->setContextProperty("homeController", &homeController);
     engine.rootContext()->setContextProperty("headerController",
                                              &headerController);
@@ -51,28 +61,13 @@ int main(int argc, char *argv[]) {
                                              &flappyBirdController);
     engine.rootContext()->setContextProperty("snakeController",
                                              &snakeController);
+    engine.rootContext()->setContextProperty("doomController", &doomController);
     engine.rootContext()->setContextProperty("game2048Controller",
                                              &game2048Controller);
-    engine.addImageProvider("doom", doomController.createImageProvider());
     engine.rootContext()->setContextProperty("enduranceController",
                                              &enduranceController);
     engine.rootContext()->setContextProperty("speedController",
                                              &speedController);
-
-    engine.rootContext()->setContextProperty("homeController", &homeController);
-    engine.rootContext()->setContextProperty("headerController",
-                                             &headerController);
-    engine.rootContext()->setContextProperty("offViewController",
-                                             &offViewController);
-    engine.rootContext()->setContextProperty("navigationController",
-                                             &navigationController);
-    engine.rootContext()->setContextProperty("flappyBirdController",
-                                             &flappyBirdController);
-    engine.rootContext()->setContextProperty("snakeController", &snakeController);
-    engine.rootContext()->setContextProperty("doomController", &doomController);
-    engine.rootContext()->setContextProperty("enduranceController",
-                                             &enduranceController);
-    engine.rootContext()->setContextProperty("speedController", &speedController);
 
     QObject::connect(
         &engine, &QQmlApplicationEngine::objectCreationFailed, &app,
