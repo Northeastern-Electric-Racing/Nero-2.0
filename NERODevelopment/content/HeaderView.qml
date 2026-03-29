@@ -1,5 +1,5 @@
-import QtQuick 2.15
-import QtQuick.Controls 2.15
+import QtQuick
+import QtQuick.Controls
 import NERO
 
 Item {
@@ -9,7 +9,7 @@ Item {
 
     property var criticalFaults: headerController.criticalFaults
     property var nonCriticalFaults: headerController.nonCriticalFaults
-    property bool isTalking: headerController.isTalking
+    property string modeTitle: ""
 
     Timer {
         id: timer
@@ -28,6 +28,7 @@ Item {
             delay(3000, faultDialog.closeModal)
         }
     }
+
     onNonCriticalFaultsChanged: {
         if (nonCriticalFaults.length > 0) {
             faultDialog.openModal("Non Critical Faults",
@@ -56,15 +57,13 @@ Item {
         numWarnings: criticalFaults.length
     }
 
-    MicrophoneComponent {
-        id: microphoneComponent
-        height: parent.height / 2 + 10
-        width: parent.height / 2 + 10
-        anchors.right: parent.right
-        anchors.top: parent.top
-        anchors.rightMargin: 5
-        anchors.topMargin: 5
-        isTalking: header.isTalking
+    LabelText {
+        visible: modeTitle !== ""
+        text: modeTitle
+        anchors.centerIn: parent
+        color: Theme.offCarForeground
+        font.pixelSize: 36
+        font.bold: true
     }
 
     FaultDialog {

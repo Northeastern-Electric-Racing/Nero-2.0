@@ -1,5 +1,5 @@
-import QtQuick 6.5
-import QtQuick.Controls 6.5
+import QtQuick
+import QtQuick.Controls
 import QtQuick.Layouts
 import NERO
 
@@ -23,10 +23,9 @@ Rectangle {
                                   0.83 + (0.67 - 0.83) * (percentage / 0.125), //Purple -> Blue
                                   1, 0.5, 1 //Saturation, lightness, alpha
                               )
-
     height: 500
     width: height / 2.233
-    color: Theme.getColor("transparent")
+    color: "transparent"
 
     property int thermometerWidth: thermometer.height / 2.233
     property int horizontalPadding: thermometer.thermometerWidth / 10
@@ -89,7 +88,7 @@ Rectangle {
             stops: [
                 GradientStop {
                     position: 1.0
-                    color: Theme.getColor("fillGradientStop")
+                    color: Theme.fillGradientStop
                 },
                 GradientStop {
                     position: -0.8
@@ -111,7 +110,7 @@ Rectangle {
             stops: [
                 GradientStop {
                     position: 1.5
-                    color: Theme.getColor("fillGradientStop")
+                    color: Theme.fillGradientStop
                 },
                 GradientStop {
                     position: 0.0
@@ -130,7 +129,7 @@ Rectangle {
             right: fillRectangle.right
             bottom: fillRectangle.top
         }
-        color: Theme.getColor("background")
+        color: Theme.background
     }
 
     Lightning {

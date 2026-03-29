@@ -1,6 +1,6 @@
-import QtQuick 2.15
-import QtQuick.Controls 2.15
-import QtQuick.Layouts 1.15
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
 
 import NERO
 
@@ -73,21 +73,21 @@ Item {
 
         LabelText {
             text: "CAR OFF"
-            color: Theme.getColor("offCarForeground")
+            color: Theme.offCarForeground
             font.pixelSize: 40
             font.bold: true
         }
 
         LabelText {
             text: "-"
-            color: Theme.getColor("primaryForeground")
+            color: Theme.primaryForeground
             font.pixelSize: 40
             font.bold: true
         }
 
         LabelText {
             text: "GLVMS ON"
-            color: Theme.getColor("onGLVMSForeground")
+            color: Theme.onGLVMSForeground
             font.pixelSize: 40
             font.bold: true
         }

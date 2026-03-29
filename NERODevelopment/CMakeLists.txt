@@ -16,13 +16,14 @@ set(PROJECT_SOURCES
     src/controllers/chargingcontroller.h
     src/controllers/homecontroller.h
     src/controllers/offviewcontroller.h
-    src/controllers/efficiencycontroller.h
+    src/controllers/endurancecontroller.h
     src/controllers/headercontroller.h
     src/controllers/buttoncontroller.h
     src/controllers/navigationcontroller.h
     src/controllers/flappybirdcontroller.h
     src/controllers/speedcontroller.h
     src/controllers/snakecontroller.h
+    src/controllers/game2048controller.h
     src/controllers/tankcontroller.h
 
     # Headers - Models
@@ -40,7 +41,7 @@ set(PROJECT_SOURCES
     src/utils/descriptioninfo.h
 
     # Implementation - Controllers
-    src/controllers/efficiencycontroller.cpp
+    src/controllers/endurancecontroller.cpp
     src/controllers/chargingcontroller.cpp
     src/controllers/homecontroller.cpp
     src/controllers/headercontroller.cpp
@@ -50,6 +51,7 @@ set(PROJECT_SOURCES
     src/controllers/flappybirdcontroller.cpp
     src/controllers/speedcontroller.cpp
     src/controllers/snakecontroller.cpp
+    src/controllers/game2048controller.cpp
     src/controllers/tankcontroller.cpp
 
     # Implementation - Models

@@ -1,5 +1,5 @@
-#ifndef EFFICIENCYCONTROLLER_H
-#define EFFICIENCYCONTROLLER_H
+#ifndef ENDURANCECONTROLLER_H
+#define ENDURANCECONTROLLER_H
 
 #include "buttoncontroller.h"
 #include <QElapsedTimer>
@@ -7,10 +7,10 @@
 #include <QTimer>
 
 /**
- * @brief The EfficiencyController class
- * Controller for the efficiency view
+ * @brief The EnduranceController class
+ * Controller for the endurance view
  */
-class EfficiencyController : public ButtonController {
+class EnduranceController : public ButtonController {
   Q_OBJECT
   Q_PROPERTY(int currentMaxTorque READ currentMaxTorque WRITE
                  setCurrentMaxTorque NOTIFY currentMaxTorqueChanged FINAL)
@@ -23,9 +23,6 @@ class EfficiencyController : public ButtonController {
                  motorTempChanged FINAL)
   Q_PROPERTY(
       int packTemp READ packTemp WRITE setPackTemp NOTIFY packTempChanged FINAL)
-  Q_PROPERTY(int lowVoltageStateOfCharge READ lowVoltageStateOfCharge WRITE
-                 setLowVoltageStateOfCharge NOTIFY
-                     lowVoltageStateOfChargeChanged FINAL)
   Q_PROPERTY(int speed READ speed WRITE setSpeed NOTIFY speedChanged FINAL)
   Q_PROPERTY(int currentTime READ currentTime WRITE setCurrentTime NOTIFY
                  currentTimeChanged)
@@ -35,13 +32,12 @@ class EfficiencyController : public ButtonController {
       int lastTime READ lastTime WRITE setLastTime NOTIFY lastTimeChanged)
 
 public:
-  explicit EfficiencyController(Model *model, QObject *parent = nullptr);
+  explicit EnduranceController(Model *model, QObject *parent = nullptr);
   int currentMaxTorque() const;
   int currentRegenStrength() const;
   int stateOfCharge() const;
   int motorTemp() const;
   int packTemp() const;
-  int lowVoltageStateOfCharge() const;
   int speed() const;
   int currentTime() const;
   int fastestTime() const;
@@ -53,7 +49,6 @@ signals:
   void stateOfChargeChanged(int);
   void motorTempChanged(int);
   void packTempChanged(int);
-  void lowVoltageStateOfChargeChanged(int);
   void speedChanged(int);
   void currentTimeChanged(int);
   void fastestTimeChanged(int);
@@ -65,7 +60,6 @@ public slots:
   void setStateOfCharge(int);
   void setMotorTemp(int);
   void setPackTemp(int);
-  void setLowVoltageStateOfCharge(int);
   void setSpeed(int);
   void currentDataDidChange();
   void setCurrentTime(int);
@@ -81,7 +75,6 @@ private:
   int m_stateOfCharge = 0;           // charge percentage [0,100]
   int m_motorTemp = 0;               // Celsius
   int m_packTemp = 0;                // Celsius
-  int m_lowVoltageStateOfCharge = 0; // charge percentage [0,100]
   int m_speed = 0;                   // speed in mph
   int m_currentTime = 0;
   int m_fastestTime = 0;
@@ -91,4 +84,4 @@ private:
   QTimer *m_updateTimer;
 };
 
-#endif // EFFICIENCYCONTROLLER_H
+#endif // ENDURANCECONTROLLER_H

@@ -9,10 +9,11 @@ const std::vector<Item> &getPages() {
       {"PIT - DRIVE", Type::Page, "flag.png", "Pit.qml", nullptr},
       {"PIT - REVERSE", Type::Page, "reverse.png", "Pit.qml", nullptr},
       {"PERFORMANCE", Type::Page, "hare.png", "SpeedMode.qml", nullptr},
-      {"EFFICIENCY", Type::Page, "turtle.png", "EfficiencyScreen.qml", nullptr},
+      {"ENDURANCE", Type::Page, "turtle.png", "EnduranceScreen.qml", nullptr},
       {"GAMES", Type::Category, "game.png", nullptr, nullptr},
       {"FLAPPY BIRD", Type::SubPage, nullptr, "FlappyBird.qml", nullptr},
       {"SNAKE", Type::SubPage, nullptr, "Snake.qml", nullptr},
+      {"2048", Type::SubPage, nullptr, "Game2048.qml", nullptr},
       {"THEMES", Type::Category, "themes.png", nullptr, nullptr},
       {"LIGHT", Type::SubAction, nullptr, nullptr,
        [](NavigationController *c) {
