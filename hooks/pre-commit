@@ -1,10 +1,14 @@
 #!/bin/bash
 
-# Find qmlformat dynamically
-QMLFORMAT=$(find ~/Qt -name "qmlformat" -not -path "*.dSYM*" -not -path "*/Src/*" -not -path "*/tests/*" -not -path "*/manual/*" -not -path "*/DesignStudio/*" 2>/dev/null | head -1)
+# Detect OS and set qmlformat path (Qt 6.8.3)
+if [[ "$OSTYPE" == "msys" || "$OSTYPE" == "cygwin" || "$OSTYPE" == "win32" ]]; then
+    QMLFORMAT=~/Qt/6.8.3/mingw_64/bin/qmlformat.exe
+else
+    QMLFORMAT=~/Qt/6.8.3/macos/bin/qmlformat
+fi
 
-if [ -z "$QMLFORMAT" ]; then
-    echo "Warning: qmlformat not found, skipping QML formatting"
+if [ ! -f "$QMLFORMAT" ]; then
+    echo "Warning: qmlformat not found at $QMLFORMAT, skipping QML formatting"
 fi
 
 # Get all staged C++ files
@@ -20,7 +24,7 @@ for FILE in $CPP_FILES; do
 done
 
 # Run qmlformat on QML files
-if [ -n "$QMLFORMAT" ]; then
+if [ -f "$QMLFORMAT" ]; then
     for FILE in $QML_FILES; do
         $QMLFORMAT -i "$FILE"
         git add "$FILE"

@@ -114,3 +114,19 @@ install(TARGETS NEROApp
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
+
+# Install git hooks
+if(EXISTS "${CMAKE_SOURCE_DIR}/../hooks/pre-commit")
+    execute_process(
+        COMMAND ${CMAKE_COMMAND} -E copy
+            "${CMAKE_SOURCE_DIR}/../hooks/pre-commit"
+            "${CMAKE_SOURCE_DIR}/../.git/hooks/pre-commit"
+    )
+    if(UNIX)
+        execute_process(
+            COMMAND chmod 755
+                "${CMAKE_SOURCE_DIR}/../.git/hooks/pre-commit"
+        )
+    endif()
+    message(STATUS "Git hooks installed successfully!")
+endif()
