@@ -62,20 +62,20 @@ void EnduranceController::setSpeed(int speed) {
   }
 }
 
-int EfficiencyController::powerDrawPercent() const {
+int EnduranceController::powerDrawPercent() const {
   return m_powerDrawPercent;
 }
-void EfficiencyController::setPowerDrawPercent(int percent) {
+void EnduranceController::setPowerDrawPercent(int percent) {
   if (percent != m_powerDrawPercent) {
     m_powerDrawPercent = percent;
     emit powerDrawPercentChanged(percent);
   }
 }
 
-int EfficiencyController::maxDCCurrentTarget() const {
+int EnduranceController::maxDCCurrentTarget() const {
   return m_maxDCCurrentTarget;
 }
-void EfficiencyController::setMaxDCCurrentTarget(int target) {
+void EnduranceController::setMaxDCCurrentTarget(int target) {
   if (target != m_maxDCCurrentTarget) {
     m_maxDCCurrentTarget = target;
     emit maxDCCurrentTargetChanged(target);
