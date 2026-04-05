@@ -27,6 +27,14 @@ QList<QString> RaspberryModel::getMpuFault() {
         if (regex.match(it.key()).hasMatch() && it.value().values[0] == 1) {
             faults.append(it.key());
         }
+QList<QString> RaspberryModel::getVcuFault() {
+  QRegularExpression regex("^VCU/Faults/.*$");
+
+  QList<QString> faults;
+  for (auto it = this->currentData.begin(); it != this->currentData.end();
+       ++it) {
+    if (regex.match(it.key()).hasMatch() && it.value().values[0] == 1) {
+      faults.append(it.key());
     }
     return faults;
 }
@@ -116,6 +124,92 @@ void RaspberryModel::connectToMQTT() {
             &RaspberryModel::receiveServerData);
     client_2->connectToHost();
     this->m_client = client_1;
+  // Determine MQTT broker hostname based on environment
+  // Priority: 1. MQTT_HOST env var, 2. Default localhost for development
+  QString mqttHost =
+      getenv("HOST") ? QString(getenv("HOST")) : QString("localhost");
+
+  qInfo() << "RaspberryModel connecting to MQTT broker:" << mqttHost;
+
+  QList<QString> client_1_topics = {
+      MPH,
+      STATUS,
+      PACKTEMP,
+      MOTORTEMP,
+      STATEOFCHARGE,
+      CURRENT,
+      BALANCINGCELLS,
+      PACKVOLTAGE,
+      MAXCELLTEMP,
+      MAXCELLTEMPCHIP,
+      MAXCELLTEMPCELL,
+      MAXCELLVOLTAGE,
+      MAXCELLVOLTAGECHIP,
+      MAXCELLVOLTAGECELL,
+      MINCELLTEMP,
+      MINCELLTEMPCHIP,
+      MINCELLTEMPCELL,
+      MINCELLVOLTAGE,
+      MINCELLVOLTAGECHIP,
+      MINCELLVOLTAGECELL,
+      AVECELLTEMP,
+      AVECELLVOLTAGE,
+      TRACTIONCONTROL,
+      INVERTERTEMP,
+      BMSSTATE,
+      BMSFAULT,
+      VCUFAULT,
+      DCL,
+      CCL,
+      REGENPOWER,
+      TORQUEPOWER,
+      GFORCE,
+      SEGMENTTEMP1,
+      SEGMENTTEMP2,
+      SEGMENTTEMP3,
+      SEGMENTTEMP4,
+      MOTORPOWER,
+      FANPOWER,
+      SIDEBRBS,
+      BMS,
+      BSPD,
+      MPU,
+      BOTS,
+      INERTIA,
+      CPBRB,
+      TSMS,
+      IMD,
+      HVDINTRLK,
+      HVCNCTR,
+      CRITICALFAULTS,
+      NONCRITICALFAULTS,
+      LOWVOLTAGESOC,
+
+  };
+
+  const char *client1_port_str = getenv("CLIENT1_PORT");
+  const char *client2_port_str = getenv("CLIENT2_PORT");
+
+  int client1_port = client1_port_str ? atoi(client1_port_str) : 1883;
+  int client2_port = client2_port_str ? atoi(client2_port_str) : 1882;
+
+  MqttClient *client_1 =
+      new MqttClient(nullptr, client1_port, client_1_topics, mqttHost);
+  connect(client_1, &MqttClient::emitServerData, this,
+          &RaspberryModel::receiveServerData);
+  client_1->connectToHost();
+
+  QList<QString> client_2_topics = {
+      FORWARDBUTTON, BACKWARDBUTTON, RIGHTBUTTON, ENTERBUTTON,
+      UPBUTTON,      DOWNBUTTON,     HOMEBUTTON,  MODEINDEX,
+      DIRECTION,
+  };
+  MqttClient *client_2 =
+      new MqttClient(nullptr, client2_port, client_2_topics, mqttHost);
+  connect(client_2, &MqttClient::emitServerData, this,
+          &RaspberryModel::receiveServerData);
+  client_2->connectToHost();
+  this->m_client = client_1;
 }
 
 void RaspberryModel::sendMessage(const QString topic, const float value) {
