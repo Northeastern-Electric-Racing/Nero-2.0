@@ -33,36 +33,43 @@ void ButtonController::buttonUpdate() {
     }
 
     // Inside tabs (page >= 0): directional buttons from SOCKET only
-    // Ignore MQTT-sourced directional buttons when inside a tab
     if (!this->m_model->lastButtonFromSocket) {
         return;
     }
 
-    // Read shared button key ONCE, dispatch by value
+    // Button mapping (from hardware proposal):
+    //   1 = Escape (MQTT only — ignored here)
+    //   2 = Left
+    //   4 = Up
+    //   5 = Down
+    //   6 = Enter
+    //   7 = Right
     std::optional<float> buttonValue = this->m_model->getById(SOCKETBUTTON);
     if (buttonValue.has_value()) {
         float val = buttonValue.value();
 
-        if (val == 0) {
-            qDebug() << "Back Button Pressed (socket)";
-            this->m_model->setValue(SOCKETBUTTON, 10);
+        if (val == 2) {
+            qDebug() << "Left Button Pressed (socket)";
+            this->m_model->setValue(SOCKETBUTTON, -1);
             this->leftButtonPressed();
-        } else if (val == 1) {
+        } else if (val == 7) {
             qDebug() << "Right Button Pressed (socket)";
-            this->m_model->setValue(SOCKETBUTTON, 10);
+            this->m_model->setValue(SOCKETBUTTON, -1);
             this->rightButtonPressed();
-        } else if (val == 3) {
-            qDebug() << "Down Button Pressed (socket)";
-            this->m_model->setValue(SOCKETBUTTON, 10);
-            this->downButtonPressed();
         } else if (val == 4) {
             qDebug() << "Up Button Pressed (socket)";
-            this->m_model->setValue(SOCKETBUTTON, 10);
+            this->m_model->setValue(SOCKETBUTTON, -1);
             this->upButtonPressed();
         } else if (val == 5) {
+            qDebug() << "Down Button Pressed (socket)";
+            this->m_model->setValue(SOCKETBUTTON, -1);
+            this->downButtonPressed();
+        } else if (val == 6) {
             qDebug() << "Enter Button Pressed (socket)";
-            this->m_model->setValue(SOCKETBUTTON, 10);
+            this->m_model->setValue(SOCKETBUTTON, -1);
             this->enterButtonPressed();
         }
+        // 1 = escape (MQTT only, ignored here)
+        // -1 = cleared/released, ignore
     }
 }

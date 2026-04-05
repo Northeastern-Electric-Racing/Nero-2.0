@@ -130,8 +130,9 @@ void ButtonSocketReceiver::processMessage(const QString &message) {
         return;
     }
 
-    // On down: value = button number. On up: value = 10 (released).
-    float value = (state == "down") ? static_cast<float>(buttonNumber) : 10.0f;
+    // On down: value = button number. On up: value = -1 (released/cleared).
+    // Note: 10 is a real button (down-torque), so we use -1 for released.
+    float value = (state == "down") ? static_cast<float>(buttonNumber) : -1.0f;
     QString topic = "Wheel/Buttons/button_id";
 
     qDebug() << "Button:" << buttonNumber << state << "-> value:" << value;

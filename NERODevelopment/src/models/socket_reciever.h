@@ -19,8 +19,9 @@
  * Examples: "button_0_down\n", "button_3_up\n"
  *
  * Button mapping (N = value written to Wheel/Buttons/button_id):
- *   0 = backward, 1 = right/forward, 3 = down, 4 = up, 5 = enter
- *   10 = released (sent on _up)
+ *   1 = escape, 2 = left, 4 = up, 5 = down, 6 = enter, 7 = right
+ *   9 = up(torque), 10 = down(torque), 3/8 = on/off(launch)
+ *   -1 = released (sent on _up)
  */
 class ButtonSocketReceiver : public QObject {
     Q_OBJECT
