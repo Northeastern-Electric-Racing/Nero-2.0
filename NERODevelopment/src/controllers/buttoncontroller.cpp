@@ -1,4 +1,5 @@
 #include "buttoncontroller.h"
+#include "../utils/data_type_names.h"
 
 ButtonController::ButtonController(Model *model, int pageIndex, QObject *parent)
     : ButtonController(model, QList<int>{pageIndex}, parent) {}
@@ -6,10 +7,10 @@ ButtonController::ButtonController(Model *model, int pageIndex, QObject *parent)
 ButtonController::ButtonController(Model *model, QList<int> pageIndices,
                                    QObject *parent)
     : QObject{parent} {
-  this->m_model = model;
-  this->m_pageIndices = pageIndices;
-  connect(model, &Model::onCurrentDataChange, this,
-          &ButtonController::buttonUpdate);
+    this->m_model = model;
+    this->m_pageIndices = pageIndices;
+    connect(model, &Model::onCurrentDataChange, this,
+            &ButtonController::buttonUpdate);
 }
 
 void ButtonController::enterButtonPressed() {}
@@ -23,53 +24,52 @@ void ButtonController::leftButtonPressed() {}
 void ButtonController::rightButtonPressed() {}
 
 void ButtonController::homeButtonPressed() {
-  this->m_model->currentPageIndex = -1;
+    this->m_model->currentPageIndex = -1;
 }
 
 void ButtonController::buttonUpdate() {
-  if (this->m_pageIndices.contains(this->m_model->currentPageIndex)) {
-    // QDateTime currentDate = QDateTime::currentDateTime();
-    // qDebug() << "Button Pressed"
-    //          << this->m_model->getBackwardButtonPressed().value_or(false)
-    //          << this->m_model->getDownButtonPressed().value_or(false)
-    //          << this->m_model->getEnterButtonPressed().value_or(false)
-    //          << this->m_model->getRightButtonPressed().value_or(false)
-    //          << this->m_model->getUpButtonPressed().value_or(false)
-    //          << this->m_model->getHomeButtonPressed().value_or(false)
-    //          << this->m_model->getForwardButtonPressed().value_or(false)
-    //          << this->m_model->currentPageIndex;
-
-    if (this->m_model->getBackwardButtonPressed() == true) {
-      qDebug() << "Back Button Pressed";
-      this->leftButtonPressed();
+    if (!this->m_pageIndices.contains(this->m_model->currentPageIndex)) {
+        return;
     }
 
-    if (this->m_model->getRightButtonPressed() == true) {
-      qDebug() << "Right Button Pressed";
-
-      this->rightButtonPressed();
+    // Inside tabs (page >= 0): directional buttons from SOCKET only
+    if (!this->m_model->lastButtonFromSocket) {
+        return;
     }
 
-    if (this->m_model->getEnterButtonPressed() == true) {
-      qDebug() << "Enter Button Pressed";
+    // Button mapping (from hardware proposal):
+    //   1 = Escape (MQTT only — ignored here)
+    //   2 = Left
+    //   4 = Up
+    //   5 = Down
+    //   6 = Enter
+    //   7 = Right
+    std::optional<float> buttonValue = this->m_model->getById(SOCKETBUTTON);
+    if (buttonValue.has_value()) {
+        float val = buttonValue.value();
 
-      this->enterButtonPressed();
+        if (val == 2) {
+            qDebug() << "Left Button Pressed (socket)";
+            this->m_model->setValue(SOCKETBUTTON, -1);
+            this->leftButtonPressed();
+        } else if (val == 7) {
+            qDebug() << "Right Button Pressed (socket)";
+            this->m_model->setValue(SOCKETBUTTON, -1);
+            this->rightButtonPressed();
+        } else if (val == 4) {
+            qDebug() << "Up Button Pressed (socket)";
+            this->m_model->setValue(SOCKETBUTTON, -1);
+            this->upButtonPressed();
+        } else if (val == 5) {
+            qDebug() << "Down Button Pressed (socket)";
+            this->m_model->setValue(SOCKETBUTTON, -1);
+            this->downButtonPressed();
+        } else if (val == 6) {
+            qDebug() << "Enter Button Pressed (socket)";
+            this->m_model->setValue(SOCKETBUTTON, -1);
+            this->enterButtonPressed();
+        }
+        // 1 = escape (MQTT only, ignored here)
+        // -1 = cleared/released, ignore
     }
-
-    if (this->m_model->getUpButtonPressed() == true) {
-      qDebug() << "Up button pressed";
-      this->upButtonPressed();
-    }
-
-    if (this->m_model->getDownButtonPressed() == true) {
-      qDebug() << "Down Button Pressed";
-
-      this->downButtonPressed();
-    }
-
-    if (this->m_model->getHomeButtonPressed() == true) {
-      qDebug() << "Home button pressed";
-      this->homeButtonPressed();
-    }
-  }
 }
