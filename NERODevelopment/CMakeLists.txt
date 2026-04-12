@@ -166,3 +166,11 @@ install(TARGETS NEROApp
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
+
+# Install WAD file alongside the binary on the target (Odysseus/Pi)
+# This ensures DOOM1.WAD ends up in the same directory as NEROApp,
+# where DoomController::applicationDirPath() will find it at runtime.
+if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/resources/doom/DOOM1.WAD)
+    install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/resources/doom/DOOM1.WAD
+            DESTINATION ${CMAKE_INSTALL_BINDIR})
+endif()
