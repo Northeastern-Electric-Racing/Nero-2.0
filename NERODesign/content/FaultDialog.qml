@@ -91,19 +91,19 @@ Rectangle {
     }
 
     function openModal(name, message) {
-        faultDialog.faultName = name
-        faultDialog.faultMessage = message
-        faultDialog.visible = true
+        faultDialog.faultName = name;
+        faultDialog.faultMessage = message;
+        faultDialog.visible = true;
     }
 
     function closeModal() {
-        faultDialog.visible = false
+        faultDialog.visible = false;
     }
 
-    Keys.onPressed: (event)=> {
+    Keys.onPressed: event => {
         if (event.key === Qt.Key_Enter)
-            closeModal()
+            closeModal();
         if (event.key === Qt.Key_Return)
-            closeModal()
+            closeModal();
     }
 }

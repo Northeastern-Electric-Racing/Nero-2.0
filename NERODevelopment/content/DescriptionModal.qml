@@ -31,9 +31,7 @@ Rectangle {
         Image {
             id: modalImage
             anchors.fill: parent // This makes the image fill the rectangle
-            source: Theme.currentTheme === "dark"
-                        ? "/qt/qml/content/images/darkNeroLogo.png"
-                        : "/qt/qml/content/images/lightNeroLogo.png"
+            source: Theme.currentTheme === "dark" ? "/qt/qml/content/images/darkNeroLogo.png" : "/qt/qml/content/images/lightNeroLogo.png"
             fillMode: Image.PreserveAspectCrop
 
             layer.enabled: true
@@ -88,18 +86,18 @@ Rectangle {
         font.pixelSize: parent.height / 15
         onClicked: closeModal()
         Component.onCompleted: {
-            modalButton.contentItem.color = Theme.descriptionButtonForeground
+            modalButton.contentItem.color = Theme.descriptionButtonForeground;
         }
     }
 
     function openModal(title, text, imageUrl) {
-        modalImage.source = imageUrl
-        modalTitle.text = title
-        modalDescription.text = text
-        modal.visible = true
+        modalImage.source = imageUrl;
+        modalTitle.text = title;
+        modalDescription.text = text;
+        modal.visible = true;
     }
 
     function closeModal() {
-        modal.visible = false
+        modal.visible = false;
     }
 }

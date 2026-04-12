@@ -20,16 +20,15 @@ Item {
 
     onCriticalFaultsChanged: {
         if (criticalFaults.length > 0) {
-            faultDialog.openModal("Critical Faults", criticalFaults.join("\n"))
-            autoCloseTimer.restart()
+            faultDialog.openModal("Critical Faults", criticalFaults.join("\n"));
+            autoCloseTimer.restart();
         }
     }
 
     onNonCriticalFaultsChanged: {
         if (nonCriticalFaults.length > 0) {
-            faultDialog.openModal("Non Critical Faults",
-                                  nonCriticalFaults.join("\n"))
-            autoCloseTimer.restart()
+            faultDialog.openModal("Non Critical Faults", nonCriticalFaults.join("\n"));
+            autoCloseTimer.restart();
         }
     }
 

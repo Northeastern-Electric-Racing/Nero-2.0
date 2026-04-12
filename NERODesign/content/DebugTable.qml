@@ -17,26 +17,26 @@ Item {
     property int rowHeight: 30
 
     Keys.onPressed: event => {
-                        switch (event.key) {
-                            case Qt.Key_Up:
-                            debugTableController.upButtonPressed()
-                            break
-                            case Qt.Key_Left:
-                            debugTableController.leftButtonPressed()
-                            break
-                            case Qt.Key_Right:
-                            debugTableController.rightButtonPressed()
-                            break
-                            case Qt.Key_Down:
-                            debugTableController.downButtonPressed()
-                            break
-                            case Qt.Key_Return:
-                            debugTableController.enterButtonPressed()
-                            break
-                            default:
-                            break
-                        }
-                    }
+        switch (event.key) {
+        case Qt.Key_Up:
+            debugTableController.upButtonPressed();
+            break;
+        case Qt.Key_Left:
+            debugTableController.leftButtonPressed();
+            break;
+        case Qt.Key_Right:
+            debugTableController.rightButtonPressed();
+            break;
+        case Qt.Key_Down:
+            debugTableController.downButtonPressed();
+            break;
+        case Qt.Key_Return:
+            debugTableController.enterButtonPressed();
+            break;
+        default:
+            break;
+        }
+    }
 
     Row {
         anchors.fill: parent
@@ -77,8 +77,7 @@ Item {
                 delegate: Rectangle {
                     implicitWidth: topicsTableView.width
                     implicitHeight: debugTable.rowHeight
-                    border.width: scrollingTopics
-                                  && model.index === debugTable.selectedTopicIndex ? 3 : 1
+                    border.width: scrollingTopics && model.index === debugTable.selectedTopicIndex ? 3 : 1
                     color: 'black'
                     border.color: 'white'
 
@@ -131,8 +130,7 @@ Item {
                 delegate: Rectangle {
                     implicitWidth: parent.width / 3
                     implicitHeight: debugTable.rowHeight
-                    border.width: !scrollingTopics
-                                  && model.index === debugTable.selectedValueIndex ? 3 : 1
+                    border.width: !scrollingTopics && model.index === debugTable.selectedValueIndex ? 3 : 1
                     color: 'black'
                     border.color: 'white'
 
@@ -142,10 +140,9 @@ Item {
                     }
                 }
 
-                property var columnWidths: [valuesTableView.width
-                    / 2, valuesTableView.width / 4, valuesTableView.width / 4]
+                property var columnWidths: [valuesTableView.width / 2, valuesTableView.width / 4, valuesTableView.width / 4]
                 columnWidthProvider: function (column) {
-                    return columnWidths[column]
+                    return columnWidths[column];
                 }
             }
         }

@@ -29,11 +29,10 @@ Item {
     property int radialUnitFontSize: valueFontSize / 4
 
     Keys.onPressed: event => {
-                        if (event.key === Qt.Key_Return
-                            || event.key === Qt.Key_Enter) {
-                            speedController.enterButtonPressed()
-                        }
-                    }
+        if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
+            speedController.enterButtonPressed();
+        }
+    }
 
     ColumnLayout {
         anchors.fill: parent

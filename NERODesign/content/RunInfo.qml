@@ -30,7 +30,6 @@ Item {
         return formattedMinutes + " : " + formattedSeconds + " : " + formattedMs;
     }
 
-
     Rectangle {
         id: bottomRect
         visible: runInfo.isTop
