@@ -13,6 +13,14 @@
  *   - DoomWorker: Runs the DOOM game loop on a dedicated QThread
  *   - DoomController: QML-facing controller (same pattern as SnakeController)
  *
+ * Button input:
+ *   Unlike FlappyBird/Snake which only need press events, DOOM requires both
+ *   press AND release (hold forward to walk, release to stop). The existing
+ *   ButtonController pattern is consume-on-read (fire-and-forget presses),
+ *   so DoomController connects directly to Model::onCurrentDataChange and
+ *   reads the raw button value from "Wheel/Buttons/button_id" to do edge
+ *   detection — tracking transitions to generate press/release pairs.
+ *
  * Thread lifecycle:
  *   startGame() creates a QThread + DoomWorker, moves worker to thread, starts it.
  *   stopGame() sets m_running=false → game loop exits → thread quits → worker deleted.
@@ -31,7 +39,7 @@
 #include <QQuickImageProvider>
 #include <QElapsedTimer>
 
-class Model;
+#include "../models/model.h"
 
 struct DoomKeyEvent {
     unsigned char pressed;
@@ -127,8 +135,19 @@ private slots:
     void onWorkerStarted();
     void onWorkerStopped();
 
+    /**
+     * @brief Called on every Model::onCurrentDataChange.
+     *
+     * Reads the raw value from "Wheel/Buttons/button_id" and compares
+     * against m_lastButtonValue to detect edges (press/release).
+     * Only processes buttons when DOOM is actively running.
+     */
+    void onDataChanged();
+
 private:
     unsigned char mapNeroButtonToDoomKey(const QString &buttonName);
+    unsigned char mapButtonValueToDoomKey(int value);
+    void handleButtonValue(int value);
 
     Model *m_model;
     DoomWorker *m_worker;
@@ -139,6 +158,11 @@ private:
     int m_frameCounter;
     QString m_statusText;
     QString m_wadPath;
+
+    // Edge detection for hardware buttons
+    // Tracks the last raw value from "Wheel/Buttons/button_id"
+    // to detect press (value != 10) and release (value == 10) transitions
+    int m_lastButtonValue;
 };
 
 #endif // DOOMCONTROLLER_H

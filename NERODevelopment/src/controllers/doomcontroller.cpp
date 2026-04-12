@@ -27,6 +27,8 @@
 #include <QFile>
 #include <QDebug>
 
+#include "../utils/data_type_names.h"
+
 /* ============================================================
  * doomgeneric C headers
  * Source: https://github.com/ozkl/doomgeneric/tree/master/doomgeneric
@@ -37,6 +39,18 @@ extern "C" {
 #include "doomkeys.h"
 extern int joybspeed;
 }
+
+/* ============================================================
+ * NERO button values from "Wheel/Buttons/button_id" MQTT topic.
+ * These are the raw integer values that arrive on the topic.
+ * See raspberry_model.cpp for how these map to button getters.
+ * ============================================================ */
+static constexpr int BUTTON_VALUE_LEFT    = 0;   // backward / turn left
+static constexpr int BUTTON_VALUE_RIGHT   = 1;   // right / turn right
+static constexpr int BUTTON_VALUE_DOWN    = 3;   // down / move backward
+static constexpr int BUTTON_VALUE_UP      = 4;   // up / move forward
+static constexpr int BUTTON_VALUE_ENTER   = 5;   // enter / fire+use
+static constexpr int BUTTON_VALUE_RELEASE = 10;  // sentinel — no button held
 
 /* ============================================================
  * Platform bridge — static state for C callbacks
@@ -275,6 +289,7 @@ DoomController::DoomController(Model *model, QObject *parent)
     , m_running(false)
     , m_frameCounter(0)
     , m_statusText("Press ENTER to start DOOM")
+    , m_lastButtonValue(BUTTON_VALUE_RELEASE)
 {
     QStringList wadSearchPaths = {
         QCoreApplication::applicationDirPath() + "/DOOM1.WAD",
@@ -297,6 +312,12 @@ DoomController::DoomController(Model *model, QObject *parent)
         qWarning() << "[DOOM] WAD file not found! Searched:" << wadSearchPaths;
         m_statusText = "DOOM1.WAD not found!";
     }
+
+    // Connect to model data changes for hardware button input.
+    // We read the raw button value directly (not via the consume-on-read
+    // getXButtonPressed() methods) because DOOM needs both press AND release
+    // events, while the existing ButtonController pattern only fires on press.
+    connect(m_model, &Model::onCurrentDataChange, this, &DoomController::onDataChanged);
 }
 
 DoomController::~DoomController()
@@ -323,6 +344,9 @@ void DoomController::startGame()
     qInfo() << "[DOOM] Starting game...";
     m_statusText = "Loading DOOM...";
     emit statusTextChanged();
+
+    // Reset button state on game start
+    m_lastButtonValue = BUTTON_VALUE_RELEASE;
 
     m_gameThread = new QThread(this);
     m_worker = new DoomWorker(m_wadPath);
@@ -368,6 +392,7 @@ void DoomController::stopGame()
     }
 
     m_running = false;
+    m_lastButtonValue = BUTTON_VALUE_RELEASE;
     m_statusText = "Press ENTER to start DOOM";
     emit runningChanged();
     emit statusTextChanged();
@@ -394,6 +419,90 @@ void DoomController::onNeroButton(const QString &buttonName, bool pressed)
     }
 
     sendKey(doomKey, pressed);
+}
+
+/* ============================================================
+ * Hardware button handling via MQTT
+ *
+ * The "Wheel/Buttons/button_id" topic sends a single integer:
+ *   0 = left, 1 = right, 3 = down, 4 = up, 5 = enter, 10 = released
+ *
+ * We do edge detection: compare current value against m_lastButtonValue.
+ *   - Old != 10, New == 10 → button was released → send DOOM key release
+ *   - Old == 10, New != 10 → button was pressed  → send DOOM key press
+ *   - Old != 10, New != 10 (different) → switched buttons → release old, press new
+ *
+ * This runs on every onCurrentDataChange signal but only processes
+ * buttons when DOOM is actively running (m_running == true).
+ * ============================================================ */
+
+void DoomController::onDataChanged()
+{
+    if (!m_running) return;
+
+    // Read the raw button value directly — do NOT use the consume-on-read
+    // methods (getUpButtonPressed etc.) because those clear the value to 10,
+    // which would break edge detection for release events.
+    std::optional<float> raw = m_model->getById(FORWARDBUTTON);
+    if (!raw.has_value()) return;
+
+    int currentValue = static_cast<int>(*raw);
+
+    // No change — nothing to do
+    if (currentValue == m_lastButtonValue) return;
+
+    handleButtonValue(currentValue);
+    m_lastButtonValue = currentValue;
+}
+
+void DoomController::handleButtonValue(int value)
+{
+    // Release the previously held button (if any)
+    if (m_lastButtonValue != BUTTON_VALUE_RELEASE) {
+        unsigned char oldKey = mapButtonValueToDoomKey(m_lastButtonValue);
+        if (oldKey != 0) {
+            // Enter maps to multiple DOOM keys — release all of them
+            if (m_lastButtonValue == BUTTON_VALUE_ENTER) {
+                sendKey(KEY_ENTER, false);
+                sendKey(KEY_FIRE, false);
+                sendKey(KEY_USE, false);
+            } else {
+                sendKey(oldKey, false);
+            }
+        }
+    }
+
+    // Press the new button (if not a release)
+    if (value != BUTTON_VALUE_RELEASE) {
+        unsigned char newKey = mapButtonValueToDoomKey(value);
+        if (newKey != 0) {
+            // Enter maps to multiple DOOM keys — press all of them
+            // This handles both menu selection and in-game fire+use
+            if (value == BUTTON_VALUE_ENTER) {
+                sendKey(KEY_ENTER, true);
+                sendKey(KEY_FIRE, true);
+                sendKey(KEY_USE, true);
+            } else {
+                sendKey(newKey, true);
+            }
+        }
+    }
+}
+
+/**
+ * Maps raw MQTT button values to DOOM key codes.
+ * Values come from "Wheel/Buttons/button_id" topic.
+ */
+unsigned char DoomController::mapButtonValueToDoomKey(int value)
+{
+    switch (value) {
+        case BUTTON_VALUE_UP:    return KEY_UPARROW;    // move forward
+        case BUTTON_VALUE_DOWN:  return KEY_DOWNARROW;  // move backward
+        case BUTTON_VALUE_LEFT:  return KEY_LEFTARROW;  // turn left
+        case BUTTON_VALUE_RIGHT: return KEY_RIGHTARROW; // turn right
+        case BUTTON_VALUE_ENTER: return KEY_ENTER;      // placeholder — handled specially
+        default: return 0;
+    }
 }
 
 void DoomController::onFrameReady(const QImage &frame)
