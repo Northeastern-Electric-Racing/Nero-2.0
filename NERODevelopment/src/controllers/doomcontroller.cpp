@@ -34,6 +34,9 @@
 
 #include "../utils/data_type_names.h"
 
+#include <cstdio>
+#include <cstring>
+
 /* ============================================================
  * doomgeneric C headers
  * Source: https://github.com/ozkl/doomgeneric/tree/master/doomgeneric
@@ -45,10 +48,8 @@ extern "C" {
 #include "doomtype.h"
 #include "z_zone.h"
 
-// From v_video.h — declared here to avoid header dependency issues
-// screens[0] is the 8-bit indexed buffer DOOM renders to
-#define SCREENWIDTH  320
-#define SCREENHEIGHT 200
+// screens[] is the array of 8-bit indexed buffers defined in v_video.c
+// screens[0] is the primary buffer DOOM renders to
 extern byte *screens[5];
 
 extern int joybspeed;
@@ -105,7 +106,7 @@ extern "C" {
 
 void DG_Init(void)
 {
-    printf("[DOOM] Platform initialized (NERO Qt backend)\n");
+    fprintf(stderr, "[DOOM] Platform initialized (NERO Qt backend)\n");
 }
 
 void DG_DrawFrame(void)
@@ -144,7 +145,7 @@ int DG_GetKey(int *pressed, unsigned char *doom_key)
 
 void DG_SetWindowTitle(const char *title)
 {
-    printf("[DOOM] Title: %s\n", title);
+    fprintf(stderr, "[DOOM] Title: %s\n", title);
 }
 
 /* ============================================================
@@ -161,9 +162,11 @@ void DG_SetWindowTitle(const char *title)
  */
 void I_InitGraphics(void)
 {
-    printf("[DOOM] I_InitGraphics: NERO Qt backend (no /dev/fb0)\n");
-    I_VideoBuffer = (byte *)Z_Malloc(SCREENWIDTH * SCREENHEIGHT, PU_STATIC, NULL);
+    fprintf(stderr, "[DOOM] I_InitGraphics: NERO Qt backend (no /dev/fb0)\n");
+    I_VideoBuffer = (byte *)Z_Malloc(DOOMGENERIC_RESX * DOOMGENERIC_RESY, PU_STATIC, NULL);
     screens[0] = I_VideoBuffer;
+    fprintf(stderr, "[DOOM] I_InitGraphics: allocated %dx%d buffer at %p\n",
+            DOOMGENERIC_RESX, DOOMGENERIC_RESY, (void*)I_VideoBuffer);
 }
 
 void I_ShutdownGraphics(void)
@@ -198,11 +201,21 @@ void I_UpdateNoBlit(void)
  */
 void I_FinishUpdate(void)
 {
-    int count = SCREENWIDTH * SCREENHEIGHT;
+    static int frameCount = 0;
+    if (!I_VideoBuffer || !DG_ScreenBuffer) {
+        fprintf(stderr, "[DOOM] I_FinishUpdate: NULL buffer! vid=%p scr=%p\n",
+                (void*)I_VideoBuffer, (void*)DG_ScreenBuffer);
+        return;
+    }
+    if (frameCount == 0) {
+        fprintf(stderr, "[DOOM] I_FinishUpdate: first frame rendering\n");
+    }
+    int count = DOOMGENERIC_RESX * DOOMGENERIC_RESY;
     for (int i = 0; i < count; i++) {
         DG_ScreenBuffer[i] = s_palette[I_VideoBuffer[i]];
     }
     DG_DrawFrame();
+    frameCount++;
 }
 
 /**
@@ -210,7 +223,7 @@ void I_FinishUpdate(void)
  */
 void I_ReadScreen(byte *scr)
 {
-    memcpy(scr, I_VideoBuffer, SCREENWIDTH * SCREENHEIGHT);
+    memcpy(scr, I_VideoBuffer, DOOMGENERIC_RESX * DOOMGENERIC_RESY);
 }
 
 /**
@@ -220,6 +233,7 @@ void I_ReadScreen(byte *scr)
  */
 void I_SetPalette(byte *palette)
 {
+    fprintf(stderr, "[DOOM] I_SetPalette called\n");
     for (int i = 0; i < 256; i++) {
         s_palette[i] = (0xFF << 24)
                       | (palette[i * 3 + 0] << 16)    /* R */
