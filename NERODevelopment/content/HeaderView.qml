@@ -12,20 +12,16 @@ Item {
     property string modeTitle: ""
 
     Timer {
-        id: timer
-    }
-
-    function delay(delayTime, cb) {
-        timer.interval = delayTime
-        timer.repeat = false
-        timer.triggered.connect(cb)
-        timer.start()
+        id: autoCloseTimer
+        interval: 3000
+        repeat: false
+        onTriggered: faultDialog.closeModal()
     }
 
     onCriticalFaultsChanged: {
         if (criticalFaults.length > 0) {
             faultDialog.openModal("Critical Faults", criticalFaults.join("\n"))
-            delay(3000, faultDialog.closeModal)
+            autoCloseTimer.restart()
         }
     }
 
@@ -33,7 +29,7 @@ Item {
         if (nonCriticalFaults.length > 0) {
             faultDialog.openModal("Non Critical Faults",
                                   nonCriticalFaults.join("\n"))
-            delay(3000, faultDialog.closeModal)
+            autoCloseTimer.restart()
         }
     }
 
