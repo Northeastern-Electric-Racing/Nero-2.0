@@ -13,17 +13,17 @@ Item {
 
     property variant attributeStatusMap: offViewController.attributeStatus
 
-    property int sideBrbStatus: attributeStatusMap["MPU/Fuses/BRB"]
-    property int bmsStatus: attributeStatusMap["MPU/Shutdown/BMS"]
-    property int imdStatus: attributeStatusMap["MPU/Shutdown/IMD"]
-    property int bspdStatus: attributeStatusMap["MPU/Shutdown/BSPD"]
-    property int botsStatus: attributeStatusMap["MPU/Shutdown/BOTS"]
-    property int inertiaStatus: attributeStatusMap["MPU/Shutdown/Inertia"]
-    property int cockPitBrbStatus: attributeStatusMap["MPU/Shutdown/CockpitBRB"]
-    property int tsmsStatus: attributeStatusMap["MPU/State/TSMS"]
-    property int hvdInterlockStatus: attributeStatusMap["MPU/Shutdown/HVC_Interlock"]
-    property int hvdConnectorStatus: attributeStatusMap["MPU/Shutdown/HVD_Interlock"]
-    property int mpuStatus: attributeStatusMap["MPU/Fault/Severity"]
+    property int shutdownEfuseStatus: attributeStatusMap["VCU/eFuses/Shutdown"]
+    property int bmsStatus: attributeStatusMap["VCU/Shutdown/BMS_GPIO"]
+    property int imdStatus: attributeStatusMap["VCU/Shutdown/IMD_GPIO"]
+    property int bspdStatus: attributeStatusMap["VCU/Shutdown/BSPD_GPIO"]
+    property int botsStatus: attributeStatusMap["VCU/Shutdown/BOTS_GPIO"]
+    property int inertiaStatus: attributeStatusMap["VCU/Shutdown/INERTIA_SW_GPIO"]
+    property int cockPitBrbStatus: attributeStatusMap["VCU/Shutdown/CKPT_GPIO"]
+    property int tsmsStatus: attributeStatusMap["VCU/CarState/tsms"]
+    property int hvdInterlockStatus: attributeStatusMap["VCU/Shutdown/HVD_GPIO"]
+    property int hvdConnectorStatus: attributeStatusMap["VCU/Shutdown/HV_C_GPIO"]
+    property int mcEfuseStatus: attributeStatusMap["VCU/eFuses/MC"]
 
     property double packTemp: offViewController.packTemp
     property double motorTemp: offViewController.motorTemp
@@ -152,7 +152,7 @@ Item {
             Layout.column: 0
             shutdownFlowTask: "SIDE BRBs"
             highlight: offScreen.selectedFlowIndex == 0
-            status: offScreen.sideBrbStatus
+            status: offScreen.shutdownEfuseStatus
         }
 
         DetailDisplay {
@@ -182,8 +182,8 @@ Item {
         DetailDisplay {
             Layout.row: 4
             Layout.column: 0
-            shutdownFlowTask: "MPU"
-            status: offScreen.mpuStatus
+            shutdownFlowTask: "CAN"
+            status: offScreen.mcEfuseStatus
             highlight: offScreen.selectedFlowIndex == 4
         }
 
