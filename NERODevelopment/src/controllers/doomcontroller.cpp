@@ -43,8 +43,14 @@ extern "C" {
 #include "doomgeneric.h"
 #include "doomkeys.h"
 #include "doomtype.h"
-#include "v_video.h"
 #include "z_zone.h"
+
+// From v_video.h — declared here to avoid header dependency issues
+// screens[0] is the 8-bit indexed buffer DOOM renders to
+#define SCREENWIDTH  320
+#define SCREENHEIGHT 200
+extern byte *screens[5];
+
 extern int joybspeed;
 }
 
