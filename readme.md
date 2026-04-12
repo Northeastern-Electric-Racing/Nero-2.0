@@ -76,7 +76,7 @@ Click OK to close all the windows.
 
 Type clang-format --version and press Enter. You should see the version information for clang-format if the installation was successful.
 ### Running Formats
-#### Mac Format C++ files
+#### Mac/Linux Format C++ files
 ```bash
 git ls-files "*.cpp" "*.h" ":!deps/*" | xargs clang-format -i
 ```
