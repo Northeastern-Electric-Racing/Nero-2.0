@@ -16,19 +16,22 @@ Item {
     Keys.onPressed: event => {
         switch (event.key) {
         case Qt.Key_Escape:
-            navigationController.goHome()
-            break
+            navigationController.goHome();
+            break;
         case Qt.Key_Right:
         case Qt.Key_Down:
-            if (!navigationController.isPageActive) navigationController.moveNext()
-            break
+            if (!navigationController.isPageActive)
+                navigationController.moveNext();
+            break;
         case Qt.Key_Left:
         case Qt.Key_Up:
-            if (!navigationController.isPageActive) navigationController.movePrev()
-            break
+            if (!navigationController.isPageActive)
+                navigationController.movePrev();
+            break;
         case Qt.Key_Return:
-            if (!navigationController.isPageActive) navigationController.activate()
-            break
+            if (!navigationController.isPageActive)
+                navigationController.activate();
+            break;
         }
     }
 
@@ -61,17 +64,17 @@ Item {
         property int maxPerRow: Math.max(1, Math.floor((width + itemSpacing) / (navigation.boxSize + itemSpacing)))
 
         function getRowItems(rowIndex) {
-            var start = rowIndex * maxPerRow
-            var end = Math.min(start + maxPerRow, allItems.length)
-            var items = []
+            var start = rowIndex * maxPerRow;
+            var end = Math.min(start + maxPerRow, allItems.length);
+            var items = [];
             for (var i = start; i < end; i++) {
-                items.push(allItems[i])
+                items.push(allItems[i]);
             }
-            return items
+            return items;
         }
 
         function getRowCount() {
-            return Math.ceil(allItems.length / maxPerRow)
+            return Math.ceil(allItems.length / maxPerRow);
         }
 
         Repeater {
@@ -132,16 +135,17 @@ Item {
         active: navigationController.isPageActive
 
         source: {
-            if (!navigationController.isPageActive) return ""
-            var qmlFile = navigationController.qmlFor(navigationController.activePageIndex)
-            return qmlFile ? "/qt/qml/content/" + qmlFile : ""
+            if (!navigationController.isPageActive)
+                return "";
+            var qmlFile = navigationController.qmlFor(navigationController.activePageIndex);
+            return qmlFile ? "/qt/qml/content/" + qmlFile : "";
         }
 
         onLoaded: {
             if (item) {
-                item.forceActiveFocus()
+                item.forceActiveFocus();
                 if (typeof item.isFocused !== "undefined") {
-                    item.isFocused = true
+                    item.isFocused = true;
                 }
             }
         }
@@ -152,20 +156,20 @@ Item {
 
         function onActivePageChanged() {
             if (!navigationController.isPageActive) {
-                navigation.forceActiveFocus()
+                navigation.forceActiveFocus();
             }
         }
 
         function onThemeChanged(theme) {
-            Theme.setTheme(theme)
+            Theme.setTheme(theme);
         }
 
         function onExitRequested() {
-            Qt.quit()
+            Qt.quit();
         }
 
         function onExpandedChanged() {
-            navContainer.allItems = navigationController.getTopLevelItems()
+            navContainer.allItems = navigationController.getTopLevelItems();
         }
     }
 }

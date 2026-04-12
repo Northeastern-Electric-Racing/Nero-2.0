@@ -13,13 +13,13 @@ QtObject {
         id: timer
         interval: 100
         onTriggered: {
-            EventSimulator.show()
+            EventSimulator.show();
         }
     }
 
     Component.onCompleted: {
-        EventSystem.init(Qt.resolvedUrl("EventListModel.qml"))
+        EventSystem.init(Qt.resolvedUrl("EventListModel.qml"));
         if (simulator.active)
-            timer.start()
+            timer.start();
     }
 }

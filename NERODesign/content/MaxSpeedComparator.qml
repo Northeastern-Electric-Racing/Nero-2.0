@@ -39,15 +39,11 @@ Rectangle {
         width: topSpeedBar.width
         height: maxSpeedComparator.height * percentageHeight - 10
         radius: 5
-        property real percentageHeight: parseFloat(
-                                            (maxSpeedComparator.currentSpeed
-                                             / maxSpeedComparator.maxSpeed).toFixed(
-                                                2)) // Calculate percentage of height relative to maxSpeedComparator
+        property real percentageHeight: parseFloat((maxSpeedComparator.currentSpeed / maxSpeedComparator.maxSpeed).toFixed(2)) // Calculate percentage of height relative to maxSpeedComparator
 
         gradient: Gradient {
             GradientStop {
-                position: -5 * (1 - bar.percentageHeight
-                                + 0.1) // Start of gradient relative to parent's height
+                position: -5 * (1 - bar.percentageHeight + 0.1) // Start of gradient relative to parent's height
                 color: "red"
             }
             GradientStop {
@@ -69,8 +65,7 @@ Rectangle {
         text: qsTr("TOP SPEED")
         color: "white"
         x: -(width + dimension / 20)
-        y: maxSpeedComparator.height * (1 - maxSpeedComparator.previousTopSpeed
-                                        / maxSpeedComparator.maxSpeed)
+        y: maxSpeedComparator.height * (1 - maxSpeedComparator.previousTopSpeed / maxSpeedComparator.maxSpeed)
         font.pixelSize: parent.width * 0.2
         Text {
             id: topSpeedNumber
@@ -85,8 +80,7 @@ Rectangle {
 
     Rectangle {
         id: topSpeedBar
-        y: maxSpeedComparator.height * (1 - maxSpeedComparator.previousTopSpeed
-                                        / maxSpeedComparator.maxSpeed)
+        y: maxSpeedComparator.height * (1 - maxSpeedComparator.previousTopSpeed / maxSpeedComparator.maxSpeed)
         width: maxSpeedComparator.width - dimension / 6
         anchors.horizontalCenter: parent.horizontalCenter
         height: 2

@@ -41,34 +41,32 @@ Rectangle {
     property int radialUnitFontSize: valueFontSize / 3
 
     Keys.onPressed: event => {
-                        switch (event.key) {
-                            case Qt.Key_Up:
-                            offViewController.upButtonPressed()
-                            break
-                            case Qt.Key_Left:
-                            offViewController.leftButtonPressed()
-                            break
-                            case Qt.Key_Right:
-                            offViewController.rightButtonPressed()
-                            break
-                            case Qt.Key_Down:
-                            offViewController.downButtonPressed()
-                            break
-                            case Qt.Key_Return:
-                            offViewController.enterButtonPressed()
-                            break
-                            default:
-                            break
-                        }
-                    }
+        switch (event.key) {
+        case Qt.Key_Up:
+            offViewController.upButtonPressed();
+            break;
+        case Qt.Key_Left:
+            offViewController.leftButtonPressed();
+            break;
+        case Qt.Key_Right:
+            offViewController.rightButtonPressed();
+            break;
+        case Qt.Key_Down:
+            offViewController.downButtonPressed();
+            break;
+        case Qt.Key_Return:
+            offViewController.enterButtonPressed();
+            break;
+        default:
+            break;
+        }
+    }
 
     onDidSelectChanged: {
         if (offScreen.didSelect) {
-            descriptionModal.openModal(offViewController.selectedName,
-                                       offViewController.selectedDescription,
-                                       offViewController.selectedUrl)
+            descriptionModal.openModal(offViewController.selectedName, offViewController.selectedDescription, offViewController.selectedUrl);
         } else {
-            descriptionModal.closeModal()
+            descriptionModal.closeModal();
         }
     }
 
@@ -142,13 +140,16 @@ Rectangle {
             }
 
             Arrow {
-                stops: [{
+                stops: [
+                    {
                         "x": glvms.x + glvms.width,
                         "y": glvms.y + glvms.height / 2
-                    }, {
+                    },
+                    {
                         "x": brbs.x,
                         "y": brbs.y + brbs.height / 2
-                    }]
+                    }
+                ]
             }
         }
 
@@ -196,8 +197,7 @@ Rectangle {
                 id: latch
                 anchors.centerIn: parent
                 shutdownFlowTask: "LATCH"
-                status: offScreen.bmsStatus == 1 && offScreen.imdStatus == 1
-                        && offScreen.mpuStatus == 1 && offScreen.bspdStatus == 1
+                status: offScreen.bmsStatus == 1 && offScreen.imdStatus == 1 && offScreen.mpuStatus == 1 && offScreen.bspdStatus == 1
                 height: parent.height / 4
                 width: parent.width / 3
             }
@@ -237,65 +237,84 @@ Rectangle {
         }
 
         Arrow {
-            stops: [{
+            stops: [
+                {
                     "x": brbs.x + brbs.width / 2,
                     "y": brbs.y + brbs.height
-                }, {
+                },
+                {
                     "x": latch.x + latch.width / 2,
                     "y": latch.y + lvStatusContainer.height
-                }]
+                }
+            ]
         }
 
         Arrow {
-            stops: [{
+            stops: [
+                {
                     "x": bms.x + bms.width / 2,
                     "y": bms.y + bms.height + lvStatusContainer.height
-                }, {
+                },
+                {
                     "x": bms.x + bms.width / 2,
                     "y": latch.y + latch.height / 2 + lvStatusContainer.height
-                }, {
+                },
+                {
                     "x": latch.x,
                     "y": latch.y + latch.height / 2 + lvStatusContainer.height
-                }]
+                }
+            ]
         }
 
         Arrow {
-            stops: [{
+            stops: [
+                {
                     "x": imd.x + imd.width / 2,
                     "y": imd.y + lvStatusContainer.height
-                }, {
+                },
+                {
                     "x": imd.x + imd.width / 2,
                     "y": latch.y + latch.height / 2 + lvStatusContainer.height
-                }, {
+                },
+                {
                     "x": latch.x,
                     "y": latch.y + latch.height / 2 + lvStatusContainer.height
-                }]
+                }
+            ]
         }
 
         Arrow {
-            stops: [{
+            stops: [
+                {
                     "x": can.x + can.width / 2 + canbspdContainer.x,
                     "y": can.y + can.height + lvStatusContainer.height
-                }, {
+                },
+                {
                     "x": can.x + can.width / 2 + canbspdContainer.x,
                     "y": latch.y + latch.height / 2 + lvStatusContainer.height
-                }, {
+                },
+                {
                     "x": latch.x + latch.width,
                     "y": latch.y + latch.height / 2 + lvStatusContainer.height
-                }]
+                }
+            ]
         }
 
         Arrow {
-            stops: [{
+            stops: [
+                {
                     "x": bspd.x + bspd.width / 2 + canbspdContainer.x,
                     "y": bspd.y + lvStatusContainer.height
-                }, {
+                },
+                {
                     "x": bspd.x + bspd.width / 2 + canbspdContainer.x,
                     "y": latch.y + latch.height / 2 + lvStatusContainer.height
-                }, {
+                },
+                {
                     "x": latch.x + latch.width,
                     "y": latch.y + latch.height / 2 + lvStatusContainer.height
-                }]
+                }
+            ]
         }
     }
 
@@ -333,24 +352,30 @@ Rectangle {
         }
 
         Arrow {
-            stops: [{
+            stops: [
+                {
                     "x": bots.x + bots.width,
                     "y": bots.y + bots.height / 2
-                }, {
+                },
+                {
                     "x": inertia.x,
                     "y": bots.y + bots.height / 2
-                }]
+                }
+            ]
         }
     }
 
     Arrow {
-        stops: [{
+        stops: [
+            {
                 "x": latch.x + latch.width / 2 + lvFaultContainer.x,
                 "y": latch.y + latch.height * 2 + lvFaultContainer.y
-            }, {
+            },
+            {
                 "x": bots.x + bots.width / 2 + botsInertiaContainer.x,
                 "y": bots.y + botsInertiaContainer.y
-            }]
+            }
+        ]
     }
 
     Rectangle {
@@ -377,8 +402,7 @@ Rectangle {
         StatusDisplay {
             id: interlocks
             shutdownFlowTask: "INTERLOCKS"
-            status: offScreen.hvdConnectorStatus == 1
-                    && offScreen.hvdInterlockStatus == 1
+            status: offScreen.hvdConnectorStatus == 1 && offScreen.hvdInterlockStatus == 1
             highlight: offScreen.selectedFlowIndex == 9
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
@@ -398,38 +422,47 @@ Rectangle {
         }
 
         Arrow {
-            stops: [{
+            stops: [
+                {
                     "x": cpBrb.x + cpBrb.width,
                     "y": cpBrb.y + cpBrb.height / 2
-                }, {
+                },
+                {
                     "x": interlocks.x,
                     "y": interlocks.y + interlocks.height / 2
-                }]
+                }
+            ]
 
             l2: 10
         }
 
         Arrow {
-            stops: [{
+            stops: [
+                {
                     "x": interlocks.x + interlocks.width,
                     "y": interlocks.y + interlocks.height / 2
-                }, {
+                },
+                {
                     "x": tsms.x,
                     "y": tsms.y + tsms.height / 2
-                }]
+                }
+            ]
 
             l2: 10
         }
     }
 
     Arrow {
-        stops: [{
+        stops: [
+            {
                 "x": inertia.x + inertia.width / 2 + botsInertiaContainer.x,
                 "y": inertia.y + inertia.height + botsInertiaContainer.y
-            }, {
+            },
+            {
                 "x": cpBrb.x + cpBrb.width / 2 + cpBrbInterlocksTsmsContainer.x,
                 "y": cpBrb.y + cpBrbInterlocksTsmsContainer.y
-            }]
+            }
+        ]
     }
 
     Rectangle {
@@ -508,9 +541,7 @@ Rectangle {
         anchors.right: cpBrbInterlocksTsmsContainer.left
         anchors.rightMargin: parent.width / 30
         anchors.leftMargin: parent.width / 30
-        source: Theme.currentTheme === "dark"
-                    ? "/qt/qml/content/images/darkNeroLogo.png"
-                    : "/qt/qml/content/images/lightNeroLogo.png"
+        source: Theme.currentTheme === "dark" ? "/qt/qml/content/images/darkNeroLogo.png" : "/qt/qml/content/images/lightNeroLogo.png"
         fillMode: Image.PreserveAspectFit
     }
 

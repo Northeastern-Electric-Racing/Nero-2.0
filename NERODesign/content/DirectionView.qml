@@ -18,11 +18,10 @@ Item {
             id: rectangle
             color: forward ? "#7CFC00" : "transparent"
             Layout.fillHeight: true
-            Layout.preferredWidth: parent.width/2 - 10
+            Layout.preferredWidth: parent.width / 2 - 10
             border.color: forward ? "transparent" : "white"  // Outline color
             border.width: 5      // Outline width
             radius: directionView.radius          // Border radius to round the corners
-
 
             Text {
                 anchors.centerIn: parent

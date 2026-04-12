@@ -18,28 +18,27 @@ Item {
     property int snakePageIndex: 7
 
     Keys.onPressed: event => {
-                        console.log(navigationController.isSelected,
-                                    selectedPageIndex, event.key)
-                        switch (event.key) {
-                            case Qt.Key_Escape:
-                            navigationController.homeButtonPressed()
-                            break
-                            case Qt.Key_Down:
-                            if (!this.isSelected) {
-                                navigationController.downButtonPressed()
-                            }
-                            break
-                            case Qt.Key_Up:
-                            if (!this.isSelected) {
-                                navigationController.upButtonPressed()
-                            }
-                            break
-                            case Qt.Key_Return:
-                            if (!this.isSelected) {
-                                navigationController.enterButtonPressed()
-                            }
-                        }
-                    }
+        console.log(navigationController.isSelected, selectedPageIndex, event.key);
+        switch (event.key) {
+        case Qt.Key_Escape:
+            navigationController.homeButtonPressed();
+            break;
+        case Qt.Key_Down:
+            if (!this.isSelected) {
+                navigationController.downButtonPressed();
+            }
+            break;
+        case Qt.Key_Up:
+            if (!this.isSelected) {
+                navigationController.upButtonPressed();
+            }
+            break;
+        case Qt.Key_Return:
+            if (!this.isSelected) {
+                navigationController.enterButtonPressed();
+            }
+        }
+    }
 
     Column {
         visible: !navigation.isSelected

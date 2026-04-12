@@ -56,12 +56,12 @@ Popup {
     }
 
     function openModal(title, text) {
-        modalTitle.text = title
-        modalDescription.text = text
-        modal.open()
+        modalTitle.text = title;
+        modalDescription.text = text;
+        modal.open();
     }
 
     function closeModal() {
-        modal.close()
+        modal.close();
     }
 }

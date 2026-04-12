@@ -30,15 +30,15 @@ Rectangle {
                 antialiasing: true
 
                 onPaint: {
-                    var ctx = upCanvas.getContext('2d')
+                    var ctx = upCanvas.getContext('2d');
 
-                    ctx.strokeStyle = Theme.primaryForeground
-                    ctx.lineWidth = upCanvas.height * 0.3
-                    ctx.beginPath()
-                    ctx.moveTo(upCanvas.width * 0.05, upCanvas.height)
-                    ctx.lineTo(upCanvas.width / 2, upCanvas.height * 0.1)
-                    ctx.lineTo(upCanvas.width * 0.95, upCanvas.height)
-                    ctx.stroke()
+                    ctx.strokeStyle = Theme.primaryForeground;
+                    ctx.lineWidth = upCanvas.height * 0.3;
+                    ctx.beginPath();
+                    ctx.moveTo(upCanvas.width * 0.05, upCanvas.height);
+                    ctx.lineTo(upCanvas.width / 2, upCanvas.height * 0.1);
+                    ctx.lineTo(upCanvas.width * 0.95, upCanvas.height);
+                    ctx.stroke();
                 }
 
                 SequentialAnimation {
@@ -63,7 +63,7 @@ Rectangle {
             MouseArea {
                 anchors.fill: parent
                 onClicked: {
-                    upSelected = !upSelected
+                    upSelected = !upSelected;
                 }
             }
         }
@@ -96,15 +96,15 @@ Rectangle {
                 }
 
                 onPaint: {
-                    var ctx = downCanvas.getContext('2d')
+                    var ctx = downCanvas.getContext('2d');
 
-                    ctx.strokeStyle = Theme.primaryForeground
-                    ctx.lineWidth = downCanvas.height * 0.3
-                    ctx.beginPath()
-                    ctx.moveTo(downCanvas.width * 0.05, downCanvas.height)
-                    ctx.lineTo(downCanvas.width / 2, downCanvas.height * 0.1)
-                    ctx.lineTo(downCanvas.width * 0.95, downCanvas.height)
-                    ctx.stroke()
+                    ctx.strokeStyle = Theme.primaryForeground;
+                    ctx.lineWidth = downCanvas.height * 0.3;
+                    ctx.beginPath();
+                    ctx.moveTo(downCanvas.width * 0.05, downCanvas.height);
+                    ctx.lineTo(downCanvas.width / 2, downCanvas.height * 0.1);
+                    ctx.lineTo(downCanvas.width * 0.95, downCanvas.height);
+                    ctx.stroke();
                 }
 
                 SequentialAnimation {
@@ -129,7 +129,7 @@ Rectangle {
             MouseArea {
                 anchors.fill: parent
                 onClicked: {
-                    downSelected = !downSelected
+                    downSelected = !downSelected;
                 }
             }
         }
