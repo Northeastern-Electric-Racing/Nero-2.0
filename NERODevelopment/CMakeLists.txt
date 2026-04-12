@@ -47,8 +47,7 @@ list(FILTER DOOM_SOURCES EXCLUDE REGEX "i_sdl.*\\.c$")
 list(FILTER DOOM_SOURCES EXCLUDE REGEX "i_allegro.*\\.c$")
 
 # Remove i_video.c — it opens /dev/fb0 directly which conflicts with Qt's EGLFS
-# on the Raspberry Pi. We provide our own video functions in doomcontroller.cpp
-# that render to a QImage instead of the Linux framebuffer.
+# on the Raspberry Pi. We provide all required video symbols in doomcontroller.cpp.
 list(FILTER DOOM_SOURCES EXCLUDE REGEX "i_video\\.c$")
 
 # Suppress warnings in third-party DOOM code (unmodified upstream C from the 90s)

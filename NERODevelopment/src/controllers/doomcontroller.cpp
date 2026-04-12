@@ -46,13 +46,11 @@ extern "C" {
 #include "doomgeneric.h"
 #include "doomkeys.h"
 #include "doomtype.h"
+#include "d_event.h"
 #include "z_zone.h"
 
-// screens[] is the array of 8-bit indexed buffers defined in v_video.c
-// screens[0] is the primary buffer DOOM renders to
-extern byte *screens[5];
-
 extern int joybspeed;
+extern void D_PostEvent(event_t *ev);
 }
 
 /* ============================================================
@@ -87,8 +85,28 @@ static int platform_getkey_callback(unsigned char *pressed, unsigned char *doomK
  *   3. Result goes into DG_ScreenBuffer (allocated by doomgeneric.c)
  *   4. DG_DrawFrame is called → Qt picks up the frame
  * ============================================================ */
-static byte *I_VideoBuffer = NULL;
 static uint32_t s_palette[256];
+
+/* ============================================================
+ * Variables and functions that i_video.c normally defines.
+ * These are referenced by the rest of the DOOM engine and must
+ * be provided since we excluded i_video.c from the build.
+ * ============================================================ */
+extern "C" {
+
+/* Video buffers — screens[0] is the primary 8-bit indexed buffer */
+byte *I_VideoBuffer = NULL;
+byte *screens[5] = { NULL, NULL, NULL, NULL, NULL };
+
+/* Video settings referenced by the engine */
+int screenvisible = 1;
+int screensaver_mode = 0;
+int usegamma = 0;
+int usemouse = 0;
+int mouse_acceleration = 2;
+int mouse_threshold = 10;
+
+} /* extern "C" */
 
 /* ============================================================
  * doomgeneric platform callbacks (extern "C")
@@ -163,10 +181,15 @@ void DG_SetWindowTitle(const char *title)
 void I_InitGraphics(void)
 {
     fprintf(stderr, "[DOOM] I_InitGraphics: NERO Qt backend (no /dev/fb0)\n");
-    I_VideoBuffer = (byte *)Z_Malloc(DOOMGENERIC_RESX * DOOMGENERIC_RESY, PU_STATIC, NULL);
+    // Allocate at DOOM's native render resolution (320x200), NOT at
+    // DOOMGENERIC_RESX x DOOMGENERIC_RESY (640x400). The engine's V_Init
+    // allocates screens[1..4] at 320x200, and wipe code calls I_ReadScreen
+    // expecting a 320x200 buffer. Using 640x400 here would overflow those
+    // destination buffers and crash during screen wipe transitions.
+    I_VideoBuffer = (byte *)Z_Malloc(320 * 200, PU_STATIC, NULL);
     screens[0] = I_VideoBuffer;
-    fprintf(stderr, "[DOOM] I_InitGraphics: allocated %dx%d buffer at %p\n",
-            DOOMGENERIC_RESX, DOOMGENERIC_RESY, (void*)I_VideoBuffer);
+    fprintf(stderr, "[DOOM] I_InitGraphics: allocated 320x200 buffer at %p\n",
+            (void*)I_VideoBuffer);
 }
 
 void I_ShutdownGraphics(void)
@@ -181,11 +204,24 @@ void I_StartFrame(void)
 
 /**
  * Called each tick to process input events.
- * Pumps the key queue via DG_GetKey (defined above).
+ * Reads keys from our queue via DG_GetKey and posts them
+ * to the DOOM engine's event system via D_PostEvent.
+ * Without this, keyboard/button input never reaches the game.
  */
 void I_StartTic(void)
 {
-    /* Input is handled via DG_GetKey which the engine calls directly */
+    int pressed;
+    unsigned char doomKey;
+
+    while (DG_GetKey(&pressed, &doomKey))
+    {
+        event_t event;
+        event.type = pressed ? ev_keydown : ev_keyup;
+        event.data1 = doomKey;
+        event.data2 = -1;
+        event.data3 = -1;
+        D_PostEvent(&event);
+    }
 }
 
 void I_UpdateNoBlit(void)
@@ -201,21 +237,21 @@ void I_UpdateNoBlit(void)
  */
 void I_FinishUpdate(void)
 {
-    static int frameCount = 0;
-    if (!I_VideoBuffer || !DG_ScreenBuffer) {
-        fprintf(stderr, "[DOOM] I_FinishUpdate: NULL buffer! vid=%p scr=%p\n",
-                (void*)I_VideoBuffer, (void*)DG_ScreenBuffer);
-        return;
-    }
-    if (frameCount == 0) {
-        fprintf(stderr, "[DOOM] I_FinishUpdate: first frame rendering\n");
-    }
-    int count = DOOMGENERIC_RESX * DOOMGENERIC_RESY;
-    for (int i = 0; i < count; i++) {
-        DG_ScreenBuffer[i] = s_palette[I_VideoBuffer[i]];
+    if (!I_VideoBuffer || !DG_ScreenBuffer) return;
+
+    // DOOM renders at 320x200 (SCREENWIDTH x SCREENHEIGHT) into I_VideoBuffer.
+    // DG_ScreenBuffer is DOOMGENERIC_RESX x DOOMGENERIC_RESY (640x400).
+    // Scale each pixel to a 2x2 block.
+    for (int y = 0; y < 200; y++) {
+        for (int x = 0; x < 320; x++) {
+            uint32_t color = s_palette[I_VideoBuffer[y * 320 + x]];
+            DG_ScreenBuffer[(y * 2) * DOOMGENERIC_RESX + (x * 2)]         = color;
+            DG_ScreenBuffer[(y * 2) * DOOMGENERIC_RESX + (x * 2) + 1]     = color;
+            DG_ScreenBuffer[(y * 2 + 1) * DOOMGENERIC_RESX + (x * 2)]     = color;
+            DG_ScreenBuffer[(y * 2 + 1) * DOOMGENERIC_RESX + (x * 2) + 1] = color;
+        }
     }
     DG_DrawFrame();
-    frameCount++;
 }
 
 /**
@@ -223,7 +259,7 @@ void I_FinishUpdate(void)
  */
 void I_ReadScreen(byte *scr)
 {
-    memcpy(scr, I_VideoBuffer, DOOMGENERIC_RESX * DOOMGENERIC_RESY);
+    memcpy(scr, I_VideoBuffer, 320 * 200);
 }
 
 /**
@@ -241,6 +277,63 @@ void I_SetPalette(byte *palette)
                       | (palette[i * 3 + 2]);          /* B */
     }
 }
+
+/* ============================================================
+ * Additional i_video.c symbols required by the DOOM engine.
+ * These are stubs — NERO doesn't need mouse, screensaver,
+ * gamma, or disk icon support.
+ * ============================================================ */
+
+void I_BindVideoVariables(void) { /* nothing to bind */ }
+
+void I_SetWindowTitle(const char *title)
+{
+    fprintf(stderr, "[DOOM] I_SetWindowTitle: %s\n", title);
+}
+
+void I_GraphicsCheckCommandLine(void) { /* no command line video args */ }
+
+void I_SetGrabMouseCallback(void (*func)(boolean grab))
+{
+    (void)func; /* no mouse grabbing in NERO */
+}
+
+void I_EnableLoadingDisk(int xoffs, int yoffs)
+{
+    (void)xoffs;
+    (void)yoffs;
+}
+
+void I_DisplayFPSDots(boolean dots_on)
+{
+    (void)dots_on;
+}
+
+boolean I_CheckIsScreensaver(void)
+{
+    return false;
+}
+
+int I_GetPaletteIndex(int r, int g, int b)
+{
+    /* Find closest palette entry — simple nearest match */
+    int best = 0;
+    int bestDist = 0x7FFFFFFF;
+    for (int i = 0; i < 256; i++) {
+        int pr = (s_palette[i] >> 16) & 0xFF;
+        int pg = (s_palette[i] >> 8) & 0xFF;
+        int pb = s_palette[i] & 0xFF;
+        int dist = (r - pr) * (r - pr) + (g - pg) * (g - pg) + (b - pb) * (b - pb);
+        if (dist < bestDist) {
+            bestDist = dist;
+            best = i;
+        }
+    }
+    return best;
+}
+
+void I_BeginRead(void) { /* no loading disk icon */ }
+void I_EndRead(void) { /* no loading disk icon */ }
 
 } /* extern "C" */
 

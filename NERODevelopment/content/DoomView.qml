@@ -46,16 +46,16 @@ Item {
         anchors.centerIn: parent
 
         width: {
-            var scaleX = parent.width / 320
-            var scaleY = parent.height / 200
+            var scaleX = parent.width / 640
+            var scaleY = parent.height / 400
             var scale = Math.min(scaleX, scaleY)
-            return 320 * scale
+            return 640 * scale
         }
         height: {
-            var scaleX = parent.width / 320
-            var scaleY = parent.height / 200
+            var scaleX = parent.width / 640
+            var scaleY = parent.height / 400
             var scale = Math.min(scaleX, scaleY)
-            return 200 * scale
+            return 400 * scale
         }
 
         source: doomController.running
