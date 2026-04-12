@@ -85,18 +85,18 @@ Rectangle {
         font.pixelSize: parent.height / 15
         onClicked: closeModal()
         Component.onCompleted: {
-            modalButton.contentItem.color = "white"
+            modalButton.contentItem.color = "white";
         }
     }
 
     function openModal(title, text, imageUrl) {
-        modalImage.source = imageUrl
-        modalTitle.text = title
-        modalDescription.text = text
-        modal.visible = true
+        modalImage.source = imageUrl;
+        modalTitle.text = title;
+        modalDescription.text = text;
+        modal.visible = true;
     }
 
     function closeModal() {
-        modal.visible = false
+        modal.visible = false;
     }
 }

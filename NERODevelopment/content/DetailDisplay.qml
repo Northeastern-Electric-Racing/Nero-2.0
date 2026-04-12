@@ -14,13 +14,13 @@ Rectangle {
     color: Theme.background
 
     onStatusChanged: {
-        console.log("Changing status")
+        console.log("Changing status");
         if (status === 0) {
-            statusDisplay = "OFF"
+            statusDisplay = "OFF";
         } else if (status == 1) {
-            statusDisplay = "GOOD"
+            statusDisplay = "GOOD";
         } else {
-            statusDisplay = "FAULTED"
+            statusDisplay = "FAULTED";
         }
     }
 
@@ -79,8 +79,7 @@ Rectangle {
         color: "transparent"
 
         border.color: "transparent"
-        width: Math.max(parent.width * 0.6,
-                        taskText.implicitWidth) // Ensure minimum width
+        width: Math.max(parent.width * 0.6, taskText.implicitWidth) // Ensure minimum width
         height: parent.height
         radius: 10
 
@@ -98,8 +97,7 @@ Rectangle {
     Rectangle {
         id: statusDisplayContainer
         color: status == 0 ? "transparent" : (status === 1 ? Theme.goodStatus : (status === 2 ? Theme.criticalStatus : "transparent"))
-        width: Math.max(parent.width * 0.4,
-                        statusText.implicitWidth + 20) // Ensure minimum width
+        width: Math.max(parent.width * 0.4, statusText.implicitWidth + 20) // Ensure minimum width
         height: parent.height
         anchors.left: taskDisplay.right
         radius: 10

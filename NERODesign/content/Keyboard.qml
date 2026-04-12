@@ -29,32 +29,32 @@ Item {
     property int numKeys: 44
 
     Keys.onPressed: event => {
-                        switch (event.key) {
-                            case Qt.Key_Up:
-                            keyboardViewController.upButtonPressed()
-                            break
-                            case Qt.Key_Down:
-                            keyboardViewController.downButtonPressed()
-                            break
-                            case Qt.Key_Left:
-                            keyboardViewController.leftButtonPressed()
-                            break
-                            case Qt.Key_Right:
-                            keyboardViewController.rightButtonPressed()
-                            break
-                            case Qt.Key_Return:
-                            keyboardViewController.enterButtonPressed()
-                            break
-                            case Qt.Key_Escape:
-                            keyboardViewController.homeButtonPressed()
-                            break
-                        }
-                    }
+        switch (event.key) {
+        case Qt.Key_Up:
+            keyboardViewController.upButtonPressed();
+            break;
+        case Qt.Key_Down:
+            keyboardViewController.downButtonPressed();
+            break;
+        case Qt.Key_Left:
+            keyboardViewController.leftButtonPressed();
+            break;
+        case Qt.Key_Right:
+            keyboardViewController.rightButtonPressed();
+            break;
+        case Qt.Key_Return:
+            keyboardViewController.enterButtonPressed();
+            break;
+        case Qt.Key_Escape:
+            keyboardViewController.homeButtonPressed();
+            break;
+        }
+    }
 
     onExitChanged: {
         if (exit) {
-            rejected()
-            keyboardViewController.setExit(false)
+            rejected();
+            keyboardViewController.setExit(false);
         }
     }
 
@@ -95,7 +95,7 @@ Item {
             echoMode: password ? TextInput.Password : TextInput.Normal
 
             onAccepted: if (acceptableInput)
-                            root.accepted(text) // keyboard Enter key
+                root.accepted(text) // keyboard Enter key
         }
 
         Button {
@@ -138,37 +138,48 @@ Item {
                     spacing: rowSpacing
 
                     Repeater {
-                        model: [{
+                        model: [
+                            {
                                 "text": '1',
                                 "width": 1
-                            }, {
+                            },
+                            {
                                 "text": '2',
                                 "width": 1
-                            }, {
+                            },
+                            {
                                 "text": '3',
                                 "width": 1
-                            }, {
+                            },
+                            {
                                 "text": '4',
                                 "width": 1
-                            }, {
+                            },
+                            {
                                 "text": '5',
                                 "width": 1
-                            }, {
+                            },
+                            {
                                 "text": '6',
                                 "width": 1
-                            }, {
+                            },
+                            {
                                 "text": '7',
                                 "width": 1
-                            }, {
+                            },
+                            {
                                 "text": '8',
                                 "width": 1
-                            }, {
+                            },
+                            {
                                 "text": '9',
                                 "width": 1
-                            }, {
+                            },
+                            {
                                 "text": '0',
                                 "width": 1
-                            }]
+                            }
+                        ]
 
                         delegate: Button {
                             text: modelData.text
@@ -181,8 +192,8 @@ Item {
 
                             onIsKeySelectedChanged: {
                                 if (root.isKeySelected && highlighted) {
-                                    clicked()
-                                    event.accepted = true
+                                    clicked();
+                                    event.accepted = true;
                                 }
                             }
                         }
@@ -194,53 +205,63 @@ Item {
                     spacing: rowSpacing
 
                     Repeater {
-                        model: [{
+                        model: [
+                            {
                                 "text": 'q',
                                 "symbol": '+',
                                 "width": 1
-                            }, {
+                            },
+                            {
                                 "text": 'w',
                                 "symbol": '\u00D7',
                                 "width": 1
-                            }, // MULTIPLICATION SIGN
+                            } // MULTIPLICATION SIGN
+                            ,
                             {
                                 "text": 'e',
                                 "symbol": '\u00F7',
                                 "width": 1
-                            }, // DIVISION SIGN
+                            } // DIVISION SIGN
+                            ,
                             {
                                 "text": 'r',
                                 "symbol": '=',
                                 "width": 1
-                            }, {
+                            },
+                            {
                                 "text": 't',
                                 "symbol": '/',
                                 "width": 1
-                            }, {
+                            },
+                            {
                                 "text": 'y',
                                 "symbol": '_',
                                 "width": 1
-                            }, {
+                            },
+                            {
                                 "text": 'u',
                                 "symbol": '<',
                                 "width": 1
-                            }, {
+                            },
+                            {
                                 "text": 'i',
                                 "symbol": '>',
                                 "width": 1
-                            }, {
+                            },
+                            {
                                 "text": 'o',
                                 "symbol": '[',
                                 "width": 1
-                            }, {
+                            },
+                            {
                                 "text": 'p',
                                 "symbol": ']',
                                 "width": 1
-                            }]
+                            }
+                        ]
 
                         delegate: Button {
-                            text: symbols ? modelData.symbol : shift ? modelData.text.toUpperCase(
-                                                                           ) : modelData.text
+                            text: symbols ? modelData.symbol : shift ? modelData.text.toUpperCase() : modelData.text
                             width: modelData.width * keyboard.width / columns - rowSpacing
                             height: keyboard.height / rows - columnSpacing
                             highlighted: root.selectedIndex === index + root.columns
@@ -250,8 +271,8 @@ Item {
 
                             onIsKeySelectedChanged: {
                                 if (root.isKeySelected && highlighted) {
-                                    clicked()
-                                    event.accepted = true
+                                    clicked();
+                                    event.accepted = true;
                                 }
                             }
                         }
@@ -263,55 +284,66 @@ Item {
                     spacing: rowSpacing
 
                     Repeater {
-                        model: [{
+                        model: [
+                            {
                                 "text": '',
                                 "symbol": '',
                                 "width": 0.5
-                            }, {
+                            },
+                            {
                                 "text": 'a',
                                 "symbol": '!',
                                 "width": 1
-                            }, {
+                            },
+                            {
                                 "text": 's',
                                 "symbol": '@',
                                 "width": 1
-                            }, {
+                            },
+                            {
                                 "text": 'd',
                                 "symbol": '#',
                                 "width": 1
-                            }, {
+                            },
+                            {
                                 "text": 'f',
                                 "symbol": '$',
                                 "width": 1
-                            }, {
+                            },
+                            {
                                 "text": 'g',
                                 "symbol": '%',
                                 "width": 1
-                            }, {
+                            },
+                            {
                                 "text": 'h',
                                 "symbol": '&',
                                 "width": 1
-                            }, {
+                            },
+                            {
                                 "text": 'j',
                                 "symbol": '*',
                                 "width": 1
-                            }, {
+                            },
+                            {
                                 "text": 'k',
                                 "symbol": '(',
                                 "width": 1
-                            }, {
+                            },
+                            {
                                 "text": 'l',
                                 "symbol": ')',
                                 "width": 1
-                            }, {
+                            },
+                            {
                                 "text": '',
                                 "symbol": '',
                                 "width": 0.5
-                            }]
+                            }
+                        ]
 
                         delegate: Button {
-                            text: symbols ? modelData.symbol : shift ? modelData.text.toUpperCase(
-                                                                           ) : modelData.text
+                            text: symbols ? modelData.symbol : shift ? modelData.text.toUpperCase() : modelData.text
                             width: modelData.width * keyboard.width / columns - rowSpacing
                             height: keyboard.height / rows - columnSpacing
                             highlighted: root.selectedIndex === index + 2 * root.columns
@@ -321,8 +353,8 @@ Item {
 
                             onIsKeySelectedChanged: {
                                 if (root.isKeySelected && highlighted) {
-                                    clicked()
-                                    event.accepted = true
+                                    clicked();
+                                    event.accepted = true;
                                 }
                             }
                         }
@@ -334,40 +366,49 @@ Item {
                     spacing: rowSpacing
 
                     Repeater {
-                        model: [{
+                        model: [
+                            {
                                 "text": '\u2191',
                                 "symbol": '',
                                 "width": 1.5
-                            }, // UPWARDS ARROW (shift)
+                            } // UPWARDS ARROW (shift)
+                            ,
                             {
                                 "text": 'z',
                                 "symbol": '-',
                                 "width": 1
-                            }, {
+                            },
+                            {
                                 "text": 'x',
                                 "symbol": "'",
                                 "width": 1
-                            }, {
+                            },
+                            {
                                 "text": 'c',
                                 "symbol": '"',
                                 "width": 1
-                            }, {
+                            },
+                            {
                                 "text": 'v',
                                 "symbol": ':',
                                 "width": 1
-                            }, {
+                            },
+                            {
                                 "text": 'b',
                                 "symbol": ';',
                                 "width": 1
-                            }, {
+                            },
+                            {
                                 "text": 'n',
                                 "symbol": ',',
                                 "width": 1
-                            }, {
+                            },
+                            {
                                 "text": 'm',
                                 "symbol": '?',
                                 "width": 1
-                            }, {
+                            },
+                            {
                                 "text": '\u2190',
                                 "symbol": '\u2190',
                                 "width": 1.5
@@ -375,8 +416,7 @@ Item {
                         ]
 
                         delegate: Button {
-                            text: symbols ? modelData.symbol : shift ? modelData.text.toUpperCase(
-                                                                           ) : modelData.text
+                            text: symbols ? modelData.symbol : shift ? modelData.text.toUpperCase() : modelData.text
                             width: modelData.width * keyboard.width / columns - rowSpacing
                             height: keyboard.height / rows - columnSpacing
                             highlighted: root.selectedIndex === index + 3 * root.columns + 1
@@ -386,8 +426,8 @@ Item {
 
                             onIsKeySelectedChanged: {
                                 if (root.isKeySelected && highlighted) {
-                                    clicked()
-                                    event.accepted = true
+                                    clicked();
+                                    event.accepted = true;
                                 }
                             }
                         }
@@ -399,20 +439,25 @@ Item {
                     spacing: rowSpacing
 
                     Repeater {
-                        model: [{
+                        model: [
+                            {
                                 "text": symbols ? 'AB' : '@#',
                                 "width": 1.5
-                            }, {
+                            },
+                            {
                                 "text": ',',
                                 "width": 1
-                            }, {
+                            },
+                            {
                                 "text": ' ',
                                 "width": 5
-                            }, // space
+                            } // space
+                            ,
                             {
                                 "text": '.',
                                 "width": 1
-                            }, {
+                            },
+                            {
                                 "text": '\u21B5',
                                 "width": 1.5
                             } // DOWNWARDS ARROW WITH CORNER LEFTWARDS (enter)
@@ -429,7 +474,7 @@ Item {
 
                             onIsKeySelectedChanged: {
                                 if (root.isKeySelected && highlighted) {
-                                    clicked()
+                                    clicked();
                                 }
                             }
                         }
@@ -441,33 +486,28 @@ Item {
 
     signal clicked(string text)
     onClicked: text => {
-                   if (text === '\u2190') {
-                       // LEFTWARDS ARROW (backspace)
-                       var position = textInput.cursorPosition
-                       textInput.text = textInput.text.substring(
-                           0,
-                           textInput.cursorPosition - 1) + textInput.text.substring(
-                           textInput.cursorPosition, textInput.text.length)
-                       textInput.cursorPosition = position - 1
-                   } else if (text === '\u2191')
-                   shift = !shift // UPWARDS ARROW (shift)
-                   else if (text === '@#')
-                   symbols = true
-                   else if (text === 'AB')
-                   symbols = false
-                   else if (text === '\u21B5')
-                   accepted(
-                       textInput.text) // DOWNWARDS ARROW WITH CORNER LEFTWARDS (enter)
-                   else {
-                       // insert text
-                       var position = textInput.cursorPosition
-                       textInput.text = textInput.text.substring(
-                           0,
-                           textInput.cursorPosition) + text + textInput.text.substring(
-                           textInput.cursorPosition, textInput.text.length)
-                       textInput.cursorPosition = position + 1
+        if (text === '\u2190') {
+            // LEFTWARDS ARROW (backspace)
+            var position = textInput.cursorPosition;
+            textInput.text = textInput.text.substring(0, textInput.cursorPosition - 1) + textInput.text.substring(textInput.cursorPosition, textInput.text.length);
+            textInput.cursorPosition = position - 1;
+        } else if (text === '\u2191')
+            shift = !shift;
+            // UPWARDS ARROW (shift)
+        else if (text === '@#')
+            symbols = true;
+        else if (text === 'AB')
+            symbols = false;
+        else if (text === '\u21B5')
+            accepted(textInput.text);
+            // DOWNWARDS ARROW WITH CORNER LEFTWARDS (enter)
+        else {
+            // insert text
+            var position = textInput.cursorPosition;
+            textInput.text = textInput.text.substring(0, textInput.cursorPosition) + text + textInput.text.substring(textInput.cursorPosition, textInput.text.length);
+            textInput.cursorPosition = position + 1;
 
-                       shift = false // momentary
-                   }
-               }
+            shift = false; // momentary
+        }
+    }
 }

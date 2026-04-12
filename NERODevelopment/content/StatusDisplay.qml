@@ -10,7 +10,7 @@ Item {
     property bool highlight: false
     onHighlightChanged: {
         if (!highlight) {
-            background.border.width = 1
+            background.border.width = 1;
         }
     }
 
@@ -34,8 +34,7 @@ Item {
             running: detailDisplay.highlight
             repeat: true
             onTriggered: {
-                background.border.width = (background.border.width
-                                           === 1) ? 5 : 1 // Toggle between 0 and 5
+                background.border.width = (background.border.width === 1) ? 5 : 1; // Toggle between 0 and 5
             }
         }
 
