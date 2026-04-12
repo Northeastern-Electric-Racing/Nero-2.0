@@ -80,7 +80,7 @@ Type clang-format --version and press Enter. You should see the version informat
 ```bash
 git ls-files "*.cpp" "*.h" ":!deps/*" | xargs clang-format -i
 ```
-#### Mac Format QML files
+#### Mac/Linux Format QML files
 ```bash
 git ls-files "*.qml" ":!deps/*" | xargs ~/Qt/6.8.3/macos/bin/qmlformat -i
 ```
