@@ -16,6 +16,11 @@
  * DoomImageProvider, DoomWorker, and DoomController classes. These bridge
  * the unmodified engine into Qt/QML for our dashboard.
  *
+ * We also provide our own I_InitGraphics / I_FinishUpdate / I_SetPalette
+ * (replacing i_video.c from the upstream repo) because the upstream version
+ * opens /dev/fb0 directly, which conflicts with Qt's EGLFS on the Pi.
+ * Our version renders to DG_ScreenBuffer in memory and lets Qt handle display.
+ *
  * The doomgeneric platform callbacks are implemented directly in this file
  * via extern "C" blocks — no separate .c file is needed.
  */
@@ -37,6 +42,9 @@
 extern "C" {
 #include "doomgeneric.h"
 #include "doomkeys.h"
+#include "doomtype.h"
+#include "v_video.h"
+#include "z_zone.h"
 extern int joybspeed;
 }
 
@@ -59,6 +67,21 @@ static DoomWorker *g_doomWorker = nullptr;
 
 static void platform_frame_callback(uint32_t *framebuffer, int width, int height);
 static int platform_getkey_callback(unsigned char *pressed, unsigned char *doomKey);
+
+/* ============================================================
+ * Video subsystem state (replaces i_video.c)
+ *
+ * The upstream i_video.c opens /dev/fb0 and mmaps the Linux
+ * framebuffer, which crashes on the Pi because Qt EGLFS already
+ * owns the display. Our replacement renders entirely in memory:
+ *
+ *   1. DOOM renders to I_VideoBuffer (8-bit indexed color)
+ *   2. I_FinishUpdate converts indexed → XRGB using s_palette
+ *   3. Result goes into DG_ScreenBuffer (allocated by doomgeneric.c)
+ *   4. DG_DrawFrame is called → Qt picks up the frame
+ * ============================================================ */
+static byte *I_VideoBuffer = NULL;
+static uint32_t s_palette[256];
 
 /* ============================================================
  * doomgeneric platform callbacks (extern "C")
@@ -118,7 +141,88 @@ void DG_SetWindowTitle(const char *title)
     printf("[DOOM] Title: %s\n", title);
 }
 
+/* ============================================================
+ * Video functions (replacing i_video.c)
+ *
+ * The DOOM engine calls these during initialization and each frame.
+ * Our versions avoid any framebuffer/display device access — all
+ * rendering goes through DG_ScreenBuffer → DG_DrawFrame → Qt.
+ * ============================================================ */
+
+/**
+ * Called once during engine startup.
+ * Allocates the 8-bit indexed video buffer that DOOM renders to.
+ */
+void I_InitGraphics(void)
+{
+    printf("[DOOM] I_InitGraphics: NERO Qt backend (no /dev/fb0)\n");
+    I_VideoBuffer = (byte *)Z_Malloc(SCREENWIDTH * SCREENHEIGHT, PU_STATIC, NULL);
+    screens[0] = I_VideoBuffer;
 }
+
+void I_ShutdownGraphics(void)
+{
+    /* Z_Malloc'd memory is freed when the zone is destroyed */
+}
+
+void I_StartFrame(void)
+{
+    /* Nothing needed — Qt handles frame timing */
+}
+
+/**
+ * Called each tick to process input events.
+ * Pumps the key queue via DG_GetKey (defined above).
+ */
+void I_StartTic(void)
+{
+    /* Input is handled via DG_GetKey which the engine calls directly */
+}
+
+void I_UpdateNoBlit(void)
+{
+    /* Nothing needed */
+}
+
+/**
+ * Called each frame after rendering is complete.
+ * Converts the 8-bit indexed I_VideoBuffer to 32-bit XRGB in
+ * DG_ScreenBuffer using the current palette, then calls DG_DrawFrame
+ * which hands the frame to Qt.
+ */
+void I_FinishUpdate(void)
+{
+    int count = SCREENWIDTH * SCREENHEIGHT;
+    for (int i = 0; i < count; i++) {
+        DG_ScreenBuffer[i] = s_palette[I_VideoBuffer[i]];
+    }
+    DG_DrawFrame();
+}
+
+/**
+ * Copy the current screen to a buffer (used for wipes/transitions).
+ */
+void I_ReadScreen(byte *scr)
+{
+    memcpy(scr, I_VideoBuffer, SCREENWIDTH * SCREENHEIGHT);
+}
+
+/**
+ * Called when the engine changes the color palette.
+ * Converts the 768-byte RGB palette (256 entries × 3 bytes) to
+ * 32-bit XRGB values for fast lookup during I_FinishUpdate.
+ */
+void I_SetPalette(byte *palette)
+{
+    for (int i = 0; i < 256; i++) {
+        s_palette[i] = (0xFF << 24)
+                      | (palette[i * 3 + 0] << 16)    /* R */
+                      | (palette[i * 3 + 1] << 8)     /* G */
+                      | (palette[i * 3 + 2]);          /* B */
+    }
+}
+
+} /* extern "C" */
 
 /* ============================================================
  * Platform callback implementations
