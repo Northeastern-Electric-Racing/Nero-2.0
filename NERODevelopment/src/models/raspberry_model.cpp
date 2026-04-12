@@ -78,10 +78,12 @@ void RaspberryModel::connectToMQTT() {
       SEGMENTTEMP4,
       MOTORPOWER,
       FANPOWER,
-      SIDEBRBS,
+      EFUSE_SHUTDOWN_ENABLED,
+      EFUSE_SHUTDOWN_FAULTED,
       BMS,
       BSPD,
-      MPU,
+      EFUSE_MC_ENABLED,
+      EFUSE_MC_FAULTED,
       BOTS,
       INERTIA,
       CPBRB,
@@ -417,7 +419,8 @@ std::optional<float> RaspberryModel::getModeIndex() {
 void RaspberryModel::updateCurrentData() { emit this->onCurrentDataChange(); }
 
 QList<QString> RaspberryModel::getCriticalFaults() {
-  QRegularExpression regex("^(BMS/Faults/Critical/.*|MPU/Fault/Critical/.*)$");
+  QRegularExpression regex(
+      "^(BMS/Faults/Critical/.*|VCU/Faults/Critical/.*)$");
 
   QList<QString> faults;
 
@@ -433,7 +436,7 @@ QList<QString> RaspberryModel::getCriticalFaults() {
 
 QList<QString> RaspberryModel::getNonCriticalFaults() {
   QRegularExpression regex(
-      "^(BMS/Faults/Non-Critical/.*|MPU/Fault/Non-Critical/.*)$");
+      "^(BMS/Faults/Non-Critical/.*|VCU/Faults/Non-Critical/.*)$");
 
   QList<QString> faults;
 
