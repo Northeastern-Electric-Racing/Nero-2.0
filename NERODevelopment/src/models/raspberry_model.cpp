@@ -18,8 +18,8 @@ RaspberryModel::RaspberryModel() {}
 
 RaspberryModel::~RaspberryModel() {}
 
-QList<QString> RaspberryModel::getMpuFault() {
-  QRegularExpression regex("^MPU/Fault/.*$");
+QList<QString> RaspberryModel::getVcuFault() {
+  QRegularExpression regex("^VCU/Faults/.*$");
 
   QList<QString> faults;
   for (auto it = this->currentData.begin(); it != this->currentData.end();
@@ -66,7 +66,7 @@ void RaspberryModel::connectToMQTT() {
       INVERTERTEMP,
       BMSSTATE,
       BMSFAULT,
-      MPUFAULT,
+      VCUFAULT,
       DCL,
       CCL,
       REGENPOWER,

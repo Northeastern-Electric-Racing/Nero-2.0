@@ -50,7 +50,7 @@ public:
   std::optional<float> getRegenPower() override;
   std::optional<float> getBmsState() override;
   QList<QString> getBmsFault() override;
-  QList<QString> getMpuFault() override;
+  QList<QString> getVcuFault() override;
   std::optional<float> getDcl() override;
   std::optional<float> getCcl() override;
   std::optional<float> getPackCurrent() override;
