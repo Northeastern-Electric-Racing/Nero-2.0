@@ -14,17 +14,17 @@ Rectangle {
 
     property variant attributeStatusMap: offViewController.attributeStatus
 
-    property int sideBrbStatus: attributeStatusMap["MPU/Fuses/SD_TO_BRB_FUSE_STAT"]
-    property int bmsStatus: attributeStatusMap["MPU/Shutdown/BMS_GOOD"]
-    property int imdStatus: attributeStatusMap["MPU/Shutdown/IMD_GOOD"]
-    property int bspdStatus: attributeStatusMap["MPU/Shutdown/BSPD_GOOD"]
-    property int botsStatus: attributeStatusMap["MPU/Shutdown/BOTS_GOOD"]
-    property int inertiaStatus: attributeStatusMap["MPU/Shutdown/INERTIA_SW_GOOD"]
-    property int cockPitBrbStatus: attributeStatusMap["MPU/GPIO_EXPANDER_DEBUG/SHUTDOWN/CKPT_BRB_CLR"]
-    property int tsmsStatus: attributeStatusMap["MPU/State/TSMS"]
-    property int hvdInterlockStatus: attributeStatusMap["MPU/Shutdown/HVD_INTLK_GOOD"]
-    property int hvdConnectorStatus: attributeStatusMap["MPU/Shutdown/HVC_INTLK_GOOD"]
-    property int mpuStatus: attributeStatusMap["MPU/Shutdown/MC_STAT"]
+    property int shutdownEfuseStatus: attributeStatusMap["VCU/eFuses/Shutdown"]
+    property int bmsStatus: attributeStatusMap["VCU/Shutdown/BMS_GPIO"]
+    property int imdStatus: attributeStatusMap["VCU/Shutdown/IMD_GPIO"]
+    property int bspdStatus: attributeStatusMap["VCU/Shutdown/BSPD_GPIO"]
+    property int botsStatus: attributeStatusMap["VCU/Shutdown/BOTS_GPIO"]
+    property int inertiaStatus: attributeStatusMap["VCU/Shutdown/INERTIA_SW_GPIO"]
+    property int cockPitBrbStatus: attributeStatusMap["VCU/Shutdown/CKPT_GPIO"]
+    property int tsmsStatus: attributeStatusMap["VCU/CarState/tsms"]
+    property int hvdInterlockStatus: attributeStatusMap["VCU/Shutdown/HVD_GPIO"]
+    property int hvdConnectorStatus: attributeStatusMap["VCU/Shutdown/HV_C_GPIO"]
+    property int mcEfuseStatus: attributeStatusMap["VCU/eFuses/MC"]
 
     property double packTemp: offViewController.packTemp
     property double motorTemp: offViewController.motorTemp
@@ -131,7 +131,7 @@ Rectangle {
             StatusDisplay {
                 id: brbs
                 shutdownFlowTask: "BRBS"
-                status: offScreen.sideBrbStatus
+                status: offScreen.shutdownEfuseStatus
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
                 highlight: offScreen.selectedFlowIndex == 1
@@ -197,7 +197,7 @@ Rectangle {
                 id: latch
                 anchors.centerIn: parent
                 shutdownFlowTask: "LATCH"
-                status: offScreen.bmsStatus == 1 && offScreen.imdStatus == 1 && offScreen.mpuStatus == 1 && offScreen.bspdStatus == 1
+                status: offScreen.bmsStatus == 1 && offScreen.imdStatus == 1 && offScreen.mcEfuseStatus == 1 && offScreen.bspdStatus == 1
                 height: parent.height / 4
                 width: parent.width / 3
             }
@@ -213,7 +213,7 @@ Rectangle {
                 StatusDisplay {
                     id: can
                     shutdownFlowTask: "CAN"
-                    status: offScreen.mpuStatus
+                    status: offScreen.mcEfuseStatus
                     highlight: offScreen.selectedFlowIndex == 4
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.verticalCenterOffset: -parent.height / 4
