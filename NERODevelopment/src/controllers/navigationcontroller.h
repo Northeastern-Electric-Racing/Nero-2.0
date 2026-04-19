@@ -118,6 +118,8 @@ public slots:
   void enterButtonPressed() override;
   void downButtonPressed() override;
   void upButtonPressed() override;
+  void leftButtonPressed() override;
+  void rightButtonPressed() override;
   void homeButtonPressed() override;
   void buttonUpdate() override;
 

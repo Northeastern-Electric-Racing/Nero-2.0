@@ -114,14 +114,24 @@ QVariantList NavigationController::getChildrenOf(int parent) const {
 void NavigationController::moveNext() {
   int pos = m_navOrder.indexOf(m_selected);
   if (pos + 1 < m_navOrder.size()) {
-    setSelectedIndex(m_navOrder[pos + 1]);
+    int next = m_navOrder[pos + 1];
+    if (m_expanded >= 0 && Menu::isSubItem(m_selected) &&
+        !Menu::isSubItem(next)) {
+      setExpanded(-1);
+    }
+    setSelectedIndex(next);
   }
 }
 
 void NavigationController::movePrev() {
   int pos = m_navOrder.indexOf(m_selected);
   if (pos > 0) {
-    setSelectedIndex(m_navOrder[pos - 1]);
+    int prev = m_navOrder[pos - 1];
+    if (m_expanded >= 0 && Menu::isSubItem(m_selected) &&
+        !Menu::isSubItem(prev)) {
+      setExpanded(-1);
+    }
+    setSelectedIndex(prev);
   }
 }
 
@@ -187,6 +197,8 @@ void NavigationController::executeAction(int i) {
 void NavigationController::enterButtonPressed() { activate(); }
 void NavigationController::downButtonPressed() { moveNext(); }
 void NavigationController::upButtonPressed() { movePrev(); }
+void NavigationController::leftButtonPressed() { movePrev(); }
+void NavigationController::rightButtonPressed() { moveNext(); }
 void NavigationController::homeButtonPressed() { goHome(); }
 
 void NavigationController::buttonUpdate() {
@@ -213,5 +225,9 @@ void NavigationController::buttonUpdate() {
       downButtonPressed();
     if (m_model->getUpButtonPressed() == true)
       upButtonPressed();
+    if (m_model->getBackwardButtonPressed() == true)
+      leftButtonPressed();
+    if (m_model->getRightButtonPressed() == true)
+      rightButtonPressed();
   }
 }
