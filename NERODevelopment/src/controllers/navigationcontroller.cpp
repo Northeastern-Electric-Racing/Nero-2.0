@@ -14,6 +14,7 @@ const std::vector<Item> &getPages() {
       {"FLAPPY BIRD", Type::SubPage, nullptr, "FlappyBird.qml", nullptr},
       {"SNAKE", Type::SubPage, nullptr, "Snake.qml", nullptr},
       {"2048", Type::SubPage, nullptr, "Game2048.qml", nullptr},
+      {"DOOM", Type::SubPage, nullptr, "DoomView.qml", nullptr},
       {"THEMES", Type::Category, "themes.png", nullptr, nullptr},
       {"LIGHT", Type::SubAction, nullptr, nullptr,
        [](NavigationController *c) {
