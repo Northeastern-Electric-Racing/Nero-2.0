@@ -148,7 +148,8 @@ private slots:
 private:
     unsigned char mapNeroButtonToDoomKey(const QString &buttonName);
     unsigned char mapButtonValueToDoomKey(int value);
-    void handleButtonValue(int value);
+    void releaseCurrentButton();
+    void pressButton(int value);
 
     Model *m_model;
     DoomWorker *m_worker;

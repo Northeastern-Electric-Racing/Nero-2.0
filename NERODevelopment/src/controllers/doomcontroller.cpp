@@ -64,7 +64,22 @@ static constexpr int BUTTON_VALUE_UP      = 4;   // button 4 — move forward
 static constexpr int BUTTON_VALUE_DOWN    = 5;   // button 5 — move backward
 static constexpr int BUTTON_VALUE_ENTER   = 6;   // button 6 — fire+use+menu
 static constexpr int BUTTON_VALUE_RIGHT   = 7;   // button 7 — turn right
-static constexpr int BUTTON_VALUE_RELEASE = -1;  // release sentinel
+
+/**
+ * Returns true if the value corresponds to a known DOOM-mapped button.
+ * Any value NOT in this set is treated as a release (button let go).
+ * This makes release detection robust regardless of whether the
+ * release sentinel is -1, 10, 0, or anything else.
+ */
+static bool isKnownDoomButton(int value)
+{
+    return value == BUTTON_VALUE_ESCAPE
+        || value == BUTTON_VALUE_LEFT
+        || value == BUTTON_VALUE_UP
+        || value == BUTTON_VALUE_DOWN
+        || value == BUTTON_VALUE_ENTER
+        || value == BUTTON_VALUE_RIGHT;
+}
 
 /* ============================================================
  * Platform bridge — static state for C callbacks
@@ -507,7 +522,7 @@ DoomController::DoomController(Model *model, QObject *parent)
     , m_running(false)
     , m_frameCounter(0)
     , m_statusText("Press ENTER to start DOOM")
-    , m_lastButtonValue(BUTTON_VALUE_RELEASE)
+    , m_lastButtonValue(-1)
 {
     QStringList wadSearchPaths = {
         QCoreApplication::applicationDirPath() + "/DOOM1.WAD",
@@ -564,7 +579,7 @@ void DoomController::startGame()
     emit statusTextChanged();
 
     // Reset button state on game start
-    m_lastButtonValue = BUTTON_VALUE_RELEASE;
+    m_lastButtonValue = -1;
 
     m_gameThread = new QThread(this);
     m_worker = new DoomWorker(m_wadPath);
@@ -610,7 +625,7 @@ void DoomController::stopGame()
     }
 
     m_running = false;
-    m_lastButtonValue = BUTTON_VALUE_RELEASE;
+    m_lastButtonValue = -1;
     m_statusText = "Press ENTER to start DOOM";
     emit runningChanged();
     emit statusTextChanged();
@@ -668,47 +683,50 @@ void DoomController::onDataChanged()
 
     // Escape button (1) — stop DOOM and go home immediately
     if (currentValue == BUTTON_VALUE_ESCAPE) {
+        // Release any currently held button first
+        releaseCurrentButton();
         m_lastButtonValue = currentValue;
         stopGame();
         emit escapeRequested();
         return;
     }
 
-    handleButtonValue(currentValue);
+    // Known button pressed → release old, press new
+    if (isKnownDoomButton(currentValue)) {
+        releaseCurrentButton();
+        pressButton(currentValue);
+    } else {
+        // Any unknown value (release sentinel, whether -1, 10, or anything else)
+        // → just release the current button
+        releaseCurrentButton();
+    }
+
     m_lastButtonValue = currentValue;
 }
 
-void DoomController::handleButtonValue(int value)
+void DoomController::releaseCurrentButton()
 {
-    // Release the previously held button (if any)
-    if (m_lastButtonValue != BUTTON_VALUE_RELEASE) {
-        unsigned char oldKey = mapButtonValueToDoomKey(m_lastButtonValue);
-        if (oldKey != 0) {
-            // Enter maps to multiple DOOM keys — release all of them
-            if (m_lastButtonValue == BUTTON_VALUE_ENTER) {
-                sendKey(KEY_ENTER, false);
-                sendKey(KEY_FIRE, false);
-                sendKey(KEY_USE, false);
-            } else {
-                sendKey(oldKey, false);
-            }
-        }
-    }
+    if (!isKnownDoomButton(m_lastButtonValue)) return;
 
-    // Press the new button (if not a release)
-    if (value != BUTTON_VALUE_RELEASE) {
-        unsigned char newKey = mapButtonValueToDoomKey(value);
-        if (newKey != 0) {
-            // Enter maps to multiple DOOM keys — press all of them
-            // This handles both menu selection and in-game fire+use
-            if (value == BUTTON_VALUE_ENTER) {
-                sendKey(KEY_ENTER, true);
-                sendKey(KEY_FIRE, true);
-                sendKey(KEY_USE, true);
-            } else {
-                sendKey(newKey, true);
-            }
-        }
+    if (m_lastButtonValue == BUTTON_VALUE_ENTER) {
+        sendKey(KEY_ENTER, false);
+        sendKey(KEY_FIRE, false);
+        sendKey(KEY_USE, false);
+    } else {
+        unsigned char key = mapButtonValueToDoomKey(m_lastButtonValue);
+        if (key != 0) sendKey(key, false);
+    }
+}
+
+void DoomController::pressButton(int value)
+{
+    if (value == BUTTON_VALUE_ENTER) {
+        sendKey(KEY_ENTER, true);
+        sendKey(KEY_FIRE, true);
+        sendKey(KEY_USE, true);
+    } else {
+        unsigned char key = mapButtonValueToDoomKey(value);
+        if (key != 0) sendKey(key, true);
     }
 }
 
