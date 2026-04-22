@@ -85,6 +85,27 @@ static bool isKnownDoomButton(int value)
     return value >= 0 && value <= 7;
 }
 
+/**
+ * Returns true if the button should be a brief tap (auto-release after timer).
+ * These buttons send keydown then keyup after 100ms:
+ *   - Middle Left (2): small left nudge
+ *   - Middle Right (7): small right nudge
+ *   - Enter (5): shoot once / use once / menu select
+ *
+ * All other buttons are TOGGLE — they stay held until a different
+ * button is pressed:
+ *   - Left (1): continuous turn left
+ *   - Right (6): continuous turn right
+ *   - Up (3): continuous move forward
+ *   - Down (4): continuous move backward
+ */
+static bool isTapButton(int value)
+{
+    return value == BUTTON_VALUE_MIDDLE_LEFT
+        || value == BUTTON_VALUE_MIDDLE_RIGHT
+        || value == BUTTON_VALUE_ENTER;
+}
+
 /* ============================================================
  * Platform bridge — static state for C callbacks
  * ============================================================ */
@@ -711,13 +732,18 @@ void DoomController::onDataChanged()
         return;
     }
 
-    // Known button pressed → release old, press new, schedule auto-release
+    // Known button pressed → release old, press new
     if (isKnownDoomButton(currentValue)) {
         m_releaseTimer->stop();
         releaseCurrentButton();
         pressButton(currentValue);
         m_lastButtonValue = currentValue;
-        m_releaseTimer->start();
+
+        // Tap buttons: auto-release after 100ms (single shot)
+        // Toggle buttons: stay held until a different button is pressed
+        if (isTapButton(currentValue)) {
+            m_releaseTimer->start();
+        }
     } else {
         // Non-button value (release event, if hardware sends one)
         m_releaseTimer->stop();
