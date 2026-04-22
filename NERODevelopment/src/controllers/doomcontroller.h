@@ -38,6 +38,7 @@
 #include <QQueue>
 #include <QQuickImageProvider>
 #include <QElapsedTimer>
+#include <QTimer>
 
 #include "../models/model.h"
 
@@ -151,6 +152,9 @@ private:
     void releaseCurrentButton();
     void pressButton(int value);
 
+    /** Auto-releases the held key after a short delay */
+    void autoRelease();
+
     Model *m_model;
     DoomWorker *m_worker;
     QThread *m_gameThread;
@@ -161,10 +165,18 @@ private:
     QString m_statusText;
     QString m_wadPath;
 
-    // Edge detection for hardware buttons
-    // Tracks the last raw value from "Wheel/Buttons/button_id"
-    // to detect press (value != 10) and release (value == 10) transitions
+    // Edge detection for hardware buttons.
+    // Tracks the last raw value from "Wheel/Buttons/button_id".
     int m_lastButtonValue;
+
+    // Auto-release timer: sends keyup after a brief delay so DOOM
+    // registers a tap instead of an infinite hold. Needed because
+    // the wheel hardware does not send release events to MQTT.
+    QTimer *m_releaseTimer;
+
+    // Tracks when auto-release last fired, to suppress phantom
+    // re-presses from stale MQTT values within a cooldown window.
+    QElapsedTimer m_lastReleaseTime;
 };
 
 #endif // DOOMCONTROLLER_H
