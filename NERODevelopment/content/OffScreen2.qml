@@ -14,17 +14,17 @@ Rectangle {
 
     property variant attributeStatusMap: offViewController.attributeStatus
 
-    property int sideBrbStatus: attributeStatusMap["MPU/Fuses/SD_TO_BRB_FUSE_STAT"]
-    property int bmsStatus: attributeStatusMap["MPU/Shutdown/BMS_GOOD"]
-    property int imdStatus: attributeStatusMap["MPU/Shutdown/IMD_GOOD"]
-    property int bspdStatus: attributeStatusMap["MPU/Shutdown/BSPD_GOOD"]
-    property int botsStatus: attributeStatusMap["MPU/Shutdown/BOTS_GOOD"]
-    property int inertiaStatus: attributeStatusMap["MPU/Shutdown/INERTIA_SW_GOOD"]
-    property int cockPitBrbStatus: attributeStatusMap["MPU/GPIO_EXPANDER_DEBUG/SHUTDOWN/CKPT_BRB_CLR"]
-    property int tsmsStatus: attributeStatusMap["MPU/State/TSMS"]
-    property int hvdInterlockStatus: attributeStatusMap["MPU/Shutdown/HVD_INTLK_GOOD"]
-    property int hvdConnectorStatus: attributeStatusMap["MPU/Shutdown/HVC_INTLK_GOOD"]
-    property int mpuStatus: attributeStatusMap["MPU/Shutdown/MC_STAT"]
+    property int shutdownEfuseStatus: attributeStatusMap["VCU/eFuses/Shutdown"]
+    property int bmsStatus: attributeStatusMap["VCU/Shutdown/BMS_GPIO"]
+    property int imdStatus: attributeStatusMap["VCU/Shutdown/IMD_GPIO"]
+    property int bspdStatus: attributeStatusMap["VCU/Shutdown/BSPD_GPIO"]
+    property int botsStatus: attributeStatusMap["VCU/Shutdown/BOTS_GPIO"]
+    property int inertiaStatus: attributeStatusMap["VCU/Shutdown/INERTIA_SW_GPIO"]
+    property int cockPitBrbStatus: attributeStatusMap["VCU/Shutdown/CKPT_GPIO"]
+    property int tsmsStatus: attributeStatusMap["VCU/CarState/tsms"]
+    property int hvdInterlockStatus: attributeStatusMap["VCU/Shutdown/HVD_GPIO"]
+    property int hvdConnectorStatus: attributeStatusMap["VCU/Shutdown/HV_C_GPIO"]
+    property int mcEfuseStatus: attributeStatusMap["VCU/eFuses/MC"]
 
     property double packTemp: offViewController.packTemp
     property double motorTemp: offViewController.motorTemp
@@ -41,34 +41,32 @@ Rectangle {
     property int radialUnitFontSize: valueFontSize / 3
 
     Keys.onPressed: event => {
-                        switch (event.key) {
-                            case Qt.Key_Up:
-                            offViewController.upButtonPressed()
-                            break
-                            case Qt.Key_Left:
-                            offViewController.leftButtonPressed()
-                            break
-                            case Qt.Key_Right:
-                            offViewController.rightButtonPressed()
-                            break
-                            case Qt.Key_Down:
-                            offViewController.downButtonPressed()
-                            break
-                            case Qt.Key_Return:
-                            offViewController.enterButtonPressed()
-                            break
-                            default:
-                            break
-                        }
-                    }
+        switch (event.key) {
+        case Qt.Key_Up:
+            offViewController.upButtonPressed();
+            break;
+        case Qt.Key_Left:
+            offViewController.leftButtonPressed();
+            break;
+        case Qt.Key_Right:
+            offViewController.rightButtonPressed();
+            break;
+        case Qt.Key_Down:
+            offViewController.downButtonPressed();
+            break;
+        case Qt.Key_Return:
+            offViewController.enterButtonPressed();
+            break;
+        default:
+            break;
+        }
+    }
 
     onDidSelectChanged: {
         if (offScreen.didSelect) {
-            descriptionModal.openModal(offViewController.selectedName,
-                                       offViewController.selectedDescription,
-                                       offViewController.selectedUrl)
+            descriptionModal.openModal(offViewController.selectedName, offViewController.selectedDescription, offViewController.selectedUrl);
         } else {
-            descriptionModal.closeModal()
+            descriptionModal.closeModal();
         }
     }
 
@@ -133,7 +131,7 @@ Rectangle {
             StatusDisplay {
                 id: brbs
                 shutdownFlowTask: "BRBS"
-                status: offScreen.sideBrbStatus
+                status: offScreen.shutdownEfuseStatus
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
                 highlight: offScreen.selectedFlowIndex == 1
@@ -142,13 +140,16 @@ Rectangle {
             }
 
             Arrow {
-                stops: [{
+                stops: [
+                    {
                         "x": glvms.x + glvms.width,
                         "y": glvms.y + glvms.height / 2
-                    }, {
+                    },
+                    {
                         "x": brbs.x,
                         "y": brbs.y + brbs.height / 2
-                    }]
+                    }
+                ]
             }
         }
 
@@ -196,8 +197,7 @@ Rectangle {
                 id: latch
                 anchors.centerIn: parent
                 shutdownFlowTask: "LATCH"
-                status: offScreen.bmsStatus == 1 && offScreen.imdStatus == 1
-                        && offScreen.mpuStatus == 1 && offScreen.bspdStatus == 1
+                status: offScreen.bmsStatus == 1 && offScreen.imdStatus == 1 && offScreen.mcEfuseStatus == 1 && offScreen.bspdStatus == 1
                 height: parent.height / 4
                 width: parent.width / 3
             }
@@ -213,7 +213,7 @@ Rectangle {
                 StatusDisplay {
                     id: can
                     shutdownFlowTask: "CAN"
-                    status: offScreen.mpuStatus
+                    status: offScreen.mcEfuseStatus
                     highlight: offScreen.selectedFlowIndex == 4
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.verticalCenterOffset: -parent.height / 4
@@ -237,65 +237,84 @@ Rectangle {
         }
 
         Arrow {
-            stops: [{
+            stops: [
+                {
                     "x": brbs.x + brbs.width / 2,
                     "y": brbs.y + brbs.height
-                }, {
+                },
+                {
                     "x": latch.x + latch.width / 2,
                     "y": latch.y + lvStatusContainer.height
-                }]
+                }
+            ]
         }
 
         Arrow {
-            stops: [{
+            stops: [
+                {
                     "x": bms.x + bms.width / 2,
                     "y": bms.y + bms.height + lvStatusContainer.height
-                }, {
+                },
+                {
                     "x": bms.x + bms.width / 2,
                     "y": latch.y + latch.height / 2 + lvStatusContainer.height
-                }, {
+                },
+                {
                     "x": latch.x,
                     "y": latch.y + latch.height / 2 + lvStatusContainer.height
-                }]
+                }
+            ]
         }
 
         Arrow {
-            stops: [{
+            stops: [
+                {
                     "x": imd.x + imd.width / 2,
                     "y": imd.y + lvStatusContainer.height
-                }, {
+                },
+                {
                     "x": imd.x + imd.width / 2,
                     "y": latch.y + latch.height / 2 + lvStatusContainer.height
-                }, {
+                },
+                {
                     "x": latch.x,
                     "y": latch.y + latch.height / 2 + lvStatusContainer.height
-                }]
+                }
+            ]
         }
 
         Arrow {
-            stops: [{
+            stops: [
+                {
                     "x": can.x + can.width / 2 + canbspdContainer.x,
                     "y": can.y + can.height + lvStatusContainer.height
-                }, {
+                },
+                {
                     "x": can.x + can.width / 2 + canbspdContainer.x,
                     "y": latch.y + latch.height / 2 + lvStatusContainer.height
-                }, {
+                },
+                {
                     "x": latch.x + latch.width,
                     "y": latch.y + latch.height / 2 + lvStatusContainer.height
-                }]
+                }
+            ]
         }
 
         Arrow {
-            stops: [{
+            stops: [
+                {
                     "x": bspd.x + bspd.width / 2 + canbspdContainer.x,
                     "y": bspd.y + lvStatusContainer.height
-                }, {
+                },
+                {
                     "x": bspd.x + bspd.width / 2 + canbspdContainer.x,
                     "y": latch.y + latch.height / 2 + lvStatusContainer.height
-                }, {
+                },
+                {
                     "x": latch.x + latch.width,
                     "y": latch.y + latch.height / 2 + lvStatusContainer.height
-                }]
+                }
+            ]
         }
     }
 
@@ -333,24 +352,30 @@ Rectangle {
         }
 
         Arrow {
-            stops: [{
+            stops: [
+                {
                     "x": bots.x + bots.width,
                     "y": bots.y + bots.height / 2
-                }, {
+                },
+                {
                     "x": inertia.x,
                     "y": bots.y + bots.height / 2
-                }]
+                }
+            ]
         }
     }
 
     Arrow {
-        stops: [{
+        stops: [
+            {
                 "x": latch.x + latch.width / 2 + lvFaultContainer.x,
                 "y": latch.y + latch.height * 2 + lvFaultContainer.y
-            }, {
+            },
+            {
                 "x": bots.x + bots.width / 2 + botsInertiaContainer.x,
                 "y": bots.y + botsInertiaContainer.y
-            }]
+            }
+        ]
     }
 
     Rectangle {
@@ -377,8 +402,7 @@ Rectangle {
         StatusDisplay {
             id: interlocks
             shutdownFlowTask: "INTERLOCKS"
-            status: offScreen.hvdConnectorStatus == 1
-                    && offScreen.hvdInterlockStatus == 1
+            status: offScreen.hvdConnectorStatus == 1 && offScreen.hvdInterlockStatus == 1
             highlight: offScreen.selectedFlowIndex == 9
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
@@ -398,38 +422,47 @@ Rectangle {
         }
 
         Arrow {
-            stops: [{
+            stops: [
+                {
                     "x": cpBrb.x + cpBrb.width,
                     "y": cpBrb.y + cpBrb.height / 2
-                }, {
+                },
+                {
                     "x": interlocks.x,
                     "y": interlocks.y + interlocks.height / 2
-                }]
+                }
+            ]
 
             l2: 10
         }
 
         Arrow {
-            stops: [{
+            stops: [
+                {
                     "x": interlocks.x + interlocks.width,
                     "y": interlocks.y + interlocks.height / 2
-                }, {
+                },
+                {
                     "x": tsms.x,
                     "y": tsms.y + tsms.height / 2
-                }]
+                }
+            ]
 
             l2: 10
         }
     }
 
     Arrow {
-        stops: [{
+        stops: [
+            {
                 "x": inertia.x + inertia.width / 2 + botsInertiaContainer.x,
                 "y": inertia.y + inertia.height + botsInertiaContainer.y
-            }, {
+            },
+            {
                 "x": cpBrb.x + cpBrb.width / 2 + cpBrbInterlocksTsmsContainer.x,
                 "y": cpBrb.y + cpBrbInterlocksTsmsContainer.y
-            }]
+            }
+        ]
     }
 
     Rectangle {
@@ -508,9 +541,7 @@ Rectangle {
         anchors.right: cpBrbInterlocksTsmsContainer.left
         anchors.rightMargin: parent.width / 30
         anchors.leftMargin: parent.width / 30
-        source: Theme.currentTheme === "dark"
-                    ? "/qt/qml/content/images/darkNeroLogo.png"
-                    : "/qt/qml/content/images/lightNeroLogo.png"
+        source: Theme.currentTheme === "dark" ? "/qt/qml/content/images/darkNeroLogo.png" : "/qt/qml/content/images/lightNeroLogo.png"
         fillMode: Image.PreserveAspectFit
     }
 

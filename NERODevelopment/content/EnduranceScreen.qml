@@ -28,11 +28,10 @@ Item {
     height: 480
 
     Keys.onPressed: event => {
-                        if (event.key === Qt.Key_Return
-                            || event.key === Qt.Key_Enter) {
-                            enduranceController.enterButtonPressed()
-                        }
-                    }
+        if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
+            enduranceController.enterButtonPressed();
+        }
+    }
 
     ColumnLayout {
         anchors.fill: parent

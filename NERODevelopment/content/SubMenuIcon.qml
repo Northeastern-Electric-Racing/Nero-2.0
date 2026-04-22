@@ -12,8 +12,14 @@ Rectangle {
     property string text: "FLAPPY BIRD"
 
     gradient: Gradient {
-        GradientStop { position: 0.0; color: highlighted ? Theme.iconHighlightedBackground : Theme.iconBackground }
-        GradientStop { position: 1.0; color: highlighted ? Theme.iconHighlightedGradientStop : Theme.iconGradientStop }
+        GradientStop {
+            position: 0.0
+            color: highlighted ? Theme.iconHighlightedBackground : Theme.iconBackground
+        }
+        GradientStop {
+            position: 1.0
+            color: highlighted ? Theme.iconHighlightedGradientStop : Theme.iconGradientStop
+        }
     }
 
     LabelText {

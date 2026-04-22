@@ -26,7 +26,10 @@ Item {
             startX: 47 / 80 * shape2.width
             startY: 32 / 80 * shape2.width
 
-            PathLine { x: 60 / 80 * shape2.width; y: 32 / 80 * shape2.width }
+            PathLine {
+                x: 60 / 80 * shape2.width
+                y: 32 / 80 * shape2.width
+            }
 
             // rounded right corner
             PathQuad {
@@ -36,7 +39,10 @@ Item {
                 controlY: 33.75 / 80 * shape2.width
             }
 
-            PathLine { x: 38 / 80 * shape2.width; y: 69.75 / 80 * shape2.width }
+            PathLine {
+                x: 38 / 80 * shape2.width
+                y: 69.75 / 80 * shape2.width
+            }
 
             // rounded bottom corner
             PathQuad {
@@ -46,8 +52,14 @@ Item {
                 controlY: 73.75 / 80 * shape2.width
             }
 
-            PathLine { x: 33 / 80 * shape2.width; y: 48 / 80 * shape2.width }
-            PathLine { x: 20 / 80 * shape2.width; y: 48 / 80 * shape2.width }
+            PathLine {
+                x: 33 / 80 * shape2.width
+                y: 48 / 80 * shape2.width
+            }
+            PathLine {
+                x: 20 / 80 * shape2.width
+                y: 48 / 80 * shape2.width
+            }
 
             // rounded left corner
             PathQuad {
@@ -57,7 +69,10 @@ Item {
                 controlY: 46.25 / 80 * shape2.width
             }
 
-            PathLine { x: 42 / 80 * shape2.width; y: 10.25 / 80 * shape2.width }
+            PathLine {
+                x: 42 / 80 * shape2.width
+                y: 10.25 / 80 * shape2.width
+            }
 
             // rounded top corner
             PathQuad {
@@ -84,7 +99,10 @@ Item {
             startX: 45 / 80 * shape.width
             startY: 33.75 / 80 * shape.width
 
-            PathLine { x: 60 / 80 * shape.width; y: 33.75 / 80 * shape.width }
+            PathLine {
+                x: 60 / 80 * shape.width
+                y: 33.75 / 80 * shape.width
+            }
 
             // rounded right corner
             PathQuad {
@@ -94,7 +112,10 @@ Item {
                 controlY: 33.75 / 80 * shape.width
             }
 
-            PathLine { x: 38 / 80 * shape.width; y: 69.75 / 80 * shape.width }
+            PathLine {
+                x: 38 / 80 * shape.width
+                y: 69.75 / 80 * shape.width
+            }
 
             // rounded bottom corner
             PathQuad {
@@ -104,8 +125,14 @@ Item {
                 controlY: 73.75 / 80 * shape.width
             }
 
-            PathLine { x: 35 / 80 * shape.width; y: 46.25 / 80 * shape.width }
-            PathLine { x: 20 / 80 * shape.width; y: 46.25 / 80 * shape.width }
+            PathLine {
+                x: 35 / 80 * shape.width
+                y: 46.25 / 80 * shape.width
+            }
+            PathLine {
+                x: 20 / 80 * shape.width
+                y: 46.25 / 80 * shape.width
+            }
 
             // rounded left corner
             PathQuad {
@@ -115,7 +142,10 @@ Item {
                 controlY: 46.25 / 80 * shape.width
             }
 
-            PathLine { x: 42 / 80 * shape.width; y: 10.25 / 80 * shape.width }
+            PathLine {
+                x: 42 / 80 * shape.width
+                y: 10.25 / 80 * shape.width
+            }
 
             // rounded top corner
             PathQuad {

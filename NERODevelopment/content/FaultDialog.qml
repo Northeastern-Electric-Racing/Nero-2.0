@@ -29,7 +29,7 @@ Popup {
 
         Text {
             id: modalTitle
-            color: Theme.inverseForeground
+            color: Theme.blackForeground
             font.pixelSize: dimension / 6
             font.bold: true
             wrapMode: Text.WordWrap
@@ -43,7 +43,7 @@ Popup {
 
         Text {
             id: modalDescription
-            color: Theme.inverseForeground
+            color: Theme.blackForeground
             font.pixelSize: dimension / 11
             wrapMode: Text.WordWrap
             anchors.left: parent.left
@@ -56,12 +56,12 @@ Popup {
     }
 
     function openModal(title, text) {
-        modalTitle.text = title
-        modalDescription.text = text
-        modal.open()
+        modalTitle.text = title;
+        modalDescription.text = text;
+        modal.open();
     }
 
     function closeModal() {
-        modal.close()
+        modal.close();
     }
 }

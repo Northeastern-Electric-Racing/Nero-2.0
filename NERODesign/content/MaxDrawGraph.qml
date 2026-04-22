@@ -18,18 +18,18 @@ Rectangle {
         id: canvas
         anchors.fill: parent
         onPaint: {
-            var ctx = getContext("2d")
-            var centerX = dimension / 2
-            var centerY = dimension / 2
-            var radius = Math.min(dimension, dimension) / 2 - 25
-            var startAngle = -Math.PI / 2
-            var endAngle = startAngle + (value / 300) * 2 * Math.PI
+            var ctx = getContext("2d");
+            var centerX = dimension / 2;
+            var centerY = dimension / 2;
+            var radius = Math.min(dimension, dimension) / 2 - 25;
+            var startAngle = -Math.PI / 2;
+            var endAngle = startAngle + (value / 300) * 2 * Math.PI;
 
-            ctx.beginPath()
-            ctx.arc(centerX, centerY, radius, startAngle, endAngle, false)
-            ctx.strokeStyle = '#14f804'
-            ctx.lineWidth = 0.06 * background.dimension
-            ctx.stroke()
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, radius, startAngle, endAngle, false);
+            ctx.strokeStyle = '#14f804';
+            ctx.lineWidth = 0.06 * background.dimension;
+            ctx.stroke();
         }
     }
 

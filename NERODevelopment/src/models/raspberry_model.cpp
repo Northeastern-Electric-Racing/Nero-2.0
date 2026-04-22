@@ -78,10 +78,12 @@ void RaspberryModel::connectToMQTT() {
       SEGMENTTEMP4,
       MOTORPOWER,
       FANPOWER,
-      SIDEBRBS,
+      EFUSE_SHUTDOWN_ENABLED,
+      EFUSE_SHUTDOWN_FAULTED,
       BMS,
       BSPD,
-      MPU,
+      EFUSE_MC_ENABLED,
+      EFUSE_MC_FAULTED,
       BOTS,
       INERTIA,
       CPBRB,
@@ -108,9 +110,8 @@ void RaspberryModel::connectToMQTT() {
   client_1->connectToHost();
 
   QList<QString> client_2_topics = {
-      FORWARDBUTTON, BACKWARDBUTTON, RIGHTBUTTON, ENTERBUTTON,
-      UPBUTTON,      DOWNBUTTON,     HOMEBUTTON,  MODEINDEX,
-      DIRECTION,
+      FORWARDBUTTON, BACKWARDBUTTON, RIGHTBUTTON, ENTERBUTTON, UPBUTTON,
+      DOWNBUTTON,    HOMEBUTTON,     MODEINDEX,   DIRECTION,
   };
   MqttClient *client_2 =
       new MqttClient(nullptr, client2_port, client_2_topics, mqttHost);
@@ -419,7 +420,7 @@ void RaspberryModel::updateCurrentData() { emit this->onCurrentDataChange(); }
 
 QList<QString> RaspberryModel::getCriticalFaults() {
   QRegularExpression regex(
-      "^(BMS/Faults/Critical/.*|MPU/Fault/Critical/.*)$");
+      "^(BMS/Faults/Critical/.*|VCU/Faults/Critical/.*)$");
 
   QList<QString> faults;
 
@@ -435,7 +436,7 @@ QList<QString> RaspberryModel::getCriticalFaults() {
 
 QList<QString> RaspberryModel::getNonCriticalFaults() {
   QRegularExpression regex(
-      "^(BMS/Faults/Non-Critical/.*|MPU/Fault/Non-Critical/.*)$");
+      "^(BMS/Faults/Non-Critical/.*|VCU/Faults/Non-Critical/.*)$");
 
   QList<QString> faults;
 

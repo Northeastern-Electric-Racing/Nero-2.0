@@ -4,6 +4,7 @@
 #include "app_environment.h"
 #include "controllers/endurancecontroller.h"
 #include "controllers/flappybirdcontroller.h"
+#include "controllers/game2048controller.h"
 #include "controllers/headercontroller.h"
 #include "controllers/homecontroller.h"
 #include "controllers/navigationcontroller.h"

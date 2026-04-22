@@ -13,20 +13,20 @@ Item {
     // onAccepted: print('onAccepted', text)
     function show() {
         keyboard = keyboardComponent.createObject(null, {
-                                                      "password": root.password
-                                                  })
+            "password": root.password
+        });
 
-        var rootObject = null, object = parent // search up the parent chain to find QQuickView::rootObject()
+        var rootObject = null, object = parent; // search up the parent chain to find QQuickView::rootObject()
         while (object) {
             if (object)
-                rootObject = object
-            object = object.parent
+                rootObject = object;
+            object = object.parent;
         }
 
-        keyboard.parent = rootObject
-        keyboard.width = rootObject.width // resize
-        keyboard.height = rootObject.height
-        keyboard.focus = true
+        keyboard.parent = rootObject;
+        keyboard.width = rootObject.width; // resize
+        keyboard.height = rootObject.height;
+        keyboard.focus = true;
     }
 
     // private
@@ -40,13 +40,13 @@ Item {
         target: keyboard
 
         onAccepted: text => {
-                        root.accepted(text) // emit
-                        keyboard.destroy() // hide
-                    }
+            root.accepted(text); // emit
+            keyboard.destroy(); // hide
+        }
 
         onRejected: {
-            root.rejected()
-            keyboard.destroy()
+            root.rejected();
+            keyboard.destroy();
         }
     }
 }
