@@ -129,6 +129,7 @@ signals:
     void runningChanged();
     void frameCounterChanged();
     void statusTextChanged();
+    void escapeRequested();
 
 private slots:
     void onFrameReady(const QImage &frame);

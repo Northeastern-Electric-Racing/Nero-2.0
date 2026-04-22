@@ -55,15 +55,16 @@ extern void D_PostEvent(event_t *ev);
 
 /* ============================================================
  * NERO button values from "Wheel/Buttons/button_id" MQTT topic.
- * These are the raw integer values that arrive on the topic.
- * See raspberry_model.cpp for how these map to button getters.
+ * These are the raw integer values from the wheel PCB hardware.
+ * See the button mapping table for physical button positions.
  * ============================================================ */
-static constexpr int BUTTON_VALUE_LEFT    = 0;   // backward / turn left
-static constexpr int BUTTON_VALUE_RIGHT   = 1;   // right / turn right
-static constexpr int BUTTON_VALUE_DOWN    = 3;   // down / move backward
-static constexpr int BUTTON_VALUE_UP      = 4;   // up / move forward
-static constexpr int BUTTON_VALUE_ENTER   = 5;   // enter / fire+use
-static constexpr int BUTTON_VALUE_RELEASE = 10;  // sentinel — no button held
+static constexpr int BUTTON_VALUE_ESCAPE  = 1;   // button 1 — escape
+static constexpr int BUTTON_VALUE_LEFT    = 2;   // button 2 — turn left
+static constexpr int BUTTON_VALUE_UP      = 4;   // button 4 — move forward
+static constexpr int BUTTON_VALUE_DOWN    = 5;   // button 5 — move backward
+static constexpr int BUTTON_VALUE_ENTER   = 6;   // button 6 — fire+use+menu
+static constexpr int BUTTON_VALUE_RIGHT   = 7;   // button 7 — turn right
+static constexpr int BUTTON_VALUE_RELEASE = -1;  // release sentinel
 
 /* ============================================================
  * Platform bridge — static state for C callbacks
@@ -657,9 +658,6 @@ void DoomController::onDataChanged()
 {
     if (!m_running) return;
 
-    // Read the raw button value directly — do NOT use the consume-on-read
-    // methods (getUpButtonPressed etc.) because those clear the value to 10,
-    // which would break edge detection for release events.
     std::optional<float> raw = m_model->getById(FORWARDBUTTON);
     if (!raw.has_value()) return;
 
@@ -667,6 +665,14 @@ void DoomController::onDataChanged()
 
     // No change — nothing to do
     if (currentValue == m_lastButtonValue) return;
+
+    // Escape button (1) — stop DOOM and go home immediately
+    if (currentValue == BUTTON_VALUE_ESCAPE) {
+        m_lastButtonValue = currentValue;
+        stopGame();
+        emit escapeRequested();
+        return;
+    }
 
     handleButtonValue(currentValue);
     m_lastButtonValue = currentValue;
@@ -713,11 +719,11 @@ void DoomController::handleButtonValue(int value)
 unsigned char DoomController::mapButtonValueToDoomKey(int value)
 {
     switch (value) {
-        case BUTTON_VALUE_UP:    return KEY_UPARROW;    // move forward
-        case BUTTON_VALUE_DOWN:  return KEY_DOWNARROW;  // move backward
-        case BUTTON_VALUE_LEFT:  return KEY_LEFTARROW;  // turn left
-        case BUTTON_VALUE_RIGHT: return KEY_RIGHTARROW; // turn right
-        case BUTTON_VALUE_ENTER: return KEY_ENTER;      // placeholder — handled specially
+        case BUTTON_VALUE_UP:    return KEY_UPARROW;    // button 4 — move forward
+        case BUTTON_VALUE_DOWN:  return KEY_DOWNARROW;  // button 5 — move backward
+        case BUTTON_VALUE_LEFT:  return KEY_LEFTARROW;  // button 2 — turn left
+        case BUTTON_VALUE_RIGHT: return KEY_RIGHTARROW; // button 7 — turn right
+        case BUTTON_VALUE_ENTER: return KEY_ENTER;      // button 6 — handled specially
         default: return 0;
     }
 }

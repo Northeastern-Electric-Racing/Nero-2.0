@@ -144,6 +144,16 @@ Item {
         }
     }
 
+    // When the hardware escape button (button 1) is pressed,
+    // DoomController emits escapeRequested after stopping DOOM.
+    // This navigates back to the home screen.
+    Connections {
+        target: doomController
+        function onEscapeRequested() {
+            navigationController.goHome()
+        }
+    }
+
     Component.onDestruction: {
         if (doomController.running) {
             doomController.stopGame()
