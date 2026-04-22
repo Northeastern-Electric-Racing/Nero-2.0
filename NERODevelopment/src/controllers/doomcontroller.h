@@ -173,10 +173,6 @@ private:
     // registers a tap instead of an infinite hold. Needed because
     // the wheel hardware does not send release events to MQTT.
     QTimer *m_releaseTimer;
-
-    // Tracks when auto-release last fired, to suppress phantom
-    // re-presses from stale MQTT values within a cooldown window.
-    QElapsedTimer m_lastReleaseTime;
 };
 
 #endif // DOOMCONTROLLER_H

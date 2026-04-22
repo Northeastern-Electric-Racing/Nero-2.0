@@ -671,16 +671,19 @@ void DoomController::onNeroButton(const QString &buttonName, bool pressed)
 /* ============================================================
  * Hardware button handling via MQTT
  *
- * The wheel hardware sends button presses to MQTT but does NOT
- * send release events. The MQTT value stays at the pressed button
- * ID until a different button is pressed.
+ * The wheel hardware sends button presses but NOT releases.
+ * The MQTT value stays at the pressed button ID forever.
  *
- * To handle this:
- *   1. On button press: send DOOM keydown, start 100ms timer
- *   2. Timer fires: send DOOM keyup (auto-release), reset state
- *      so the same button can be re-detected
- *   3. Suppress phantom re-presses from stale MQTT values for
- *      200ms after auto-release (cooldown window)
+ * Approach:
+ *   1. Detect value change → send DOOM keydown + start 100ms timer
+ *   2. Timer fires → send DOOM keyup (auto-release)
+ *   3. m_lastButtonValue stays at the button value to prevent
+ *      phantom re-presses from the stale MQTT value
+ *
+ * To press the same button twice: press any other button first,
+ * which changes the MQTT value, then press the original button.
+ * This is a hardware limitation — without release events, we
+ * cannot distinguish a stale value from a new press of the same button.
  *
  * MQTT values (physical button - 1):
  *   0=esc, 1=left, 2=mid-left, 3=up, 4=down, 5=enter, 6=right, 7=mid-right
@@ -695,17 +698,8 @@ void DoomController::onDataChanged()
 
     int currentValue = static_cast<int>(*raw);
 
-    // No change from what we last processed — nothing to do
+    // No change from last processed value — nothing to do
     if (currentValue == m_lastButtonValue) return;
-
-    // Suppress phantom re-presses from stale MQTT values.
-    // After auto-release resets m_lastButtonValue to -1, the stale
-    // MQTT value would look like a "new" press. Ignore it briefly.
-    // Do NOT update m_lastButtonValue here — that would prevent
-    // re-detection of the same button after cooldown expires.
-    if (m_lastReleaseTime.isValid() && m_lastReleaseTime.elapsed() < 200) {
-        return;
-    }
 
     // Escape button (0) — stop DOOM and go home immediately
     if (currentValue == BUTTON_VALUE_ESCAPE) {
@@ -725,7 +719,7 @@ void DoomController::onDataChanged()
         m_lastButtonValue = currentValue;
         m_releaseTimer->start();
     } else {
-        // Release value arrived (if hardware does send them)
+        // Non-button value (release event, if hardware sends one)
         m_releaseTimer->stop();
         releaseCurrentButton();
         m_lastButtonValue = currentValue;
@@ -734,16 +728,16 @@ void DoomController::onDataChanged()
 
 /**
  * Auto-release timer callback.
- * Sends keyup for the currently held button and resets m_lastButtonValue
- * so the same button can be detected again on re-press.
- * Also starts a cooldown window to suppress phantom presses from
- * the stale MQTT value that's still sitting on the topic.
+ * Sends keyup for the currently held button.
+ * Does NOT reset m_lastButtonValue — the stale MQTT value must
+ * not be re-detected as a new press.
  */
 void DoomController::autoRelease()
 {
     releaseCurrentButton();
-    m_lastButtonValue = -1;           // Allow same button to be re-detected
-    m_lastReleaseTime.restart();      // Start cooldown window
+    // m_lastButtonValue intentionally NOT reset.
+    // It stays at the button value so the stale MQTT value
+    // doesn't trigger phantom re-presses.
 }
 
 void DoomController::releaseCurrentButton()
