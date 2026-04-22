@@ -700,10 +700,10 @@ void DoomController::onDataChanged()
 
     // Suppress phantom re-presses from stale MQTT values.
     // After auto-release resets m_lastButtonValue to -1, the stale
-    // MQTT value would look like a "new" press. Ignore it if we're
-    // still within the cooldown window.
+    // MQTT value would look like a "new" press. Ignore it briefly.
+    // Do NOT update m_lastButtonValue here — that would prevent
+    // re-detection of the same button after cooldown expires.
     if (m_lastReleaseTime.isValid() && m_lastReleaseTime.elapsed() < 200) {
-        m_lastButtonValue = currentValue;
         return;
     }
 
