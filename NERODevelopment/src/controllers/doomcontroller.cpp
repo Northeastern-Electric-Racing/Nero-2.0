@@ -55,30 +55,34 @@ extern void D_PostEvent(event_t *ev);
 
 /* ============================================================
  * NERO button values from "Wheel/Buttons/button_id" MQTT topic.
- * These are the raw integer values from the wheel PCB hardware.
- * See the button mapping table for physical button positions.
+ *
+ * MQTT value = physical button number - 1 (0-indexed).
+ * Physical buttons on the wheel PCB:
+ *   Phys 1 (Escape)       → MQTT 0
+ *   Phys 2 (Left)         → MQTT 1
+ *   Phys 3 (Middle Left)  → MQTT 2
+ *   Phys 4 (Up)           → MQTT 3
+ *   Phys 5 (Down)         → MQTT 4
+ *   Phys 6 (Enter)        → MQTT 5
+ *   Phys 7 (Right)        → MQTT 6
+ *   Phys 8 (Middle Right) → MQTT 7
  * ============================================================ */
-static constexpr int BUTTON_VALUE_ESCAPE  = 1;   // button 1 — escape
-static constexpr int BUTTON_VALUE_LEFT    = 2;   // button 2 — turn left
-static constexpr int BUTTON_VALUE_UP      = 4;   // button 4 — move forward
-static constexpr int BUTTON_VALUE_DOWN    = 5;   // button 5 — move backward
-static constexpr int BUTTON_VALUE_ENTER   = 6;   // button 6 — fire+use+menu
-static constexpr int BUTTON_VALUE_RIGHT   = 7;   // button 7 — turn right
+static constexpr int BUTTON_VALUE_ESCAPE       = 0;  // physical 1 — escape
+static constexpr int BUTTON_VALUE_LEFT         = 1;  // physical 2 — turn left
+static constexpr int BUTTON_VALUE_MIDDLE_LEFT  = 2;  // physical 3 — also turn left
+static constexpr int BUTTON_VALUE_UP           = 3;  // physical 4 — move forward
+static constexpr int BUTTON_VALUE_DOWN         = 4;  // physical 5 — move backward
+static constexpr int BUTTON_VALUE_ENTER        = 5;  // physical 6 — fire+use+menu
+static constexpr int BUTTON_VALUE_RIGHT        = 6;  // physical 7 — turn right
+static constexpr int BUTTON_VALUE_MIDDLE_RIGHT = 7;  // physical 8 — also turn right
 
 /**
  * Returns true if the value corresponds to a known DOOM-mapped button.
- * Any value NOT in this set is treated as a release (button let go).
- * This makes release detection robust regardless of whether the
- * release sentinel is -1, 10, 0, or anything else.
+ * Any value NOT in this set (e.g. -1, 10, 255) is treated as a release.
  */
 static bool isKnownDoomButton(int value)
 {
-    return value == BUTTON_VALUE_ESCAPE
-        || value == BUTTON_VALUE_LEFT
-        || value == BUTTON_VALUE_UP
-        || value == BUTTON_VALUE_DOWN
-        || value == BUTTON_VALUE_ENTER
-        || value == BUTTON_VALUE_RIGHT;
+    return value >= 0 && value <= 7;
 }
 
 /* ============================================================
@@ -737,11 +741,13 @@ void DoomController::pressButton(int value)
 unsigned char DoomController::mapButtonValueToDoomKey(int value)
 {
     switch (value) {
-        case BUTTON_VALUE_UP:    return KEY_UPARROW;    // button 4 — move forward
-        case BUTTON_VALUE_DOWN:  return KEY_DOWNARROW;  // button 5 — move backward
-        case BUTTON_VALUE_LEFT:  return KEY_LEFTARROW;  // button 2 — turn left
-        case BUTTON_VALUE_RIGHT: return KEY_RIGHTARROW; // button 7 — turn right
-        case BUTTON_VALUE_ENTER: return KEY_ENTER;      // button 6 — handled specially
+        case BUTTON_VALUE_LEFT:         return KEY_LEFTARROW;   // phys 2 — turn left
+        case BUTTON_VALUE_MIDDLE_LEFT:  return KEY_LEFTARROW;   // phys 3 — also turn left
+        case BUTTON_VALUE_UP:           return KEY_UPARROW;     // phys 4 — move forward
+        case BUTTON_VALUE_DOWN:         return KEY_DOWNARROW;   // phys 5 — move backward
+        case BUTTON_VALUE_ENTER:        return KEY_ENTER;       // phys 6 — handled specially
+        case BUTTON_VALUE_RIGHT:        return KEY_RIGHTARROW;  // phys 7 — turn right
+        case BUTTON_VALUE_MIDDLE_RIGHT: return KEY_RIGHTARROW;  // phys 8 — also turn right
         default: return 0;
     }
 }
