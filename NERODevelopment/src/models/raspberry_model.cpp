@@ -93,7 +93,7 @@ void RaspberryModel::connectToMQTT() {
       HVCNCTR,
       CRITICALFAULTS,
       NONCRITICALFAULTS,
-      LOWVOLTAGESOC,
+      LVVOLTAGE,
 
   };
 
@@ -505,6 +505,6 @@ int RaspberryModel::totalNumberOfOnesIn(float value) {
   return total;
 }
 
-std::optional<float> RaspberryModel::getLowVoltageStateOfCharge() {
-  return this->getById(LOWVOLTAGESOC);
+std::optional<float> RaspberryModel::getLowVoltage() {
+  return this->getById(LVVOLTAGE);
 }

@@ -42,9 +42,7 @@
 // EFUSE_MC_FAULTED
 #define CRITICALFAULTS "BMS/Faults/Critical/#"
 #define NONCRITICALFAULTS "BMS/Faults/Non-Critical/#"
-#define LOWVOLTAGESOC                                                          \
-  "MPU/Sense/SOC" // OUTDATED MPU TOPIC - no equivalent topic exists on VCU as
-                  // of right now.
+#define LVVOLTAGE "VCU/LV/voltage"
 
 /* VCU Topics */
 #define TORQUEPOWER "VCU/CarState/torque_limit_percentage"
