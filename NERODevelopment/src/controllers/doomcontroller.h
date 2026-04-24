@@ -149,11 +149,6 @@ private:
   void releaseCurrentButton();
   void pressButton(int value);
 
-  // Scans buttonNum0Pressed..buttonNum7Pressed and returns the first hit
-  // (0..7) or -1 if none are active. Buttons 8..9 (up/down torque) are
-  // ignored — DOOM doesn't use them.
-  int currentPressedButtonNum();
-
   /** Auto-releases the held key after a short delay */
   void autoRelease();
 

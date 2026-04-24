@@ -32,6 +32,8 @@
 #include <QDir>
 #include <QFile>
 
+#include "../utils/data_type_names.h"
+
 #include <cstdio>
 #include <cstring>
 
@@ -54,22 +56,51 @@ extern void D_PostEvent(event_t *ev);
 /* ============================================================
  * NERO button values from "Wheel/Buttons/button_id" MQTT topic.
  *
- * Button ordinals (0-indexed) match the VCU `button_t` enum in
- * Cerberus-2.0/Core/Inc/u_buttons.h. See raspberry_model.h for the full
- * wheel layout. DOOM only consumes 0..7; 8 (up-torque) and 9 (down-torque)
- * are ignored in-game.
- *
- * Tap buttons (2, 5, 7) send keydown then keyup after 100ms. The other
- * doom-mapped buttons (1, 3, 4, 6) stay held until a different button is
- * pressed. Button 0 (esc) is handled specially — it stops DOOM.
+ * MQTT value = physical button number - 1 (0-indexed).
+ * Physical buttons on the wheel PCB:
+ *   Phys 1 (Escape)       → MQTT 0
+ *   Phys 2 (Left)         → MQTT 1
+ *   Phys 3 (Middle Left)  → MQTT 2
+ *   Phys 4 (Up)           → MQTT 3
+ *   Phys 5 (Down)         → MQTT 4
+ *   Phys 6 (Enter)        → MQTT 5
+ *   Phys 7 (Right)        → MQTT 6
+ *   Phys 8 (Middle Right) → MQTT 7
  * ============================================================ */
+static constexpr int BUTTON_VALUE_ESCAPE = 0; // physical 1 — escape
+static constexpr int BUTTON_VALUE_LEFT = 1;   // physical 2 — turn left
+static constexpr int BUTTON_VALUE_MIDDLE_LEFT =
+    2;                                       // physical 3 — also turn left
+static constexpr int BUTTON_VALUE_UP = 3;    // physical 4 — move forward
+static constexpr int BUTTON_VALUE_DOWN = 4;  // physical 5 — move backward
+static constexpr int BUTTON_VALUE_ENTER = 5; // physical 6 — fire+use+menu
+static constexpr int BUTTON_VALUE_RIGHT = 6; // physical 7 — turn right
+static constexpr int BUTTON_VALUE_MIDDLE_RIGHT =
+    7; // physical 8 — also turn right
+
+/**
+ * Returns true if the value corresponds to a known DOOM-mapped button.
+ * Any value NOT in this set (e.g. -1, 10, 255) is treated as a release.
+ */
 static bool isKnownDoomButton(int value) { return value >= 0 && value <= 7; }
 
+/**
+ * Returns true if the button should be a brief tap (auto-release after timer).
+ * These buttons send keydown then keyup after 100ms:
+ *   - Middle Left (2): small left nudge
+ *   - Middle Right (7): small right nudge
+ *   - Enter (5): shoot once / use once / menu select
+ *
+ * All other buttons are TOGGLE — they stay held until a different
+ * button is pressed:
+ *   - Left (1): continuous turn left
+ *   - Right (6): continuous turn right
+ *   - Up (3): continuous move forward
+ *   - Down (4): continuous move backward
+ */
 static bool isTapButton(int value) {
-  // 2: launch-control-toggle (doubles as left nudge in DOOM)
-  // 5: enter (single-shot shoot/use/select)
-  // 7: traction-control-toggle (doubles as right nudge in DOOM)
-  return value == 2 || value == 5 || value == 7;
+  return value == BUTTON_VALUE_MIDDLE_LEFT ||
+         value == BUTTON_VALUE_MIDDLE_RIGHT || value == BUTTON_VALUE_ENTER;
 }
 
 /* ============================================================
@@ -606,38 +637,22 @@ void DoomController::sendKey(int doomKeyCode, bool pressed) {
  *   0=esc, 1=left, 2=mid-left, 3=up, 4=down, 5=enter, 6=right, 7=mid-right
  * ============================================================ */
 
-int DoomController::currentPressedButtonNum() {
-  if (m_model->buttonNum0Pressed())
-    return 0;
-  if (m_model->buttonNum1Pressed())
-    return 1;
-  if (m_model->buttonNum2Pressed())
-    return 2;
-  if (m_model->buttonNum3Pressed())
-    return 3;
-  if (m_model->buttonNum4Pressed())
-    return 4;
-  if (m_model->buttonNum5Pressed())
-    return 5;
-  if (m_model->buttonNum6Pressed())
-    return 6;
-  if (m_model->buttonNum7Pressed())
-    return 7;
-  return -1;
-}
-
 void DoomController::onDataChanged() {
   if (!m_running)
     return;
 
-  int currentValue = currentPressedButtonNum();
+  std::optional<float> raw = m_model->getById(BUTTONID);
+  if (!raw.has_value())
+    return;
+
+  int currentValue = static_cast<int>(*raw);
 
   // No change from last processed value — nothing to do
   if (currentValue == m_lastButtonValue)
     return;
 
-  // Escape (button 0) — stop DOOM and go home immediately
-  if (currentValue == 0) {
+  // Escape button (0) — stop DOOM and go home immediately
+  if (currentValue == BUTTON_VALUE_ESCAPE) {
     m_releaseTimer->stop();
     releaseCurrentButton();
     m_lastButtonValue = currentValue;
@@ -683,8 +698,7 @@ void DoomController::releaseCurrentButton() {
   if (!isKnownDoomButton(m_lastButtonValue))
     return;
 
-  // Enter (5) fans out to three DOOM keys at once
-  if (m_lastButtonValue == 5) {
+  if (m_lastButtonValue == BUTTON_VALUE_ENTER) {
     sendKey(KEY_ENTER, false);
     sendKey(KEY_FIRE, false);
     sendKey(KEY_USE, false);
@@ -696,7 +710,7 @@ void DoomController::releaseCurrentButton() {
 }
 
 void DoomController::pressButton(int value) {
-  if (value == 5) {
+  if (value == BUTTON_VALUE_ENTER) {
     sendKey(KEY_ENTER, true);
     sendKey(KEY_FIRE, true);
     sendKey(KEY_USE, true);
@@ -713,21 +727,20 @@ void DoomController::pressButton(int value) {
  */
 unsigned char DoomController::mapButtonValueToDoomKey(int value) {
   switch (value) {
-  case 1:
-    return KEY_LEFTARROW; // left
-  case 2:
-    return KEY_LEFTARROW; // launch-control-toggle — also nudges left in DOOM
-  case 3:
-    return KEY_UPARROW; // up-regen (physical up)
-  case 4:
-    return KEY_DOWNARROW; // down-regen (physical down)
-  case 5:
-    return KEY_ENTER; // enter — handled specially in pressButton
-  case 6:
-    return KEY_RIGHTARROW; // right
-  case 7:
-    return KEY_RIGHTARROW; // traction-control-toggle — also nudges right in
-                           // DOOM
+  case BUTTON_VALUE_LEFT:
+    return KEY_LEFTARROW; // phys 2 — turn left
+  case BUTTON_VALUE_MIDDLE_LEFT:
+    return KEY_LEFTARROW; // phys 3 — also turn left
+  case BUTTON_VALUE_UP:
+    return KEY_UPARROW; // phys 4 — move forward
+  case BUTTON_VALUE_DOWN:
+    return KEY_DOWNARROW; // phys 5 — move backward
+  case BUTTON_VALUE_ENTER:
+    return KEY_ENTER; // phys 6 — handled specially
+  case BUTTON_VALUE_RIGHT:
+    return KEY_RIGHTARROW; // phys 7 — turn right
+  case BUTTON_VALUE_MIDDLE_RIGHT:
+    return KEY_RIGHTARROW; // phys 8 — also turn right
   default:
     return 0;
   }
