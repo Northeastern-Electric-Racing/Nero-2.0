@@ -110,8 +110,10 @@ void RaspberryModel::connectToMQTT() {
   client_1->connectToHost();
 
   QList<QString> client_2_topics = {
-      FORWARDBUTTON, BACKWARDBUTTON, RIGHTBUTTON, ENTERBUTTON, UPBUTTON,
-      DOWNBUTTON,    HOMEBUTTON,     MODEINDEX,   DIRECTION,
+      BUTTONID,
+      HOMEBUTTON,
+      MODEINDEX,
+      DIRECTION,
   };
   MqttClient *client_2 =
       new MqttClient(nullptr, client2_port, client_2_topics, mqttHost);
@@ -335,75 +337,118 @@ QList<QString> RaspberryModel::getBmsFault() {
   return faults;
 }
 
-std::optional<bool> RaspberryModel::getForwardButtonPressed() {
-  // std::optional<float> value = this->getById(FORWARDBUTTON);
-
-  // if (value) {
-  //   std::string binary =
-  //   std::bitset<8>(static_cast<int>(*value)).to_string();
-
-  //   return false;
-  // }
-  return std::nullopt;
+bool RaspberryModel::buttonNum0Pressed() {
+  return this->getById(BUTTONID) == 0;
+}
+bool RaspberryModel::buttonNum1Pressed() {
+  return this->getById(BUTTONID) == 1;
+}
+bool RaspberryModel::buttonNum2Pressed() {
+  return this->getById(BUTTONID) == 2;
+}
+bool RaspberryModel::buttonNum3Pressed() {
+  return this->getById(BUTTONID) == 3;
+}
+bool RaspberryModel::buttonNum4Pressed() {
+  return this->getById(BUTTONID) == 4;
+}
+bool RaspberryModel::buttonNum5Pressed() {
+  return this->getById(BUTTONID) == 5;
+}
+bool RaspberryModel::buttonNum6Pressed() {
+  return this->getById(BUTTONID) == 6;
+}
+bool RaspberryModel::buttonNum7Pressed() {
+  return this->getById(BUTTONID) == 7;
+}
+bool RaspberryModel::buttonNum8Pressed() {
+  return this->getById(BUTTONID) == 8;
+}
+bool RaspberryModel::buttonNum9Pressed() {
+  return this->getById(BUTTONID) == 9;
 }
 
-std::optional<bool> RaspberryModel::getBackwardButtonPressed() {
-  std::optional<float> value = this->getById(BACKWARDBUTTON);
-  if (value == 0) {
-    this->setValue(
-        UPBUTTON,
-        10); // 10 is an invalid value so basically clearing the old value
+// Sentinel value written to BUTTONID to latch "this press has been consumed"
+// so the next tick doesn't re-fire on stale MQTT data. 10 is outside the
+// valid 0..9 ordinal range.
+static constexpr float BUTTON_CONSUMED_SENTINEL = 10;
+
+std::optional<bool> RaspberryModel::getEscButtonPressed() {
+  if (buttonNum0Pressed()) {
+    this->setValue(BUTTONID, BUTTON_CONSUMED_SENTINEL);
     return true;
   }
   return std::nullopt;
 }
 
-std::optional<bool> RaspberryModel::getRightButtonPressed() {
-  std::optional<float> value = this->getById(RIGHTBUTTON);
-  if (value == 1) {
-    this->setValue(
-        UPBUTTON,
-        10); // 10 is an invalid value so basically clearing the old value
+std::optional<bool> RaspberryModel::getLeftButtonPressed() {
+  if (buttonNum1Pressed()) {
+    this->setValue(BUTTONID, BUTTON_CONSUMED_SENTINEL);
+    return true;
+  }
+  return std::nullopt;
+}
+
+std::optional<bool> RaspberryModel::getLaunchControlToggleButtonPressed() {
+  if (buttonNum2Pressed()) {
+    this->setValue(BUTTONID, BUTTON_CONSUMED_SENTINEL);
+    return true;
+  }
+  return std::nullopt;
+}
+
+std::optional<bool> RaspberryModel::getUpRegenButtonPressed() {
+  if (buttonNum3Pressed()) {
+    this->setValue(BUTTONID, BUTTON_CONSUMED_SENTINEL);
+    return true;
+  }
+  return std::nullopt;
+}
+
+std::optional<bool> RaspberryModel::getDownRegenButtonPressed() {
+  if (buttonNum4Pressed()) {
+    this->setValue(BUTTONID, BUTTON_CONSUMED_SENTINEL);
     return true;
   }
   return std::nullopt;
 }
 
 std::optional<bool> RaspberryModel::getEnterButtonPressed() {
-  std::optional<float> value = this->getById(ENTERBUTTON);
-  if (value) {
-    if (value == 5) {
-      this->setValue(
-          UPBUTTON,
-          10); // 10 is an invalid value so basically clearing the old value
-      return true;
-    }
+  if (buttonNum5Pressed()) {
+    this->setValue(BUTTONID, BUTTON_CONSUMED_SENTINEL);
+    return true;
   }
   return std::nullopt;
 }
 
-std::optional<bool> RaspberryModel::getUpButtonPressed() {
-  std::optional<float> value = this->getById(UPBUTTON);
-  if (value) {
-    if (value == 4) {
-      this->setValue(
-          UPBUTTON,
-          10); // 10 is an invalid value so basically clearing the old value
-      return true;
-    }
+std::optional<bool> RaspberryModel::getRightButtonPressed() {
+  if (buttonNum6Pressed()) {
+    this->setValue(BUTTONID, BUTTON_CONSUMED_SENTINEL);
+    return true;
   }
   return std::nullopt;
 }
 
-std::optional<bool> RaspberryModel::getDownButtonPressed() {
-  std::optional<float> value = this->getById(DOWNBUTTON);
-  if (value) {
-    if (value == 3) {
-      this->setValue(
-          DOWNBUTTON,
-          10); // 10 is an invalid value so basically clearing the old value
-      return true;
-    }
+std::optional<bool> RaspberryModel::getTractionControlToggleButtonPressed() {
+  if (buttonNum7Pressed()) {
+    this->setValue(BUTTONID, BUTTON_CONSUMED_SENTINEL);
+    return true;
+  }
+  return std::nullopt;
+}
+
+std::optional<bool> RaspberryModel::getUpTorqueButtonPressed() {
+  if (buttonNum8Pressed()) {
+    this->setValue(BUTTONID, BUTTON_CONSUMED_SENTINEL);
+    return true;
+  }
+  return std::nullopt;
+}
+
+std::optional<bool> RaspberryModel::getDownTorqueButtonPressed() {
+  if (buttonNum9Pressed()) {
+    this->setValue(BUTTONID, BUTTON_CONSUMED_SENTINEL);
+    return true;
   }
   return std::nullopt;
 }
