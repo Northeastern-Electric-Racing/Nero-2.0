@@ -17,15 +17,9 @@ const std::vector<Item> &getPages() {
       {"DOOM", Type::SubPage, nullptr, "DoomView.qml", nullptr},
       {"THEMES", Type::Category, "themes.png", nullptr, nullptr},
       {"LIGHT", Type::SubAction, nullptr, nullptr,
-       [](NavigationController *c) {
-         emit c->themeChanged("light");
-         c->collapse();
-       }},
+       [](NavigationController *c) { emit c->themeChanged("light"); }},
       {"DARK", Type::SubAction, nullptr, nullptr,
-       [](NavigationController *c) {
-         emit c->themeChanged("dark");
-         c->collapse();
-       }},
+       [](NavigationController *c) { emit c->themeChanged("dark"); }},
       {"EXIT", Type::Action, "exit.png", nullptr,
        [](NavigationController *c) { emit c->exitRequested(); }},
   };
