@@ -220,5 +220,9 @@ void NavigationController::buttonUpdate() {
       leftButtonPressed();
     if (m_model->getRightButtonPressed() == true)
       rightButtonPressed();
+    if (m_model->getUpRegenButtonPressed() == true)
+      upButtonPressed();
+    if (m_model->getDownRegenButtonPressed() == true)
+      downButtonPressed();
   }
 }
