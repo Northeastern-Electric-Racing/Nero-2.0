@@ -19,7 +19,20 @@ Rectangle {
     property int minY: 40
     property int maxY: 440
 
-    property var snakeBody: [{"x": 300, "y": 300}, {"x": 280, "y": 300}, {"x": 260, "y": 300}]
+    property var snakeBody: [
+        {
+            "x": 300,
+            "y": 300
+        },
+        {
+            "x": 280,
+            "y": 300
+        },
+        {
+            "x": 260,
+            "y": 300
+        }
+    ]
     property int segmentSize: 20
     property string direction: "right"
 

@@ -21,12 +21,12 @@ Item {
     property var dummyData: debugGraphController.graphData
 
     onDummyDataChanged: {
-        console.log(maxX)
-        series.clear()
+        console.log(maxX);
+        series.clear();
     }
 
     onVisibleChanged: {
-        debugGraphController.setTitle(chartTitle)
+        debugGraphController.setTitle(chartTitle);
     }
     ChartView {
         anchors.fill: parent
@@ -72,7 +72,7 @@ Item {
         model: dummyData
         delegate: Item {
             Component.onCompleted: {
-                series.append(modelData.x, modelData.y)
+                series.append(modelData.x, modelData.y);
             }
         }
     }

@@ -46,13 +46,9 @@ docker compose -f compose.nero-dev.yml logs -f
 docker ps | grep nero
 ```
 
-### Installing Prettier
+### Formatting
 
-We use clang-format for formatting our files
-
-Ensure that the Beautifier plugin is installed in your Qt Creator. You can check and install plugins by going to “Help” > “About Plugins” and then enabling the “Beautifier” plugin.
-
-Note: Enable the Beautifier plugin to use it. Since Qt Creator 10.0.0, the ClangFormat plugin is enabled by default. Select Preferences > C++ > Formatting mode > Disable to turn off ClangFormat if you enable Beautifier because combining them can lead to unexpected results.
+We use clang-format and QML format for formatting our files
 
 #### Mac
 
@@ -79,23 +75,42 @@ Click the "New" button and add the path to the bin directory of your LLVM instal
 Click OK to close all the windows.
 
 Type clang-format --version and press Enter. You should see the version information for clang-format if the installation was successful.
+### Running Formats
+#### Mac/Linux Format C++ files
+```bash
+git ls-files "*.cpp" "*.h" ":!deps/*" | xargs clang-format -i
+```
+#### Mac/Linux Format QML files
+```bash
+git ls-files "*.qml" ":!deps/*" | xargs ~/Qt/6.8.3/macos/bin/qmlformat -i
+```
+#### Windows Format C++ files
+```bash
+for /f %f in ('git ls-files "*.cpp" "*.h" ":!deps/*"') do clang-format -i "%f"
+```
+#### Windows Format QML files
+```bash
+for /f %f in ('git ls-files "*.qml" ":!deps/*"') do C:\Qt\6.8.3\mingw_64\bin\qmlformat.exe -i "%f"
+```
 
-### Linking Clang-Format to Qt Creator
+## Button Layout
 
-With Qt Creator open, select preferences from under the Qt Creator tab in the top menu bar
+MQTT topic `Wheel/Buttons/button_id` carries the 0-indexed button ordinal,
+matching the VCU `button_t` enum in `Cerberus-2.0/Core/Inc/u_buttons.h`.
 
-Select the beautifer tab (Should have a diamond icon)
+| 0 | ESC                     |
+| 1 | LEFT                    |
+| 2 | LAUNCH_CONTROL_TOGGLE   |
+| 3 | UP_REGEN                |
+| 4 | DOWN_REGEN              |
+| 5 | ENTER                   |
+| 6 | RIGHT                   |
+| 7 | TRACTION_CONTROL_TOGGLE |
+| 8 | UP_TORQUE               |
+| 9 | DOWN_TORQUE             |
 
-Under the general tab check the box for automatic formatting on save
-
-Select Clang-format as the tool
-
-<img width="1098" alt="Screen Shot 2023-08-03 at 8 33 27 AM" src="https://github.com/Northeastern-Electric-Racing/Nero-2.0/assets/113635669/dc179628-2a80-47cd-8dcd-47f5a6815189">
-
-Now under the Clang Format tab Set the path to where you installed your clang-format command
-You can figure out the file directory by running `which clang-format`
-
-Now you can edit a file and save it to make sure it works
+Confluence reference (silkscreen is 1-indexed; wire = silkscreen − 1):
+https://nerdocs.atlassian.net/wiki/spaces/NER/pages/1526988828/Button+IO+25
 
 ### Testing out Enviornment Variables (Locally)
 

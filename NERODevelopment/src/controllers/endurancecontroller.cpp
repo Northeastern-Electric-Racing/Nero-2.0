@@ -10,9 +10,7 @@ EnduranceController::EnduranceController(Model *model, QObject *parent)
   m_updateTimer->setInterval(1);
 }
 
-int EnduranceController::currentMaxTorque() const {
-  return m_currentMaxTorque;
-}
+int EnduranceController::currentMaxTorque() const { return m_currentMaxTorque; }
 void EnduranceController::setCurrentMaxTorque(int torque) {
   if (torque != m_currentMaxTorque) {
     m_currentMaxTorque = torque;

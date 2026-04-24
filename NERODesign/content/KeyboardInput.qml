@@ -22,8 +22,8 @@ Rectangle {
 
     onSelectedChanged: {
         if (selected) {
-            textInput.focus = true
-            keyboardController.show()
+            textInput.focus = true;
+            keyboardController.show();
         }
     }
 
@@ -60,9 +60,9 @@ Rectangle {
         password: root.password
 
         onAccepted: text => {
-                        textInput.text = text
-                        root.accepted(text) // emit
-                    }
+            textInput.text = text;
+            root.accepted(text); // emit
+        }
 
         onRejected: root.rejected()
     }

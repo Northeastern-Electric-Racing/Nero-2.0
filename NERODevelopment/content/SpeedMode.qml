@@ -93,6 +93,8 @@ Item {
                     valueFontSize: speedMode.valueFontSize
                     labelFontSize: speedMode.labelFontSize
                     regen: true
+                    unit: "A"
+                    unitAnchorBottom: true
                 }
 
                 ThermometerValueComponent {

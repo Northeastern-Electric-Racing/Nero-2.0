@@ -8,8 +8,7 @@ Rectangle {
     property int maxValue: 100
     property int fillMargin: height / 20
 
-    property string fillColor: battery.value > 70 ? Theme.goodStatus : battery.value
-                    > 40 ? Theme.cautionStatus : Theme.criticalStatus
+    property string fillColor: battery.value > 70 ? Theme.goodStatus : battery.value > 40 ? Theme.cautionStatus : Theme.criticalStatus
     width: height / 2
     color: "transparent"
 

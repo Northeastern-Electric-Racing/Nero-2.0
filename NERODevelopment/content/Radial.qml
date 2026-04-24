@@ -49,15 +49,9 @@ Item {
 
         property real centerX: ring.width / 2
         property real centerY: ring.height / 2
-        property real ringRadius: Math.sqrt(
-                                      Math.pow(
-                                          ring.height - gauge.verticalPadding * 2,
-                                          2) + Math.pow(
-                                          ring.width - gauge.horizontalPadding * 2,
-                                          2)) / 3
+        property real ringRadius: Math.sqrt(Math.pow(ring.height - gauge.verticalPadding * 2, 2) + Math.pow(ring.width - gauge.horizontalPadding * 2, 2)) / 3
         property real startAngle: Math.PI / 2
-        property real rawStep: ((gauge.value - gauge.minValue)
-                                / (gauge.maxValue - gauge.minValue)) * 2 * Math.PI
+        property real rawStep: ((gauge.value - gauge.minValue) / (gauge.maxValue - gauge.minValue)) * 2 * Math.PI
         property real clampedStep: Math.min(rawStep, 2 * Math.PI - 0.001)
         property bool arcVisible: clampedStep > 0.001
         property bool largeArc: clampedStep > Math.PI
@@ -66,11 +60,11 @@ Item {
         property real innerR: ringRadius - gauge.outerStrokeWidth / 2
 
         function polarX(r, angle) {
-            return centerX + r * Math.cos(angle)
+            return centerX + r * Math.cos(angle);
         }
 
         function polarY(r, angle) {
-            return centerY + r * Math.sin(angle)
+            return centerY + r * Math.sin(angle);
         }
 
         ShapePath {
@@ -79,10 +73,18 @@ Item {
             strokeWidth: -1
 
             fillGradient: LinearGradient {
-                x1: 0; y1: 0
-                x2: ring.width; y2: 0
-                GradientStop { position: 0.0; color: Theme.fillGradientStop }
-                GradientStop { position: 1.0; color: gauge.color }
+                x1: 0
+                y1: 0
+                x2: ring.width
+                y2: 0
+                GradientStop {
+                    position: 0.0
+                    color: Theme.fillGradientStop
+                }
+                GradientStop {
+                    position: 1.0
+                    color: gauge.color
+                }
             }
 
             startX: ring.polarX(ring.outerR, ring.startAngle)

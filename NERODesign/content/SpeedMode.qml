@@ -18,7 +18,7 @@ Item {
     property int currentSpeed: speedController.currentSpeed
     property int currentDraw: speedController.current
 
-    Keys.onPressed: (event) => {
+    Keys.onPressed: event => {
         if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
             speedController.enterButtonPressed();
         }
@@ -44,8 +44,7 @@ Item {
         height: speedMode.height * 0.12
         text: speedMode.tractionControlStatus ? "TRACTION CONTROL - ON" : "TRACTION CONTROL - OFF"
         color: "#14ff00"
-        font.pixelSize: Math.min(speedMode.height * 0.09,
-                                 speedMode.width * 0.06)
+        font.pixelSize: Math.min(speedMode.height * 0.09, speedMode.width * 0.06)
         font.bold: true
     }
 
@@ -59,8 +58,7 @@ Item {
         height: speedMode.height * 0.1
         text: "VEHICLE INFO"
         color: "white"
-        font.pixelSize: Math.min(speedMode.height * 0.06,
-                                 speedMode.width * 0.035)
+        font.pixelSize: Math.min(speedMode.height * 0.06, speedMode.width * 0.035)
         font.bold: true
     }
 
@@ -74,8 +72,7 @@ Item {
         height: speedMode.height * 0.1
         text: "PERFORMANCE INFO"
         color: "white"
-        font.pixelSize: Math.min(speedMode.height * 0.06,
-                                 speedMode.width * 0.035)
+        font.pixelSize: Math.min(speedMode.height * 0.06, speedMode.width * 0.035)
         font.bold: true
     }
 

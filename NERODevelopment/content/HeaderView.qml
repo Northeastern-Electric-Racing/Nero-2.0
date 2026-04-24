@@ -12,30 +12,24 @@ Item {
     property string modeTitle: ""
 
     Timer {
-        id: timer
+        id: autoCloseTimer
+        interval: 3000
+        repeat: false
+        onTriggered: faultDialog.close()
     }
 
-    function delay(delayTime, cb) {
-        timer.interval = delayTime
-        timer.repeat = false
-        timer.triggered.connect(cb)
-        timer.start()
-    }
-
-    onCriticalFaultsChanged: {
-        if (criticalFaults.length > 0) {
-            faultDialog.openModal("Critical Faults", criticalFaults.join("\n"))
-            delay(3000, faultDialog.closeModal)
+    function refreshFaultDialog() {
+        if (criticalFaults.length === 0 && nonCriticalFaults.length === 0) {
+            faultDialog.close();
+            autoCloseTimer.stop();
+            return;
         }
+        faultDialog.open();
+        autoCloseTimer.restart();
     }
 
-    onNonCriticalFaultsChanged: {
-        if (nonCriticalFaults.length > 0) {
-            faultDialog.openModal("Non Critical Faults",
-                                  nonCriticalFaults.join("\n"))
-            delay(3000, faultDialog.closeModal)
-        }
-    }
+    onCriticalFaultsChanged: refreshFaultDialog()
+    onNonCriticalFaultsChanged: refreshFaultDialog()
 
     NonCriticalWarning {
         id: nonCriticalWarning
@@ -69,5 +63,7 @@ Item {
     FaultDialog {
         id: faultDialog
         dimension: 300
+        criticalList: criticalFaults
+        nonCriticalList: nonCriticalFaults
     }
 }

@@ -14,17 +14,12 @@ const std::vector<Item> &getPages() {
       {"FLAPPY BIRD", Type::SubPage, nullptr, "FlappyBird.qml", nullptr},
       {"SNAKE", Type::SubPage, nullptr, "Snake.qml", nullptr},
       {"2048", Type::SubPage, nullptr, "Game2048.qml", nullptr},
+      {"DOOM", Type::SubPage, nullptr, "DoomView.qml", nullptr},
       {"THEMES", Type::Category, "themes.png", nullptr, nullptr},
       {"LIGHT", Type::SubAction, nullptr, nullptr,
-       [](NavigationController *c) {
-         emit c->themeChanged("light");
-         c->collapse();
-       }},
+       [](NavigationController *c) { emit c->themeChanged("light"); }},
       {"DARK", Type::SubAction, nullptr, nullptr,
-       [](NavigationController *c) {
-         emit c->themeChanged("dark");
-         c->collapse();
-       }},
+       [](NavigationController *c) { emit c->themeChanged("dark"); }},
       {"EXIT", Type::Action, "exit.png", nullptr,
        [](NavigationController *c) { emit c->exitRequested(); }},
   };
@@ -114,14 +109,24 @@ QVariantList NavigationController::getChildrenOf(int parent) const {
 void NavigationController::moveNext() {
   int pos = m_navOrder.indexOf(m_selected);
   if (pos + 1 < m_navOrder.size()) {
-    setSelectedIndex(m_navOrder[pos + 1]);
+    int next = m_navOrder[pos + 1];
+    if (m_expanded >= 0 && Menu::isSubItem(m_selected) &&
+        !Menu::isSubItem(next)) {
+      return;
+    }
+    setSelectedIndex(next);
   }
 }
 
 void NavigationController::movePrev() {
   int pos = m_navOrder.indexOf(m_selected);
   if (pos > 0) {
-    setSelectedIndex(m_navOrder[pos - 1]);
+    int prev = m_navOrder[pos - 1];
+    if (m_expanded >= 0 && Menu::isSubItem(m_selected) &&
+        !Menu::isSubItem(prev)) {
+      return;
+    }
+    setSelectedIndex(prev);
   }
 }
 
@@ -187,6 +192,8 @@ void NavigationController::executeAction(int i) {
 void NavigationController::enterButtonPressed() { activate(); }
 void NavigationController::downButtonPressed() { moveNext(); }
 void NavigationController::upButtonPressed() { movePrev(); }
+void NavigationController::leftButtonPressed() { movePrev(); }
+void NavigationController::rightButtonPressed() { moveNext(); }
 void NavigationController::homeButtonPressed() { goHome(); }
 
 void NavigationController::buttonUpdate() {
@@ -209,9 +216,13 @@ void NavigationController::buttonUpdate() {
   if (!isPageActive()) {
     if (m_model->getEnterButtonPressed() == true)
       enterButtonPressed();
-    if (m_model->getDownButtonPressed() == true)
-      downButtonPressed();
-    if (m_model->getUpButtonPressed() == true)
+    if (m_model->getLeftButtonPressed() == true)
+      leftButtonPressed();
+    if (m_model->getRightButtonPressed() == true)
+      rightButtonPressed();
+    if (m_model->getUpRegenButtonPressed() == true)
       upButtonPressed();
+    if (m_model->getDownRegenButtonPressed() == true)
+      downButtonPressed();
   }
 }

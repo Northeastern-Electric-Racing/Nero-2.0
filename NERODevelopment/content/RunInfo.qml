@@ -17,15 +17,15 @@ Item {
     property bool vertical: false
 
     function formatTime(milliseconds) {
-        var minutes = Math.floor(milliseconds / 60000)
-        var seconds = Math.floor((milliseconds % 60000) / 1000)
-        var ms = Math.trunc(milliseconds % 1000 / 10)
+        var minutes = Math.floor(milliseconds / 60000);
+        var seconds = Math.floor((milliseconds % 60000) / 1000);
+        var ms = Math.trunc(milliseconds % 1000 / 10);
 
-        var formattedMinutes = minutes > 0 ? minutes + ":" : ""
-        var formattedSeconds = seconds + ":"
-        var formattedMs = ms + ""
+        var formattedMinutes = minutes > 0 ? minutes + ":" : "";
+        var formattedSeconds = seconds + ":";
+        var formattedMs = ms + "";
 
-        return formattedMinutes + formattedSeconds + formattedMs
+        return formattedMinutes + formattedSeconds + formattedMs;
     }
 
     Rectangle {
