@@ -118,7 +118,6 @@ void NavigationController::moveNext() {
     int next = m_navOrder[pos + 1];
     if (m_expanded >= 0 && Menu::isSubItem(m_selected) &&
         !Menu::isSubItem(next)) {
-      collapse();
       return;
     }
     setSelectedIndex(next);
@@ -131,7 +130,6 @@ void NavigationController::movePrev() {
     int prev = m_navOrder[pos - 1];
     if (m_expanded >= 0 && Menu::isSubItem(m_selected) &&
         !Menu::isSubItem(prev)) {
-      collapse();
       return;
     }
     setSelectedIndex(prev);
