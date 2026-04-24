@@ -28,18 +28,15 @@ void OffViewController::update() {
     setAttributeStatus(SHUTDOWN_EFUSE,
                        static_cast<int>(AttributeStatus::FAULTED));
   } else if (shutdownEnabled && *shutdownEnabled == 1) {
-    setAttributeStatus(SHUTDOWN_EFUSE,
-                       static_cast<int>(AttributeStatus::GOOD));
+    setAttributeStatus(SHUTDOWN_EFUSE, static_cast<int>(AttributeStatus::GOOD));
   } else {
-    setAttributeStatus(SHUTDOWN_EFUSE,
-                       static_cast<int>(AttributeStatus::OFF));
+    setAttributeStatus(SHUTDOWN_EFUSE, static_cast<int>(AttributeStatus::OFF));
   }
 
   std::optional<float> mcFaulted = this->m_model->getById(EFUSE_MC_FAULTED);
   std::optional<float> mcEnabled = this->m_model->getById(EFUSE_MC_ENABLED);
   if (mcFaulted && *mcFaulted == 1) {
-    setAttributeStatus(MC_EFUSE,
-                       static_cast<int>(AttributeStatus::FAULTED));
+    setAttributeStatus(MC_EFUSE, static_cast<int>(AttributeStatus::FAULTED));
   } else if (mcEnabled && *mcEnabled == 1) {
     setAttributeStatus(MC_EFUSE, static_cast<int>(AttributeStatus::GOOD));
   } else {
