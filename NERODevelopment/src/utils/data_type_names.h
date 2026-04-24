@@ -74,7 +74,7 @@
 #define MODEINDEX                                                              \
   "VCU/CarState/nero_index" // '0' = OFF, '1' = PIT, '2' = REVERSE, '3' =
                             // PERFORMANCE, '4' = EFFICIENCY, '5' = GAMES, '6' =
-                            // EXIT
+                            // THEMES, '7' = EXIT
 #define MOTORPOWER                                                             \
   "VCU/eFuses/MC/Current" // Current (A) flowing through motor controller eFuse.
 #define FANPOWER                                                               \
