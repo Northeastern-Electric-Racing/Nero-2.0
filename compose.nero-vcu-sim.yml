@@ -1,0 +1,37 @@
+name: nero-2-vcu-sim
+
+# VCU-only sim stack. Calypso's `simulate` subcommand (on branch
+# 292-local-testing, built at ../../../firmware/Calypso) publishes random
+# values for every generated sim component, driving all of the VCU-facing
+# topics NERO's client_2 subscribes to. Manual button injection is done via
+# the separate `manual-sim` binary — point it at localhost:1882 and use the
+# keymap at Calypso/manual_sim_buttons.keymap.json.
+
+services:
+  siren-vcu:
+    container_name: nero-siren-vcu
+    image: eclipse-mosquitto:latest
+    ports:
+      - "1883:1883"
+    volumes:
+      - ./dev-config/mosquitto.conf:/mosquitto/config/mosquitto.conf:ro
+
+  # Second broker for NERO's client_2 (BUTTONID, HOMEBUTTON, MODEINDEX,
+  # DIRECTION). Listens on 1882 inside and outside so the Calypso sim can
+  # target `siren-buttons:1882` directly.
+  siren-buttons:
+    container_name: nero-siren-buttons
+    image: eclipse-mosquitto:latest
+    ports:
+      - "1882:1882"
+    volumes:
+      - ./dev-config/mosquitto-1882.conf:/mosquitto/config/mosquitto.conf:ro
+
+  calypso-vcu-sim:
+    container_name: nero-calypso-vcu-sim
+    build: ../../../firmware/Calypso
+    depends_on:
+      - siren-buttons
+    environment:
+      - CALYPSO_SIREN_HOST_URL=siren-buttons:1882
+    command: ["simulate"]
