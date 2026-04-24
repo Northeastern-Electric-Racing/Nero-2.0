@@ -5,3 +5,6 @@
 [submodule "deps/protobuf"]
 	path = deps/protobuf
 	url = https://github.com/protocolbuffers/protobuf
+[submodule "NERODevelopment/src/third_party/doomgeneric"]
+	path = NERODevelopment/src/third_party/doomgeneric
+	url = https://github.com/ozkl/doomgeneric.git

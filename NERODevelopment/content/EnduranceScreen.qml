@@ -30,6 +30,8 @@ Item {
     Keys.onPressed: event => {
         if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
             enduranceController.enterButtonPressed();
+        } else if (event.key === Qt.Key_Right) {
+            headerController.toggleFaultAlerts();
         }
     }
 

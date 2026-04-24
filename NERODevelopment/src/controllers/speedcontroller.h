@@ -69,6 +69,7 @@ signals:
   void currentDischargeChanged(float);
   void maxCurrentDischargeChanged(float);
   void regenChanged(float);
+  void toggleFaultAlertsRequested();
 
 public slots:
   void setTractionControl(bool);
@@ -87,6 +88,7 @@ public slots:
   void setRegen(float);
 
   void enterButtonPressed() override;
+  void rightButtonPressed() override;
   void updateCurrentTime();
 
   void update();

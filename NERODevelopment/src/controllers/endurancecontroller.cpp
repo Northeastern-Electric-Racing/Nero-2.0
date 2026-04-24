@@ -140,6 +140,10 @@ void EnduranceController::enterButtonPressed() {
   }
 }
 
+void EnduranceController::rightButtonPressed() {
+  emit toggleFaultAlertsRequested();
+}
+
 void EnduranceController::updateCurrentTime() {
   if (m_timerRunning) {
     setCurrentTime(static_cast<int>(m_timer.elapsed()));

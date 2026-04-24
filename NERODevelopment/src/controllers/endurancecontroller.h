@@ -53,6 +53,7 @@ signals:
   void currentTimeChanged(int);
   void fastestTimeChanged(int);
   void lastTimeChanged(int);
+  void toggleFaultAlertsRequested();
 
 public slots:
   void setCurrentMaxTorque(int);
@@ -67,6 +68,7 @@ public slots:
   void setLastTime(int);
 
   void enterButtonPressed() override;
+  void rightButtonPressed() override;
   void updateCurrentTime();
 
 private:
