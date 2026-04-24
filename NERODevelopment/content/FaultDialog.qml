@@ -60,7 +60,7 @@ Popup {
                 delegate: Text {
                     required property string modelData
                     text: modelData
-                    color: Theme.accentGreen
+                    color: Theme.accentBlue
                     font.pixelSize: modal.dimension / 11
                     wrapMode: Text.WordWrap
                     width: parent.width
