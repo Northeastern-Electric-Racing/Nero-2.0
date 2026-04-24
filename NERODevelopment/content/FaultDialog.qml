@@ -1,12 +1,14 @@
 import QtQuick
 import QtQuick.Controls
-import Qt5Compat.GraphicalEffects
 import NERO
 
 Popup {
     id: modal
     property int dimension: 500
     property int offset: (modal.width * .02)
+    property var criticalList: []
+    property var nonCriticalList: []
+
     focus: false
     modal: true
     width: dimension * 2
@@ -27,41 +29,43 @@ Popup {
         color: Theme.popoverBackground
         radius: 20
 
-        Text {
-            id: modalTitle
-            color: Theme.blackForeground
-            font.pixelSize: dimension / 6
-            font.bold: true
-            wrapMode: Text.WordWrap
-            width: (parent.width - modalTitle.x) - modal.offset
-            anchors.top: parent.top
-            anchors.left: parent.left
-            anchors.right: parent.right
-            anchors.leftMargin: 5
-            anchors.topMargin: 5
+        Column {
+            anchors.fill: parent
+            anchors.margins: 5
+            spacing: 4
+
+            Text {
+                text: "Faults"
+                color: Theme.blackForeground
+                font.pixelSize: modal.dimension / 6
+                font.bold: true
+                wrapMode: Text.WordWrap
+                width: parent.width
+            }
+
+            Repeater {
+                model: modal.criticalList
+                delegate: Text {
+                    required property string modelData
+                    text: modelData
+                    color: Theme.criticalStatus
+                    font.pixelSize: modal.dimension / 11
+                    wrapMode: Text.WordWrap
+                    width: parent.width
+                }
+            }
+
+            Repeater {
+                model: modal.nonCriticalList
+                delegate: Text {
+                    required property string modelData
+                    text: modelData
+                    color: Theme.accentBlue
+                    font.pixelSize: modal.dimension / 11
+                    wrapMode: Text.WordWrap
+                    width: parent.width
+                }
+            }
         }
-
-        Text {
-            id: modalDescription
-            color: Theme.blackForeground
-            font.pixelSize: dimension / 11
-            wrapMode: Text.WordWrap
-            anchors.left: parent.left
-            anchors.right: parent.right
-            anchors.bottom: parent.bottom
-            anchors.top: modalTitle.bottom
-            anchors.leftMargin: 5
-            anchors.topMargin: 5
-        }
-    }
-
-    function openModal(title, text) {
-        modalTitle.text = title;
-        modalDescription.text = text;
-        modal.open();
-    }
-
-    function closeModal() {
-        modal.close();
     }
 }
