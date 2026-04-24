@@ -93,6 +93,34 @@ for /f %f in ('git ls-files "*.cpp" "*.h" ":!deps/*"') do clang-format -i "%f"
 for /f %f in ('git ls-files "*.qml" ":!deps/*"') do C:\Qt\6.8.3\mingw_64\bin\qmlformat.exe -i "%f"
 ```
 
+## Button Layout
+
+The wheel PCB publishes the currently-pressed button as a single int on MQTT
+topic `Wheel/Buttons/button_id` (0-indexed). The ordinal matches the VCU-side
+`button_t` enum in `Cerberus-2.0/Core/Inc/u_buttons.h` — the two must stay in
+sync.
+
+| Wire value | Firmware name             | Menu role   | NERO handler                            |
+|-----------:|---------------------------|-------------|-----------------------------------------|
+| 0          | `BUTTON_ESC`              | home        | `getEscButtonPressed`                   |
+| 1          | `BUTTON_LEFT`             | menu left   | `getLeftButtonPressed`                  |
+| 2          | `BUTTON_LAUNCH_CONTROL_TOGGLE` | —      | `getLaunchControlToggleButtonPressed`   |
+| 3          | `BUTTON_UP_REGEN`         | menu up     | `getUpRegenButtonPressed`               |
+| 4          | `BUTTON_DOWN_REGEN`       | menu down   | `getDownRegenButtonPressed`             |
+| 5          | `BUTTON_ENTER`            | select      | `getEnterButtonPressed`                 |
+| 6          | `BUTTON_RIGHT`            | menu right  | `getRightButtonPressed`                 |
+| 7          | `BUTTON_TRACTION_CONTROL_TOGGLE` | —    | `getTractionControlToggleButtonPressed` |
+| 8          | `BUTTON_UP_TORQUE`        | —           | `getUpTorqueButtonPressed`              |
+| 9          | `BUTTON_DOWN_TORQUE`      | —           | `getDownTorqueButtonPressed`            |
+
+`RaspberryModel` also exposes non-consuming primitives `buttonNum0Pressed` …
+`buttonNum9Pressed` that each return `true` iff the current button_id matches
+that ordinal. DOOM uses those directly so it can do its own press/release edge
+detection.
+
+Reference (silkscreen numbers on Confluence are 1-indexed — wire value is
+silkscreen − 1): https://nerdocs.atlassian.net/wiki/spaces/NER/pages/1526988828/Button+IO+25
+
 ### Testing out Enviornment Variables (Locally)
 
 Go into Projects, go into Run, go into Enviornment, and add variables named `ClIENT1_PORT` and `CLIENT2_PORT`.

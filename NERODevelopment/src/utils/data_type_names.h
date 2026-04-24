@@ -21,24 +21,25 @@
 #define MINCELLVOLTAGECELL "BMS/Cells/Volts_Low_Cell"
 #define AVECELLTEMP "BMS/Status/Temp_Average"
 #define AVECELLVOLTAGE "BMS/Cells/Volts_Avg_Value"
-// #define TRACTIONCONTROL "MPU/State/LaunchControl" // OUTDATED - see LAUNCHCONTROL and TRACTIONCONTROL
+// #define TRACTIONCONTROL "MPU/State/LaunchControl" // OUTDATED - see
+// LAUNCHCONTROL and TRACTIONCONTROL
 #define INVERTERTEMP "DTI/Temps/Controller_Temperature"
 #define BMSSTATE "BMS/Status/State"
 #define BMSFAULT "BMS/Faults/Critical/#"
 #define DCL "BMS/Commands/Max_DC_Current_Target"
 #define CCL "BMS/Commands/Max_DC_Brake_Current_Target"
-#define FORWARDBUTTON "Wheel/Buttons/button_id"
-#define BACKWARDBUTTON "Wheel/Buttons/button_id"
-#define RIGHTBUTTON "Wheel/Buttons/button_id"
-#define ENTERBUTTON "Wheel/Buttons/button_id"
-#define UPBUTTON "Wheel/Buttons/button_id"
-#define DOWNBUTTON "Wheel/Buttons/button_id"
+// Single wheel-button topic. The int payload is a 0-indexed button ordinal
+// (0..9) matching the VCU-side `button_t` enum in
+// Cerberus-2.0/Core/Inc/u_buttons.h. See raspberry_model.h for the full layout.
+#define BUTTONID "Wheel/Buttons/button_id"
 #define SEGMENTTEMP1 "BMS/Segment_Temp/1"
 #define SEGMENTTEMP2 "BMS/Segment_Temp/2"
 #define SEGMENTTEMP3 "BMS/Segment_Temp/3"
 #define SEGMENTTEMP4 "BMS/Segment_Temp/4"
-// #define SIDEBRBS "MPU/Fuses/SD_TO_BRB_FUSE_STAT" // OUTDATED - see EFUSE_SHUTDOWN_ENABLED and EFUSE_SHUTDOWN_FAULTED
-// #define MPU "MPU/Shutdown/MC_STAT" // OUTDATED - see EFUSE_MC_ENABLED and EFUSE_MC_FAULTED
+// #define SIDEBRBS "MPU/Fuses/SD_TO_BRB_FUSE_STAT" // OUTDATED - see
+// EFUSE_SHUTDOWN_ENABLED and EFUSE_SHUTDOWN_FAULTED #define MPU
+// "MPU/Shutdown/MC_STAT" // OUTDATED - see EFUSE_MC_ENABLED and
+// EFUSE_MC_FAULTED
 #define CRITICALFAULTS "BMS/Faults/Critical/#"
 #define NONCRITICALFAULTS "BMS/Faults/Non-Critical/#"
 #define LOWVOLTAGESOC                                                          \

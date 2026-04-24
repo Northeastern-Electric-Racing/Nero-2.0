@@ -58,12 +58,34 @@ public:
   virtual std::optional<float> getDcl() = 0;
   virtual std::optional<float> getCcl() = 0;
   virtual std::optional<float> getPackCurrent() = 0;
-  virtual std::optional<bool> getForwardButtonPressed() = 0;
-  virtual std::optional<bool> getBackwardButtonPressed() = 0;
-  virtual std::optional<bool> getRightButtonPressed() = 0;
+  // Non-consuming primitives: true iff the current Wheel/Buttons/button_id
+  // payload equals the given 0-indexed ordinal. See raspberry_model.h for
+  // the layout and VCU counterpart.
+  virtual bool buttonNum0Pressed() = 0;
+  virtual bool buttonNum1Pressed() = 0;
+  virtual bool buttonNum2Pressed() = 0;
+  virtual bool buttonNum3Pressed() = 0;
+  virtual bool buttonNum4Pressed() = 0;
+  virtual bool buttonNum5Pressed() = 0;
+  virtual bool buttonNum6Pressed() = 0;
+  virtual bool buttonNum7Pressed() = 0;
+  virtual bool buttonNum8Pressed() = 0;
+  virtual bool buttonNum9Pressed() = 0;
+
+  // Semantic wrappers, consume-on-read: return true once per press then clear
+  // the latched value so ButtonController's fire-and-forget pattern keeps
+  // working. Each wraps one primitive.
+  virtual std::optional<bool> getEscButtonPressed() = 0;
+  virtual std::optional<bool> getLeftButtonPressed() = 0;
+  virtual std::optional<bool> getLaunchControlToggleButtonPressed() = 0;
+  virtual std::optional<bool> getUpRegenButtonPressed() = 0;
+  virtual std::optional<bool> getDownRegenButtonPressed() = 0;
   virtual std::optional<bool> getEnterButtonPressed() = 0;
-  virtual std::optional<bool> getUpButtonPressed() = 0;
-  virtual std::optional<bool> getDownButtonPressed() = 0;
+  virtual std::optional<bool> getRightButtonPressed() = 0;
+  virtual std::optional<bool> getTractionControlToggleButtonPressed() = 0;
+  virtual std::optional<bool> getUpTorqueButtonPressed() = 0;
+  virtual std::optional<bool> getDownTorqueButtonPressed() = 0;
+
   virtual std::optional<bool> getHomeButtonPressed() = 0;
   virtual std::optional<float> getModeIndex() = 0;
   virtual std::optional<float> getGForceX() = 0;

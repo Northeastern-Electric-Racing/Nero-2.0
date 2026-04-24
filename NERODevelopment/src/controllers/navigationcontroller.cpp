@@ -224,11 +224,7 @@ void NavigationController::buttonUpdate() {
   if (!isPageActive()) {
     if (m_model->getEnterButtonPressed() == true)
       enterButtonPressed();
-    if (m_model->getDownButtonPressed() == true)
-      downButtonPressed();
-    if (m_model->getUpButtonPressed() == true)
-      upButtonPressed();
-    if (m_model->getBackwardButtonPressed() == true)
+    if (m_model->getLeftButtonPressed() == true)
       leftButtonPressed();
     if (m_model->getRightButtonPressed() == true)
       rightButtonPressed();
