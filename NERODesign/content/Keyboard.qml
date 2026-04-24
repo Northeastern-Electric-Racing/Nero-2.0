@@ -493,15 +493,17 @@ Item {
             textInput.cursorPosition = position - 1;
         } else if (text === '\u2191')
             shift = !shift;
-            // UPWARDS ARROW (shift)
-        else if (text === '@#')
+        else
+        // UPWARDS ARROW (shift)
+        if (text === '@#')
             symbols = true;
         else if (text === 'AB')
             symbols = false;
         else if (text === '\u21B5')
             accepted(textInput.text);
-            // DOWNWARDS ARROW WITH CORNER LEFTWARDS (enter)
-        else {
+        else
+        // DOWNWARDS ARROW WITH CORNER LEFTWARDS (enter)
+        {
             // insert text
             var position = textInput.cursorPosition;
             textInput.text = textInput.text.substring(0, textInput.cursorPosition) + text + textInput.text.substring(textInput.cursorPosition, textInput.text.length);

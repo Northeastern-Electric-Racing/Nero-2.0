@@ -419,8 +419,7 @@ std::optional<float> RaspberryModel::getModeIndex() {
 void RaspberryModel::updateCurrentData() { emit this->onCurrentDataChange(); }
 
 QList<QString> RaspberryModel::getCriticalFaults() {
-  QRegularExpression regex(
-      "^(BMS/Faults/Critical/.*|VCU/Faults/Critical/.*)$");
+  QRegularExpression regex("^(BMS/Faults/Critical/.*|VCU/Faults/Critical/.*)$");
 
   QList<QString> faults;
 
