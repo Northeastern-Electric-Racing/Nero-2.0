@@ -28,12 +28,10 @@
 #define BMSFAULT "BMS/Faults/Critical/#"
 #define DCL "BMS/Commands/Max_DC_Current_Target"
 #define CCL "BMS/Commands/Max_DC_Brake_Current_Target"
-#define FORWARDBUTTON "Wheel/Buttons/button_id"
-#define BACKWARDBUTTON "Wheel/Buttons/button_id"
-#define RIGHTBUTTON "Wheel/Buttons/button_id"
-#define ENTERBUTTON "Wheel/Buttons/button_id"
-#define UPBUTTON "Wheel/Buttons/button_id"
-#define DOWNBUTTON "Wheel/Buttons/button_id"
+// Single wheel-button topic. The int payload is a 0-indexed button ordinal
+// (0..9) matching the VCU-side `button_t` enum in
+// Cerberus-2.0/Core/Inc/u_buttons.h. See raspberry_model.h for the full layout.
+#define BUTTONID "Wheel/Buttons/button_id"
 #define SEGMENTTEMP1 "BMS/Segment_Temp/1"
 #define SEGMENTTEMP2 "BMS/Segment_Temp/2"
 #define SEGMENTTEMP3 "BMS/Segment_Temp/3"
@@ -76,7 +74,7 @@
 #define MODEINDEX                                                              \
   "VCU/CarState/nero_index" // '0' = OFF, '1' = PIT, '2' = REVERSE, '3' =
                             // PERFORMANCE, '4' = EFFICIENCY, '5' = GAMES, '6' =
-                            // EXIT
+                            // THEMES, '7' = EXIT
 #define MOTORPOWER                                                             \
   "VCU/eFuses/MC/Current" // Current (A) flowing through motor controller eFuse.
 #define FANPOWER                                                               \

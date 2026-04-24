@@ -17,15 +17,9 @@ const std::vector<Item> &getPages() {
       {"DOOM", Type::SubPage, nullptr, "DoomView.qml", nullptr},
       {"THEMES", Type::Category, "themes.png", nullptr, nullptr},
       {"LIGHT", Type::SubAction, nullptr, nullptr,
-       [](NavigationController *c) {
-         emit c->themeChanged("light");
-         c->collapse();
-       }},
+       [](NavigationController *c) { emit c->themeChanged("light"); }},
       {"DARK", Type::SubAction, nullptr, nullptr,
-       [](NavigationController *c) {
-         emit c->themeChanged("dark");
-         c->collapse();
-       }},
+       [](NavigationController *c) { emit c->themeChanged("dark"); }},
       {"EXIT", Type::Action, "exit.png", nullptr,
        [](NavigationController *c) { emit c->exitRequested(); }},
   };
@@ -118,7 +112,6 @@ void NavigationController::moveNext() {
     int next = m_navOrder[pos + 1];
     if (m_expanded >= 0 && Menu::isSubItem(m_selected) &&
         !Menu::isSubItem(next)) {
-      collapse();
       return;
     }
     setSelectedIndex(next);
@@ -131,7 +124,6 @@ void NavigationController::movePrev() {
     int prev = m_navOrder[pos - 1];
     if (m_expanded >= 0 && Menu::isSubItem(m_selected) &&
         !Menu::isSubItem(prev)) {
-      collapse();
       return;
     }
     setSelectedIndex(prev);
@@ -224,13 +216,13 @@ void NavigationController::buttonUpdate() {
   if (!isPageActive()) {
     if (m_model->getEnterButtonPressed() == true)
       enterButtonPressed();
-    if (m_model->getDownButtonPressed() == true)
-      downButtonPressed();
-    if (m_model->getUpButtonPressed() == true)
-      upButtonPressed();
-    if (m_model->getBackwardButtonPressed() == true)
+    if (m_model->getLeftButtonPressed() == true)
       leftButtonPressed();
     if (m_model->getRightButtonPressed() == true)
       rightButtonPressed();
+    if (m_model->getUpRegenButtonPressed() == true)
+      upButtonPressed();
+    if (m_model->getDownRegenButtonPressed() == true)
+      downButtonPressed();
   }
 }

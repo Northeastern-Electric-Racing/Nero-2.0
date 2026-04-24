@@ -93,6 +93,25 @@ for /f %f in ('git ls-files "*.cpp" "*.h" ":!deps/*"') do clang-format -i "%f"
 for /f %f in ('git ls-files "*.qml" ":!deps/*"') do C:\Qt\6.8.3\mingw_64\bin\qmlformat.exe -i "%f"
 ```
 
+## Button Layout
+
+MQTT topic `Wheel/Buttons/button_id` carries the 0-indexed button ordinal,
+matching the VCU `button_t` enum in `Cerberus-2.0/Core/Inc/u_buttons.h`.
+
+| 0 | ESC                     |
+| 1 | LEFT                    |
+| 2 | LAUNCH_CONTROL_TOGGLE   |
+| 3 | UP_REGEN                |
+| 4 | DOWN_REGEN              |
+| 5 | ENTER                   |
+| 6 | RIGHT                   |
+| 7 | TRACTION_CONTROL_TOGGLE |
+| 8 | UP_TORQUE               |
+| 9 | DOWN_TORQUE             |
+
+Confluence reference (silkscreen is 1-indexed; wire = silkscreen − 1):
+https://nerdocs.atlassian.net/wiki/spaces/NER/pages/1526988828/Button+IO+25
+
 ### Testing out Enviornment Variables (Locally)
 
 Go into Projects, go into Run, go into Enviornment, and add variables named `ClIENT1_PORT` and `CLIENT2_PORT`.

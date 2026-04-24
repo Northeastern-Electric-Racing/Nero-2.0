@@ -616,19 +616,6 @@ void DoomController::sendKey(int doomKeyCode, bool pressed) {
   m_worker->enqueueKey(event);
 }
 
-void DoomController::onNeroButton(const QString &buttonName, bool pressed) {
-  unsigned char doomKey = mapNeroButtonToDoomKey(buttonName);
-  if (doomKey == 0)
-    return;
-
-  if (!m_running && pressed && buttonName == "Enter") {
-    startGame();
-    return;
-  }
-
-  sendKey(doomKey, pressed);
-}
-
 /* ============================================================
  * Hardware button handling via MQTT
  *
@@ -654,7 +641,7 @@ void DoomController::onDataChanged() {
   if (!m_running)
     return;
 
-  std::optional<float> raw = m_model->getById(FORWARDBUTTON);
+  std::optional<float> raw = m_model->getById(BUTTONID);
   if (!raw.has_value())
     return;
 
@@ -779,23 +766,4 @@ void DoomController::onWorkerStopped() {
   m_statusText = "Press ENTER to start DOOM";
   emit runningChanged();
   emit statusTextChanged();
-}
-
-unsigned char
-DoomController::mapNeroButtonToDoomKey(const QString &buttonName) {
-  if (buttonName == "Forward")
-    return KEY_UPARROW;
-  if (buttonName == "Backward")
-    return KEY_DOWNARROW;
-  if (buttonName == "Left")
-    return KEY_LEFTARROW;
-  if (buttonName == "Right")
-    return KEY_RIGHTARROW;
-  if (buttonName == "Enter")
-    return KEY_USE;
-  if (buttonName == "Up")
-    return KEY_FIRE;
-  if (buttonName == "Down")
-    return KEY_TAB;
-  return 0;
 }

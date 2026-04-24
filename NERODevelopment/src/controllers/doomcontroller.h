@@ -123,7 +123,6 @@ public:
   Q_INVOKABLE void startGame();
   Q_INVOKABLE void stopGame();
   Q_INVOKABLE void sendKey(int doomKeyCode, bool pressed);
-  Q_INVOKABLE void onNeroButton(const QString &buttonName, bool pressed);
 
 signals:
   void runningChanged();
@@ -146,7 +145,6 @@ private slots:
   void onDataChanged();
 
 private:
-  unsigned char mapNeroButtonToDoomKey(const QString &buttonName);
   unsigned char mapButtonValueToDoomKey(int value);
   void releaseCurrentButton();
   void pressButton(int value);
