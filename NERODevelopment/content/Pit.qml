@@ -8,7 +8,7 @@ Rectangle {
     id: pit
     anchors.fill: parent
     property int stateOfChargePercentage: homeController.stateOfCharge
-    property int lvStateOfChargePercentage: homeController.lowVoltageStateOfCharge
+    property real lvVoltage: homeController.lowVoltage
     property int packTempValue: homeController.packTemp
     property int motorTempValue: homeController.motorTemp
     property int currentSpeed: homeController.speed
@@ -117,12 +117,13 @@ Rectangle {
                     unitFontSize: pit.unitFontSize
                 }
 
-                BatteryValueComponent {
+                ThermometerValueComponent {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
 
-                    batteryValue: pit.lvStateOfChargePercentage
-                    title: "LV SOC"
+                    thermometerValue: pit.lvVoltage
+                    title: "LV"
+                    unit: "V"
                     radius: pit.componentRadii
                     valueFontSize: pit.valueFontSize
                     labelFontSize: pit.labelFontSize
