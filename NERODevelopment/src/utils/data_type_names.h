@@ -21,7 +21,8 @@
 #define MINCELLVOLTAGECELL "BMS/Cells/Volts_Low_Cell"
 #define AVECELLTEMP "BMS/Status/Temp_Average"
 #define AVECELLVOLTAGE "BMS/Cells/Volts_Avg_Value"
-// #define TRACTIONCONTROL "MPU/State/LaunchControl" // OUTDATED - see LAUNCHCONTROL and TRACTIONCONTROL
+// #define TRACTIONCONTROL "MPU/State/LaunchControl" // OUTDATED - see
+// LAUNCHCONTROL and TRACTIONCONTROL
 #define INVERTERTEMP "DTI/Temps/Controller_Temperature"
 #define BMSSTATE "BMS/Status/State"
 #define BMSFAULT "BMS/Faults/Critical/#"
@@ -37,13 +38,13 @@
 #define SEGMENTTEMP2 "BMS/Segment_Temp/2"
 #define SEGMENTTEMP3 "BMS/Segment_Temp/3"
 #define SEGMENTTEMP4 "BMS/Segment_Temp/4"
-// #define SIDEBRBS "MPU/Fuses/SD_TO_BRB_FUSE_STAT" // OUTDATED - see EFUSE_SHUTDOWN_ENABLED and EFUSE_SHUTDOWN_FAULTED
-// #define MPU "MPU/Shutdown/MC_STAT" // OUTDATED - see EFUSE_MC_ENABLED and EFUSE_MC_FAULTED
+// #define SIDEBRBS "MPU/Fuses/SD_TO_BRB_FUSE_STAT" // OUTDATED - see
+// EFUSE_SHUTDOWN_ENABLED and EFUSE_SHUTDOWN_FAULTED #define MPU
+// "MPU/Shutdown/MC_STAT" // OUTDATED - see EFUSE_MC_ENABLED and
+// EFUSE_MC_FAULTED
 #define CRITICALFAULTS "BMS/Faults/Critical/#"
 #define NONCRITICALFAULTS "BMS/Faults/Non-Critical/#"
-#define LOWVOLTAGESOC                                                          \
-  "MPU/Sense/SOC" // OUTDATED MPU TOPIC - no equivalent topic exists on VCU as
-                  // of right now.
+#define LVVOLTAGE "VCU/LV/voltage"
 
 /* VCU Topics */
 #define TORQUEPOWER "VCU/CarState/torque_limit_percentage"

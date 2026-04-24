@@ -71,7 +71,7 @@ public:
   std::optional<float> getSegment4Temp() override;
   QList<QString> getCriticalFaults() override;
   QList<QString> getNonCriticalFaults() override;
-  std::optional<float> getLowVoltageStateOfCharge() override;
+  std::optional<float> getLowVoltage() override;
 
   void sendMessage(const QString topic, const float value) override;
 

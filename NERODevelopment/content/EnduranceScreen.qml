@@ -84,6 +84,8 @@ Item {
                 ThermometerValueComponent {
                     id: regen
                     regen: true
+                    unit: "A"
+                    unitAnchorBottom: true
                     thermometerValue: endurance.numRegen
                     title: "REGEN"
                     Layout.fillWidth: true
