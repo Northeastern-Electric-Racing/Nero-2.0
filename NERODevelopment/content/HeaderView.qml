@@ -15,22 +15,21 @@ Item {
         id: autoCloseTimer
         interval: 3000
         repeat: false
-        onTriggered: faultDialog.closeModal()
+        onTriggered: faultDialog.close()
     }
 
-    onCriticalFaultsChanged: {
-        if (criticalFaults.length > 0) {
-            faultDialog.openModal("Critical Faults", criticalFaults.join("\n"));
-            autoCloseTimer.restart();
+    function refreshFaultDialog() {
+        if (criticalFaults.length === 0 && nonCriticalFaults.length === 0) {
+            faultDialog.close();
+            autoCloseTimer.stop();
+            return;
         }
+        faultDialog.open();
+        autoCloseTimer.restart();
     }
 
-    onNonCriticalFaultsChanged: {
-        if (nonCriticalFaults.length > 0) {
-            faultDialog.openModal("Non Critical Faults", nonCriticalFaults.join("\n"));
-            autoCloseTimer.restart();
-        }
-    }
+    onCriticalFaultsChanged: refreshFaultDialog()
+    onNonCriticalFaultsChanged: refreshFaultDialog()
 
     NonCriticalWarning {
         id: nonCriticalWarning
@@ -64,5 +63,7 @@ Item {
     FaultDialog {
         id: faultDialog
         dimension: 300
+        criticalList: criticalFaults
+        nonCriticalList: nonCriticalFaults
     }
 }
