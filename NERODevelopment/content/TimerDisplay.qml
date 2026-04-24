@@ -8,8 +8,7 @@ Item {
     property int currentRunTime: 0
     property int lastRunTime: 0
     property int fastestRunTime: 0
-    property int radius: Math.min(timerDisplay.height / 7,
-                                  timerDisplay.width / 20)
+    property int radius: Math.min(timerDisplay.height / 7, timerDisplay.width / 20)
     property bool vertical: false
 
     RowLayout {

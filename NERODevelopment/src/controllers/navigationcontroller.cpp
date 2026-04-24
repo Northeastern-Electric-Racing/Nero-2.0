@@ -9,11 +9,12 @@ const std::vector<Item> &getPages() {
       {"PIT - DRIVE", Type::Page, "flag.png", "Pit.qml", nullptr},
       {"PIT - REVERSE", Type::Page, "reverse.png", "Pit.qml", nullptr},
       {"PERFORMANCE", Type::Page, "hare.png", "SpeedMode.qml", nullptr},
-      {"EFFICIENCY", Type::Page, "turtle.png", "EfficiencyScreen.qml", nullptr},
+      {"ENDURANCE", Type::Page, "turtle.png", "EnduranceScreen.qml", nullptr},
       {"GAMES", Type::Category, "game.png", nullptr, nullptr},
       {"FLAPPY BIRD", Type::SubPage, nullptr, "FlappyBird.qml", nullptr},
       {"SNAKE", Type::SubPage, nullptr, "Snake.qml", nullptr},
       {"2048", Type::SubPage, nullptr, "Game2048.qml", nullptr},
+      {"DOOM", Type::SubPage, nullptr, "DoomView.qml", nullptr},
       {"THEMES", Type::Category, "themes.png", nullptr, nullptr},
       {"LIGHT", Type::SubAction, nullptr, nullptr,
        [](NavigationController *c) {
@@ -121,14 +122,26 @@ QVariantList NavigationController::getChildrenOf(int parent) const {
 void NavigationController::moveNext() {
   int pos = m_navOrder.indexOf(m_selected);
   if (pos + 1 < m_navOrder.size()) {
-    setSelectedIndex(m_navOrder[pos + 1]);
+    int next = m_navOrder[pos + 1];
+    if (m_expanded >= 0 && Menu::isSubItem(m_selected) &&
+        !Menu::isSubItem(next)) {
+      collapse();
+      return;
+    }
+    setSelectedIndex(next);
   }
 }
 
 void NavigationController::movePrev() {
   int pos = m_navOrder.indexOf(m_selected);
   if (pos > 0) {
-    setSelectedIndex(m_navOrder[pos - 1]);
+    int prev = m_navOrder[pos - 1];
+    if (m_expanded >= 0 && Menu::isSubItem(m_selected) &&
+        !Menu::isSubItem(prev)) {
+      collapse();
+      return;
+    }
+    setSelectedIndex(prev);
   }
 }
 
@@ -200,6 +213,8 @@ void NavigationController::executeAction(int i) {
 void NavigationController::enterButtonPressed() { activate(); }
 void NavigationController::downButtonPressed() { moveNext(); }
 void NavigationController::upButtonPressed() { movePrev(); }
+void NavigationController::leftButtonPressed() { movePrev(); }
+void NavigationController::rightButtonPressed() { moveNext(); }
 void NavigationController::homeButtonPressed() { goHome(); }
 
 void NavigationController::buttonUpdate() {
@@ -226,5 +241,9 @@ void NavigationController::buttonUpdate() {
       downButtonPressed();
     if (m_model->getUpButtonPressed() == true)
       upButtonPressed();
+    if (m_model->getBackwardButtonPressed() == true)
+      leftButtonPressed();
+    if (m_model->getRightButtonPressed() == true)
+      rightButtonPressed();
   }
 }

@@ -28,8 +28,7 @@ Item {
         Rectangle {
             id: fillContainer
             width: parent.width - (battery.horizontalFillMargin * 2)
-            height: (parent.height - (battery.verticalFillMargin * 2))
-                    * (battery.value / battery.maxValue)
+            height: (parent.height - (battery.verticalFillMargin * 2)) * (battery.value / battery.maxValue)
             color: battery.value > 70 ? "#55FF00" : battery.value > 40 ? "orange" : "red"
             anchors.bottom: parent.bottom
             anchors.horizontalCenter: parent.horizontalCenter

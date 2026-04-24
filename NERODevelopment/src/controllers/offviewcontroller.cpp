@@ -20,21 +20,36 @@ void OffViewController::setAttributeStatus(const QString &name, int status) {
 }
 
 void OffViewController::update() {
+  std::optional<float> shutdownFaulted =
+      this->m_model->getById(EFUSE_SHUTDOWN_FAULTED);
+  std::optional<float> shutdownEnabled =
+      this->m_model->getById(EFUSE_SHUTDOWN_ENABLED);
+  if (shutdownFaulted && *shutdownFaulted == 1) {
+    setAttributeStatus(SHUTDOWN_EFUSE,
+                       static_cast<int>(AttributeStatus::FAULTED));
+  } else if (shutdownEnabled && *shutdownEnabled == 1) {
+    setAttributeStatus(SHUTDOWN_EFUSE, static_cast<int>(AttributeStatus::GOOD));
+  } else {
+    setAttributeStatus(SHUTDOWN_EFUSE, static_cast<int>(AttributeStatus::OFF));
+  }
+
+  std::optional<float> mcFaulted = this->m_model->getById(EFUSE_MC_FAULTED);
+  std::optional<float> mcEnabled = this->m_model->getById(EFUSE_MC_ENABLED);
+  if (mcFaulted && *mcFaulted == 1) {
+    setAttributeStatus(MC_EFUSE, static_cast<int>(AttributeStatus::FAULTED));
+  } else if (mcEnabled && *mcEnabled == 1) {
+    setAttributeStatus(MC_EFUSE, static_cast<int>(AttributeStatus::GOOD));
+  } else {
+    setAttributeStatus(MC_EFUSE, static_cast<int>(AttributeStatus::OFF));
+  }
+
   for (const QString &attributeName :
-       {SIDEBRBS, BMS, IMD, BSPD, MPU, BOTS, INERTIA, CPBRB, TSMS, HVDINTRLK,
-        HVCNCTR}) {
+       {BMS, IMD, BSPD, BOTS, INERTIA, CPBRB, TSMS, HVDINTRLK, HVCNCTR}) {
     std::optional<float> value = this->m_model->getById(attributeName);
     if (value) {
-      if (attributeName == MPU) {
-        if (value == 1) {
-          setAttributeStatus(attributeName,
-                             static_cast<int>(AttributeStatus::FAULTED));
-        }
-      } else {
-        setAttributeStatus(
-            attributeName,
-            static_cast<int>(this->mapFloatToAttributeStatus(*value)));
-      }
+      setAttributeStatus(
+          attributeName,
+          static_cast<int>(this->mapFloatToAttributeStatus(*value)));
     } else {
       setAttributeStatus(attributeName,
                          static_cast<int>(AttributeStatus::GOOD));

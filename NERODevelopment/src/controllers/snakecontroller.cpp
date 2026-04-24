@@ -48,6 +48,15 @@ bool SnakeController::isSameOrOppositeDirection(int newDirection) {
   return (m_direction + 2) % 4 == newDirection || m_direction == newDirection;
 }
 
+void SnakeController::resetGame() {
+  m_gameOver = true;
+  m_direction = 1;
+  m_didStart = false;
+  emit gameOverChanged();
+  emit directionChanged();
+  emit didStartChanged();
+}
+
 void SnakeController::saveScore(int score) {
   QString topic = "SNAKE/SCORE";
   this->m_model->sendMessage(topic, score);

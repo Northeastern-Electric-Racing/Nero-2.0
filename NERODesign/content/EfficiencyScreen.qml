@@ -22,12 +22,11 @@ Item {
     width: 800
     height: 480
 
-    Keys.onPressed: (event) => {
-            if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
-                efficiencyController.enterButtonPressed();
-            }
+    Keys.onPressed: event => {
+        if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
+            efficiencyController.enterButtonPressed();
         }
-
+    }
 
     HeaderView {
         id: header
@@ -67,11 +66,11 @@ Item {
     }
 
     Column {
+        id: driveColumn
         anchors.top: parent.top
         anchors.topMargin: 50
         anchors.left: thermColumn.right
         anchors.bottom: parent.bottom
-        id: driveColumn
         width: efficiency.width * 0.5
         height: parent.height
 

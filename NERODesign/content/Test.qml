@@ -33,14 +33,14 @@ Window {
         color: "green"
 
         Component.onCompleted: {
-            start()
+            start();
         }
     }
 
     MouseArea {
         anchors.fill: parent
         onClicked: {
-            Qt.quit()
+            Qt.quit();
         }
     }
 }

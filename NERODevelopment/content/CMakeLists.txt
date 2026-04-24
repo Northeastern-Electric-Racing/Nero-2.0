@@ -29,7 +29,7 @@ qt6_add_qml_module(content
         HeaderView.qml
         CriticalFaultIcon.qml
         NonCriticalWarning.qml
-        EfficiencyScreen.qml
+        EnduranceScreen.qml
         TorqueValueComponent.qml
         TorqueAdj.qml
         SpeedMode.qml
@@ -48,6 +48,7 @@ qt6_add_qml_module(content
         LabeledComponent.qml
         HomeIcon.qml
         SubMenuIcon.qml
+        DoomView.qml
 
     RESOURCES
         fonts/fonts.txt

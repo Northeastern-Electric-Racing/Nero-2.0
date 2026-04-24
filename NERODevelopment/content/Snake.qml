@@ -30,101 +30,120 @@ Rectangle {
     property bool gameOver: snakeController.gameOver
     property int score: 0
 
-    Component.onCompleted: startGame()
+    Component.onCompleted: snakeController.resetGame()
 
     onDidStartChanged: {
-        console.log(direction)
-        let centerX = Math.floor(gridWidth / 2)
-        let centerY = Math.floor(gridHeight / 2)
+        console.log(direction);
+        let centerX = Math.floor(gridWidth / 2);
+        let centerY = Math.floor(gridHeight / 2);
         snakeBody = [
-            { x: centerX,     y: centerY },
-            { x: centerX - 1, y: centerY },
-            { x: centerX - 2, y: centerY }
-        ]
-        snakeController.setGameOver(false)
-        score = 0
-        food.x = Math.floor(gridWidth / 3 * 2)
-        food.y = centerY
-        updateSnakeModel()
-        gameTimer.start()
+            {
+                x: centerX,
+                y: centerY
+            },
+            {
+                x: centerX - 1,
+                y: centerY
+            },
+            {
+                x: centerX - 2,
+                y: centerY
+            }
+        ];
+        snakeController.setGameOver(false);
+        score = 0;
+        food.x = Math.floor(gridWidth / 3 * 2);
+        food.y = centerY;
+        updateSnakeModel();
+        gameTimer.start();
     }
 
     function placeFood() {
-        var x, y
+        var x, y;
         do {
-            x = Math.floor(Math.random() * gridWidth)
-            y = Math.floor(Math.random() * gridHeight)
+            x = Math.floor(Math.random() * gridWidth);
+            y = Math.floor(Math.random() * gridHeight);
         } while (isSnakePosition(x, y))
-        food.x = x
-        food.y = y
+        food.x = x;
+        food.y = y;
     }
 
     function isSnakePosition(x, y) {
         for (let i = 0; i < snakeBody.length; i++) {
             if (snakeBody[i].x === x && snakeBody[i].y === y) {
-                return true
+                return true;
             }
         }
-        return false
+        return false;
     }
 
     function checkCollision(x, y) {
         if (x < 0 || x >= gridWidth || y < 0 || y >= gridHeight) {
-            return true
+            return true;
         }
         for (let i = 1; i < snakeBody.length; i++) {
             if (snakeBody[i].x === x && snakeBody[i].y === y) {
-                return true
+                return true;
             }
         }
-        return false
+        return false;
     }
 
     function updateGame() {
         if (gameOver) {
-            gameTimer.stop()
-            snakeController.saveScore(score)
-            return
+            gameTimer.stop();
+            snakeController.saveScore(score);
+            return;
         }
 
-        let head = { x: snakeBody[0].x, y: snakeBody[0].y }
+        let head = {
+            x: snakeBody[0].x,
+            y: snakeBody[0].y
+        };
 
         switch (direction) {
-            case 0: // Up
-                head.y -= 1
-                break
-            case 1: // Right
-                head.x += 1
-                break
-            case 2: // Down
-                head.y += 1
-                break
-            case 3: // Left
-                head.x -= 1
-                break
+        case 0 // Up
+        :
+            head.y -= 1;
+            break;
+        case 1 // Right
+        :
+            head.x += 1;
+            break;
+        case 2 // Down
+        :
+            head.y += 1;
+            break;
+        case 3 // Left
+        :
+            head.x -= 1;
+            break;
         }
 
         if (checkCollision(head.x, head.y)) {
-            snakeController.setGameOver(true)
-            return
+            snakeController.setGameOver(true);
+            return;
         }
 
-        snakeBody.unshift(head)
+        snakeBody.unshift(head);
 
         if (head.x === food.x && head.y === food.y) {
-            score += 1
-            placeFood()
+            score += 1;
+            placeFood();
         } else {
-            snakeBody.pop()
+            snakeBody.pop();
         }
 
-        updateSnakeModel()
+        updateSnakeModel();
     }
 
     function updateSnakeModel() {
-        snakeModel.clear()
+        snakeModel.clear();
         for (let segment of snakeBody) {
-            snakeModel.append({ "x": segment.x, "y": segment.y })
+            snakeModel.append({
+                "x": segment.x,
+                "y": segment.y
+            });
         }
     }
 
@@ -144,7 +163,8 @@ Rectangle {
     }
 
     onDirectionChanged: {
-        if (directionCooldown) return;
+        if (directionCooldown)
+            return;
 
         directionCooldown = true;
         cooldownTimer.start();
@@ -152,24 +172,24 @@ Rectangle {
 
     Keys.onSpacePressed: {
         if (gameOver) {
-            snakeController.enterButtonPressed()
+            snakeController.enterButtonPressed();
         }
     }
 
     Keys.onLeftPressed: {
-        snakeController.leftButtonPressed()
+        snakeController.leftButtonPressed();
     }
 
     Keys.onRightPressed: {
-        snakeController.rightButtonPressed()
+        snakeController.rightButtonPressed();
     }
 
     Keys.onUpPressed: {
-        snakeController.upButtonPressed()
+        snakeController.upButtonPressed();
     }
 
     Keys.onDownPressed: {
-        snakeController.downButtonPressed()
+        snakeController.downButtonPressed();
     }
 
     ListModel {
@@ -210,13 +230,5 @@ Rectangle {
         anchors.top: parent.top
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.topMargin: 10
-    }
-
-    Connections {
-        target: snakeController
-        onDirectionChanged: {
-            direction = newDirection
-            console.log("Direction updated to:", direction)
-        }
     }
 }

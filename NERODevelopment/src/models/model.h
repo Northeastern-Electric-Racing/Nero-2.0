@@ -54,7 +54,7 @@ public:
   virtual std::optional<float> getRegenPower() = 0;
   virtual std::optional<float> getBmsState() = 0;
   virtual QList<QString> getBmsFault() = 0;
-  virtual QList<QString> getMpuFault() = 0;
+  virtual QList<QString> getVcuFault() = 0;
   virtual std::optional<float> getDcl() = 0;
   virtual std::optional<float> getCcl() = 0;
   virtual std::optional<float> getPackCurrent() = 0;
@@ -76,8 +76,7 @@ public:
   virtual QList<QString> getCriticalFaults() = 0;
   virtual QList<QString> getNonCriticalFaults() = 0;
   virtual void sendMessage(QString topic, float value) = 0;
-  virtual void sendMessage(QString topic, QList<float> values) = 0;
-  virtual std::optional<float> getLowVoltageStateOfCharge() = 0;
+  virtual std::optional<float> getLowVoltage() = 0;
 
   std::optional<int> getTime();
   std::optional<int> getFastestTime();

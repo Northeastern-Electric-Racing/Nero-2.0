@@ -34,38 +34,36 @@ Item {
     property bool didSelect: offViewController.didSelect
 
     Keys.onPressed: event => {
-                        switch (event.key) {
-                            case Qt.Key_Up:
-                            offViewController.upButtonPressed()
-                            break
-                            case Qt.Key_Left:
-                            offViewController.leftButtonPressed()
-                            break
-                            case Qt.Key_Right:
-                            offViewController.rightButtonPressed()
-                            break
-                            case Qt.Key_Down:
-                            offViewController.downButtonPressed()
-                            break
-                            case Qt.Key_Return:
-                            offViewController.enterButtonPressed()
-                            break
-                            default:
-                            break
-                        }
-                    }
+        switch (event.key) {
+        case Qt.Key_Up:
+            offViewController.upButtonPressed();
+            break;
+        case Qt.Key_Left:
+            offViewController.leftButtonPressed();
+            break;
+        case Qt.Key_Right:
+            offViewController.rightButtonPressed();
+            break;
+        case Qt.Key_Down:
+            offViewController.downButtonPressed();
+            break;
+        case Qt.Key_Return:
+            offViewController.enterButtonPressed();
+            break;
+        default:
+            break;
+        }
+    }
 
     onAttributeStatusMapChanged: {
-        console.log(attributeStatusMap)
+        console.log(attributeStatusMap);
     }
 
     onDidSelectChanged: {
         if (offScreen.didSelect) {
-            descriptionModal.openModal(offViewController.selectedName,
-                                       offViewController.selectedDescription,
-                                       offViewController.selectedUrl)
+            descriptionModal.openModal(offViewController.selectedName, offViewController.selectedDescription, offViewController.selectedUrl);
         } else {
-            descriptionModal.closeModal()
+            descriptionModal.closeModal();
         }
     }
 

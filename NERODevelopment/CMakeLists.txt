@@ -1,11 +1,59 @@
 cmake_minimum_required(VERSION 3.21.1)
 
-project(NEROApp LANGUAGES CXX)
+project(NEROApp LANGUAGES CXX C)
 
 # Find Qt6 first before version checks
 find_package(Qt6 REQUIRED COMPONENTS Core Gui Qml Quick Network Mqtt Protobuf)
 
 qt_standard_project_setup(REQUIRES 6.8)
+
+# ============================================================
+# DOOM Integration — doomgeneric engine
+# Source: https://github.com/ozkl/doomgeneric
+#
+# Strategy: Check for a local copy in third_party/ first. If none
+# exists, use FetchContent to auto-download from GitHub.
+# This ensures offline builds work if someone has cloned the repo
+# manually, while still being zero-friction for fresh clones.
+# ============================================================
+set(DOOMGENERIC_LOCAL_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src/third_party/doomgeneric/doomgeneric)
+
+if(EXISTS ${DOOMGENERIC_LOCAL_DIR}/doomgeneric.h)
+    # Local copy found — use it directly, skip download
+    set(DOOMGENERIC_DIR ${DOOMGENERIC_LOCAL_DIR})
+    message(STATUS "DOOM: Using local source at ${DOOMGENERIC_DIR}")
+else()
+    # No local copy — download via FetchContent
+    message(STATUS "DOOM: No local source found, downloading via FetchContent...")
+    include(FetchContent)
+    FetchContent_Declare(
+        doomgeneric
+        GIT_REPOSITORY https://github.com/ozkl/doomgeneric.git
+        GIT_SHALLOW TRUE
+    )
+    FetchContent_MakeAvailable(doomgeneric)
+    set(DOOMGENERIC_DIR ${doomgeneric_SOURCE_DIR}/doomgeneric)
+    message(STATUS "DOOM: Downloaded to ${DOOMGENERIC_DIR}")
+endif()
+
+file(GLOB DOOM_SOURCES ${DOOMGENERIC_DIR}/*.c)
+
+# Remove ALL platform backends (doomgeneric_*.c) — we provide our own in doomcontroller.cpp
+# The core engine file is doomgeneric.c (no underscore suffix) so it is kept
+list(FILTER DOOM_SOURCES EXCLUDE REGEX "doomgeneric_[a-z].*\\.c$")
+
+# Remove SDL and Allegro sound/music backends — we don't have those libraries
+list(FILTER DOOM_SOURCES EXCLUDE REGEX "i_sdl.*\\.c$")
+list(FILTER DOOM_SOURCES EXCLUDE REGEX "i_allegro.*\\.c$")
+
+# Remove i_video.c — it opens /dev/fb0 directly which conflicts with Qt's EGLFS
+# on the Raspberry Pi. We provide all required video symbols in doomcontroller.cpp.
+list(FILTER DOOM_SOURCES EXCLUDE REGEX "i_video\\.c$")
+
+# Suppress warnings in third-party DOOM code (unmodified upstream C from the 90s)
+set_source_files_properties(${DOOM_SOURCES} PROPERTIES COMPILE_FLAGS "-w")
+
+# ============================================================
 
 # Consolidate all sources in one place
 set(PROJECT_SOURCES
@@ -16,7 +64,7 @@ set(PROJECT_SOURCES
     src/controllers/chargingcontroller.h
     src/controllers/homecontroller.h
     src/controllers/offviewcontroller.h
-    src/controllers/efficiencycontroller.h
+    src/controllers/endurancecontroller.h
     src/controllers/headercontroller.h
     src/controllers/buttoncontroller.h
     src/controllers/navigationcontroller.h
@@ -25,6 +73,7 @@ set(PROJECT_SOURCES
     src/controllers/snakecontroller.h
     src/controllers/game2048controller.h
     src/controllers/tankcontroller.h
+    src/controllers/doomcontroller.h
 
     # Headers - Models
     src/models/model.h
@@ -41,7 +90,7 @@ set(PROJECT_SOURCES
     src/utils/descriptioninfo.h
 
     # Implementation - Controllers
-    src/controllers/efficiencycontroller.cpp
+    src/controllers/endurancecontroller.cpp
     src/controllers/chargingcontroller.cpp
     src/controllers/homecontroller.cpp
     src/controllers/headercontroller.cpp
@@ -53,6 +102,7 @@ set(PROJECT_SOURCES
     src/controllers/snakecontroller.cpp
     src/controllers/game2048controller.cpp
     src/controllers/tankcontroller.cpp
+    src/controllers/doomcontroller.cpp
 
     # Implementation - Models
     src/models/model.cpp
@@ -75,19 +125,18 @@ set(PROJECT_SOURCES
 
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOMOC ON)
-# Create executable with all sources consolidated
-qt_add_executable(NEROApp ${PROJECT_SOURCES}
 
+# Create executable with all sources + DOOM engine
+qt_add_executable(NEROApp ${PROJECT_SOURCES} ${DOOM_SOURCES})
 
-
-)
+# Add doomgeneric headers to include path
+target_include_directories(NEROApp PRIVATE ${DOOMGENERIC_DIR})
 
 # Add protobuf
 qt_add_protobuf(NEROApp
     PROTO_FILES
     src/proto/serverdata/serverdata.proto
 )
-
 
 # Link libraries
 target_link_libraries(NEROApp PRIVATE
@@ -102,6 +151,13 @@ target_link_libraries(NEROApp PRIVATE
 
 set(CMAKE_OBJECT_PATH_MAX 500)
 
+# Copy WAD file to build directory if it exists
+if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/resources/doom/DOOM1.WAD)
+    file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/resources/doom/DOOM1.WAD
+         DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+    message(STATUS "DOOM: WAD file copied to build directory")
+endif()
+
 # include the qml config
 include(${CMAKE_CURRENT_SOURCE_DIR}/qmlmodules)
 include(${CMAKE_CURRENT_SOURCE_DIR}/qmlcomponents)
@@ -114,3 +170,11 @@ install(TARGETS NEROApp
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
+
+# Install WAD file alongside the binary on the target (Odysseus/Pi)
+# This ensures DOOM1.WAD ends up in the same directory as NEROApp,
+# where DoomController::applicationDirPath() will find it at runtime.
+if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/resources/doom/DOOM1.WAD)
+    install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/resources/doom/DOOM1.WAD
+            DESTINATION ${CMAKE_INSTALL_BINDIR})
+endif()
