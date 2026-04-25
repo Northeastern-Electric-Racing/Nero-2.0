@@ -3,9 +3,7 @@
 
 #include "../models/model.h"
 #include "buttoncontroller.h"
-#include <QElapsedTimer>
 #include <QObject>
-#include <QTimer>
 
 class SpeedController : public ButtonController {
   Q_OBJECT
@@ -17,12 +15,6 @@ class SpeedController : public ButtonController {
       float motorTemp READ motorTemp WRITE setMotorTemp NOTIFY motorTempChanged)
   Q_PROPERTY(float chargeState READ chargeState WRITE setChargeState NOTIFY
                  chargeStateChanged)
-  Q_PROPERTY(int currentTime READ currentTime WRITE setCurrentTime NOTIFY
-                 currentTimeChanged)
-  Q_PROPERTY(int fastestTime READ fastestTime WRITE setFastestTime NOTIFY
-                 fastestTimeChanged)
-  Q_PROPERTY(
-      int lastTime READ lastTime WRITE setLastTime NOTIFY lastTimeChanged)
   Q_PROPERTY(int currentSpeed READ currentSpeed WRITE setCurrentSpeed NOTIFY
                  currentSpeedChanged)
   Q_PROPERTY(float regen READ regen WRITE setRegen NOTIFY regenChanged)
@@ -47,9 +39,6 @@ public:
   float packTemp() const;
   float motorTemp() const;
   float chargeState() const;
-  int currentTime() const;
-  int fastestTime() const;
-  int lastTime() const;
   int currentSpeed() const;
   int maxSpeed() const;
   float current() const;
@@ -65,9 +54,6 @@ signals:
   void packTempChanged(float);
   void motorTempChanged(float);
   void chargeStateChanged(float);
-  void currentTimeChanged(int);
-  void fastestTimeChanged(int);
-  void lastTimeChanged(int);
   void currentSpeedChanged(int);
   void maxSpeedChanged(int);
   void currentChanged(float);
@@ -84,9 +70,6 @@ public slots:
   void setPackTemp(float);
   void setMotorTemp(float);
   void setChargeState(float);
-  void setCurrentTime(int);
-  void setFastestTime(int);
-  void setLastTime(int);
   void setCurrentSpeed(int);
   void setMaxSpeed(int);
   void setCurrent(float);
@@ -97,9 +80,7 @@ public slots:
   void setPowerDrawPercent(int);
   void setMaxDCCurrentTarget(int);
 
-  void enterButtonPressed() override;
   void rightButtonPressed() override;
-  void updateCurrentTime();
 
   void update();
 
@@ -108,9 +89,6 @@ private:
   float m_packTemp = 0;
   float m_motorTemp = 0;
   float m_chargeState = 0;
-  int m_currentTime = 0;
-  int m_fastestTime = 0;
-  int m_lastTime = 0;
   int m_currentSpeed = 0;
   int m_maxSpeed = 0;
   float m_current = 0;
@@ -120,10 +98,6 @@ private:
   float m_regen = 0;
   int m_powerDrawPercent = 0;
   int m_maxDCCurrentTarget = 0;
-
-  bool m_timerRunning = false;
-  QElapsedTimer m_timer;
-  QTimer *m_updateTimer;
 };
 
 #endif // SPEEDCONTROLLER_H
