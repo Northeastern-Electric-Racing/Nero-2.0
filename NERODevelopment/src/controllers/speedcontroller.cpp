@@ -87,6 +87,10 @@ void SpeedController::setMaxCurrentDischarge(float maxCurrentDischarge) {
   }
 }
 
+void SpeedController::rightButtonPressed() {
+  emit toggleFaultAlertsRequested();
+}
+
 void SpeedController::update() {
   setTractionControl(*m_model->getTractionControl());
   setPackTemp(*m_model->getPackTemp());

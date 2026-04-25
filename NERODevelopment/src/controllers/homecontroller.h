@@ -42,6 +42,7 @@ signals:
   void motorTempChanged(float);
   void stateOfChargeChanged(int);
   void lowVoltageChanged(float);
+  void toggleFaultAlertsRequested();
 
 public slots:
   void setSpeed(int);
@@ -52,6 +53,7 @@ public slots:
   void currentDataDidChange();
   void setStateOfCharge(int);
   void setLowVoltage(float);
+  void rightButtonPressed() override;
 
 private:
   int m_speed;

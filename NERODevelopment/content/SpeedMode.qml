@@ -25,6 +25,12 @@ Item {
     property int labelFontSize: Math.min(height / 30, width / 20)
     property int radialUnitFontSize: valueFontSize / 4
 
+    Keys.onPressed: event => {
+        if (event.key === Qt.Key_Right) {
+            headerController.toggleFaultAlerts();
+        }
+    }
+
     ColumnLayout {
         anchors.fill: parent
         spacing: 0
