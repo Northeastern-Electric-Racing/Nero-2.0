@@ -11,9 +11,6 @@ Item {
     property bool tractionControlStatus: speedController.tractionControl
     property int packTemp: speedController.packTemp
     property int motorTemp: speedController.motorTemp
-    property int timerValue: speedController.currentTime
-    property int lastRunTime: speedController.lastTime
-    property int fastestRunTime: speedController.fastestTime
     property int maxSpeed: speedController.maxSpeed
     property int currentSpeed: speedController.currentSpeed
     property int maxDraw: speedController.maxCurrent
@@ -27,12 +24,6 @@ Item {
     property int valueFontSize: Math.min(height / 8, width / 10)
     property int labelFontSize: Math.min(height / 30, width / 20)
     property int radialUnitFontSize: valueFontSize / 4
-
-    Keys.onPressed: event => {
-        if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
-            speedController.enterButtonPressed();
-        }
-    }
 
     ColumnLayout {
         anchors.fill: parent
@@ -51,19 +42,6 @@ Item {
             color: speedMode.tractionControlStatus ? Theme.goodStatus : Theme.criticalStatus
             font.pixelSize: 18
             font.bold: true
-        }
-
-        TimerDisplay {
-            id: timerDisplay
-            Layout.fillWidth: true
-            Layout.leftMargin: speedMode.xMargin
-            Layout.rightMargin: speedMode.xMargin
-            Layout.topMargin: speedMode.verticalSpacing
-            height: speedMode.height / 12
-            currentRunTime: speedMode.timerValue
-            lastRunTime: speedMode.lastRunTime
-            fastestRunTime: speedMode.fastestRunTime
-            radius: speedMode.borderRadii
         }
 
         RowLayout {
