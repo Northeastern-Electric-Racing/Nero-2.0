@@ -37,6 +37,7 @@ Item {
 
     HeaderView {
         id: header
+        ownsDialog: true
     }
 
     LabelText {

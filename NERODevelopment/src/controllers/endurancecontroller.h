@@ -61,6 +61,7 @@ signals:
   void lastTimeChanged(int);
   void powerDrawPercentChanged(int);
   void maxDCCurrentTargetChanged(int);
+  void toggleFaultAlertsRequested();
 
 public slots:
   void setCurrentMaxTorque(int);
@@ -77,6 +78,7 @@ public slots:
   void setMaxDCCurrentTarget(int);
 
   void enterButtonPressed() override;
+  void rightButtonPressed() override;
   void updateCurrentTime();
 
 private:

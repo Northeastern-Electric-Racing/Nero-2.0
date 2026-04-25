@@ -71,6 +71,8 @@ void HomeController::setLowVoltage(float voltage) {
   }
 }
 
+void HomeController::rightButtonPressed() { emit toggleFaultAlertsRequested(); }
+
 void HomeController::currentDataDidChange() {
   if (this->m_pageIndices.contains(this->m_model->currentPageIndex)) {
     setPackTemp(*m_model->getPackTemp());

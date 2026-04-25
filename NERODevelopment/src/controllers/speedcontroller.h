@@ -77,6 +77,7 @@ signals:
   void regenChanged(float);
   void powerDrawPercentChanged(int);
   void maxDCCurrentTargetChanged(int);
+  void toggleFaultAlertsRequested();
 
 public slots:
   void setTractionControl(bool);
@@ -97,6 +98,7 @@ public slots:
   void setMaxDCCurrentTarget(int);
 
   void enterButtonPressed() override;
+  void rightButtonPressed() override;
   void updateCurrentTime();
 
   void update();

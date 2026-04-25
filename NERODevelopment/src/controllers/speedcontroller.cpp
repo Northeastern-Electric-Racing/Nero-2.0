@@ -153,6 +153,10 @@ void SpeedController::enterButtonPressed() {
   }
 }
 
+void SpeedController::rightButtonPressed() {
+  emit toggleFaultAlertsRequested();
+}
+
 void SpeedController::updateCurrentTime() {
   if (m_timerRunning) {
     setCurrentTime(static_cast<int>(m_timer.elapsed()));

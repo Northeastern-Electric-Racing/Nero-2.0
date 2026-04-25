@@ -9,6 +9,8 @@ Item {
 
     property var criticalFaults: headerController.criticalFaults
     property var nonCriticalFaults: headerController.nonCriticalFaults
+    property bool faultAlertsEnabled: headerController.faultAlertsEnabled
+    property bool ownsDialog: false
     property string modeTitle: ""
 
     Timer {
@@ -19,17 +21,26 @@ Item {
     }
 
     function refreshFaultDialog() {
+        if (!ownsDialog)
+            return;
+        if (!faultAlertsEnabled) {
+            faultDialog.close();
+            autoCloseTimer.stop();
+            return;
+        }
         if (criticalFaults.length === 0 && nonCriticalFaults.length === 0) {
             faultDialog.close();
             autoCloseTimer.stop();
             return;
         }
+        faultDialog.close();
         faultDialog.open();
         autoCloseTimer.restart();
     }
 
     onCriticalFaultsChanged: refreshFaultDialog()
     onNonCriticalFaultsChanged: refreshFaultDialog()
+    onFaultAlertsEnabledChanged: refreshFaultDialog()
 
     NonCriticalWarning {
         id: nonCriticalWarning
