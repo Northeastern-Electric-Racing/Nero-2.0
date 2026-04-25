@@ -31,3 +31,12 @@ void HeaderController::currentDataDidChange() {
   setCriticalFaults(m_model->getCriticalFaults());
   setNonCriticalFaults(m_model->getNonCriticalFaults());
 }
+
+bool HeaderController::faultAlertsEnabled() const {
+  return m_faultAlertsEnabled;
+}
+
+void HeaderController::toggleFaultAlerts() {
+  m_faultAlertsEnabled = !m_faultAlertsEnabled;
+  emit faultAlertsEnabledChanged(m_faultAlertsEnabled);
+}
