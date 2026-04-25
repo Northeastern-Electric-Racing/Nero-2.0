@@ -1,5 +1,6 @@
-import QtQuick 2.15
-import QtQuick.Controls 2.15
+import QtQuick
+import QtQuick.Controls
+import NERO
 
 Rectangle {
     id: maxSpeedComparator
@@ -12,14 +13,14 @@ Rectangle {
     width: dimension
     height: dimension * 3
     radius: 5
-    color: "black"
-    border.color: "white"
+    color: Theme.background
+    border.color: Theme.primaryForeground
 
     Text {
         id: maxSpeed
         text: maxSpeedComparator.maxSpeed
         font.pixelSize: parent.width * 0.2
-        color: "white"
+        color: Theme.primaryForeground
         x: -(width + dimension / 20)
     }
 
@@ -27,7 +28,7 @@ Rectangle {
         id: lowestSpeed
         text: maxSpeedComparator.lowestSpeed
         font.pixelSize: parent.width * 0.2
-        color: "white"
+        color: Theme.primaryForeground
         x: -(width + dimension / 20)
         y: maxSpeedComparator.height - height
     }
@@ -39,20 +40,16 @@ Rectangle {
         width: topSpeedBar.width
         height: maxSpeedComparator.height * percentageHeight - 10
         radius: 5
-        property real percentageHeight: parseFloat(
-                                            (maxSpeedComparator.currentSpeed
-                                             / maxSpeedComparator.maxSpeed).toFixed(
-                                                2)) // Calculate percentage of height relative to maxSpeedComparator
+        property real percentageHeight: parseFloat((maxSpeedComparator.currentSpeed / maxSpeedComparator.maxSpeed).toFixed(2)) // Calculate percentage of height relative to maxSpeedComparator
 
         gradient: Gradient {
             GradientStop {
-                position: -5 * (1 - bar.percentageHeight
-                                + 0.1) // Start of gradient relative to parent's height
-                color: "red"
+                position: -5 * (1 - bar.percentageHeight + 0.1) // Start of gradient relative to parent's height
+                color: Theme.criticalStatus
             }
             GradientStop {
                 position: 1.0 // End of gradient relative to parent's height
-                color: "#55FF00"
+                color: Theme.goodStatus
             }
         }
         transformOrigin: Item.BottomLeft
@@ -67,15 +64,14 @@ Rectangle {
     Text {
         id: topSpeed
         text: qsTr("TOP SPEED")
-        color: "white"
+        color: Theme.primaryForeground
         x: -(width + dimension / 20)
-        y: maxSpeedComparator.height * (1 - maxSpeedComparator.previousTopSpeed
-                                        / maxSpeedComparator.maxSpeed)
+        y: maxSpeedComparator.height * (1 - maxSpeedComparator.previousTopSpeed / maxSpeedComparator.maxSpeed)
         font.pixelSize: parent.width * 0.2
         Text {
             id: topSpeedNumber
             text: maxSpeedComparator.previousTopSpeed + qsTr("MPH")
-            color: "white"
+            color: Theme.primaryForeground
             y: -height
             font.pixelSize: parent.width * 0.2
 
@@ -85,12 +81,11 @@ Rectangle {
 
     Rectangle {
         id: topSpeedBar
-        y: maxSpeedComparator.height * (1 - maxSpeedComparator.previousTopSpeed
-                                        / maxSpeedComparator.maxSpeed)
+        y: maxSpeedComparator.height * (1 - maxSpeedComparator.previousTopSpeed / maxSpeedComparator.maxSpeed)
         width: maxSpeedComparator.width - dimension / 6
         anchors.horizontalCenter: parent.horizontalCenter
         height: 2
-        color: "white"
+        color: Theme.primaryForeground
     }
 
     Behavior on currentSpeed {

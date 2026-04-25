@@ -1,51 +1,13 @@
 # Nero-2.0
+
 The Cars Dashboard Written in C++ With Qt Framework
 
 ### Onboarding
 
-Download Qt Installer For Open Source (https://www.qt.io/download-qt-installer-oss?hsCtaTracking=99d9dd4f-5681-48d2-b096-470725510d34%7C074ddad0-fdef-4e53-8aa8-5e8a876d6ab4)
-
-Open Qt Installer. 
-
-Create a Qt account if you do not already have one. 
-
-Accept the open source licensing agreement
-
-Select the Default options for installing components
-- Select Qt version 6.5.3
-
-Select Next Until You start downloading Qt (Should be around 30 GB)
-
-### Install protobuf for your machine
-
-#### Mac Os
-
-`brew install protobuf@3`
-
-`brew link --overwrite protobuf@3`
-
-#### Linux
-
-`sudo apt update`
-
-`sudo apt install protobuf-compiler`
-
-`protoc`
-
-### Compiling QtMqtt for your Qt version
-1 load QtCreator -> Load Project c:\Qt\6.5.3\Src\QtMqtt\CMakeList.txt
-
-2 Build Release and Debug
-
-3 Exit QtCreator
-
-4 Go to C:\Qt\6.5.3\Src\qtmqtt\build\build-qtmqtt-Desktop_Qt_6_5_3_MinGW_64_bit-Release
-
-5 cmake --install . (see the point at the end)
-
-Done
+> For initial installation, visit here: https://nerdocs.atlassian.net/wiki/x/CIBORQ
 
 #### Opening the Project
+
 Clone This repository to a directory of your choosing
 
 Select the cmakelists.txt file inside the NERO Development to open in qt creator
@@ -54,14 +16,39 @@ It should generate the project
 
 Select the kit for your respective desktop and press build and run
 
-### Installing Prettier
+## Development with Mock Telemetry
 
-We use clang-format for formatting our files
+### Quick Start
 
-Ensure that the Beautifier plugin is installed in your Qt Creator. You can check and install plugins by going to “Help” > “About Plugins” and then enabling the “Beautifier” plugin.
+1. Start mock telemetry (Docker required)
 
-Note: Enable the Beautifier plugin to use it. Since Qt Creator 10.0.0, the ClangFormat plugin is enabled by default. Select Preferences > C++ > Formatting mode > Disable to turn off ClangFormat if you enable Beautifier because combining them can lead to unexpected results.
+```bash
+docker compose -f compose.nero-dev.yml up -d
+```
 
+2. Run NERO in Qt Creator
+
+3. Stop when mock data when done
+
+```bash
+docker compose -f compose.nero-dev.yml down
+```
+
+### Troubleshooting
+
+Make sure you don't have any env vars set if running locally.
+
+```bash
+# View logs
+docker compose -f compose.nero-dev.yml logs -f
+
+# Check status
+docker ps | grep nero
+```
+
+### Formatting
+
+We use clang-format and QML format for formatting our files
 
 #### Mac
 
@@ -88,29 +75,48 @@ Click the "New" button and add the path to the bin directory of your LLVM instal
 Click OK to close all the windows.
 
 Type clang-format --version and press Enter. You should see the version information for clang-format if the installation was successful.
+### Running Formats
+#### Mac/Linux Format C++ files
+```bash
+git ls-files "*.cpp" "*.h" ":!deps/*" | xargs clang-format -i
+```
+#### Mac/Linux Format QML files
+```bash
+git ls-files "*.qml" ":!deps/*" | xargs ~/Qt/6.8.3/macos/bin/qmlformat -i
+```
+#### Windows Format C++ files
+```bash
+for /f %f in ('git ls-files "*.cpp" "*.h" ":!deps/*"') do clang-format -i "%f"
+```
+#### Windows Format QML files
+```bash
+for /f %f in ('git ls-files "*.qml" ":!deps/*"') do C:\Qt\6.8.3\mingw_64\bin\qmlformat.exe -i "%f"
+```
 
-### Linking Clang-Format to Qt Creator
+## Button Layout
 
-With Qt Creator open, select preferences from under the Qt Creator tab in the top menu bar
+MQTT topic `Wheel/Buttons/button_id` carries the 0-indexed button ordinal,
+matching the VCU `button_t` enum in `Cerberus-2.0/Core/Inc/u_buttons.h`.
 
-Select the beautifer tab (Should have a diamond icon)
+| 0 | ESC                     |
+| 1 | LEFT                    |
+| 2 | LAUNCH_CONTROL_TOGGLE   |
+| 3 | UP_REGEN                |
+| 4 | DOWN_REGEN              |
+| 5 | ENTER                   |
+| 6 | RIGHT                   |
+| 7 | TRACTION_CONTROL_TOGGLE |
+| 8 | UP_TORQUE               |
+| 9 | DOWN_TORQUE             |
 
-Under the general tab check the box for automatic formatting on save
-
-Select Clang-format as the tool
-
-<img width="1098" alt="Screen Shot 2023-08-03 at 8 33 27 AM" src="https://github.com/Northeastern-Electric-Racing/Nero-2.0/assets/113635669/dc179628-2a80-47cd-8dcd-47f5a6815189">
-
-Now under the Clang Format tab Set the path to where you installed your clang-format command
-You can figure out the file directory by running ```which clang-format```
-
-Now you can edit a file and save it to make sure it works
+Confluence reference (silkscreen is 1-indexed; wire = silkscreen − 1):
+https://nerdocs.atlassian.net/wiki/spaces/NER/pages/1526988828/Button+IO+25
 
 ### Testing out Enviornment Variables (Locally)
 
-Go into Projects, go into Run, go into Enviornment, and add variables named `ClIENT1_PORT` and `CLIENT2_PORT`. 
+Go into Projects, go into Run, go into Enviornment, and add variables named `ClIENT1_PORT` and `CLIENT2_PORT`.
 
-Then, change the option from Build Enviornment to System Enviornment. 
+Then, change the option from Build Enviornment to System Enviornment.
 
 Finally, save and run it.
 
@@ -124,11 +130,11 @@ After it's updated, exit out and ssh into the car: `ssh root@192.168.100.12, use
 
 Then, nano into the ENV variables: `nano /etc/init.d/S99nero2`
 
-Then, go to the ENV variables and change `CLIENT1_PORT`, `CLIENT2_PORT`, and `HOST`. 
-    (Correct: `CLIENT1_PORT=1883, CLIENT2_PORT=1882, HOST="92.168.100.12"`)
+Then, go to the ENV variables and change `CLIENT1_PORT`, `CLIENT2_PORT`, and `HOST`.
+(Correct: `CLIENT1_PORT=1883, CLIENT2_PORT=1882, HOST="92.168.100.12"`)
 
-After, exit out and save all the changed variables. 
+After, exit out and save all the changed variables.
 
-Then, exit out of the car. In `~/Projects/Odysseus`, run `./update_bin.sh nero <ODY_TPU_ROOT_PASSWORD>`. 
+Then, exit out of the car. In `~/Projects/Odysseus`, run `./update_bin.sh nero <ODY_TPU_ROOT_PASSWORD>`.
 
-If correct port and host variables, buttons should work. Else, no buttons should work. 
+If correct port and host variables, buttons should work. Else, no buttons should work.

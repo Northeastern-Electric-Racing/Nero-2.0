@@ -1,5 +1,6 @@
 #include "model.h"
 #include "QVector"
+#include <cmath>
 
 Model::Model() : pageHeight(480), pageWidth(800) {
   connect(this, &Model::onCurrentDataChange, this, &Model::updateStoredValues);
@@ -21,8 +22,9 @@ void Model::updateStoredValues() {
   }
   std::optional<float> draw = this->getCurrent();
   if (draw) {
-    if (draw.value() > m_maxDraw) {
-      m_maxDraw = draw.value();
+    float absDraw = std::fabs(draw.value());
+    if (absDraw > m_maxDraw) {
+      m_maxDraw = absDraw;
     }
   }
 }
@@ -96,12 +98,18 @@ QList<DebugTableRowValue> Model::getDebugTableValues() {
   return table;
 }
 
-std::optional<float> Model::getById(QString id) {
-  float value = this->currentData.value(id, DataInfo()).values[0];
-  if (value != -9999) {
-    return value;
-  } else {
+// Returns a single value at the given index in the values array of the topic id
+std::optional<float> Model::getById(QString id, int valueIndex) {
+  const QVector<float> values = this->currentData.value(id, DataInfo()).values;
+  if (valueIndex < 0 || valueIndex >= values.size()) {
     return std::nullopt;
+  } else {
+    float value = values[valueIndex];
+    if (value != -9999) {
+      return value;
+    } else {
+      return std::nullopt;
+    }
   }
 }
 

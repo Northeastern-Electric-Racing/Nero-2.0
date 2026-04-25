@@ -1,5 +1,6 @@
-import QtQuick 2.15
+import QtQuick
 import QtQuick.Shapes
+import NERO
 
 Item {
     id: critical
@@ -18,7 +19,7 @@ Item {
         ShapePath {
             id: triangle
             dashPattern: 5.6
-            fillColor: "red"
+            fillColor: Theme.criticalStatus
             strokeColor: "transparent"
             strokeWidth: 1
             capStyle: ShapePath.RoundCap
@@ -44,7 +45,7 @@ Item {
             id: text1
             x: (shape.width) / 2 - font.pixelSize / 8
             y: (shape.height - (font.pixelSize * 1.2))
-            color: "white"
+            color: Theme.primaryForeground
             text: qsTr("!")
             font.pixelSize: .75 * shape.width
         }

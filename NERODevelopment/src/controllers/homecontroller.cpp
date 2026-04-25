@@ -62,14 +62,12 @@ void HomeController::setStateOfCharge(int charge) {
   }
 }
 
-int HomeController::lowVoltageStateOfCharge() const {
-  return m_lowVoltageStateOfCharge;
-}
+float HomeController::lowVoltage() const { return m_lowVoltage; }
 
-void HomeController::setLowVoltageStateOfCharge(int charge) {
-  if (charge != m_lowVoltageStateOfCharge) {
-    m_lowVoltageStateOfCharge = charge;
-    emit lowVoltageStateOfChargeChanged(charge);
+void HomeController::setLowVoltage(float voltage) {
+  if (voltage != m_lowVoltage) {
+    m_lowVoltage = voltage;
+    emit lowVoltageChanged(voltage);
   }
 }
 
@@ -81,6 +79,6 @@ void HomeController::currentDataDidChange() {
     setStateOfCharge(*m_model->getStateOfCharge());
     setSpeed(*m_model->getMph());
     setStatus(*m_model->getStatus());
-    setLowVoltageStateOfCharge(*m_model->getLowVoltageStateOfCharge());
+    setLowVoltage(*m_model->getLowVoltage());
   }
 }

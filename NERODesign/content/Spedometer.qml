@@ -31,9 +31,8 @@ Item {
             anchors.bottom: shape.bottom
             anchors.verticalCenter: parent.verticalCenter
             anchors.verticalCenterOffset: 15
-            anchors.bottomMargin: gauge.verticalPadding / (3/2)
+            anchors.bottomMargin: gauge.verticalPadding / (3 / 2)
         }
-
     }
 
     Behavior on value {
@@ -76,19 +75,17 @@ Item {
             context.lineWidth = ring.borderWidth;
             context.beginPath();
             context.clearRect(0, 0, ring.width, ring.height);
-            context.arc(ring.centerX, ring.centerY, ring.ringRadius,
-                        ring.startAngle, ring.startAngle - ring.step / 10, false);
+            context.arc(ring.centerX, ring.centerY, ring.ringRadius, ring.startAngle, ring.startAngle - ring.step / 10, false);
             context.stroke();
 
             // Draw the inner border
             const innerBorderRadius = ring.ringRadius - ring.borderWidth / 2;
-                context.strokeStyle = "#87CEEB";
-                context.lineWidth = gauge.innerStrokeWidth;
+            context.strokeStyle = "#87CEEB";
+            context.lineWidth = gauge.innerStrokeWidth;
 
-                context.beginPath();
-                context.arc(ring.centerX, ring.centerY, innerBorderRadius,
-                    ring.startAngle, ring.startAngle - ring.step / 10,false);
-                context.stroke();
+            context.beginPath();
+            context.arc(ring.centerX, ring.centerY, innerBorderRadius, ring.startAngle, ring.startAngle - ring.step / 10, false);
+            context.stroke();
         }
     }
 

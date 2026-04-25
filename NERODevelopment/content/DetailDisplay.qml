@@ -1,6 +1,7 @@
-import QtQuick 2.15
-import QtQuick.Controls 2.15
+import QtQuick
+import QtQuick.Controls
 import QtQuick.Particles
+import NERO
 
 Rectangle {
     id: detailDisplay
@@ -10,16 +11,16 @@ Rectangle {
     property bool highlight: false
     height: 60
     width: 250
-    color: "black"
+    color: Theme.background
 
     onStatusChanged: {
-        console.log("Changing status")
+        console.log("Changing status");
         if (status === 0) {
-            statusDisplay = "OFF"
+            statusDisplay = "OFF";
         } else if (status == 1) {
-            statusDisplay = "GOOD"
+            statusDisplay = "GOOD";
         } else {
-            statusDisplay = "FAULTED"
+            statusDisplay = "FAULTED";
         }
     }
 
@@ -40,13 +41,13 @@ Rectangle {
                     SequentialAnimation on color {
                         loops: Animation.Infinite
                         ColorAnimation {
-                            from: "black"
-                            to: "#969696"
+                            from: Theme.primaryDetailGradient
+                            to: Theme.secondaryDetailGradient
                             duration: 1500
                         }
                         ColorAnimation {
-                            from: "#969696"
-                            to: "black"
+                            from: Theme.secondaryDetailGradient
+                            to: Theme.primaryDetailGradient
                             duration: 3000
                         }
                     }
@@ -57,18 +58,18 @@ Rectangle {
                     SequentialAnimation on color {
                         loops: Animation.Infinite
                         ColorAnimation {
-                            from: "black"
-                            to: "black"
+                            from: Theme.primaryDetailGradient
+                            to: Theme.primaryDetailGradient
                             duration: 1500
                         }
                         ColorAnimation {
-                            from: "black"
-                            to: "#969696"
+                            from: Theme.primaryDetailGradient
+                            to: Theme.secondaryDetailGradient
                             duration: 1500
                         }
                         ColorAnimation {
-                            from: "#969696"
-                            to: "black"
+                            from: Theme.secondaryDetailGradient
+                            to: Theme.primaryDetailGradient
                             duration: 1500
                         }
                     }
@@ -78,14 +79,13 @@ Rectangle {
         color: "transparent"
 
         border.color: "transparent"
-        width: Math.max(parent.width * 0.6,
-                        taskText.implicitWidth) // Ensure minimum width
+        width: Math.max(parent.width * 0.6, taskText.implicitWidth) // Ensure minimum width
         height: parent.height
         radius: 10
 
         LabelText {
             id: taskText
-            color: "white"
+            color: Theme.primaryForeground
             text: detailDisplay.shutdownFlowTask
             anchors.verticalCenter: parent.verticalCenter
             anchors.left: parent.left
@@ -96,19 +96,18 @@ Rectangle {
 
     Rectangle {
         id: statusDisplayContainer
-        color: status == 0 ? "transparent" : (status === 1 ? "#14FF00" : (status === 2 ? "#FF0000" : "transparent"))
-        width: Math.max(parent.width * 0.4,
-                        statusText.implicitWidth + 20) // Ensure minimum width
+        color: status == 0 ? "transparent" : (status === 1 ? Theme.goodStatus : (status === 2 ? Theme.criticalStatus : "transparent"))
+        width: Math.max(parent.width * 0.4, statusText.implicitWidth + 20) // Ensure minimum width
         height: parent.height
         anchors.left: taskDisplay.right
         radius: 10
-        border.color: status == 0 ? "white" : "transparent"
+        border.color: status == 0 ? Theme.primaryForeground : "transparent"
         border.width: status == 0 ? 3 : 0
 
         LabelText {
             id: statusText
             visible: !clear
-            color: "black"
+            color: Theme.inverseForeground
             text: detailDisplay.statusDisplay
             anchors.centerIn: parent
         }

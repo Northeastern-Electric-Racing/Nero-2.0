@@ -29,12 +29,12 @@ qt6_add_qml_module(content
         HeaderView.qml
         CriticalFaultIcon.qml
         NonCriticalWarning.qml
-        MicrophoneComponent.qml
-        EfficiencyScreen.qml
+        EnduranceScreen.qml
         TorqueValueComponent.qml
         TorqueAdj.qml
         SpeedMode.qml
         Snake.qml
+        Game2048.qml
         TimerDisplay.qml
         MaxSpeedComparator.qml
         MaxDrawGraph.qml
@@ -48,6 +48,7 @@ qt6_add_qml_module(content
         LabeledComponent.qml
         HomeIcon.qml
         SubMenuIcon.qml
+        DoomView.qml
 
     RESOURCES
         fonts/fonts.txt
@@ -55,7 +56,6 @@ qt6_add_qml_module(content
         images/bg.png
         images/pipe.png
         images/flappy-bird.png
-        images/microphone.svg
         images/flag.png
         images/hare.png
         images/turtle.png
@@ -63,7 +63,9 @@ qt6_add_qml_module(content
         images/game.png
         images/reverse.png
         images/exit.png
-        images/neroLogo.png
+        images/darkNeroLogo.png
+        images/lightNeroLogo.png
+        images/themes.png
         images/bots.jpg
         images/bspd.jpg
         images/cockpitBrb.jpg

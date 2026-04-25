@@ -28,19 +28,8 @@ void ButtonController::homeButtonPressed() {
 
 void ButtonController::buttonUpdate() {
   if (this->m_pageIndices.contains(this->m_model->currentPageIndex)) {
-    // QDateTime currentDate = QDateTime::currentDateTime();
-    // qDebug() << "Button Pressed"
-    //          << this->m_model->getBackwardButtonPressed().value_or(false)
-    //          << this->m_model->getDownButtonPressed().value_or(false)
-    //          << this->m_model->getEnterButtonPressed().value_or(false)
-    //          << this->m_model->getRightButtonPressed().value_or(false)
-    //          << this->m_model->getUpButtonPressed().value_or(false)
-    //          << this->m_model->getHomeButtonPressed().value_or(false)
-    //          << this->m_model->getForwardButtonPressed().value_or(false)
-    //          << this->m_model->currentPageIndex;
-
-    if (this->m_model->getBackwardButtonPressed() == true) {
-      qDebug() << "Back Button Pressed";
+    if (this->m_model->getLeftButtonPressed() == true) {
+      qDebug() << "Left Button Pressed";
       this->leftButtonPressed();
     }
 
@@ -56,12 +45,12 @@ void ButtonController::buttonUpdate() {
       this->enterButtonPressed();
     }
 
-    if (this->m_model->getUpButtonPressed() == true) {
+    if (this->m_model->getUpRegenButtonPressed() == true) {
       qDebug() << "Up button pressed";
       this->upButtonPressed();
     }
 
-    if (this->m_model->getDownButtonPressed() == true) {
+    if (this->m_model->getDownRegenButtonPressed() == true) {
       qDebug() << "Down Button Pressed";
 
       this->downButtonPressed();

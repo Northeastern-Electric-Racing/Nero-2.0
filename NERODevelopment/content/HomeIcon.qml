@@ -1,6 +1,7 @@
-import QtQuick 2.15
-import QtQuick.Controls 2.15
+import QtQuick
+import QtQuick.Controls
 import QtQuick.Layouts
+import NERO
 
 Rectangle {
     id: root
@@ -24,11 +25,11 @@ Rectangle {
             gradient: Gradient {
                 GradientStop {
                     position: 0.0
-                    color: highlighted ? "#6e6e6e" : "#191919"
+                    color: highlighted ? Theme.iconHighlightedBackground : Theme.iconBackground
                 }
                 GradientStop {
                     position: 1.0
-                    color: highlighted ? "#333333" : "#111111"
+                    color: highlighted ? Theme.iconHighlightedGradientStop : Theme.iconGradientStop
                 }
             }
 

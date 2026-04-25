@@ -25,8 +25,8 @@ Item {
     }
 
     Rectangle {
-        visible: thermometer.regen
         id: lightningBackground
+        visible: thermometer.regen
         width: parent.width / 3
         height: parent.height / 3
         color: "black"
@@ -77,9 +77,18 @@ Item {
                 anchors.bottom: innerFillCircle.bottom
                 radius: innerFillCircle.radius
                 gradient: Gradient {
-                    GradientStop { position: 0.0; color: thermometer.color }
-                    GradientStop { position: 0.5; color: Qt.darker(thermometer.color, 1.5) }
-                    GradientStop { position: 1.0; color: Qt.darker(thermometer.color, 2.5) }
+                    GradientStop {
+                        position: 0.0
+                        color: thermometer.color
+                    }
+                    GradientStop {
+                        position: 0.5
+                        color: Qt.darker(thermometer.color, 1.5)
+                    }
+                    GradientStop {
+                        position: 1.0
+                        color: Qt.darker(thermometer.color, 2.5)
+                    }
                 }
             }
         }

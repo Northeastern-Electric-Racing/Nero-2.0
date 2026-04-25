@@ -1,13 +1,13 @@
-import QtQuick 2.0
-import QtQuick.Shapes
 import QtQuick
+import QtQuick.Shapes
+import NERO
 
 Item {
     id: arrow
     property variant stops: []
     property int arrowWidth: 2
     property real angle: -Math.PI / 6
-    property string arrowColor: "white"
+    property string arrowColor: Theme.primaryForeground
 
     property real x1: stops[stops.length - 2].x
     property real y1: stops[stops.length - 2].y
@@ -20,15 +20,11 @@ Item {
     property real l1: Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2))
     property real l2: 15
 
-    property real x3: x2 + l2 / l1 * (xDiff * Math.cos(
-                                          angle) + yDiff * Math.sin(angle))
-    property real y3: y2 + l2 / l1 * (yDiff * Math.cos(
-                                          angle) - xDiff * Math.sin(angle))
+    property real x3: x2 + l2 / l1 * (xDiff * Math.cos(angle) + yDiff * Math.sin(angle))
+    property real y3: y2 + l2 / l1 * (yDiff * Math.cos(angle) - xDiff * Math.sin(angle))
 
-    property real x4: x2 + l2 / l1 * (xDiff * Math.cos(
-                                          angle) - yDiff * Math.sin(angle))
-    property real y4: y2 + l2 / l1 * (yDiff * Math.cos(
-                                          angle) + xDiff * Math.sin(angle))
+    property real x4: x2 + l2 / l1 * (xDiff * Math.cos(angle) - yDiff * Math.sin(angle))
+    property real y4: y2 + l2 / l1 * (yDiff * Math.cos(angle) + xDiff * Math.sin(angle))
 
     // Explanation of math https://math.stackexchange.com/questions/1314006/drawing-an-arrow
     Repeater {

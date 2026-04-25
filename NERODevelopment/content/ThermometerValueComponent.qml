@@ -1,5 +1,6 @@
-import QtQuick 2.15
+import QtQuick
 import QtQuick.Layouts
+import NERO
 
 Item {
     id: thermometerComponent
@@ -8,12 +9,14 @@ Item {
     property int horizontalIconSpacing: width * 0.1
     property int labelVerticalSpacing: height * 0.1
     property bool regen: false
-    property string labelColor: "#47A7FF"
+    property string labelColor: Theme.accentForeground
     property int horizontalPadding: width * 0.1
     property int radius
     property int valueFontSize
     property int labelFontSize
     property int unitFontSize: valueFontSize
+    property string unit: "°"
+    property bool unitAnchorBottom: false
 
     LabeledComponent {
         anchors.fill: parent
@@ -28,11 +31,11 @@ Item {
         labelVerticalSpacing: thermometerComponent.labelVerticalSpacing
         labelColor: thermometerComponent.labelColor
         horizontalPadding: thermometerComponent.horizontalPadding
-        valueUnit: regen ? "A" : "°"
+        valueUnit: thermometerComponent.unit
         radius: thermometerComponent.radius
         valueFontSize: thermometerComponent.valueFontSize
         labelFontSize: thermometerComponent.labelFontSize
         unitFontSize: thermometerComponent.unitFontSize
-        unitAnchorBottom: regen ? true : false
+        unitAnchorBottom: thermometerComponent.unitAnchorBottom
     }
 }

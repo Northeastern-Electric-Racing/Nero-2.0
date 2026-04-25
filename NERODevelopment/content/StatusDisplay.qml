@@ -1,6 +1,7 @@
-import QtQuick 2.15
-import QtQuick.Controls 2.15
+import QtQuick
+import QtQuick.Controls
 import QtQuick.Particles
+import NERO
 
 Item {
     id: detailDisplay
@@ -9,7 +10,7 @@ Item {
     property bool highlight: false
     onHighlightChanged: {
         if (!highlight) {
-            background.border.width = 1
+            background.border.width = 1;
         }
     }
 
@@ -17,8 +18,8 @@ Item {
         id: background
         anchors.fill: parent
         radius: 5
-        color: detailDisplay.status == 0 ? "black" : (detailDisplay.status == 1 ? "#14FF00" : (detailDisplay.status == 2 ? "#FF0000" : "transparent"))
-        border.color: "white"
+        color: detailDisplay.status == 0 ? Theme.background : (detailDisplay.status == 1 ? Theme.goodStatus : (detailDisplay.status == 2 ? Theme.criticalStatus : "transparent"))
+        border.color: Theme.primaryForeground
         border.width: 1
 
         Behavior on border.width {
@@ -33,14 +34,13 @@ Item {
             running: detailDisplay.highlight
             repeat: true
             onTriggered: {
-                background.border.width = (background.border.width
-                                           === 1) ? 5 : 1 // Toggle between 0 and 5
+                background.border.width = (background.border.width === 1) ? 5 : 1; // Toggle between 0 and 5
             }
         }
 
         LabelText {
             id: taskText
-            color: detailDisplay.status == 0 ? "white" : "black"
+            color: detailDisplay.status == 0 ? Theme.primaryForeground : Theme.inverseForeground
             text: detailDisplay.shutdownFlowTask
             anchors.centerIn: parent
             font.bold: true
