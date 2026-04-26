@@ -105,7 +105,7 @@ Item {
             }
 
             ColumnLayout {
-                id: rightColumn
+                id: radialColumn
                 Layout.fillHeight: true
                 Layout.fillWidth: true
                 Layout.preferredWidth: 2
