@@ -168,6 +168,14 @@ std::optional<float> RaspberryModel::getCurrent() {
   return this->getById(CURRENT);
 }
 
+std::optional<float> RaspberryModel::getDCCurrent() {
+  return this->getById(CURRENT);
+}
+
+std::optional<float> RaspberryModel::getMaxDCCurrentTarget() {
+  return this->getById(DCL);
+}
+
 std::optional<float> RaspberryModel::getMaxCellVoltage() {
   std::optional<float> voltage = this->getById(MAXCELLVOLTAGE);
   return voltage ? std::optional<float>(std::round(*voltage * 1000))

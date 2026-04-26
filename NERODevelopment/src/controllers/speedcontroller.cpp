@@ -87,6 +87,22 @@ void SpeedController::setMaxCurrentDischarge(float maxCurrentDischarge) {
   }
 }
 
+int SpeedController::powerDrawPercent() const { return m_powerDrawPercent; }
+void SpeedController::setPowerDrawPercent(int percent) {
+  if (percent != m_powerDrawPercent) {
+    m_powerDrawPercent = percent;
+    emit powerDrawPercentChanged(percent);
+  }
+}
+
+int SpeedController::maxDCCurrentTarget() const { return m_maxDCCurrentTarget; }
+void SpeedController::setMaxDCCurrentTarget(int target) {
+  if (target != m_maxDCCurrentTarget) {
+    m_maxDCCurrentTarget = target;
+    emit maxDCCurrentTargetChanged(target);
+  }
+}
+
 void SpeedController::rightButtonPressed() {
   emit toggleFaultAlertsRequested();
 }
@@ -102,4 +118,20 @@ void SpeedController::update() {
   setMaxCurrent(m_model->getMaxDraw());
   setCurrentDischarge(*m_model->getDcl());
   setRegen(*m_model->getRegenPower());
+
+  std::optional<float> dcCurrent = m_model->getDCCurrent();
+  std::optional<float> maxDCTarget = m_model->getMaxDCCurrentTarget();
+
+  if (maxDCTarget) {
+    setMaxDCCurrentTarget(static_cast<int>(std::round(std::abs(*maxDCTarget))));
+  }
+  if (dcCurrent && maxDCTarget && std::abs(*maxDCTarget) > 0) {
+    int percent = static_cast<int>(
+        std::round(std::abs(*dcCurrent) / std::abs(*maxDCTarget) * 100.0f));
+    if (percent > 100)
+      percent = 100;
+    if (percent < 0)
+      percent = 0;
+    setPowerDrawPercent(percent);
+  }
 }
