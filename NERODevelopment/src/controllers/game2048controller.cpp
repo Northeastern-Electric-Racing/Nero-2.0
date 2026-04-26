@@ -21,6 +21,27 @@ void Game2048Controller::setScore(int score) {
   }
 }
 
+int Game2048Controller::bestScore() const { return m_bestScore; }
+
+void Game2048Controller::setBestScore(int bestScore) {
+  if (bestScore != m_bestScore) {
+    m_bestScore = bestScore;
+    emit bestScoreChanged();
+  }
+}
+
+bool Game2048Controller::hasSavedGame() const { return m_hasSavedGame; }
+
+QVariantList Game2048Controller::savedBoard() const { return m_savedBoard; }
+
+bool Game2048Controller::savedHasWon() const { return m_savedHasWon; }
+
+void Game2048Controller::saveState(const QVariantList &board, bool hasWon) {
+  m_savedBoard = board;
+  m_savedHasWon = hasWon;
+  m_hasSavedGame = true;
+}
+
 void Game2048Controller::enterButtonPressed() {
   if (m_gameOver) {
     emit restartRequested();
