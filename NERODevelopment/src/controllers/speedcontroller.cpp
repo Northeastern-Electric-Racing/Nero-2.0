@@ -1,13 +1,8 @@
 #include "speedcontroller.h"
-#include <QElapsedTimer>
-#include <QTimer>
 
 SpeedController::SpeedController(Model *model, QObject *parent)
-    : ButtonController{model, 3, parent}, m_updateTimer(new QTimer(this)) {
+    : ButtonController{model, 3, parent} {
   connect(m_model, &Model::onCurrentDataChange, this, &SpeedController::update);
-  connect(m_updateTimer, &QTimer::timeout, this,
-          &SpeedController::updateCurrentTime);
-  m_updateTimer->setInterval(1);
 }
 
 bool SpeedController::tractionControl() const { return m_tractionControl; }
@@ -45,27 +40,6 @@ void SpeedController::setChargeState(float chargeState) {
   if (chargeState != m_chargeState) {
     m_chargeState = chargeState;
     emit chargeStateChanged(chargeState);
-  }
-}
-int SpeedController::currentTime() const { return m_currentTime; }
-void SpeedController::setCurrentTime(int currentTime) {
-  if (currentTime != m_currentTime) {
-    m_currentTime = currentTime;
-    emit currentTimeChanged(currentTime);
-  }
-}
-int SpeedController::fastestTime() const { return m_fastestTime; }
-void SpeedController::setFastestTime(int fastTime) {
-  if (fastTime != m_fastestTime) {
-    m_fastestTime = fastTime;
-    emit fastestTimeChanged(fastTime);
-  }
-}
-int SpeedController::lastTime() const { return m_lastTime; }
-void SpeedController::setLastTime(int lastTime) {
-  if (lastTime != m_lastTime) {
-    m_lastTime = lastTime;
-    emit lastTimeChanged(lastTime);
   }
 }
 int SpeedController::currentSpeed() const { return m_currentSpeed; }
@@ -113,38 +87,8 @@ void SpeedController::setMaxCurrentDischarge(float maxCurrentDischarge) {
   }
 }
 
-void SpeedController::enterButtonPressed() {
-  if (m_timerRunning) {
-    m_timerRunning = false;
-    m_updateTimer->stop();
-    int runTime = static_cast<int>(m_timer.elapsed());
-    qDebug() << "Timer stopped. Run time:" << runTime
-             << " Last time:" << m_lastTime
-             << " Fastest time:" << m_fastestTime;
-    setCurrentTime(runTime);
-    setLastTime(runTime);
-
-    if (runTime < fastestTime() || fastestTime() == 0) {
-      setFastestTime(runTime);
-      qDebug() << "fastest time overridden" << runTime;
-    }
-  } else {
-    setLastTime(m_currentTime);
-    m_timerRunning = true;
-    m_timer.start();
-    m_updateTimer->start();
-    qDebug() << "Timer started.";
-  }
-}
-
 void SpeedController::rightButtonPressed() {
   emit toggleFaultAlertsRequested();
-}
-
-void SpeedController::updateCurrentTime() {
-  if (m_timerRunning) {
-    setCurrentTime(static_cast<int>(m_timer.elapsed()));
-  }
 }
 
 void SpeedController::update() {
