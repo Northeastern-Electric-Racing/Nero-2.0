@@ -12,6 +12,7 @@ Item {
     property bool faultAlertsEnabled: headerController.faultAlertsEnabled
     property bool ownsDialog: false
     property string modeTitle: ""
+    property real titleHorizontalCenterOffset: 0
 
     Timer {
         id: autoCloseTimer
@@ -66,6 +67,7 @@ Item {
         visible: modeTitle !== ""
         text: modeTitle
         anchors.centerIn: parent
+        anchors.horizontalCenterOffset: header.titleHorizontalCenterOffset
         color: Theme.offCarForeground
         font.pixelSize: 36
         font.bold: true
