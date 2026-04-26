@@ -60,9 +60,7 @@ void EnduranceController::setSpeed(int speed) {
   }
 }
 
-int EnduranceController::powerDrawPercent() const {
-  return m_powerDrawPercent;
-}
+int EnduranceController::powerDrawPercent() const { return m_powerDrawPercent; }
 void EnduranceController::setPowerDrawPercent(int percent) {
   if (percent != m_powerDrawPercent) {
     m_powerDrawPercent = percent;
