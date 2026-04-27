@@ -1,5 +1,5 @@
-import QtQuick 2.15
-import QtQuick.Controls 2.15
+import QtQuick
+import QtQuick.Controls
 import NERO
 
 Item {
@@ -9,32 +9,39 @@ Item {
 
     property var criticalFaults: headerController.criticalFaults
     property var nonCriticalFaults: headerController.nonCriticalFaults
-    property bool isTalking: headerController.isTalking
+    property bool faultAlertsEnabled: headerController.faultAlertsEnabled
+    property bool ownsDialog: false
+    property string modeTitle: ""
+    property real titleHorizontalCenterOffset: 0
 
     Timer {
-        id: timer
+        id: autoCloseTimer
+        interval: 3000
+        repeat: false
+        onTriggered: faultDialog.close()
     }
 
-    function delay(delayTime, cb) {
-        timer.interval = delayTime
-        timer.repeat = false
-        timer.triggered.connect(cb)
-        timer.start()
+    function refreshFaultDialog() {
+        if (!ownsDialog)
+            return;
+        if (!faultAlertsEnabled) {
+            faultDialog.close();
+            autoCloseTimer.stop();
+            return;
+        }
+        if (criticalFaults.length === 0 && nonCriticalFaults.length === 0) {
+            faultDialog.close();
+            autoCloseTimer.stop();
+            return;
+        }
+        faultDialog.close();
+        faultDialog.open();
+        autoCloseTimer.restart();
     }
 
-    onCriticalFaultsChanged: {
-        if (criticalFaults.length > 0) {
-            faultDialog.openModal("Critical Faults", criticalFaults.join("\n"))
-            delay(3000, faultDialog.closeModal)
-        }
-    }
-    onNonCriticalFaultsChanged: {
-        if (nonCriticalFaults.length > 0) {
-            faultDialog.openModal("Non Critical Faults",
-                                  nonCriticalFaults.join("\n"))
-            delay(3000, faultDialog.closeModal)
-        }
-    }
+    onCriticalFaultsChanged: refreshFaultDialog()
+    onNonCriticalFaultsChanged: refreshFaultDialog()
+    onFaultAlertsEnabledChanged: refreshFaultDialog()
 
     NonCriticalWarning {
         id: nonCriticalWarning
@@ -56,19 +63,20 @@ Item {
         numWarnings: criticalFaults.length
     }
 
-    MicrophoneComponent {
-        id: microphoneComponent
-        height: parent.height / 2 + 10
-        width: parent.height / 2 + 10
-        anchors.right: parent.right
-        anchors.top: parent.top
-        anchors.rightMargin: 5
-        anchors.topMargin: 5
-        isTalking: header.isTalking
+    LabelText {
+        visible: modeTitle !== ""
+        text: modeTitle
+        anchors.centerIn: parent
+        anchors.horizontalCenterOffset: header.titleHorizontalCenterOffset
+        color: Theme.offCarForeground
+        font.pixelSize: 36
+        font.bold: true
     }
 
     FaultDialog {
         id: faultDialog
         dimension: 300
+        criticalList: criticalFaults
+        nonCriticalList: nonCriticalFaults
     }
 }

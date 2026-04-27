@@ -1,4 +1,4 @@
-import QtQuick 2.15
+import QtQuick
 
 Item {
     id: tankIcon
@@ -58,7 +58,6 @@ Item {
             color: tankColor
             anchors.verticalCenterOffset: 15
             anchors.verticalCenter: parent.verticalCenter
-
         }
     }
 
@@ -92,7 +91,6 @@ Item {
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
         }
-
     }
 
     Rectangle {
@@ -127,8 +125,5 @@ Item {
                 anchors.horizontalCenter: parent.horizontalCenter
             }
         }
-
-
-
     }
 }

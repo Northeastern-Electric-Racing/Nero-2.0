@@ -16,31 +16,31 @@ Item {
     focus: isFocused
 
     Keys.onPressed: event => {
-                        switch (event.key) {
-                            case Qt.Key_Up:
-                            configurationController.upButtonPressed()
-                            break
-                            case Qt.Key_Down:
-                            configurationController.downButtonPressed()
-                            break
-                            case Qt.Key_Return:
-                            configurationController.enterButtonPressed()
-                            break
-                            default:
-                            break
-                        }
-                    }
+        switch (event.key) {
+        case Qt.Key_Up:
+            configurationController.upButtonPressed();
+            break;
+        case Qt.Key_Down:
+            configurationController.downButtonPressed();
+            break;
+        case Qt.Key_Return:
+            configurationController.enterButtonPressed();
+            break;
+        default:
+            break;
+        }
+    }
 
     onVisibleChanged: {
         if (visible) {
-            isFocused = false
-            isFocused = true
+            isFocused = false;
+            isFocused = true;
         }
     }
 
     onIsFocusedChanged: {
-        focus = !isFocused
-        focus = isFocused
+        focus = !isFocused;
+        focus = isFocused;
     }
 
     ValueText {
@@ -61,18 +61,17 @@ Item {
             id: driverKeyboard
             label: "Enter Driver"
             onAccepted: text => {
-                            configuration.driverText = text
-                            configuration.isFocused = false
-                            configuration.isFocused = true
-                            configurationController.setDriverName(text)
-                            configurationController.setIsKeyboardSelected(false)
-                        }
-            onRejected: {
-                configuration.isFocused = false
-                configurationController.setIsKeyboardSelected(false)
+                configuration.driverText = text;
+                configuration.isFocused = false;
+                configuration.isFocused = true;
+                configurationController.setDriverName(text);
+                configurationController.setIsKeyboardSelected(false);
             }
-            selected: configuration.isKeyboardSelected
-                      && configuration.selectedConfigurationIndex === 0
+            onRejected: {
+                configuration.isFocused = false;
+                configurationController.setIsKeyboardSelected(false);
+            }
+            selected: configuration.isKeyboardSelected && configuration.selectedConfigurationIndex === 0
 
             border.width: configuration.selectedConfigurationIndex === 0 ? 2 : 0
             border.color: "blue"
@@ -89,18 +88,17 @@ Item {
         KeyboardInput {
             label: "Enter Location"
             onAccepted: text => {
-                            configuration.locationText = text
-                            configuration.isFocused = false
-                            configuration.isFocused = true
-                            configurationController.setLocationName(text)
-                            configurationController.setIsKeyboardSelected(false)
-                        }
-            onRejected: {
-                configuration.isFocused = false
-                configurationController.setIsKeyboardSelected(false)
+                configuration.locationText = text;
+                configuration.isFocused = false;
+                configuration.isFocused = true;
+                configurationController.setLocationName(text);
+                configurationController.setIsKeyboardSelected(false);
             }
-            selected: configuration.isKeyboardSelected
-                      && configuration.selectedConfigurationIndex === 1
+            onRejected: {
+                configuration.isFocused = false;
+                configurationController.setIsKeyboardSelected(false);
+            }
+            selected: configuration.isKeyboardSelected && configuration.selectedConfigurationIndex === 1
 
             border.width: configuration.selectedConfigurationIndex === 1 ? 2 : 0
             border.color: "blue"
@@ -116,18 +114,17 @@ Item {
         KeyboardInput {
             label: "Enter System"
             onAccepted: text => {
-                            configuration.systemText = text
-                            configuration.isFocused = false
-                            configuration.isFocused = true
-                            configurationController.setSystemName(text)
-                            configurationController.setIsKeyboardSelected(false)
-                        }
-            onRejected: {
-                configuration.isFocused = false
-                configurationController.setIsKeyboardSelected(false)
+                configuration.systemText = text;
+                configuration.isFocused = false;
+                configuration.isFocused = true;
+                configurationController.setSystemName(text);
+                configurationController.setIsKeyboardSelected(false);
             }
-            selected: configuration.isKeyboardSelected
-                      && configuration.selectedConfigurationIndex === 2
+            onRejected: {
+                configuration.isFocused = false;
+                configurationController.setIsKeyboardSelected(false);
+            }
+            selected: configuration.isKeyboardSelected && configuration.selectedConfigurationIndex === 2
 
             border.width: configuration.selectedConfigurationIndex === 2 ? 2 : 0
             border.color: "blue"

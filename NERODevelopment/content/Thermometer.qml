@@ -1,5 +1,5 @@
-import QtQuick 6.5
-import QtQuick.Controls 6.5
+import QtQuick
+import QtQuick.Controls
 import QtQuick.Layouts
 import NERO
 
@@ -9,11 +9,21 @@ Rectangle {
     property int value: 0
     property int maxValue: 65
     property int minValue: -15
-    property string fillColor: regen ? Theme.getColor("redThermoStatus") : value > maxValue - ((Math.abs(maxValue) + Math.abs(
-                                                                        minValue)) / 5) ? Theme.getColor("redThermoStatus") : value > maxValue - (((Math.abs(maxValue) + Math.abs(minValue)) / 5) * 2) ? Theme.getColor("orangeThermoStatus") : value > maxValue - (((Math.abs(maxValue) + Math.abs(minValue)) / 5) * 3) ? Theme.getColor("yellowThermoStatus") : value > maxValue - (((Math.abs(maxValue) + Math.abs(minValue)) / 5) * 4) ? Theme.getColor("blueThermoStatus") : Theme.getColor("purpleThermoStatus")
+
+    property real percentage: (value - minValue) / (maxValue - minValue) //Converting value to percentage range between minval -> maxval
+
+    property color fillColor: regen ? Qt.hsla(0, 1, 0.5, 1) : Qt.hsla(percentage > 0.875 ? 0.0 : //Red
+    percentage > 0.75 ? 0.08 + (0.0 - 0.08) * ((percentage - 0.75) / 0.125) : //Orange -> Red
+    percentage > 0.5 ? 0.16 + (0.08 - 0.16) * ((percentage - 0.5) / 0.25) : // Yellow -> Orange
+    percentage > 0.375 ? 0.33 + (0.16 - 0.33) * ((percentage - 0.375) / 0.125) : //Green -> Yellow
+    percentage > 0.25 ? 0.55 + (0.33 - 0.55) * ((percentage - 0.25) / 0.125) : //Cyan -> Green
+    percentage > 0.125 ? 0.67 + (0.55 - 0.67) * ((percentage - 0.125) / 0.125) : //Blue -> Cyan
+    0.83 + (0.67 - 0.83) * (percentage / 0.125) //Purple -> Blue
+    , 1, 0.5, 1 //Saturation, lightness, alpha
+    )
     height: 500
     width: height / 2.233
-    color: Theme.getColor("transparent")
+    color: "transparent"
 
     property int thermometerWidth: thermometer.height / 2.233
     property int horizontalPadding: thermometer.thermometerWidth / 10
@@ -21,8 +31,8 @@ Rectangle {
     property int outerRectangleHeight: thermometer.height / 1.84
 
     Rectangle {
-        visible: thermometer.regen
         id: lightningBackground
+        visible: thermometer.regen
         width: thermometer.thermometerWidth / 3
         height: parent.height / 4
         color: thermometer.fillColor
@@ -76,7 +86,7 @@ Rectangle {
             stops: [
                 GradientStop {
                     position: 1.0
-                    color: Theme.getColor("fillGradientStop")
+                    color: Theme.fillGradientStop
                 },
                 GradientStop {
                     position: -0.8
@@ -98,7 +108,7 @@ Rectangle {
             stops: [
                 GradientStop {
                     position: 1.5
-                    color: Theme.getColor("fillGradientStop")
+                    color: Theme.fillGradientStop
                 },
                 GradientStop {
                     position: 0.0
@@ -117,7 +127,7 @@ Rectangle {
             right: fillRectangle.right
             bottom: fillRectangle.top
         }
-        color: Theme.getColor("background")
+        color: Theme.background
     }
 
     Lightning {

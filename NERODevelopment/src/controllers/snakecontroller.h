@@ -29,6 +29,7 @@ public slots:
   void setDidStart(bool);
   void setDirection(int);
   void setGameOver(bool);
+  Q_INVOKABLE void resetGame();
 
 signals:
   void didStartChanged();

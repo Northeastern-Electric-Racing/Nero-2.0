@@ -1,5 +1,5 @@
-import QtQuick 2.15
-import QtQuick.Controls 2.15
+import QtQuick
+import QtQuick.Controls
 import NERO
 
 Text {
@@ -8,5 +8,5 @@ Text {
     font.family: webFont.name
     font.pixelSize: 85
     font.letterSpacing: -3
-    color: Theme.getColor("primaryForeground")
+    color: Theme.primaryForeground
 }

@@ -1,13 +1,13 @@
-import QtQuick 2.15
+import QtQuick
 import NERO
 
 Rectangle {
     property bool highlighted: false
     property string text: "Off"
-    color: Theme.getColor("transparent")
+    color: "transparent"
     border.width: highlighted ? 2 : 1
 
-    border.color: highlighted ? Theme.getColor("primaryForeground") : Theme.getColor("transparent")
+    border.color: highlighted ? Theme.primaryForeground : "transparent"
     height: label.implicitHeight
     width: parent.width
 

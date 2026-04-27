@@ -1,14 +1,9 @@
 #include "speedcontroller.h"
-#include <QElapsedTimer>
-#include <QTimer>
+#include <cmath>
 
 SpeedController::SpeedController(Model *model, QObject *parent)
-    : ButtonController{model, 3, parent}, m_updateTimer(new QTimer(this)) {
-    connect(m_model, &Model::onCurrentDataChange, this, &SpeedController::update);
-    connect(m_updateTimer, &QTimer::timeout, this,
-            &SpeedController::updateCurrentTime);
-    m_updateTimer->setInterval(1);
-    update();
+    : ButtonController{model, 3, parent} {
+  connect(m_model, &Model::onCurrentDataChange, this, &SpeedController::update);
 }
 
 bool SpeedController::tractionControl() const { return m_tractionControl; }
@@ -29,23 +24,19 @@ void SpeedController::setRegen(float regen) {
 }
 
 float SpeedController::regenPercentage() const {
-    if (m_maxRegenCapacity > 0) {
-        float result = (abs(m_regen) / abs(m_maxRegenCapacity)) * 100.0f;
-        return result;
-    }
-    return 0.0f;
+  if (m_maxRegenCapacity > 0) {
+    return (std::abs(m_regen) / std::abs(m_maxRegenCapacity)) * 100.0f;
+  }
+  return 0.0f;
 }
 
-float SpeedController::maxRegenCapacity() const {
-    return m_maxRegenCapacity;
-}
-
+float SpeedController::maxRegenCapacity() const { return m_maxRegenCapacity; }
 void SpeedController::setMaxRegenCapacity(float capacity) {
-    if (capacity != m_maxRegenCapacity) {
-        m_maxRegenCapacity = capacity;
-        emit maxRegenCapacityChanged(capacity);
-        emit regenPercentageChanged(regenPercentage());
-    }
+  if (capacity != m_maxRegenCapacity) {
+    m_maxRegenCapacity = capacity;
+    emit maxRegenCapacityChanged(capacity);
+    emit regenPercentageChanged(regenPercentage());
+  }
 }
 
 float SpeedController::packTemp() const { return m_packTemp; }
@@ -67,27 +58,6 @@ void SpeedController::setChargeState(float chargeState) {
   if (chargeState != m_chargeState) {
     m_chargeState = chargeState;
     emit chargeStateChanged(chargeState);
-  }
-}
-int SpeedController::currentTime() const { return m_currentTime; }
-void SpeedController::setCurrentTime(int currentTime) {
-  if (currentTime != m_currentTime) {
-    m_currentTime = currentTime;
-    emit currentTimeChanged(currentTime);
-  }
-}
-int SpeedController::fastestTime() const { return m_fastestTime; }
-void SpeedController::setFastestTime(int fastTime) {
-  if (fastTime != m_fastestTime) {
-    m_fastestTime = fastTime;
-    emit fastestTimeChanged(fastTime);
-  }
-}
-int SpeedController::lastTime() const { return m_lastTime; }
-void SpeedController::setLastTime(int lastTime) {
-  if (lastTime != m_lastTime) {
-    m_lastTime = lastTime;
-    emit lastTimeChanged(lastTime);
   }
 }
 int SpeedController::currentSpeed() const { return m_currentSpeed; }
@@ -135,46 +105,56 @@ void SpeedController::setMaxCurrentDischarge(float maxCurrentDischarge) {
   }
 }
 
-void SpeedController::enterButtonPressed() {
-  if (m_timerRunning) {
-    m_timerRunning = false;
-    m_updateTimer->stop();
-    int runTime = static_cast<int>(m_timer.elapsed());
-    qDebug() << "Timer stopped. Run time:" << runTime
-             << " Last time:" << m_lastTime
-             << " Fastest time:" << m_fastestTime;
-    setCurrentTime(runTime);
-    setLastTime(runTime);
-
-    if (runTime < fastestTime() || fastestTime() == 0) {
-      setFastestTime(runTime);
-      qDebug() << "fastest time overridden" << runTime;
-    }
-  } else {
-    setLastTime(m_currentTime);
-    m_timerRunning = true;
-    m_timer.start();
-    m_updateTimer->start();
-    qDebug() << "Timer started.";
+int SpeedController::powerDrawPercent() const { return m_powerDrawPercent; }
+void SpeedController::setPowerDrawPercent(int percent) {
+  if (percent != m_powerDrawPercent) {
+    m_powerDrawPercent = percent;
+    emit powerDrawPercentChanged(percent);
   }
 }
 
-void SpeedController::updateCurrentTime() {
-  if (m_timerRunning) {
-    setCurrentTime(static_cast<int>(m_timer.elapsed()));
+int SpeedController::maxDCCurrentTarget() const { return m_maxDCCurrentTarget; }
+void SpeedController::setMaxDCCurrentTarget(int target) {
+  if (target != m_maxDCCurrentTarget) {
+    m_maxDCCurrentTarget = target;
+    emit maxDCCurrentTargetChanged(target);
   }
+}
+
+void SpeedController::rightButtonPressed() {
+  emit toggleFaultAlertsRequested();
 }
 
 void SpeedController::update() {
-    setTractionControl(*m_model->getTractionControl());
-    setPackTemp(*m_model->getPackTemp());
-    setMotorTemp(*m_model->getMotorTemp());
-    setChargeState(*m_model->getStateOfCharge());
-    setCurrentSpeed(*m_model->getMph());
-    setMaxSpeed(m_model->getMaxSpeed());
-    setCurrent(*m_model->getCurrent());
-    setMaxCurrent(m_model->getMaxDraw());
-    setCurrentDischarge(*m_model->getDcl());
-    setRegen(*m_model->getRegenPower());
-    setMaxRegenCapacity(*m_model->getMaxRegenCapacity());
+  setTractionControl(*m_model->getTractionControl());
+  setPackTemp(*m_model->getPackTemp());
+  setMotorTemp(*m_model->getMotorTemp());
+  setChargeState(*m_model->getStateOfCharge());
+  setCurrentSpeed(*m_model->getMph());
+  setMaxSpeed(m_model->getMaxSpeed());
+  setCurrent(*m_model->getCurrent());
+  setMaxCurrent(m_model->getMaxDraw());
+  setCurrentDischarge(*m_model->getDcl());
+  setRegen(*m_model->getRegenPower());
+
+  std::optional<float> maxRegen = m_model->getMaxRegenCapacity();
+  if (maxRegen) {
+    setMaxRegenCapacity(*maxRegen);
+  }
+
+  std::optional<float> dcCurrent = m_model->getDCCurrent();
+  std::optional<float> maxDCTarget = m_model->getMaxDCCurrentTarget();
+
+  if (maxDCTarget) {
+    setMaxDCCurrentTarget(static_cast<int>(std::round(std::abs(*maxDCTarget))));
+  }
+  if (dcCurrent && maxDCTarget && std::abs(*maxDCTarget) > 0) {
+    int percent = static_cast<int>(
+        std::round(std::abs(*dcCurrent) / std::abs(*maxDCTarget) * 100.0f));
+    if (percent > 100)
+      percent = 100;
+    if (percent < 0)
+      percent = 0;
+    setPowerDrawPercent(percent);
+  }
 }

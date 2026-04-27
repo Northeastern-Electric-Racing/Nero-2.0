@@ -1,5 +1,5 @@
-import QtQuick 2.15
-import QtQuick.Controls 2.15
+import QtQuick
+import QtQuick.Controls
 import NERO
 
 Rectangle {
@@ -12,8 +12,14 @@ Rectangle {
     property string text: "FLAPPY BIRD"
 
     gradient: Gradient {
-        GradientStop { position: 0.0; color: highlighted ? Theme.getColor("iconHighlightedBackground") : Theme.getColor("iconBackground") }
-        GradientStop { position: 1.0; color: highlighted ? Theme.getColor("iconHighlightedGradientStop") : Theme.getColor("iconGradientStop") }
+        GradientStop {
+            position: 0.0
+            color: highlighted ? Theme.iconHighlightedBackground : Theme.iconBackground
+        }
+        GradientStop {
+            position: 1.0
+            color: highlighted ? Theme.iconHighlightedGradientStop : Theme.iconGradientStop
+        }
     }
 
     LabelText {

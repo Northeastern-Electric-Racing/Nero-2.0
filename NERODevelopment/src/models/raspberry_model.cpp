@@ -18,8 +18,8 @@ RaspberryModel::RaspberryModel() {}
 
 RaspberryModel::~RaspberryModel() {}
 
-QList<QString> RaspberryModel::getMpuFault() {
-  QRegularExpression regex("^MPU/Fault/.*$");
+QList<QString> RaspberryModel::getVcuFault() {
+  QRegularExpression regex("^VCU/Faults/.*$");
 
   QList<QString> faults;
   for (auto it = this->currentData.begin(); it != this->currentData.end();
@@ -41,11 +41,9 @@ void RaspberryModel::connectToMQTT() {
 
   QList<QString> client_1_topics = {
       MPH,
-      KPH,
       STATUS,
       PACKTEMP,
       MOTORTEMP,
-      MAXREGENCAPACITY,
       STATEOFCHARGE,
       CURRENT,
       BALANCINGCELLS,
@@ -64,27 +62,28 @@ void RaspberryModel::connectToMQTT() {
       MINCELLVOLTAGECELL,
       AVECELLTEMP,
       AVECELLVOLTAGE,
-      BURNINGCELLS,
       TRACTIONCONTROL,
       INVERTERTEMP,
-      MOTORPOWER,
-      FANPOWER,
       BMSSTATE,
       BMSFAULT,
-      MPUFAULT,
+      VCUFAULT,
       DCL,
       CCL,
-      GFORCEX,
-      GFORCEY, 
-      GFORCEZ,
+      REGENPOWER,
+      TORQUEPOWER,
+      GFORCE,
       SEGMENTTEMP1,
       SEGMENTTEMP2,
       SEGMENTTEMP3,
       SEGMENTTEMP4,
-      SIDEBRBS,
+      MOTORPOWER,
+      FANPOWER,
+      EFUSE_SHUTDOWN_ENABLED,
+      EFUSE_SHUTDOWN_FAULTED,
       BMS,
       BSPD,
-      MPU,
+      EFUSE_MC_ENABLED,
+      EFUSE_MC_FAULTED,
       BOTS,
       INERTIA,
       CPBRB,
@@ -94,12 +93,8 @@ void RaspberryModel::connectToMQTT() {
       HVCNCTR,
       CRITICALFAULTS,
       NONCRITICALFAULTS,
-      MICROPHONE,
-      FASTESTTIME,
-      LASTTIME,
-      CURRENT_TIME,
-      LOWVOLTAGESOC,
-      REGENPOWER
+      LVVOLTAGE,
+
   };
 
   const char *client1_port_str = getenv("CLIENT1_PORT");
@@ -108,18 +103,19 @@ void RaspberryModel::connectToMQTT() {
   int client1_port = client1_port_str ? atoi(client1_port_str) : 1883;
   int client2_port = client2_port_str ? atoi(client2_port_str) : 1882;
 
-    MqttClient *client_1 =
+  MqttClient *client_1 =
       new MqttClient(nullptr, client1_port, client_1_topics, mqttHost);
   connect(client_1, &MqttClient::emitServerData, this,
           &RaspberryModel::receiveServerData);
   client_1->connectToHost();
 
   QList<QString> client_2_topics = {
-      FORWARDBUTTON, BACKWARDBUTTON, RIGHTBUTTON, ENTERBUTTON,
-      UPBUTTON,      DOWNBUTTON,     HOMEBUTTON,  MODEINDEX,
-      DIRECTION,     TORQUEPOWER,
+      BUTTONID,
+      HOMEBUTTON,
+      MODEINDEX,
+      DIRECTION,
   };
-    MqttClient *client_2 =
+  MqttClient *client_2 =
       new MqttClient(nullptr, client2_port, client_2_topics, mqttHost);
   connect(client_2, &MqttClient::emitServerData, this,
           &RaspberryModel::receiveServerData);
@@ -141,11 +137,6 @@ void RaspberryModel::receiveServerData(const serverdata::v2::ServerData data,
 std::optional<float> RaspberryModel::getMph() {
   std::optional<float> mph = this->getById(MPH);
   return mph ? std::optional<float>(std::round(*mph)) : std::nullopt;
-}
-
-std::optional<float> RaspberryModel::getKph() {
-  std::optional<float> mph = this->getById(KPH);
-  return mph ? std::optional<float>(std::round(*mph * 1.601)) : std::nullopt;
 }
 
 std::optional<float> RaspberryModel::getStatus() {
@@ -170,9 +161,10 @@ std::optional<float> RaspberryModel::getMotorTemp() {
 }
 
 std::optional<float> RaspberryModel::getMaxRegenCapacity() {
-    std::optional<float> maxRegenCapacity = this->getById(MAXREGENCAPACITY);
-    return maxRegenCapacity ? std::optional<float>(std::round(*maxRegenCapacity))
-                            : std::nullopt;
+  // CCL ("BMS/Commands/Max_DC_Brake_Current_Target") is the BMS-imposed cap on
+  // regen current — i.e. the max regen capacity used to compute regen %.
+  std::optional<float> v = this->getById(CCL);
+  return v ? std::optional<float>(std::round(*v)) : std::nullopt;
 }
 
 std::optional<float> RaspberryModel::getStateOfCharge() {
@@ -181,6 +173,14 @@ std::optional<float> RaspberryModel::getStateOfCharge() {
 
 std::optional<float> RaspberryModel::getCurrent() {
   return this->getById(CURRENT);
+}
+
+std::optional<float> RaspberryModel::getDCCurrent() {
+  return this->getById(CURRENT);
+}
+
+std::optional<float> RaspberryModel::getMaxDCCurrentTarget() {
+  return this->getById(DCL);
 }
 
 std::optional<float> RaspberryModel::getMaxCellVoltage() {
@@ -284,15 +284,15 @@ std::optional<float> RaspberryModel::getInverterTemp() {
 }
 
 std::optional<float> RaspberryModel::getGForceX() {
-  return this->getById(GFORCEX);
+  return this->getById(GFORCE, 0);
 }
 
 std::optional<float> RaspberryModel::getGForceY() {
-  return this->getById(GFORCEY);
+  return this->getById(GFORCE, 1);
 }
 
 std::optional<float> RaspberryModel::getGForceZ() {
-  return this->getById(GFORCEZ);
+  return this->getById(GFORCE, 2);
 }
 
 std::optional<float> RaspberryModel::getBalancingCells() {
@@ -336,7 +336,7 @@ std::optional<float> RaspberryModel::getTractionControl() {
 }
 
 QList<QString> RaspberryModel::getBmsFault() {
-  QRegularExpression regex("^(BMS/Status/F/.*|MPU/Fault/Crit/.*)$");
+  QRegularExpression regex("^BMS/Faults/Critical/.*$");
 
   QList<QString> faults;
   for (auto it = this->currentData.begin(); it != this->currentData.end();
@@ -348,75 +348,118 @@ QList<QString> RaspberryModel::getBmsFault() {
   return faults;
 }
 
-std::optional<bool> RaspberryModel::getForwardButtonPressed() {
-  // std::optional<float> value = this->getById(FORWARDBUTTON);
-
-  // if (value) {
-  //   std::string binary =
-  //   std::bitset<8>(static_cast<int>(*value)).to_string();
-
-  //   return false;
-  // }
-  return std::nullopt;
+bool RaspberryModel::buttonNum0Pressed() {
+  return this->getById(BUTTONID) == 0;
+}
+bool RaspberryModel::buttonNum1Pressed() {
+  return this->getById(BUTTONID) == 1;
+}
+bool RaspberryModel::buttonNum2Pressed() {
+  return this->getById(BUTTONID) == 2;
+}
+bool RaspberryModel::buttonNum3Pressed() {
+  return this->getById(BUTTONID) == 3;
+}
+bool RaspberryModel::buttonNum4Pressed() {
+  return this->getById(BUTTONID) == 4;
+}
+bool RaspberryModel::buttonNum5Pressed() {
+  return this->getById(BUTTONID) == 5;
+}
+bool RaspberryModel::buttonNum6Pressed() {
+  return this->getById(BUTTONID) == 6;
+}
+bool RaspberryModel::buttonNum7Pressed() {
+  return this->getById(BUTTONID) == 7;
+}
+bool RaspberryModel::buttonNum8Pressed() {
+  return this->getById(BUTTONID) == 8;
+}
+bool RaspberryModel::buttonNum9Pressed() {
+  return this->getById(BUTTONID) == 9;
 }
 
-std::optional<bool> RaspberryModel::getBackwardButtonPressed() {
-  std::optional<float> value = this->getById(BACKWARDBUTTON);
-  if (value == 0) {
-    this->setValue(
-        UPBUTTON,
-        10); // 10 is an invalid value so basically clearing the old value
+// Sentinel value written to BUTTONID to latch "this press has been consumed"
+// so the next tick doesn't re-fire on stale MQTT data. 10 is outside the
+// valid 0..9 ordinal range.
+static constexpr float BUTTON_CONSUMED_SENTINEL = 10;
+
+std::optional<bool> RaspberryModel::getEscButtonPressed() {
+  if (buttonNum0Pressed()) {
+    this->setValue(BUTTONID, BUTTON_CONSUMED_SENTINEL);
     return true;
   }
   return std::nullopt;
 }
 
-std::optional<bool> RaspberryModel::getRightButtonPressed() {
-  std::optional<float> value = this->getById(RIGHTBUTTON);
-  if (value == 1) {
-    this->setValue(
-        UPBUTTON,
-        10); // 10 is an invalid value so basically clearing the old value
+std::optional<bool> RaspberryModel::getLeftButtonPressed() {
+  if (buttonNum1Pressed()) {
+    this->setValue(BUTTONID, BUTTON_CONSUMED_SENTINEL);
+    return true;
+  }
+  return std::nullopt;
+}
+
+std::optional<bool> RaspberryModel::getLaunchControlToggleButtonPressed() {
+  if (buttonNum2Pressed()) {
+    this->setValue(BUTTONID, BUTTON_CONSUMED_SENTINEL);
+    return true;
+  }
+  return std::nullopt;
+}
+
+std::optional<bool> RaspberryModel::getUpRegenButtonPressed() {
+  if (buttonNum3Pressed()) {
+    this->setValue(BUTTONID, BUTTON_CONSUMED_SENTINEL);
+    return true;
+  }
+  return std::nullopt;
+}
+
+std::optional<bool> RaspberryModel::getDownRegenButtonPressed() {
+  if (buttonNum4Pressed()) {
+    this->setValue(BUTTONID, BUTTON_CONSUMED_SENTINEL);
     return true;
   }
   return std::nullopt;
 }
 
 std::optional<bool> RaspberryModel::getEnterButtonPressed() {
-  std::optional<float> value = this->getById(ENTERBUTTON);
-  if (value) {
-    if (value == 5) {
-      this->setValue(
-          UPBUTTON,
-          10); // 10 is an invalid value so basically clearing the old value
-      return true;
-    }
+  if (buttonNum5Pressed()) {
+    this->setValue(BUTTONID, BUTTON_CONSUMED_SENTINEL);
+    return true;
   }
   return std::nullopt;
 }
 
-std::optional<bool> RaspberryModel::getUpButtonPressed() {
-  std::optional<float> value = this->getById(UPBUTTON);
-  if (value) {
-    if (value == 4) {
-      this->setValue(
-          UPBUTTON,
-          10); // 10 is an invalid value so basically clearing the old value
-      return true;
-    }
+std::optional<bool> RaspberryModel::getRightButtonPressed() {
+  if (buttonNum6Pressed()) {
+    this->setValue(BUTTONID, BUTTON_CONSUMED_SENTINEL);
+    return true;
   }
   return std::nullopt;
 }
 
-std::optional<bool> RaspberryModel::getDownButtonPressed() {
-  std::optional<float> value = this->getById(DOWNBUTTON);
-  if (value) {
-    if (value == 3) {
-      this->setValue(
-          DOWNBUTTON,
-          10); // 10 is an invalid value so basically clearing the old value
-      return true;
-    }
+std::optional<bool> RaspberryModel::getTractionControlToggleButtonPressed() {
+  if (buttonNum7Pressed()) {
+    this->setValue(BUTTONID, BUTTON_CONSUMED_SENTINEL);
+    return true;
+  }
+  return std::nullopt;
+}
+
+std::optional<bool> RaspberryModel::getUpTorqueButtonPressed() {
+  if (buttonNum8Pressed()) {
+    this->setValue(BUTTONID, BUTTON_CONSUMED_SENTINEL);
+    return true;
+  }
+  return std::nullopt;
+}
+
+std::optional<bool> RaspberryModel::getDownTorqueButtonPressed() {
+  if (buttonNum9Pressed()) {
+    this->setValue(BUTTONID, BUTTON_CONSUMED_SENTINEL);
+    return true;
   }
   return std::nullopt;
 }
@@ -433,22 +476,10 @@ std::optional<float> RaspberryModel::getModeIndex() {
   return this->getById(MODEINDEX);
 }
 
-std::optional<float> RaspberryModel::getBurningCells() {
-  return std::nullopt; // TODO: Implement Burning Cells
-}
-
 void RaspberryModel::updateCurrentData() { emit this->onCurrentDataChange(); }
 
-std::optional<bool> RaspberryModel::getIsTalking() {
-  std::optional<float> value = this->getById(MICROPHONE);
-  if (value && value > 0) {
-    return true;
-  }
-  return false;
-}
-
 QList<QString> RaspberryModel::getCriticalFaults() {
-  QRegularExpression regex("^(BMS/Status/Faults/.*|MPU/Fault/Critical/.*)$");
+  QRegularExpression regex("^(BMS/Faults/Critical/.*|VCU/Faults/Critical/.*)$");
 
   QList<QString> faults;
 
@@ -463,7 +494,8 @@ QList<QString> RaspberryModel::getCriticalFaults() {
 }
 
 QList<QString> RaspberryModel::getNonCriticalFaults() {
-  QRegularExpression regex("^MPU/Fault/Non-Critical/.*$");
+  QRegularExpression regex(
+      "^(BMS/Faults/Non-Critical/.*|VCU/Faults/Non-Critical/.*)$");
 
   QList<QString> faults;
 
@@ -488,6 +520,6 @@ int RaspberryModel::totalNumberOfOnesIn(float value) {
   return total;
 }
 
-std::optional<float> RaspberryModel::getLowVoltageStateOfCharge() {
-  return this->getById(LOWVOLTAGESOC);
+std::optional<float> RaspberryModel::getLowVoltage() {
+  return this->getById(LVVOLTAGE);
 }

@@ -1,4 +1,4 @@
-import QtQuick 2.15
+import QtQuick
 import QtQuick.Studio.DesignEffects
 
 Rectangle {
@@ -44,7 +44,10 @@ Rectangle {
                 var x = (i - offsetX) / scaleX;
                 var y = D * ((1 / 15) * (1 + 3 * Math.sin(x / A + E)) * Math.sin(x / B) * (1 / 2 + Math.sin(x / C))) - F;
                 var pixelY = offsetY - y * scaleY;
-                points.push({x: i, y: pixelY});
+                points.push({
+                    x: i,
+                    y: pixelY
+                });
             }
 
             var gradient = ctx.createLinearGradient(0, 0, 0, offsetY);
@@ -162,7 +165,7 @@ Rectangle {
                     width: 2.5
                     height: playerScoreDisplay.height
                     anchors.left: playerScoreDisplay.left
-                    anchors.leftMargin: 2* playerScoreDisplay.width / 3
+                    anchors.leftMargin: 2 * playerScoreDisplay.width / 3
                     color: "mediumblue"
                     border.color: "transparent"
                 }
@@ -249,7 +252,7 @@ Rectangle {
                     width: 2.5
                     height: aiScoreDisplay.height
                     anchors.left: aiScoreDisplay.left
-                    anchors.leftMargin: 2* aiScoreDisplay.width / 3
+                    anchors.leftMargin: 2 * aiScoreDisplay.width / 3
                     color: "darkred"
                     border.color: "transparent"
                 }
@@ -287,5 +290,4 @@ Rectangle {
         font.pixelSize: 20
         font.weight: Font.Medium
     }
-
 }

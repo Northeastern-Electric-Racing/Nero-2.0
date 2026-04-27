@@ -1,5 +1,5 @@
-import QtQuick 2.15
-import QtQuick.Controls 2.15
+import QtQuick
+import QtQuick.Controls
 import QtQuick.Particles
 import NERO
 
@@ -11,16 +11,16 @@ Rectangle {
     property bool highlight: false
     height: 60
     width: 250
-    color: Theme.getColor("background")
+    color: Theme.background
 
     onStatusChanged: {
-        console.log("Changing status")
+        console.log("Changing status");
         if (status === 0) {
-            statusDisplay = "OFF"
+            statusDisplay = "OFF";
         } else if (status == 1) {
-            statusDisplay = "GOOD"
+            statusDisplay = "GOOD";
         } else {
-            statusDisplay = "FAULTED"
+            statusDisplay = "FAULTED";
         }
     }
 
@@ -41,13 +41,13 @@ Rectangle {
                     SequentialAnimation on color {
                         loops: Animation.Infinite
                         ColorAnimation {
-                            from: Theme.getColor("primaryDetailGradient")
-                            to: Theme.getColor("secondaryDetailGradient")
+                            from: Theme.primaryDetailGradient
+                            to: Theme.secondaryDetailGradient
                             duration: 1500
                         }
                         ColorAnimation {
-                            from: Theme.getColor("secondaryDetailGradient")
-                            to: Theme.getColor("primaryDetailGradient")
+                            from: Theme.secondaryDetailGradient
+                            to: Theme.primaryDetailGradient
                             duration: 3000
                         }
                     }
@@ -58,35 +58,34 @@ Rectangle {
                     SequentialAnimation on color {
                         loops: Animation.Infinite
                         ColorAnimation {
-                            from: Theme.getColor("primaryDetailGradient")
-                            to: Theme.getColor("primaryDetailGradient")
+                            from: Theme.primaryDetailGradient
+                            to: Theme.primaryDetailGradient
                             duration: 1500
                         }
                         ColorAnimation {
-                            from: Theme.getColor("primaryDetailGradient")
-                            to: Theme.getColor("secondaryDetailGradient")
+                            from: Theme.primaryDetailGradient
+                            to: Theme.secondaryDetailGradient
                             duration: 1500
                         }
                         ColorAnimation {
-                            from: Theme.getColor("secondaryDetailGradient")
-                            to: Theme.getColor("primaryDetailGradient")
+                            from: Theme.secondaryDetailGradient
+                            to: Theme.primaryDetailGradient
                             duration: 1500
                         }
                     }
                 }
             }
         }
-        color: Theme.getColor("transparent")
+        color: "transparent"
 
-        border.color: Theme.getColor("transparent")
-        width: Math.max(parent.width * 0.6,
-                        taskText.implicitWidth) // Ensure minimum width
+        border.color: "transparent"
+        width: Math.max(parent.width * 0.6, taskText.implicitWidth) // Ensure minimum width
         height: parent.height
         radius: 10
 
         LabelText {
             id: taskText
-            color: Theme.getColor("primaryForeground")
+            color: Theme.primaryForeground
             text: detailDisplay.shutdownFlowTask
             anchors.verticalCenter: parent.verticalCenter
             anchors.left: parent.left
@@ -97,19 +96,18 @@ Rectangle {
 
     Rectangle {
         id: statusDisplayContainer
-        color: status == 0 ? Theme.getColor("transparent") : (status === 1 ? Theme.getColor("goodStatus") : (status === 2 ? Theme.getColor("criticalStatus") : Theme.getColor("transparent")))
-        width: Math.max(parent.width * 0.4,
-                        statusText.implicitWidth + 20) // Ensure minimum width
+        color: status == 0 ? "transparent" : (status === 1 ? Theme.goodStatus : (status === 2 ? Theme.criticalStatus : "transparent"))
+        width: Math.max(parent.width * 0.4, statusText.implicitWidth + 20) // Ensure minimum width
         height: parent.height
         anchors.left: taskDisplay.right
         radius: 10
-        border.color: status == 0 ? Theme.getColor("primaryForeground") : Theme.getColor("transparent")
+        border.color: status == 0 ? Theme.primaryForeground : "transparent"
         border.width: status == 0 ? 3 : 0
 
         LabelText {
             id: statusText
             visible: !clear
-            color: Theme.getColor("inverseForeground")
+            color: Theme.inverseForeground
             text: detailDisplay.statusDisplay
             anchors.centerIn: parent
         }

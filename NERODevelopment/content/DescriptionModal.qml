@@ -1,5 +1,5 @@
-import QtQuick 2.15
-import QtQuick.Controls 2.15
+import QtQuick
+import QtQuick.Controls
 import Qt5Compat.GraphicalEffects
 import NERO
 
@@ -12,7 +12,7 @@ Rectangle {
 
     width: dimension * 2
     height: dimension
-    color: Theme.getColor("popoverBackground")
+    color: Theme.popoverBackground
     radius: 20
 
     Rectangle {
@@ -22,18 +22,16 @@ Rectangle {
         x: dimension / 10
         y: -width / 2
         radius: width / 2
-        color: Theme.getColor("backgroundPicture")
+        color: Theme.backgroundPicture
 
-        border.color: Theme.getColor("popoverBackground")
+        border.color: Theme.popoverBackground
         border.width: 10
         clip: true // This enables clipping of content outside the rectangle
 
         Image {
             id: modalImage
             anchors.fill: parent // This makes the image fill the rectangle
-            source: Theme.currentTheme === "dark"
-                        ? "/qt/qml/content/images/darkNeroLogo.png"
-                        : "/qt/qml/content/images/lightNeroLogo.png"
+            source: Theme.currentTheme === "dark" ? "/qt/qml/content/images/darkNeroLogo.png" : "/qt/qml/content/images/lightNeroLogo.png"
             fillMode: Image.PreserveAspectCrop
 
             layer.enabled: true
@@ -45,7 +43,7 @@ Rectangle {
                         width: modalPic.width
                         height: modalPic.height
                         radius: modalPic.radius
-                        color: Theme.getColor("popoverBackground")
+                        color: Theme.popoverBackground
                     }
                 }
             }
@@ -54,7 +52,7 @@ Rectangle {
 
     Text {
         id: modalTitle
-        color: Theme.getColor("blackForeground")
+        color: Theme.blackForeground
         font.pixelSize: dimension / 6
         font.bold: true
         wrapMode: Text.WordWrap
@@ -64,7 +62,7 @@ Rectangle {
 
     Text {
         id: modalDescription
-        color: Theme.getColor("blackForeground")
+        color: Theme.blackForeground
         font.pixelSize: dimension / 11
         wrapMode: Text.WordWrap
         width: (parent.width - modalDescription.x) - modal.offset
@@ -77,8 +75,8 @@ Rectangle {
         height: parent.height / 5
         width: parent.width / 3
         background: Rectangle {
-            color: Theme.getColor("descriptionButtonBackground")
-            border.color: Theme.getColor("accentBlue")
+            color: Theme.descriptionButtonBackground
+            border.color: Theme.accentBlue
             border.width: 3
             radius: 10
         }
@@ -88,18 +86,18 @@ Rectangle {
         font.pixelSize: parent.height / 15
         onClicked: closeModal()
         Component.onCompleted: {
-            modalButton.contentItem.color = Theme.getColor("descriptionButtonForeground")
+            modalButton.contentItem.color = Theme.descriptionButtonForeground;
         }
     }
 
     function openModal(title, text, imageUrl) {
-        modalImage.source = imageUrl
-        modalTitle.text = title
-        modalDescription.text = text
-        modal.visible = true
+        modalImage.source = imageUrl;
+        modalTitle.text = title;
+        modalDescription.text = text;
+        modal.visible = true;
     }
 
     function closeModal() {
-        modal.visible = false
+        modal.visible = false;
     }
 }

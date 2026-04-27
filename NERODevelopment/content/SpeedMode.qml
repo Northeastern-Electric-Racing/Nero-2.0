@@ -1,5 +1,5 @@
-import QtQuick 2.15
-import QtQuick.Controls 2.15
+import QtQuick
+import QtQuick.Controls
 import QtQuick.Layouts
 
 import NERO
@@ -11,15 +11,13 @@ Item {
     property bool tractionControlStatus: speedController.tractionControl
     property int packTemp: speedController.packTemp
     property int motorTemp: speedController.motorTemp
-    property int timerValue: speedController.currentTime
-    property int lastRunTime: speedController.lastTime
-    property int fastestRunTime: speedController.fastestTime
     property int maxSpeed: speedController.maxSpeed
     property int currentSpeed: speedController.currentSpeed
     property int maxDraw: speedController.maxCurrent
     property int dcl: speedController.currentDischarge
     property double regen: speedController.regen
-    property double regenPercentage: speedController.regenPercentage
+    property int regenPercentage: speedController.regenPercentage
+    property int powerDrawPercent: speedController.powerDrawPercent
 
     property int xMargin: width / 20
     property int yMargin: height / 20
@@ -30,154 +28,187 @@ Item {
     property int radialUnitFontSize: valueFontSize / 4
 
     Keys.onPressed: event => {
-                        if (event.key === Qt.Key_Return
-                            || event.key === Qt.Key_Enter) {
-                            speedController.enterButtonPressed()
+        if (event.key === Qt.Key_Right) {
+            headerController.toggleFaultAlerts();
+        }
+    }
+
+    ColumnLayout {
+        anchors.fill: parent
+        spacing: 0
+
+        HeaderView {
+            id: header
+            Layout.fillWidth: true
+            modeTitle: "PERFORMANCE"
+        }
+
+        LabelText {
+            Layout.alignment: Qt.AlignHCenter
+            Layout.topMargin: -30
+            text: speedMode.tractionControlStatus ? "TRACTION CONTROL - ON" : "TRACTION CONTROL - OFF"
+            color: speedMode.tractionControlStatus ? Theme.goodStatus : Theme.criticalStatus
+            font.pixelSize: 18
+            font.bold: true
+        }
+
+        RowLayout {
+            id: mainRow
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            Layout.leftMargin: speedMode.xMargin
+            Layout.rightMargin: speedMode.xMargin
+            Layout.bottomMargin: speedMode.yMargin
+            Layout.topMargin: speedMode.verticalSpacing
+            spacing: speedMode.width / 20
+
+            ColumnLayout {
+                Layout.fillHeight: true
+                Layout.fillWidth: true
+                Layout.preferredWidth: 1
+                spacing: speedMode.height / 20
+
+                ThermometerValueComponent {
+                    thermometerValue: speedMode.regen
+                    title: "Regen"
+                    Layout.fillHeight: true
+                    Layout.fillWidth: true
+                    Layout.preferredHeight: 1
+                    radius: speedMode.borderRadii
+                    valueFontSize: speedMode.valueFontSize
+                    labelFontSize: speedMode.labelFontSize
+                    regen: true
+                    unit: "A"
+                    unitAnchorBottom: true
+                }
+
+                ThermometerValueComponent {
+                    thermometerValue: speedMode.motorTemp
+                    title: "MOTOR TEMP"
+                    Layout.fillHeight: true
+                    Layout.fillWidth: true
+                    Layout.preferredHeight: 1
+                    radius: speedMode.borderRadii
+                    valueFontSize: speedMode.valueFontSize
+                    labelFontSize: speedMode.labelFontSize
+                }
+
+                ThermometerValueComponent {
+                    thermometerValue: speedMode.packTemp
+                    title: "PACK TEMP"
+                    Layout.fillHeight: true
+                    Layout.fillWidth: true
+                    Layout.preferredHeight: 1
+                    radius: speedMode.borderRadii
+                    valueFontSize: speedMode.valueFontSize
+                    labelFontSize: speedMode.labelFontSize
+                }
+            }
+
+            ColumnLayout {
+                id: radialColumn
+                Layout.fillHeight: true
+                Layout.fillWidth: true
+                Layout.preferredWidth: 2
+                spacing: 0
+
+                RowLayout {
+                    id: radialRow
+                    Layout.fillHeight: true
+                    Layout.fillWidth: true
+                    Layout.preferredHeight: 4
+                    Layout.bottomMargin: speedMode.yMargin / 4
+                    spacing: speedMode.width / 20
+
+                    ColumnLayout {
+                        Layout.fillHeight: true
+                        Layout.fillWidth: true
+                        Layout.preferredWidth: 1
+
+                        LabelText {
+                            color: Theme.accentForeground
+                            text: "TOP SPEED"
+                            Layout.preferredHeight: speedMode.labelFontSize
+                            Layout.fillWidth: true
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignBottom
+                            font.pixelSize: speedMode.labelFontSize
+                        }
+
+                        Radial {
+                            value: speedMode.maxSpeed
+                            Layout.preferredHeight: 9
+                            Layout.fillHeight: true
+                            Layout.fillWidth: true
+                            Layout.maximumHeight: 213
+                            verticalPadding: 5
+                            color: Theme.accentBlue
+                            valueFontSize: speedMode.valueFontSize
+                            unitFontSize: speedMode.radialUnitFontSize
                         }
                     }
 
-    LabelText {
-        id: tractionControl
-        anchors {
-            top: speedMode.top
-            topMargin: 20
-            horizontalCenter: speedMode.horizontalCenter
-        }
-        width: speedMode.width * 0.7
-        height: speedMode.height * 0.12
-        text: speedMode.tractionControlStatus ? "TRACTION CONTROL - ON" : "TRACTION CONTROL - OFF"
-        color: speedMode.tractionControlStatus ? Theme.getColor("goodStatus") : Theme.getColor("criticalStatus")
-        font.pixelSize: Math.min(speedMode.height * 0.09,
-                                 speedMode.width * 0.06)
-        font.bold: true
-    }
+                    ColumnLayout {
+                        Layout.fillHeight: true
+                        Layout.fillWidth: true
+                        Layout.preferredWidth: 1
+                        clip: false
 
-    TimerDisplay {
-        id: timerDisplay
-        anchors {
-            top: tractionControl.bottom
-            left: parent.left
-            right: parent.right
-            rightMargin: speedMode.xMargin
-            leftMargin: speedMode.xMargin
-            topMargin: speedMode.verticalSpacing
-        }
-        height: parent.height / 12
-        currentRunTime: speedMode.timerValue
-        lastRunTime: speedMode.lastRunTime
-        fastestRunTime: speedMode.fastestRunTime
-        radius: speedMode.borderRadii
-    }
+                        LabelText {
+                            color: Theme.accentForeground
+                            text: "MAX DRAW"
+                            Layout.preferredHeight: speedMode.labelFontSize
+                            Layout.fillWidth: true
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignBottom
+                            font.pixelSize: speedMode.labelFontSize
+                        }
 
-    RowLayout {
-        id: mainRow
-        anchors {
-            top: timerDisplay.bottom
-            left: parent.left
-            right: parent.right
-            rightMargin: speedMode.xMargin
-            leftMargin: speedMode.xMargin
-            bottom: parent.bottom
-            bottomMargin: speedMode.yMargin
-            topMargin: speedMode.verticalSpacing
-        }
-        spacing: parent.width / 20
+                        Radial {
+                            value: speedMode.maxDraw
+                            Layout.preferredHeight: 9
+                            Layout.fillHeight: true
+                            Layout.fillWidth: true
+                            Layout.maximumHeight: 213
+                            verticalPadding: 5
+                            maxValue: 400
+                            label: "DCL: " + speedMode.dcl
+                            unitLabel: 'A'
+                            valueFontSize: speedMode.valueFontSize
+                            unitFontSize: speedMode.radialUnitFontSize
+                        }
+                    }
+                }
 
-        ColumnLayout {
-            Layout.fillHeight: true
-            Layout.fillWidth: true
-            Layout.preferredWidth: 1
-            spacing: parent.height / 20
+                RowLayout {
+                    id: componentRow
+                    Layout.fillHeight: true
+                    Layout.fillWidth: true
+                    Layout.preferredHeight: 1
+                    spacing: 0
 
-            ThermometerValueComponent {
-                thermometerValue: showPercentage ? speedMode.regenPercentage : speedMode.regen
-                title: "REGEN"
-                Layout.fillHeight: true
-                Layout.fillWidth: true
-                Layout.preferredHeight: 1
-                radius: speedMode.borderRadii
-                valueFontSize: speedMode.valueFontSize
-                labelFontSize: speedMode.labelFontSize
-                regen: true
-            }
+                    BatteryValueComponent {
+                        title: "PWR DRAW"
+                        batteryValue: speedMode.powerDrawPercent
+                        Layout.fillHeight: true
+                        Layout.fillWidth: true
+                        radius: speedMode.borderRadii
+                        valueFontSize: speedMode.valueFontSize
+                        labelFontSize: speedMode.labelFontSize
+                        unitFontSize: speedMode.valueFontSize / 1.5
+                    }
 
-            ThermometerValueComponent {
-                thermometerValue: speedMode.motorTemp
-                title: "MOTOR TEMP"
-                Layout.fillHeight: true
-                Layout.fillWidth: true
-                Layout.preferredHeight: 1
-                radius: speedMode.borderRadii
-                valueFontSize: speedMode.valueFontSize
-                labelFontSize: speedMode.labelFontSize
-            }
-
-            ThermometerValueComponent {
-                thermometerValue: speedMode.packTemp
-                title: "PACK TEMP"
-                Layout.fillHeight: true
-                Layout.fillWidth: true
-                Layout.preferredHeight: 1
-                radius: speedMode.borderRadii
-                valueFontSize: speedMode.valueFontSize
-                labelFontSize: speedMode.labelFontSize
-            }
-        }
-
-        ColumnLayout {
-            Layout.fillHeight: true
-            Layout.fillWidth: true
-            Layout.preferredWidth: 1
-
-            LabelText {
-                color: Theme.getColor("accentForeground")
-                text: "TOP SPEED"
-                Layout.preferredHeight: 2
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-                font.pixelSize: speedMode.labelFontSize
-            }
-
-            Radial {
-                value: speedMode.maxSpeed
-                Layout.preferredHeight: 9
-                Layout.fillHeight: true
-                Layout.fillWidth: true
-                color: Theme.getColor("accentBlue")
-                valueFontSize: speedMode.valueFontSize
-                unitFontSize: speedMode.radialUnitFontSize
-            }
-        }
-
-        ColumnLayout {
-            Layout.fillHeight: true
-            Layout.fillWidth: true
-            Layout.preferredWidth: 1
-            clip: false
-
-            LabelText {
-                color: Theme.getColor("accentForeground")
-                text: "MAX DRAW"
-                Layout.preferredHeight: 2
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-                font.pixelSize: speedMode.labelFontSize
-            }
-
-            Radial {
-                value: speedMode.maxDraw
-                Layout.preferredHeight: 9
-                Layout.fillHeight: true
-                Layout.fillWidth: true
-                maxValue: 400
-                label: "DCL: " + speedMode.dcl
-                unitLabel: 'A'
-                valueFontSize: speedMode.valueFontSize
-                unitFontSize: speedMode.radialUnitFontSize
+                    BatteryValueComponent {
+                        title: "REGEN"
+                        batteryValue: speedMode.regenPercentage
+                        Layout.fillHeight: true
+                        Layout.fillWidth: true
+                        radius: speedMode.borderRadii
+                        valueFontSize: speedMode.valueFontSize
+                        labelFontSize: speedMode.labelFontSize
+                        unitFontSize: speedMode.valueFontSize / 1.5
+                    }
+                }
             }
         }
     }
