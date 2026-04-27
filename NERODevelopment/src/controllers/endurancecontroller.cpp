@@ -31,10 +31,12 @@ void EnduranceController::setCurrentRegenStrength(int strength) {
 }
 
 float EnduranceController::currentRegenPercentage() const {
-  if (m_maxRegenCapacity > 0) {
-    return (std::abs(static_cast<float>(m_currentRegenStrength)) /
-            std::abs(m_maxRegenCapacity)) *
-           100.0f;
+  std::optional<float> dcCurrent = m_model->getDCCurrent();
+  if (dcCurrent && *dcCurrent < 0 && std::abs(m_maxRegenCapacity) > 0) {
+    float percent =
+        std::abs(*dcCurrent) / std::abs(m_maxRegenCapacity) * 100.0f;
+    if (percent > 100.0f) percent = 100.0f;
+    return percent;
   }
   return 0.0f;
 }

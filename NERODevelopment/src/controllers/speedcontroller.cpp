@@ -24,8 +24,12 @@ void SpeedController::setRegen(float regen) {
 }
 
 float SpeedController::regenPercentage() const {
-  if (m_maxRegenCapacity > 0) {
-    return (std::abs(m_regen) / std::abs(m_maxRegenCapacity)) * 100.0f;
+  std::optional<float> dcCurrent = m_model->getDCCurrent();
+  if (dcCurrent && *dcCurrent < 0 && std::abs(m_maxRegenCapacity) > 0) {
+    float percent =
+        std::abs(*dcCurrent) / std::abs(m_maxRegenCapacity) * 100.0f;
+    if (percent > 100.0f) percent = 100.0f;
+    return percent;
   }
   return 0.0f;
 }

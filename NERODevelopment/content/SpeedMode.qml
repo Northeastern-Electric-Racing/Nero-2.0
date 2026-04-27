@@ -185,7 +185,7 @@ Item {
                     Layout.fillHeight: true
                     Layout.fillWidth: true
                     Layout.preferredHeight: 1
-                    spacing: 0
+                    spacing: speedMode.width / 40
 
                     BatteryValueComponent {
                         title: "PWR DRAW"
