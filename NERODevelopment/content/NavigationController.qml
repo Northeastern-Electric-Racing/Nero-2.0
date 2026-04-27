@@ -37,6 +37,7 @@ Item {
 
     HeaderView {
         id: header
+        ownsDialog: true
     }
 
     LabelText {
@@ -44,7 +45,7 @@ Item {
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.topMargin: parent.height * 0.1
         text: navigationController.isTsOn ? "TSMS - ON" : "TSMS - OFF"
-        color: navigationController.isTsOn ? "green" : "red"
+        color: navigationController.isTsOn ? Theme.goodStatus : Theme.criticalStatus
     }
 
     ColumnLayout {

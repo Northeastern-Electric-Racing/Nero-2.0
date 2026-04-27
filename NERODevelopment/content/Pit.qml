@@ -26,6 +26,12 @@ Rectangle {
     height: 480
     width: 800
 
+    Keys.onPressed: event => {
+        if (event.key === Qt.Key_Right) {
+            headerController.toggleFaultAlerts();
+        }
+    }
+
     ColumnLayout {
         anchors.fill: parent
         spacing: 0

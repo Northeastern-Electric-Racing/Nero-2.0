@@ -1,4 +1,5 @@
 #include "endurancecontroller.h"
+#include <cmath>
 
 EnduranceController::EnduranceController(Model *model, QObject *parent)
     : ButtonController{model, 4, parent}, m_updateTimer(new QTimer(this)),
@@ -25,6 +26,29 @@ void EnduranceController::setCurrentRegenStrength(int strength) {
   if (strength != m_currentRegenStrength) {
     m_currentRegenStrength = strength;
     emit currentRegenStrengthChanged(strength);
+    emit currentRegenPercentageChanged(currentRegenPercentage());
+  }
+}
+
+float EnduranceController::currentRegenPercentage() const {
+  std::optional<float> dcCurrent = m_model->getDCCurrent();
+  if (dcCurrent && *dcCurrent < 0 && std::abs(m_maxRegenCapacity) > 0) {
+    float percent =
+        std::abs(*dcCurrent) / std::abs(m_maxRegenCapacity) * 100.0f;
+    if (percent > 100.0f) percent = 100.0f;
+    return percent;
+  }
+  return 0.0f;
+}
+
+float EnduranceController::maxRegenCapacity() const {
+  return m_maxRegenCapacity;
+}
+void EnduranceController::setMaxRegenCapacity(float capacity) {
+  if (capacity != m_maxRegenCapacity) {
+    m_maxRegenCapacity = capacity;
+    emit maxRegenCapacityChanged(capacity);
+    emit currentRegenPercentageChanged(currentRegenPercentage());
   }
 }
 
@@ -60,6 +84,24 @@ void EnduranceController::setSpeed(int speed) {
   }
 }
 
+int EnduranceController::powerDrawPercent() const { return m_powerDrawPercent; }
+void EnduranceController::setPowerDrawPercent(int percent) {
+  if (percent != m_powerDrawPercent) {
+    m_powerDrawPercent = percent;
+    emit powerDrawPercentChanged(percent);
+  }
+}
+
+int EnduranceController::maxDCCurrentTarget() const {
+  return m_maxDCCurrentTarget;
+}
+void EnduranceController::setMaxDCCurrentTarget(int target) {
+  if (target != m_maxDCCurrentTarget) {
+    m_maxDCCurrentTarget = target;
+    emit maxDCCurrentTargetChanged(target);
+  }
+}
+
 void EnduranceController::currentDataDidChange() {
   std::optional<float> torque = m_model->getTorquePower();
   std::optional<float> regen = m_model->getRegenPower();
@@ -67,6 +109,9 @@ void EnduranceController::currentDataDidChange() {
   std::optional<float> motorTemp = m_model->getMotorTemp();
   std::optional<float> packTemp = m_model->getPackTemp();
   std::optional<float> speed = m_model->getMph();
+  std::optional<float> dcCurrent = m_model->getDCCurrent();
+  std::optional<float> maxDCTarget = m_model->getMaxDCCurrentTarget();
+  std::optional<float> maxRegen = m_model->getMaxRegenCapacity();
 
   if (torque) {
     setCurrentMaxTorque(*torque);
@@ -85,6 +130,21 @@ void EnduranceController::currentDataDidChange() {
   }
   if (speed) {
     setSpeed(*speed);
+  }
+  if (maxDCTarget) {
+    setMaxDCCurrentTarget(static_cast<int>(std::round(std::abs(*maxDCTarget))));
+  }
+  if (maxRegen) {
+    setMaxRegenCapacity(*maxRegen);
+  }
+  if (dcCurrent && maxDCTarget && std::abs(*maxDCTarget) > 0) {
+    int percent = static_cast<int>(
+        std::round(std::abs(*dcCurrent) / std::abs(*maxDCTarget) * 100.0f));
+    if (percent > 100)
+      percent = 100;
+    if (percent < 0)
+      percent = 0;
+    setPowerDrawPercent(percent);
   }
 }
 
@@ -138,6 +198,10 @@ void EnduranceController::enterButtonPressed() {
     m_updateTimer->start();
     qDebug() << "Timer started.";
   }
+}
+
+void EnduranceController::rightButtonPressed() {
+  emit toggleFaultAlertsRequested();
 }
 
 void EnduranceController::updateCurrentTime() {

@@ -28,8 +28,11 @@ public:
   std::optional<float> getDir() override;
   std::optional<float> getPackTemp() override;
   std::optional<float> getMotorTemp() override;
+  std::optional<float> getMaxRegenCapacity() override;
   std::optional<float> getStateOfCharge() override;
   std::optional<float> getCurrent() override;
+  std::optional<float> getDCCurrent() override;
+  std::optional<float> getMaxDCCurrentTarget() override;
   std::optional<float> getBalancingCells() override;
   std::optional<float> getPackVoltage() override;
   std::optional<float> getMaxCellTemp() override;

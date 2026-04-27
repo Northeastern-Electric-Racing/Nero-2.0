@@ -67,6 +67,15 @@ int main(int argc, char *argv[]) {
                                            &enduranceController);
   engine.rootContext()->setContextProperty("speedController", &speedController);
 
+  QObject::connect(&homeController, &HomeController::toggleFaultAlertsRequested,
+                   &headerController, &HeaderController::toggleFaultAlerts);
+  QObject::connect(&speedController,
+                   &SpeedController::toggleFaultAlertsRequested,
+                   &headerController, &HeaderController::toggleFaultAlerts);
+  QObject::connect(&enduranceController,
+                   &EnduranceController::toggleFaultAlertsRequested,
+                   &headerController, &HeaderController::toggleFaultAlerts);
+
   QObject::connect(
       &engine, &QQmlApplicationEngine::objectCreationFailed, &app,
       []() { QCoreApplication::exit(-1); }, Qt::QueuedConnection);

@@ -30,6 +30,14 @@ class EnduranceController : public ButtonController {
                  fastestTimeChanged)
   Q_PROPERTY(
       int lastTime READ lastTime WRITE setLastTime NOTIFY lastTimeChanged)
+  Q_PROPERTY(int powerDrawPercent READ powerDrawPercent WRITE
+                 setPowerDrawPercent NOTIFY powerDrawPercentChanged FINAL)
+  Q_PROPERTY(int maxDCCurrentTarget READ maxDCCurrentTarget WRITE
+                 setMaxDCCurrentTarget NOTIFY maxDCCurrentTargetChanged FINAL)
+  Q_PROPERTY(float currentRegenPercentage READ currentRegenPercentage NOTIFY
+                 currentRegenPercentageChanged)
+  Q_PROPERTY(float maxRegenCapacity READ maxRegenCapacity WRITE
+                 setMaxRegenCapacity NOTIFY maxRegenCapacityChanged)
 
 public:
   explicit EnduranceController(Model *model, QObject *parent = nullptr);
@@ -42,6 +50,10 @@ public:
   int currentTime() const;
   int fastestTime() const;
   int lastTime() const;
+  int powerDrawPercent() const;
+  int maxDCCurrentTarget() const;
+  float currentRegenPercentage() const;
+  float maxRegenCapacity() const;
 
 signals:
   void currentMaxTorqueChanged(int);
@@ -53,6 +65,11 @@ signals:
   void currentTimeChanged(int);
   void fastestTimeChanged(int);
   void lastTimeChanged(int);
+  void powerDrawPercentChanged(int);
+  void maxDCCurrentTargetChanged(int);
+  void currentRegenPercentageChanged(float);
+  void maxRegenCapacityChanged(float);
+  void toggleFaultAlertsRequested();
 
 public slots:
   void setCurrentMaxTorque(int);
@@ -65,8 +82,12 @@ public slots:
   void setCurrentTime(int);
   void setFastestTime(int);
   void setLastTime(int);
+  void setPowerDrawPercent(int);
+  void setMaxDCCurrentTarget(int);
+  void setMaxRegenCapacity(float);
 
   void enterButtonPressed() override;
+  void rightButtonPressed() override;
   void updateCurrentTime();
 
 private:
@@ -79,6 +100,9 @@ private:
   int m_currentTime = 0;
   int m_fastestTime = 0;
   int m_lastTime = 0;
+  int m_powerDrawPercent = 0;
+  int m_maxDCCurrentTarget = 0;
+  float m_maxRegenCapacity = 0;
   bool m_timerRunning = false;
   QElapsedTimer m_timer;
   QTimer *m_updateTimer;

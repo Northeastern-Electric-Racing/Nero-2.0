@@ -9,7 +9,7 @@ Rectangle {
     property bool isFocused: false
     property var board: []
     property int score: 0
-    property int bestScore: 0
+    property int bestScore: game2048Controller.bestScore
     property bool hasWon: false
     property bool animating: false
     property var slotMap: ({})
@@ -250,8 +250,8 @@ Rectangle {
 
         slotMap = newSlotMap;
         score += totalMergeScore;
-        if (score > bestScore)
-            bestScore = score;
+        if (score > game2048Controller.bestScore)
+            game2048Controller.setBestScore(score);
 
         animTimer.toRelease = toRelease;
         animTimer.start();
@@ -296,7 +296,35 @@ Rectangle {
         game2048Controller.setGameOver(false);
     }
 
-    Component.onCompleted: startGame()
+    function restoreGame() {
+        clearAllSlots();
+        var saved = game2048Controller.savedBoard();
+        board = [];
+        for (var i = 0; i < 16; i++)
+            board.push(saved[i]);
+        score = game2048Controller.score;
+        hasWon = game2048Controller.savedHasWon();
+        showWin = false;
+        animating = false;
+        animTimer.stop();
+        for (var j = 0; j < 16; j++) {
+            if (board[j] !== 0) {
+                var slot = acquireSlot(Math.floor(j / 4), j % 4, board[j]);
+                slotMap[j] = slot;
+            }
+        }
+    }
+
+    Component.onCompleted: {
+        if (game2048Controller.hasSavedGame())
+            restoreGame();
+        else
+            startGame();
+    }
+
+    Component.onDestruction: {
+        game2048Controller.saveState(board, hasWon);
+    }
 
     property bool showWin: false
 
