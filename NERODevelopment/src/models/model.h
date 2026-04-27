@@ -27,6 +27,7 @@ public:
   virtual std::optional<float> getDir() = 0;
   virtual std::optional<float> getPackTemp() = 0;
   virtual std::optional<float> getMotorTemp() = 0;
+  virtual std::optional<float> getMaxRegenCapacity() = 0;
   virtual std::optional<float> getStateOfCharge() = 0;
   virtual std::optional<float> getCurrent() = 0;
   virtual std::optional<float> getDCCurrent() = 0;

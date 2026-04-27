@@ -160,6 +160,13 @@ std::optional<float> RaspberryModel::getMotorTemp() {
                    : std::nullopt;
 }
 
+std::optional<float> RaspberryModel::getMaxRegenCapacity() {
+  // CCL ("BMS/Commands/Max_DC_Brake_Current_Target") is the BMS-imposed cap on
+  // regen current — i.e. the max regen capacity used to compute regen %.
+  std::optional<float> v = this->getById(CCL);
+  return v ? std::optional<float>(std::round(*v)) : std::nullopt;
+}
+
 std::optional<float> RaspberryModel::getStateOfCharge() {
   return this->getById(STATEOFCHARGE);
 }

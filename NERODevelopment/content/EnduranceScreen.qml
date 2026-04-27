@@ -18,6 +18,7 @@ Item {
     property int lastRunTime: enduranceController.lastTime
     property int fastestRunTime: enduranceController.fastestTime
     property int powerDrawPercent: enduranceController.powerDrawPercent
+    property int regenPercentage: enduranceController.currentRegenPercentage
     property int xMargin: width / 20
     property int yMargin: height / 20
     property int verticalSpacing: height / 40
@@ -180,6 +181,18 @@ Item {
                 id: powerDraw
                 title: "PWR DRAW"
                 batteryValue: endurance.powerDrawPercent
+                Layout.fillHeight: true
+                Layout.fillWidth: true
+                radius: endurance.borderRadii
+                valueFontSize: endurance.valueFontSize
+                labelFontSize: endurance.labelFontSize
+                unitFontSize: endurance.valueFontSize / 1.5
+            }
+
+            BatteryValueComponent {
+                id: regenPercent
+                title: "REGEN"
+                batteryValue: endurance.regenPercentage
                 Layout.fillHeight: true
                 Layout.fillWidth: true
                 radius: endurance.borderRadii

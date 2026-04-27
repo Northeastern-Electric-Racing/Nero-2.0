@@ -34,6 +34,10 @@ class EnduranceController : public ButtonController {
                  setPowerDrawPercent NOTIFY powerDrawPercentChanged FINAL)
   Q_PROPERTY(int maxDCCurrentTarget READ maxDCCurrentTarget WRITE
                  setMaxDCCurrentTarget NOTIFY maxDCCurrentTargetChanged FINAL)
+  Q_PROPERTY(float currentRegenPercentage READ currentRegenPercentage NOTIFY
+                 currentRegenPercentageChanged)
+  Q_PROPERTY(float maxRegenCapacity READ maxRegenCapacity WRITE
+                 setMaxRegenCapacity NOTIFY maxRegenCapacityChanged)
 
 public:
   explicit EnduranceController(Model *model, QObject *parent = nullptr);
@@ -48,6 +52,8 @@ public:
   int lastTime() const;
   int powerDrawPercent() const;
   int maxDCCurrentTarget() const;
+  float currentRegenPercentage() const;
+  float maxRegenCapacity() const;
 
 signals:
   void currentMaxTorqueChanged(int);
@@ -61,6 +67,8 @@ signals:
   void lastTimeChanged(int);
   void powerDrawPercentChanged(int);
   void maxDCCurrentTargetChanged(int);
+  void currentRegenPercentageChanged(float);
+  void maxRegenCapacityChanged(float);
   void toggleFaultAlertsRequested();
 
 public slots:
@@ -76,6 +84,7 @@ public slots:
   void setLastTime(int);
   void setPowerDrawPercent(int);
   void setMaxDCCurrentTarget(int);
+  void setMaxRegenCapacity(float);
 
   void enterButtonPressed() override;
   void rightButtonPressed() override;
@@ -93,6 +102,7 @@ private:
   int m_lastTime = 0;
   int m_powerDrawPercent = 0;
   int m_maxDCCurrentTarget = 0;
+  float m_maxRegenCapacity = 0;
   bool m_timerRunning = false;
   QElapsedTimer m_timer;
   QTimer *m_updateTimer;

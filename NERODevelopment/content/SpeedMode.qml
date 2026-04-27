@@ -16,6 +16,7 @@ Item {
     property int maxDraw: speedController.maxCurrent
     property int dcl: speedController.currentDischarge
     property double regen: speedController.regen
+    property int regenPercentage: speedController.regenPercentage
     property int powerDrawPercent: speedController.powerDrawPercent
 
     property int xMargin: width / 20
@@ -184,11 +185,22 @@ Item {
                     Layout.fillHeight: true
                     Layout.fillWidth: true
                     Layout.preferredHeight: 1
-                    spacing: 0
+                    spacing: speedMode.width / 40
 
                     BatteryValueComponent {
                         title: "PWR DRAW"
                         batteryValue: speedMode.powerDrawPercent
+                        Layout.fillHeight: true
+                        Layout.fillWidth: true
+                        radius: speedMode.borderRadii
+                        valueFontSize: speedMode.valueFontSize
+                        labelFontSize: speedMode.labelFontSize
+                        unitFontSize: speedMode.valueFontSize / 1.5
+                    }
+
+                    BatteryValueComponent {
+                        title: "REGEN"
+                        batteryValue: speedMode.regenPercentage
                         Layout.fillHeight: true
                         Layout.fillWidth: true
                         radius: speedMode.borderRadii

@@ -1,4 +1,5 @@
 #include "speedcontroller.h"
+#include <cmath>
 
 SpeedController::SpeedController(Model *model, QObject *parent)
     : ButtonController{model, 3, parent} {
@@ -18,6 +19,27 @@ void SpeedController::setRegen(float regen) {
   if (regen != m_regen) {
     m_regen = regen;
     emit regenChanged(regen);
+    emit regenPercentageChanged(regenPercentage());
+  }
+}
+
+float SpeedController::regenPercentage() const {
+  std::optional<float> dcCurrent = m_model->getDCCurrent();
+  if (dcCurrent && *dcCurrent < 0 && std::abs(m_maxRegenCapacity) > 0) {
+    float percent =
+        std::abs(*dcCurrent) / std::abs(m_maxRegenCapacity) * 100.0f;
+    if (percent > 100.0f) percent = 100.0f;
+    return percent;
+  }
+  return 0.0f;
+}
+
+float SpeedController::maxRegenCapacity() const { return m_maxRegenCapacity; }
+void SpeedController::setMaxRegenCapacity(float capacity) {
+  if (capacity != m_maxRegenCapacity) {
+    m_maxRegenCapacity = capacity;
+    emit maxRegenCapacityChanged(capacity);
+    emit regenPercentageChanged(regenPercentage());
   }
 }
 
@@ -118,6 +140,11 @@ void SpeedController::update() {
   setMaxCurrent(m_model->getMaxDraw());
   setCurrentDischarge(*m_model->getDcl());
   setRegen(*m_model->getRegenPower());
+
+  std::optional<float> maxRegen = m_model->getMaxRegenCapacity();
+  if (maxRegen) {
+    setMaxRegenCapacity(*maxRegen);
+  }
 
   std::optional<float> dcCurrent = m_model->getDCCurrent();
   std::optional<float> maxDCTarget = m_model->getMaxDCCurrentTarget();
