@@ -8,13 +8,8 @@
 
 inline QString highScoresPath() {
   QString dir = qEnvironmentVariable("NERO_DATA_DIR");
-  if (dir.isEmpty()) {
-#ifdef Q_OS_LINUX
-    dir = QStringLiteral("/var/lib/nero");
-#else
+  if (dir.isEmpty())
     dir = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
-#endif
-  }
   QDir().mkpath(dir);
   return dir + "/highscores.ini";
 }
