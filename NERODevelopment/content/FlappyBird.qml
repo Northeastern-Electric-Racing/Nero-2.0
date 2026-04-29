@@ -257,4 +257,13 @@ Item {
         anchors.rightMargin: 8
         visible: true
     }
+
+    Text {
+        id: bestScoreText
+        text: "Best: " + flappyBirdController.bestScore
+        anchors.right: parent.right
+        anchors.rightMargin: 8
+        anchors.top: scoreText.bottom
+        visible: true
+    }
 }

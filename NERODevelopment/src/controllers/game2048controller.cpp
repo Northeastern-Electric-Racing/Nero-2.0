@@ -1,7 +1,10 @@
 #include "game2048controller.h"
+#include "../utils/high_scores.h"
 
 Game2048Controller::Game2048Controller(Model *model, QObject *parent)
-    : ButtonController{model, 8, parent} {}
+    : ButtonController{model, 8, parent} {
+  m_bestScore = loadHighScore("scores/2048");
+}
 
 bool Game2048Controller::gameOver() const { return m_gameOver; }
 
@@ -22,13 +25,6 @@ void Game2048Controller::setScore(int score) {
 }
 
 int Game2048Controller::bestScore() const { return m_bestScore; }
-
-void Game2048Controller::setBestScore(int bestScore) {
-  if (bestScore != m_bestScore) {
-    m_bestScore = bestScore;
-    emit bestScoreChanged();
-  }
-}
 
 bool Game2048Controller::hasSavedGame() const { return m_hasSavedGame; }
 
@@ -69,6 +65,9 @@ void Game2048Controller::rightButtonPressed() {
 }
 
 void Game2048Controller::saveScore(int score) {
-  QString topic = "2048/SCORE";
-  m_model->sendMessage(topic, score);
+  if (score <= m_bestScore)
+    return;
+  m_bestScore = score;
+  saveHighScore("scores/2048", score);
+  emit bestScoreChanged();
 }

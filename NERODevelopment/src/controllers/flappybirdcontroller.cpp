@@ -1,7 +1,12 @@
 #include "flappybirdcontroller.h"
+#include "../utils/high_scores.h"
 
 FlappyBirdController::FlappyBirdController(Model *model, QObject *parent)
-    : ButtonController{model, 6, parent} {}
+    : ButtonController{model, 6, parent} {
+  m_bestScore = loadHighScore("scores/flappybird");
+}
+
+int FlappyBirdController::bestScore() const { return m_bestScore; }
 
 bool FlappyBirdController::didJump() const { return m_didJump; }
 void FlappyBirdController::setDidJump(bool didJump) {
@@ -17,6 +22,9 @@ void FlappyBirdController::enterButtonPressed() {
 }
 
 void FlappyBirdController::saveScore(int score) {
-  QString topic = "FLAPPYBIRD/SCORE";
-  m_model->sendMessage(topic, score);
+  if (score <= m_bestScore)
+    return;
+  m_bestScore = score;
+  saveHighScore("scores/flappybird", score);
+  emit bestScoreChanged();
 }
