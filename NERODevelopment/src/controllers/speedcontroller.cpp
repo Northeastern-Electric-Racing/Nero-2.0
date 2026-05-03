@@ -14,6 +14,14 @@ void SpeedController::setTractionControl(bool tractionStatus) {
   }
 }
 
+bool SpeedController::launchControl() const { return m_launchControl; }
+void SpeedController::setLaunchControl(bool launchStatus) {
+  if (launchStatus != m_launchControl) {
+    m_launchControl = launchStatus;
+    emit launchControlChanged(launchStatus);
+  }
+}
+
 float SpeedController::regen() const { return m_regen; }
 void SpeedController::setRegen(float regen) {
   if (regen != m_regen) {
@@ -28,7 +36,8 @@ float SpeedController::regenPercentage() const {
   if (dcCurrent && *dcCurrent < 0 && std::abs(m_maxRegenCapacity) > 0) {
     float percent =
         std::abs(*dcCurrent) / std::abs(m_maxRegenCapacity) * 100.0f;
-    if (percent > 100.0f) percent = 100.0f;
+    if (percent > 100.0f)
+      percent = 100.0f;
     return percent;
   }
   return 0.0f;
@@ -131,6 +140,7 @@ void SpeedController::rightButtonPressed() {
 
 void SpeedController::update() {
   setTractionControl(*m_model->getTractionControl());
+  setLaunchControl(*m_model->getLaunchControl());
   setPackTemp(*m_model->getPackTemp());
   setMotorTemp(*m_model->getMotorTemp());
   setChargeState(*m_model->getStateOfCharge());

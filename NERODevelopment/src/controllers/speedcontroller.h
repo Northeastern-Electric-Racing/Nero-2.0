@@ -9,6 +9,8 @@ class SpeedController : public ButtonController {
   Q_OBJECT
   Q_PROPERTY(bool tractionControl READ tractionControl WRITE setTractionControl
                  NOTIFY tractionControlChanged)
+  Q_PROPERTY(bool launchControl READ launchControl WRITE setLaunchControl NOTIFY
+                 launchControlChanged)
   Q_PROPERTY(
       float packTemp READ packTemp WRITE setPackTemp NOTIFY packTempChanged)
   Q_PROPERTY(
@@ -27,8 +29,8 @@ class SpeedController : public ButtonController {
                  setCurrentDischarge NOTIFY currentDischargeChanged)
   Q_PROPERTY(float maxCurrentDischarge READ maxCurrentDischarge WRITE
                  setMaxCurrentDischarge NOTIFY maxCurrentDischargeChanged)
-  Q_PROPERTY(float regenPercentage READ regenPercentage NOTIFY
-                 regenPercentageChanged)
+  Q_PROPERTY(
+      float regenPercentage READ regenPercentage NOTIFY regenPercentageChanged)
   Q_PROPERTY(float maxRegenCapacity READ maxRegenCapacity WRITE
                  setMaxRegenCapacity NOTIFY maxRegenCapacityChanged)
   Q_PROPERTY(int powerDrawPercent READ powerDrawPercent WRITE
@@ -40,6 +42,7 @@ public:
   explicit SpeedController(Model *model, QObject *parent = nullptr);
 
   bool tractionControl() const;
+  bool launchControl() const;
   float packTemp() const;
   float motorTemp() const;
   float chargeState() const;
@@ -57,6 +60,7 @@ public:
 
 signals:
   void tractionControlChanged(bool);
+  void launchControlChanged(bool);
   void packTempChanged(float);
   void motorTempChanged(float);
   void chargeStateChanged(float);
@@ -75,6 +79,7 @@ signals:
 
 public slots:
   void setTractionControl(bool);
+  void setLaunchControl(bool);
   void setPackTemp(float);
   void setMotorTemp(float);
   void setChargeState(float);
@@ -95,6 +100,7 @@ public slots:
 
 private:
   bool m_tractionControl = false;
+  bool m_launchControl = false;
   float m_packTemp = 0;
   float m_motorTemp = 0;
   float m_chargeState = 0;

@@ -51,6 +51,7 @@ public:
   std::optional<float> getAveCellVoltage() override;
   std::optional<float> getCellDelta() override;
   std::optional<float> getTractionControl() override;
+  std::optional<float> getLaunchControl() override;
   std::optional<float> getInverterTemp() override;
   std::optional<float> getMotorPower() override;
   std::optional<float> getFanPower() override;

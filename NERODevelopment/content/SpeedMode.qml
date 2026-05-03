@@ -8,7 +8,6 @@ Item {
     id: speedMode
     anchors.fill: parent
 
-    property bool tractionControlStatus: speedController.tractionControl
     property int packTemp: speedController.packTemp
     property int motorTemp: speedController.motorTemp
     property int maxSpeed: speedController.maxSpeed
@@ -43,13 +42,20 @@ Item {
             modeTitle: "PERFORMANCE"
         }
 
-        LabelText {
+        RowLayout {
             Layout.alignment: Qt.AlignHCenter
             Layout.topMargin: -30
-            text: speedMode.tractionControlStatus ? "TRACTION CONTROL - ON" : "TRACTION CONTROL - OFF"
-            color: speedMode.tractionControlStatus ? Theme.goodStatus : Theme.criticalStatus
-            font.pixelSize: 18
-            font.bold: true
+            spacing: 30
+
+            StatusIndicator {
+                label: "TRACTION CONTROL"
+                active: speedController.tractionControl
+            }
+
+            StatusIndicator {
+                label: "LAUNCH CONTROL"
+                active: speedController.launchControl
+            }
         }
 
         RowLayout {

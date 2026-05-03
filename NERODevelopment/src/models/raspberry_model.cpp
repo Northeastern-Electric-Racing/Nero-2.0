@@ -63,6 +63,7 @@ void RaspberryModel::connectToMQTT() {
       AVECELLTEMP,
       AVECELLVOLTAGE,
       TRACTIONCONTROL,
+      LAUNCHCONTROL,
       INVERTERTEMP,
       BMSSTATE,
       BMSFAULT,
@@ -333,6 +334,10 @@ std::optional<float> RaspberryModel::getRegenPower() {
 
 std::optional<float> RaspberryModel::getTractionControl() {
   return this->getById(TRACTIONCONTROL);
+}
+
+std::optional<float> RaspberryModel::getLaunchControl() {
+  return this->getById(LAUNCHCONTROL);
 }
 
 QList<QString> RaspberryModel::getBmsFault() {
