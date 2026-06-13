@@ -112,14 +112,14 @@ void RaspberryModel::connectToMQTT() {
           &RaspberryModel::receiveServerData);
   client_1->connectToHost();
 
-  QList<QString> client_2_topics = {
+  // QList<QString> client_2_topics = {
 
-  };
-  MqttClient *client_2 =
-      new MqttClient(nullptr, client2_port, client_2_topics, mqttHost);
-  connect(client_2, &MqttClient::emitServerData, this,
-          &RaspberryModel::receiveServerData);
-  client_2->connectToHost();
+  // };
+  // MqttClient *client_2 =
+  //     new MqttClient(nullptr, client2_port, client_2_topics, mqttHost);
+  // connect(client_2, &MqttClient::emitServerData, this,
+  //         &RaspberryModel::receiveServerData);
+  // client_2->connectToHost();
   this->m_client = client_1;
 }
 
