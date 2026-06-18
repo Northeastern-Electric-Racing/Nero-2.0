@@ -94,14 +94,17 @@ void RaspberryModel::connectToMQTT() {
       CRITICALFAULTS,
       NONCRITICALFAULTS,
       LVVOLTAGE,
-
+      BUTTONID,
+      HOMEBUTTON,
+      MODEINDEX,
+      DIRECTION,
   };
 
   const char *client1_port_str = getenv("CLIENT1_PORT");
-  const char *client2_port_str = getenv("CLIENT2_PORT");
+  //const char *client2_port_str = getenv("CLIENT2_PORT");
 
   int client1_port = client1_port_str ? atoi(client1_port_str) : 1883;
-  int client2_port = client2_port_str ? atoi(client2_port_str) : 1882;
+  //int client2_port = client2_port_str ? atoi(client2_port_str) : 1882;
 
   MqttClient *client_1 =
       new MqttClient(nullptr, client1_port, client_1_topics, mqttHost);
@@ -109,17 +112,14 @@ void RaspberryModel::connectToMQTT() {
           &RaspberryModel::receiveServerData);
   client_1->connectToHost();
 
-  QList<QString> client_2_topics = {
-      BUTTONID,
-      HOMEBUTTON,
-      MODEINDEX,
-      DIRECTION,
-  };
-  MqttClient *client_2 =
-      new MqttClient(nullptr, client2_port, client_2_topics, mqttHost);
-  connect(client_2, &MqttClient::emitServerData, this,
-          &RaspberryModel::receiveServerData);
-  client_2->connectToHost();
+  // QList<QString> client_2_topics = {
+
+  // };
+  // MqttClient *client_2 =
+  //     new MqttClient(nullptr, client2_port, client_2_topics, mqttHost);
+  // connect(client_2, &MqttClient::emitServerData, this,
+  //         &RaspberryModel::receiveServerData);
+  // client_2->connectToHost();
   this->m_client = client_1;
 }
 
