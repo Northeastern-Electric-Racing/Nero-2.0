@@ -168,8 +168,7 @@ std::optional<float> RaspberryModel::getMaxRegenCapacity() {
 }
 
 std::optional<float> RaspberryModel::getStateOfCharge() {
-  std::optional<float> soc = this->getById(STATEOFCHARGE);
-  return soc ? std::optional<float>(std::round(*soc * 100)) : std::nullopt;
+  return this->getById(STATEOFCHARGE);
 }
 
 std::optional<float> RaspberryModel::getCurrent() {
