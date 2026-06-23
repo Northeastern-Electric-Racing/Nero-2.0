@@ -39,7 +39,7 @@ Rectangle {
         HeaderView {
             Layout.fillWidth: true
             height: 100
-            modeTitle: pit.forward ? "PIT - DRIVE" : "PIT - REVERSE"
+            modeTitle: pit.forward ? "PIT - DRIVE" : "PIT - KEVIN"
         }
 
         RowLayout {

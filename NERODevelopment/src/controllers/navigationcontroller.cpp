@@ -7,7 +7,7 @@ const std::vector<Item> &getPages() {
   static const std::vector<Item> pages = {
       {"OFF", Type::Page, "zzz.png", "OffScreen2.qml", nullptr},
       {"PIT - DRIVE", Type::Page, "flag.png", "Pit.qml", nullptr},
-      {"PIT - REVERSE", Type::Page, "reverse.png", "Pit.qml", nullptr},
+      {"PIT - KEVIN", Type::Page, "kevin.jpg", "Pit.qml", nullptr},
       {"PERFORMANCE", Type::Page, "hare.png", "SpeedMode.qml", nullptr},
       {"ENDURANCE", Type::Page, "turtle.png", "EnduranceScreen.qml", nullptr},
       {"GAMES", Type::Category, "game.png", nullptr, nullptr},
