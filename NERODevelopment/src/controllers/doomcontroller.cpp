@@ -73,10 +73,10 @@ static constexpr int BUTTON_VALUE_MIDDLE_LEFT =
     2;                                       // physical 3 — also turn left
 static constexpr int BUTTON_VALUE_UP = 3;    // physical 4 — move forward
 static constexpr int BUTTON_VALUE_DOWN = 4;  // physical 5 — move backward
-static constexpr int BUTTON_VALUE_ENTER = 7; // physical 6 — fire+use+menu
+static constexpr int BUTTON_VALUE_ENTER = 5; // physical 6 — fire+use+menu
 static constexpr int BUTTON_VALUE_RIGHT = 6; // physical 7 — turn right
 static constexpr int BUTTON_VALUE_MIDDLE_RIGHT =
-    5; // physical 8 — also turn right
+    7; // physical 8 — also turn right
 
 /**
  * Returns true if the value corresponds to a known DOOM-mapped button.
