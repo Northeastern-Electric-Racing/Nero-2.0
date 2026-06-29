@@ -106,6 +106,16 @@ QVariantList NavigationController::getChildrenOf(int parent) const {
   return list;
 }
 
+void NavigationController::jumpToPage(const QString &label) {
+  for (int i : Menu::topLevelIndices()) {
+    if (Menu::label(i).compare(label, Qt::CaseInsensitive) == 0) {
+      setSelectedIndex(i);
+      activate();
+      return;
+    }
+  }
+}
+
 void NavigationController::moveNext() {
   int pos = m_navOrder.indexOf(m_selected);
   if (pos + 1 < m_navOrder.size()) {
