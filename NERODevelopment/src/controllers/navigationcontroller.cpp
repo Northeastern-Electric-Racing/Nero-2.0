@@ -40,6 +40,8 @@ NavigationController::NavigationController(Model *model, QObject *parent)
       }
     }
   });
+  connect(m_model, &Model::onCurrentDataChange, this,
+          &NavigationController::syncModeFromVcu);
   rebuildNavOrder();
 }
 
@@ -189,40 +191,60 @@ void NavigationController::executeAction(int i) {
   }
 }
 
-void NavigationController::enterButtonPressed() { activate(); }
-void NavigationController::downButtonPressed() { moveNext(); }
-void NavigationController::upButtonPressed() { movePrev(); }
-void NavigationController::leftButtonPressed() { movePrev(); }
-void NavigationController::rightButtonPressed() { moveNext(); }
-void NavigationController::homeButtonPressed() { goHome(); }
+void NavigationController::syncModeFromVcu() {
+  std::optional<float> idxRaw = m_model->getModeIndex();
+  std::optional<bool> homeRaw = m_model->getHomeButtonPressed();
+  if (!idxRaw.has_value() || !homeRaw.has_value())
+    return;
+
+  int idx = static_cast<int>(*idxRaw);
+  bool home = *homeRaw;
+  if (idx == m_lastModeIndex && home == m_lastHomeMode)
+    return;
+  m_lastModeIndex = idx;
+  m_lastHomeMode = home;
+
+  const QVector<int> tops = Menu::topLevelIndices();
+  if (idx < 0 || idx >= tops.size())
+    return;
+
+  int top = tops[idx];
+
+  if (home) {
+    setActivePage(-1);
+    setExpanded(-1);
+    setSelectedIndex(top);
+    return;
+  }
+
+  switch (Menu::get(top).type) {
+  case Menu::Type::Category:
+    setActivePage(-1);
+    expand(top);
+    break;
+  case Menu::Type::Action:
+    setActivePage(-1);
+    setExpanded(-1);
+    setSelectedIndex(top);
+    break;
+  default:
+    setExpanded(-1);
+    setSelectedIndex(top);
+    setActivePage(top);
+    break;
+  }
+}
 
 void NavigationController::buttonUpdate() {
+  if (m_expanded < 0)
+    return;
   if (!m_pageIndices.contains(m_model->currentPageIndex))
     return;
 
-  std::optional<bool> home = m_model->getHomeButtonPressed();
-  if (!home.has_value())
-    return;
-
-  if (*home) {
-    homeButtonPressed();
-    std::optional<int> mode = m_model->getModeIndex();
-    if (mode.has_value() && *mode >= 0 && *mode < m_navOrder.size()) {
-      setSelectedIndex(m_navOrder[*mode]);
-    }
-    return;
-  }
-
-  if (!isPageActive()) {
-    if (m_model->getEnterButtonPressed() == true)
-      enterButtonPressed();
-    if (m_model->getLeftButtonPressed() == true)
-      leftButtonPressed();
-    if (m_model->getRightButtonPressed() == true)
-      rightButtonPressed();
-    if (m_model->getUpRegenButtonPressed() == true)
-      upButtonPressed();
-    if (m_model->getDownRegenButtonPressed() == true)
-      downButtonPressed();
-  }
+  if (m_model->getLeftButtonPressed() == true)
+    movePrev();
+  if (m_model->getRightButtonPressed() == true)
+    moveNext();
+  if (m_model->getEnterButtonPressed() == true)
+    activate();
 }
