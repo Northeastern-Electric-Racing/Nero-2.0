@@ -15,11 +15,10 @@
 #include "import_qml_components_plugins.h"
 #include "import_qml_plugins.h"
 #include "models/raspberry_model.h"
+#include "utils/screenshottool.h"
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
-#include <QQuickWindow>
-#include <QTimer>
 
 int main(int argc, char *argv[]) {
   set_qt_environment();
@@ -83,23 +82,8 @@ int main(int argc, char *argv[]) {
       []() { QCoreApplication::exit(-1); }, Qt::QueuedConnection);
   engine.loadFromModule("content", "App");
 
-  // Screenshot the named page headless, then quit.
-  if (qEnvironmentVariableIsSet("NERO_SCREENSHOT")) {
-    // Read env in the callback; captured locals would dangle.
-    QTimer::singleShot(2000, [&]() { // wait for data + UI
-      navigationController.jumpToPage(qEnvironmentVariable("NERO_SCREENSHOT"));
-      QTimer::singleShot(500, [&]() { // wait for the page to render
-        const QString out =
-            qEnvironmentVariable("NERO_SCREENSHOT_OUT", "shot.png");
-        if (auto *w = qobject_cast<QQuickWindow *>(
-                engine.rootObjects().constFirst())) {
-          const bool ok = w->grabWindow().save(out);
-          qInfo() << "NERO_SCREENSHOT:" << (ok ? "saved" : "FAILED") << out;
-        }
-        QCoreApplication::quit();
-      });
-    });
-  }
+  // Dev screenshot harness, inert unless its env vars are set
+  ScreenshotTool screenshotTool(&engine, &navigationController);
 
   return app.exec();
 }
