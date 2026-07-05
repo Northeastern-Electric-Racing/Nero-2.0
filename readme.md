@@ -135,8 +135,11 @@ QT_QPA_PLATFORM=offscreen NERO_SCREENSHOT=PERFORMANCE NERO_SCREENSHOT_OUT=perf.p
 Keep the app running and capture on demand
 
 ```bash
-# Start with a trigger file
-NERO_SCREENSHOT_WATCH=/tmp/nero-shot ./NEROApp &
+# Enable watch mode, trigger file defaults to /tmp/nero-shot
+NERO_SCREENSHOT_WATCH=1 ./NEROApp &
+
+# Or point it at a specific trigger file
+NERO_SCREENSHOT_WATCH=1 NERO_SCREENSHOT_WATCH_PATH=/tmp/nero-shot ./NEROApp &
 
 # Saves performance.png next to the trigger file
 echo PERFORMANCE > /tmp/nero-shot
@@ -145,7 +148,7 @@ echo PERFORMANCE > /tmp/nero-shot
 echo "ENDURANCE /tmp/out.png" > /tmp/nero-shot
 ```
 
-Page labels match the top-level menu and are case-insensitive.
+Page labels match the top-level menu and are case-insensitive. Use HOME to capture the menu screen.
 
 ### Testing Out Enviornment Variables (On the Car)
 
