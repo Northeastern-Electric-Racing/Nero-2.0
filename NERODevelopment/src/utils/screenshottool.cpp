@@ -24,15 +24,40 @@ ScreenshotTool::ScreenshotTool(QQmlApplicationEngine *engine,
   }
 
   // Capture on demand each time the trigger file is written
-  m_triggerPath = qEnvironmentVariable("NERO_SCREENSHOT_WATCH");
-  if (!m_triggerPath.isEmpty()) {
-    if (!QFile::exists(m_triggerPath))
-      QFile(m_triggerPath).open(QIODevice::WriteOnly); // watcher needs a file
-    if (!m_watcher.addPath(m_triggerPath))
-      qWarning() << "NERO_SCREENSHOT_WATCH: cannot watch" << m_triggerPath;
-    connect(&m_watcher, &QFileSystemWatcher::fileChanged, this,
-            &ScreenshotTool::onTriggerFileChanged);
+  if (qEnvironmentVariableIsSet("NERO_SCREENSHOT_WATCH"))
+    setupWatch();
+}
+
+void ScreenshotTool::setupWatch() {
+  m_triggerPath =
+      qEnvironmentVariable("NERO_SCREENSHOT_WATCH_PATH", "/tmp/nero-shot");
+
+  // Fail loudly instead of doing nothing when the path is unusable
+  const QFileInfo info(m_triggerPath);
+  if (info.isDir()) {
+    qWarning() << "NERO_SCREENSHOT_WATCH_PATH is a directory, need a file path"
+               << m_triggerPath;
+    return;
   }
+  if (!info.dir().exists()) {
+    qWarning() << "NERO_SCREENSHOT_WATCH_PATH directory does not exist"
+               << info.dir().absolutePath();
+    return;
+  }
+  if (!QFile::exists(m_triggerPath) &&
+      !QFile(m_triggerPath)
+           .open(QIODevice::WriteOnly)) { // watcher needs a file
+    qWarning() << "NERO_SCREENSHOT_WATCH_PATH cannot create trigger file"
+               << m_triggerPath;
+    return;
+  }
+  if (!m_watcher.addPath(m_triggerPath)) {
+    qWarning() << "NERO_SCREENSHOT_WATCH_PATH cannot watch" << m_triggerPath;
+    return;
+  }
+  connect(&m_watcher, &QFileSystemWatcher::fileChanged, this,
+          &ScreenshotTool::onTriggerFileChanged);
+  qInfo() << "NERO_SCREENSHOT_WATCH: watching" << m_triggerPath;
 }
 
 void ScreenshotTool::onTriggerFileChanged() {
