@@ -103,6 +103,8 @@ void ScreenshotTool::grabAndSave(const QString &out, bool quitAfter) {
                                 : qobject_cast<QQuickWindow *>(roots.first())) {
     const bool ok = w->grabWindow().save(out);
     qInfo() << "NERO_SCREENSHOT:" << (ok ? "saved" : "FAILED") << out;
+  } else {
+    qWarning() << "NERO_SCREENSHOT: no root window to grab";
   }
   if (quitAfter)
     QCoreApplication::quit();
