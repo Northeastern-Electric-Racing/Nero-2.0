@@ -106,8 +106,8 @@ public:
   Q_INVOKABLE QVariantList getTopLevelItems() const;
   Q_INVOKABLE QVariantList getChildrenOf(int parent) const;
 
-  // Jump straight to a top-level page by label (screenshot harness).
-  Q_INVOKABLE void jumpToPage(const QString &label);
+  // Jump to a top-level page or HOME by label, dev screenshot harness only
+  Q_INVOKABLE bool jumpToPage(const QString &label);
 
   void collapse();
 

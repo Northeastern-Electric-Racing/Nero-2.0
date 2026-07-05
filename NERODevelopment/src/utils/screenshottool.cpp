@@ -86,7 +86,12 @@ void ScreenshotTool::onTriggerFileChanged() {
 
 void ScreenshotTool::capture(const QString &page, const QString &out,
                              bool quitAfter) {
-  m_nav->jumpToPage(page);
+  if (!m_nav->jumpToPage(page)) {
+    qWarning() << "NERO_SCREENSHOT: unknown page" << page;
+    if (quitAfter)
+      QCoreApplication::quit();
+    return;
+  }
   QTimer::singleShot(500, this, [this, out, quitAfter]() { // let it render
     grabAndSave(out, quitAfter);
   });
