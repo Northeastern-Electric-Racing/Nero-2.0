@@ -108,6 +108,23 @@ QVariantList NavigationController::getChildrenOf(int parent) const {
   return list;
 }
 
+// Dev testing only for now, drives the screenshot harness
+bool NavigationController::jumpToPage(const QString &label) {
+  // HOME is the menu screen, not a menu entry, so it needs goHome
+  if (label.compare("HOME", Qt::CaseInsensitive) == 0) {
+    goHome();
+    return true;
+  }
+  for (int i : Menu::topLevelIndices()) {
+    if (Menu::label(i).compare(label, Qt::CaseInsensitive) == 0) {
+      setSelectedIndex(i);
+      activate();
+      return true;
+    }
+  }
+  return false;
+}
+
 void NavigationController::moveNext() {
   int pos = m_navOrder.indexOf(m_selected);
   if (pos + 1 < m_navOrder.size()) {
