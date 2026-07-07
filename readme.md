@@ -144,11 +144,25 @@ NERO_SCREENSHOT_WATCH=1 NERO_SCREENSHOT_WATCH_PATH=/tmp/nero-shot ./NEROApp &
 # Saves performance.png next to the trigger file
 echo PERFORMANCE > /tmp/nero-shot
 
-# Optional second word picks the output path
+# An optional trailing path (one containing "/" or ending in .png) sets the
+# output; multi-word labels work because only that trailing path is split off
 echo "ENDURANCE /tmp/out.png" > /tmp/nero-shot
+echo "PIT - DRIVE /tmp/pit.png" > /tmp/nero-shot
+
+# Each capture reports completion: a `NERO_SHOT_DONE ok "<path>"` line on
+# stdout, plus a `<trigger>.done` sentinel file for callers not reading stdout
 ```
 
-Page labels match the top-level menu and are case-insensitive. Use HOME to capture the menu screen.
+Page labels match the top-level menu and are case-insensitive. Use HOME to capture the menu screen. The render settle delay before each grab defaults to 500 ms; override it with `NERO_SCREENSHOT_DELAY_MS`.
+
+For scripting, `scripts/nero-shot.sh PAGE [OUT]` drives a running watch-mode app and blocks until the capture lands, printing the saved path — it waits on the sentinel, so there is no guessing at timing:
+
+```bash
+QT_QPA_PLATFORM=offscreen NERO_SCREENSHOT_WATCH=1 ./NEROApp &
+scripts/nero-shot.sh PERFORMANCE /tmp/perf.png   # prints /tmp/perf.png
+```
+
+Agents can invoke the `/nero-shot` skill, which launches the app if needed and wraps this.
 
 ### Testing Out Enviornment Variables (On the Car)
 

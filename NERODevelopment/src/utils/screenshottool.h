@@ -28,6 +28,7 @@ private:
   void setupWatch();
   void onTriggerFileChanged();
   void grabAndSave(const QString &out, bool quitAfter);
+  void signalDone(bool ok, const QString &detail);
 
   QQmlApplicationEngine *m_engine;
   NavigationController *m_nav;

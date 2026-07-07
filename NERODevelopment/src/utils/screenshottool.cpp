@@ -8,6 +8,7 @@
 #include <QFileInfo>
 #include <QQmlApplicationEngine>
 #include <QQuickWindow>
+#include <QRegularExpression>
 #include <QTextStream>
 #include <QTimer>
 
@@ -69,18 +70,27 @@ void ScreenshotTool::onTriggerFileChanged() {
   if (!f.open(QIODevice::ReadOnly))
     return;
   // QTextStream detects BOMs so Windows PowerShell writes parse too
-  const QStringList request =
-      QTextStream(&f).readAll().trimmed().split(' ', Qt::SkipEmptyParts);
+  const QString request = QTextStream(&f).readAll().trimmed();
   f.close();
   if (request.isEmpty()) // the truncation below re-fires into this branch
     return;
   f.open(QIODevice::WriteOnly); // truncate so the same page can re-fire
 
-  const QString page = request.first();
-  const QString out =
-      request.size() > 1
-          ? request.at(1)
-          : QFileInfo(m_triggerPath).dir().filePath(page.toLower() + ".png");
+  // Format is "PAGE [OUT]". Split on the last whitespace, but only when the
+  // trailing token looks like a path, so multi-word labels ("PIT - DRIVE")
+  // stay intact while an optional output path is still honored.
+  QString page = request;
+  QString out;
+  const int lastWs = request.lastIndexOf(QRegularExpression("\\s"));
+  if (lastWs >= 0) {
+    const QString tail = request.mid(lastWs + 1);
+    if (tail.contains('/') || tail.endsWith(".png", Qt::CaseInsensitive)) {
+      page = request.left(lastWs).trimmed();
+      out = tail;
+    }
+  }
+  if (out.isEmpty()) // default next to the trigger file
+    out = QFileInfo(m_triggerPath).dir().filePath(page.toLower() + ".png");
   capture(page, out, /*quitAfter=*/false);
 }
 
@@ -88,24 +98,48 @@ void ScreenshotTool::capture(const QString &page, const QString &out,
                              bool quitAfter) {
   if (!m_nav->jumpToPage(page)) {
     qWarning() << "NERO_SCREENSHOT: unknown page" << page;
+    signalDone(false, page); // let a waiting caller learn it failed
     if (quitAfter)
       QCoreApplication::quit();
     return;
   }
-  QTimer::singleShot(500, this, [this, out, quitAfter]() { // let it render
-    grabAndSave(out, quitAfter);
-  });
+  // Settle delay is tunable so bulk captures aren't stuck at 500ms
+  const int delayMs = qEnvironmentVariableIntValue("NERO_SCREENSHOT_DELAY_MS");
+  QTimer::singleShot(delayMs > 0 ? delayMs : 500, this,
+                     [this, out, quitAfter]() { // let it render
+                       grabAndSave(out, quitAfter);
+                     });
 }
 
 void ScreenshotTool::grabAndSave(const QString &out, bool quitAfter) {
   const QList<QObject *> roots = m_engine->rootObjects();
+  bool ok = false;
   if (auto *w = roots.isEmpty() ? nullptr
                                 : qobject_cast<QQuickWindow *>(roots.first())) {
-    const bool ok = w->grabWindow().save(out);
+    ok = w->grabWindow().save(out);
     qInfo() << "NERO_SCREENSHOT:" << (ok ? "saved" : "FAILED") << out;
   } else {
     qWarning() << "NERO_SCREENSHOT: no root window to grab";
   }
+  signalDone(ok, out);
   if (quitAfter)
     QCoreApplication::quit();
+}
+
+// Announce a finished capture so callers can await it instead of polling the
+// output file (which races the write). Emits a parseable stdout line in both
+// modes; in watch mode also drops a "<trigger>.done" sentinel for callers that
+// don't capture stdout.
+void ScreenshotTool::signalDone(bool ok, const QString &detail) {
+  const QString status = ok ? QStringLiteral("ok") : QStringLiteral("fail");
+  qInfo().noquote()
+      << QStringLiteral("NERO_SHOT_DONE %1 \"%2\"").arg(status, detail);
+
+  if (m_triggerPath.isEmpty())
+    return;
+  QFile done(m_triggerPath + ".done");
+  if (done.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+    QTextStream(&done) << status << " \"" << detail << "\"\n";
+    done.close();
+  }
 }

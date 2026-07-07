@@ -73,6 +73,9 @@ build*
 *.dll
 *.exe
 
-# Claude Code local config
-.claude/
+# Claude Code local config (skills under .claude/skills/nero-shot are shared)
+.claude/*
+!.claude/skills/
+.claude/skills/*
+!.claude/skills/nero-shot/
 CLAUDE.md
