@@ -15,8 +15,8 @@ Page labels are case-insensitive: `HOME`, `OFF`, `PERFORMANCE`, `ENDURANCE`,
 ## Setup (both modes)
 
 ```bash
-NERO=/Users/wyattbracy/Desktop/ner/app_software/NERO/Nero-2.0
-BIN="$NERO/NERODevelopment/build/macos_development-Debug/NEROApp"
+NERO=$(git rev-parse --show-toplevel)   # run from anywhere inside the repo
+BIN="$NERO/NERODevelopment/build/macos_development-Debug/NEROApp"  # build dir matches your Qt Creator kit
 ```
 
 If you changed code, rebuild first: `/build-run build`. No broker is needed —
