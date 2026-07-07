@@ -155,11 +155,11 @@ echo "PIT - DRIVE /tmp/pit.png" > /tmp/nero-shot
 
 Page labels match the top-level menu and are case-insensitive. Use HOME to capture the menu screen. The render settle delay before each grab defaults to 500 ms; override it with `NERO_SCREENSHOT_DELAY_MS`.
 
-For scripting, `scripts/nero-shot.sh PAGE [OUT]` drives a running watch-mode app and blocks until the capture lands, printing the saved path — it waits on the sentinel, so there is no guessing at timing:
+For scripting, `.claude/skills/nero-shot/scripts/nero-shot.sh PAGE [OUT]` drives a running watch-mode app and blocks until the capture lands, printing the saved path — it waits on the sentinel, so there is no guessing at timing:
 
 ```bash
 QT_QPA_PLATFORM=offscreen NERO_SCREENSHOT_WATCH=1 ./NEROApp &
-scripts/nero-shot.sh PERFORMANCE /tmp/perf.png   # prints /tmp/perf.png
+.claude/skills/nero-shot/scripts/nero-shot.sh PERFORMANCE /tmp/perf.png   # prints /tmp/perf.png
 ```
 
 Agents can invoke the `/nero-shot` skill, which launches the app if needed and wraps this.

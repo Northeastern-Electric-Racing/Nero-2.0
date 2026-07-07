@@ -63,7 +63,7 @@ LOG=/tmp/nero-shot.log
 2. **Capture each page** with the wrapper (also `run_in_background: true`, since
    it blocks on the completion sentinel). It prints the saved path on stdout:
    ```bash
-   "$NERO/scripts/nero-shot.sh" "PERFORMANCE" /tmp/performance.png
+   "$NERO/.claude/skills/nero-shot/scripts/nero-shot.sh" "PERFORMANCE" /tmp/performance.png
    ```
    Give `PAGE` alone to save to `<trigger dir>/<page>.png`, or `PAGE OUT` for an
    explicit path. Quote multi-word labels: `nero-shot.sh "PIT - DRIVE"`. Exits
