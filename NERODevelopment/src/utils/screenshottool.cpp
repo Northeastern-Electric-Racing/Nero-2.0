@@ -127,19 +127,18 @@ void ScreenshotTool::grabAndSave(const QString &out, bool quitAfter) {
 }
 
 // Announce a finished capture so callers can await it instead of polling the
-// output file (which races the write). Emits a parseable stdout line in both
-// modes; in watch mode also drops a "<trigger>.done" sentinel for callers that
-// don't capture stdout.
+// output file (which races the write). Emits a parseable line to the app's log
+// (qInfo, which Qt sends to stderr) in both modes; in watch mode also drops a
+// "<trigger>.done" sentinel for callers that don't read the log.
 void ScreenshotTool::signalDone(bool ok, const QString &detail) {
-  const QString status = ok ? QStringLiteral("ok") : QStringLiteral("fail");
-  qInfo().noquote()
-      << QStringLiteral("NERO_SHOT_DONE %1 \"%2\"").arg(status, detail);
+  const QString payload =
+      QStringLiteral("%1 \"%2\"")
+          .arg(ok ? QStringLiteral("ok") : QStringLiteral("fail"), detail);
+  qInfo().noquote() << "NERO_SHOT_DONE" << payload;
 
   if (m_triggerPath.isEmpty())
     return;
   QFile done(m_triggerPath + ".done");
-  if (done.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
-    QTextStream(&done) << status << " \"" << detail << "\"\n";
-    done.close();
-  }
+  if (done.open(QIODevice::WriteOnly | QIODevice::Truncate))
+    done.write((payload + QStringLiteral("\n")).toUtf8());
 }
