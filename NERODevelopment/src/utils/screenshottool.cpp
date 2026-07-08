@@ -77,14 +77,18 @@ void ScreenshotTool::onTriggerFileChanged() {
   f.open(QIODevice::WriteOnly); // truncate so the same page can re-fire
 
   // Format is "PAGE [OUT]". Split on the last whitespace, but only when the
-  // trailing token looks like a path, so multi-word labels ("PIT - DRIVE")
+  // trailing token looks like a filename — a path separator ('/' or '\') or a
+  // trailing extension (.png, .jpg, ...) — so multi-word labels ("PIT - DRIVE")
   // stay intact while an optional output path is still honored.
   QString page = request;
   QString out;
-  const int lastWs = request.lastIndexOf(QRegularExpression("\\s"));
+  static const QRegularExpression wsRe(QStringLiteral("\\s"));
+  static const QRegularExpression fileExtRe(QStringLiteral("\\.[A-Za-z0-9]+$"));
+  const int lastWs = request.lastIndexOf(wsRe);
   if (lastWs >= 0) {
     const QString tail = request.mid(lastWs + 1);
-    if (tail.contains('/') || tail.endsWith(".png", Qt::CaseInsensitive)) {
+    if (tail.contains('/') || tail.contains('\\') ||
+        fileExtRe.match(tail).hasMatch()) {
       page = request.left(lastWs).trimmed();
       out = tail;
     }
@@ -103,12 +107,21 @@ void ScreenshotTool::capture(const QString &page, const QString &out,
       QCoreApplication::quit();
     return;
   }
-  // Settle delay is tunable so bulk captures aren't stuck at 500ms
-  const int delayMs = qEnvironmentVariableIntValue("NERO_SCREENSHOT_DELAY_MS");
-  QTimer::singleShot(delayMs > 0 ? delayMs : 500, this,
-                     [this, out, quitAfter]() { // let it render
-                       grabAndSave(out, quitAfter);
-                     });
+  // Settle delay is tunable so bulk captures aren't stuck at 500ms; warn on a
+  // set-but-bogus value instead of silently falling back, like setupWatch does.
+  int delayMs = 500;
+  if (qEnvironmentVariableIsSet("NERO_SCREENSHOT_DELAY_MS")) {
+    bool ok = false;
+    const int v = qEnvironmentVariableIntValue("NERO_SCREENSHOT_DELAY_MS", &ok);
+    if (ok && v > 0)
+      delayMs = v;
+    else
+      qWarning() << "NERO_SCREENSHOT_DELAY_MS ignored, want a positive integer:"
+                 << qEnvironmentVariable("NERO_SCREENSHOT_DELAY_MS");
+  }
+  QTimer::singleShot(delayMs, this, [this, out, quitAfter]() { // let it render
+    grabAndSave(out, quitAfter);
+  });
 }
 
 void ScreenshotTool::grabAndSave(const QString &out, bool quitAfter) {

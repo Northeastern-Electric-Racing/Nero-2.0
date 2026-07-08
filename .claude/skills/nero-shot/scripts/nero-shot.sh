@@ -24,6 +24,12 @@ fi
 
 page=$1
 out=${2:-}
+# Absolutize a relative OUT against the caller's cwd — NEROApp resolves it from
+# its own working directory otherwise, so the saved (and printed) path would not
+# match where the caller expects it.
+if [ -n "$out" ] && [ "${out#/}" = "$out" ]; then
+  out="$PWD/$out"
+fi
 trigger=${NERO_SHOT_TRIGGER:-/tmp/nero-shot}
 timeout=${NERO_SHOT_TIMEOUT:-15}
 done_file="$trigger.done"
@@ -38,9 +44,11 @@ rm -f "$done_file"
 printf '%s %s\n' "$page" "$out" >"$trigger"
 
 # Poll for the sentinel NEROApp writes once the grab (or failure) completes.
+# Wait for it to be non-empty (-s): the app creates the file on open and then
+# writes the payload, so -f alone could catch it in the empty instant between.
 tries=$((timeout * 10))
 i=0
-while [ ! -f "$done_file" ]; do
+while [ ! -s "$done_file" ]; do
   i=$((i + 1))
   if [ "$i" -ge "$tries" ]; then
     echo "nero-shot: timed out after ${timeout}s waiting for $done_file" >&2

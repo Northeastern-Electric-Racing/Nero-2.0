@@ -16,11 +16,14 @@ Page labels are case-insensitive: `HOME`, `OFF`, `PERFORMANCE`, `ENDURANCE`,
 
 ```bash
 NERO=$(git rev-parse --show-toplevel)   # run from anywhere inside the repo
-BIN="$NERO/NERODevelopment/build/macos_development-Debug/NEROApp"  # build dir matches your Qt Creator kit
+# Auto-discover the built NEROApp for whatever kit/platform you built. See
+# platforms.md for the exact path per OS, or to pick when several kits exist.
+BIN=$(find "$NERO/NERODevelopment/build" -type f \( -name NEROApp -o -name NEROApp.exe \) 2>/dev/null | head -n1)
 ```
 
-If you changed code, rebuild first: `/build-run build`. No broker is needed —
-telemetry reads zero, which is fine for checking layout/rendering.
+If you changed code, rebuild first — build the NEROApp target in Qt Creator (or
+see [platforms.md](platforms.md) for the terminal command). No broker is needed
+— telemetry reads zero, which is fine for checking layout/rendering.
 
 ## Mode A — single shot (one-off, self-contained)
 

@@ -144,13 +144,15 @@ NERO_SCREENSHOT_WATCH=1 NERO_SCREENSHOT_WATCH_PATH=/tmp/nero-shot ./NEROApp &
 # Saves performance.png next to the trigger file
 echo PERFORMANCE > /tmp/nero-shot
 
-# An optional trailing path (one containing "/" or ending in .png) sets the
-# output; multi-word labels work because only that trailing path is split off
+# An optional trailing path (one with a slash/backslash, or a file extension
+# like .png) sets the output; multi-word labels work because only that trailing
+# path is split off
 echo "ENDURANCE /tmp/out.png" > /tmp/nero-shot
 echo "PIT - DRIVE /tmp/pit.png" > /tmp/nero-shot
 
-# Each capture reports completion: a `NERO_SHOT_DONE ok "<path>"` line on
-# stdout, plus a `<trigger>.done` sentinel file for callers not reading stdout
+# Each capture reports completion: a `NERO_SHOT_DONE ok "<path>"` line in the
+# app's log (stderr), plus a `<trigger>.done` sentinel file for callers not
+# reading the log
 ```
 
 Page labels match the top-level menu and are case-insensitive. Use HOME to capture the menu screen. The render settle delay before each grab defaults to 500 ms; override it with `NERO_SCREENSHOT_DELAY_MS`.
