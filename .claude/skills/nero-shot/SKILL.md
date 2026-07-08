@@ -86,3 +86,6 @@ LOG=/tmp/nero-shot.log
   sleep of your own.
 - Tune the settle delay per launch with `NERO_SCREENSHOT_DELAY_MS` (default 500).
 - Fire one live capture at a time; the wrapper enforces the write→wait handshake.
+- A blank capture on headless Linux means the scene did not render — the tool
+  fails loudly (a `grab is blank` warning + `fail` sentinel) rather than saving
+  an empty PNG. Relaunch with `QT_QUICK_BACKEND=software` (see platforms.md).

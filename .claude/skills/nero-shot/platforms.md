@@ -34,6 +34,19 @@ Capture uses Qt's offscreen platform plugin. On macOS/Linux, set it inline:
 QT_QPA_PLATFORM=offscreen NERO_SCREENSHOT_WATCH=1 "$BIN"
 ```
 
-On Windows PowerShell, set the env var first (`$env:QT_QPA_PLATFORM='offscreen'`)
-and run the `.exe`. The `scripts/nero-shot.sh` wrapper assumes a POSIX shell
-(macOS/Linux, or Git Bash / WSL on Windows).
+**Blank PNGs on headless Linux?** The offscreen plugin still needs a way to
+render the Qt Quick scene; on a box with no GPU/EGL the grab can come back empty.
+The tool detects an empty grab and fails loudly (a `NERO_SCREENSHOT: grab is
+blank` warning + a `fail` sentinel) instead of saving a blank image. If you hit
+it, force the software renderer:
+
+```bash
+QT_QUICK_BACKEND=software QT_QPA_PLATFORM=offscreen NERO_SCREENSHOT_WATCH=1 "$BIN"
+```
+
+**Windows:** WSL is the clean path — the `scripts/nero-shot.sh` wrapper needs a
+POSIX shell, and under WSL the shell and a WSL build share one pathspace, so the
+paths line up. A native-Windows build has no `/tmp`, so set
+`NERO_SCREENSHOT_WATCH_PATH` (and `NERO_SHOT_TRIGGER` for the wrapper) to a real
+path; in PowerShell set env vars with `$env:VAR='...'`. Mixing a Git Bash shell
+with a native-Windows build is not supported — their path conventions differ.

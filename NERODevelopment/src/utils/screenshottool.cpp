@@ -6,6 +6,7 @@
 #include <QDir>
 #include <QFile>
 #include <QFileInfo>
+#include <QImage>
 #include <QQmlApplicationEngine>
 #include <QQuickWindow>
 #include <QRegularExpression>
@@ -124,13 +125,39 @@ void ScreenshotTool::capture(const QString &page, const QString &out,
   });
 }
 
+// A grab where every pixel is identical means the scene never rendered — a
+// common headless failure when the offscreen plugin has no way to draw the Qt
+// Quick scene. Real NERO screens always have UI on them, so treat a uniform
+// (or null) grab as a failed capture rather than silently saving a blank PNG.
+static bool isBlankGrab(const QImage &image) {
+  if (image.isNull())
+    return true;
+  const QImage img = image.convertToFormat(QImage::Format_RGB32);
+  const QRgb first = *reinterpret_cast<const QRgb *>(img.constScanLine(0));
+  for (int y = 0; y < img.height(); ++y) {
+    const auto *line = reinterpret_cast<const QRgb *>(img.constScanLine(y));
+    for (int x = 0; x < img.width(); ++x)
+      if (line[x] != first)
+        return false;
+  }
+  return true;
+}
+
 void ScreenshotTool::grabAndSave(const QString &out, bool quitAfter) {
   const QList<QObject *> roots = m_engine->rootObjects();
   bool ok = false;
   if (auto *w = roots.isEmpty() ? nullptr
                                 : qobject_cast<QQuickWindow *>(roots.first())) {
-    ok = w->grabWindow().save(out);
-    qInfo() << "NERO_SCREENSHOT:" << (ok ? "saved" : "FAILED") << out;
+    const QImage img = w->grabWindow();
+    if (isBlankGrab(img)) {
+      // Fail loudly: a blank grab usually means there was no render surface. On
+      // headless Linux, launching with QT_QUICK_BACKEND=software fixes it.
+      qWarning() << "NERO_SCREENSHOT: grab is blank, not saving" << out
+                 << "- on headless Linux try QT_QUICK_BACKEND=software";
+    } else {
+      ok = img.save(out);
+      qInfo() << "NERO_SCREENSHOT:" << (ok ? "saved" : "FAILED") << out;
+    }
   } else {
     qWarning() << "NERO_SCREENSHOT: no root window to grab";
   }
