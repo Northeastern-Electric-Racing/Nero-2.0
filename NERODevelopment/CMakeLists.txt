@@ -88,6 +88,7 @@ set(PROJECT_SOURCES
     src/utils/server_data.h
     src/utils/attributestatus.h
     src/utils/descriptioninfo.h
+    src/utils/screenshottool.h
 
     # Implementation - Controllers
     src/controllers/endurancecontroller.cpp
@@ -115,6 +116,7 @@ set(PROJECT_SOURCES
     # Implementation - Utils
     src/utils/server_data.cpp
     src/utils/descriptioninfo.cpp
+    src/utils/screenshottool.cpp
 
     # Main
     src/main.cpp

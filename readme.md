@@ -120,6 +120,36 @@ Then, change the option from Build Enviornment to System Enviornment.
 
 Finally, save and run it.
 
+### Headless Screenshots (Dev)
+
+Capture any page as a PNG without a display. Both modes do nothing unless their env vars are set.
+
+Commands are bash. On Windows use Git Bash or the Qt Creator run config.
+
+Capture a single page and exit
+
+```bash
+QT_QPA_PLATFORM=offscreen NERO_SCREENSHOT=PERFORMANCE NERO_SCREENSHOT_OUT=perf.png ./NEROApp
+```
+
+Keep the app running and capture on demand
+
+```bash
+# Enable watch mode, trigger file defaults to /tmp/nero-shot
+NERO_SCREENSHOT_WATCH=1 ./NEROApp &
+
+# Or point it at a specific trigger file
+NERO_SCREENSHOT_WATCH=1 NERO_SCREENSHOT_WATCH_PATH=/tmp/nero-shot ./NEROApp &
+
+# Saves performance.png next to the trigger file
+echo PERFORMANCE > /tmp/nero-shot
+
+# Optional second word picks the output path
+echo "ENDURANCE /tmp/out.png" > /tmp/nero-shot
+```
+
+Page labels match the top-level menu and are case-insensitive. Use HOME to capture the menu screen.
+
 ### Testing Out Enviornment Variables (On the Car)
 
 First, ssh into godzilla: `ssh godzilla2@192.168.100.57 password <LINUX SERVER PASSWORD>`
