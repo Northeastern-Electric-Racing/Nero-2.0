@@ -50,6 +50,7 @@ public:
   virtual std::optional<float> getAveCellVoltage() = 0;
   virtual std::optional<float> getCellDelta() = 0;
   virtual std::optional<float> getTractionControl() = 0;
+  virtual std::optional<float> getLaunchControl() = 0;
   virtual std::optional<float> getInverterTemp() = 0;
   virtual std::optional<float> getMotorPower() = 0;
   virtual std::optional<float> getFanPower() = 0;

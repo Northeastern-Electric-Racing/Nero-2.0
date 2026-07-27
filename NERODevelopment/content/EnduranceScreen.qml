@@ -56,9 +56,28 @@ Item {
             titleHorizontalCenterOffset: (endurance.width - header.width) / 2
         }
 
+        RowLayout {
+            Layout.row: 1
+            Layout.column: 0
+            Layout.columnSpan: 2
+            Layout.alignment: Qt.AlignHCenter
+            Layout.topMargin: -30
+            spacing: 30
+
+            StatusIndicator {
+                label: "TRACTION CONTROL"
+                active: speedController.tractionControl
+            }
+
+            StatusIndicator {
+                label: "LAUNCH CONTROL"
+                active: speedController.launchControl
+            }
+        }
+
         ColumnLayout {
             id: thermColumn
-            Layout.row: 1
+            Layout.row: 2
             Layout.column: 0
             Layout.leftMargin: endurance.xMargin / 2
             Layout.bottomMargin: endurance.yMargin
@@ -108,7 +127,7 @@ Item {
 
         ColumnLayout {
             id: driveColumn
-            Layout.row: 1
+            Layout.row: 2
             Layout.column: 1
             Layout.bottomMargin: endurance.yMargin
             Layout.fillWidth: true
@@ -144,7 +163,7 @@ Item {
             id: percentColumn
             Layout.row: 0
             Layout.column: 2
-            Layout.rowSpan: 2
+            Layout.rowSpan: 3
             Layout.topMargin: endurance.yMargin
             Layout.rightMargin: endurance.xMargin / 2
             Layout.bottomMargin: endurance.yMargin
