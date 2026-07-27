@@ -7,7 +7,7 @@ const std::vector<Item> &getPages() {
   static const std::vector<Item> pages = {
       {"OFF", Type::Page, "zzz.png", "OffScreen2.qml", nullptr},
       {"PIT - DRIVE", Type::Page, "flag.png", "Pit.qml", nullptr},
-      {"PIT - REVERSE", Type::Page, "reverse.png", "Pit.qml", nullptr},
+      {"PIT - KEVIN", Type::Page, "kevin.jpg", "Pit.qml", nullptr},
       {"PERFORMANCE", Type::Page, "hare.png", "SpeedMode.qml", nullptr},
       {"ENDURANCE", Type::Page, "turtle.png", "EnduranceScreen.qml", nullptr},
       {"GAMES", Type::Category, "game.png", nullptr, nullptr},
@@ -40,6 +40,8 @@ NavigationController::NavigationController(Model *model, QObject *parent)
       }
     }
   });
+  connect(m_model, &Model::onCurrentDataChange, this,
+          &NavigationController::syncModeFromVcu);
   rebuildNavOrder();
 }
 
@@ -104,6 +106,23 @@ QVariantList NavigationController::getChildrenOf(int parent) const {
     list.append(buildItem(i));
   }
   return list;
+}
+
+// Dev testing only for now, drives the screenshot harness
+bool NavigationController::jumpToPage(const QString &label) {
+  // HOME is the menu screen, not a menu entry, so it needs goHome
+  if (label.compare("HOME", Qt::CaseInsensitive) == 0) {
+    goHome();
+    return true;
+  }
+  for (int i : Menu::topLevelIndices()) {
+    if (Menu::label(i).compare(label, Qt::CaseInsensitive) == 0) {
+      setSelectedIndex(i);
+      activate();
+      return true;
+    }
+  }
+  return false;
 }
 
 void NavigationController::moveNext() {
@@ -189,40 +208,60 @@ void NavigationController::executeAction(int i) {
   }
 }
 
-void NavigationController::enterButtonPressed() { activate(); }
-void NavigationController::downButtonPressed() { moveNext(); }
-void NavigationController::upButtonPressed() { movePrev(); }
-void NavigationController::leftButtonPressed() { movePrev(); }
-void NavigationController::rightButtonPressed() { moveNext(); }
-void NavigationController::homeButtonPressed() { goHome(); }
+void NavigationController::syncModeFromVcu() {
+  std::optional<float> idxRaw = m_model->getModeIndex();
+  std::optional<bool> homeRaw = m_model->getHomeButtonPressed();
+  if (!idxRaw.has_value() || !homeRaw.has_value())
+    return;
+
+  int idx = static_cast<int>(*idxRaw);
+  bool home = *homeRaw;
+  if (idx == m_lastModeIndex && home == m_lastHomeMode)
+    return;
+  m_lastModeIndex = idx;
+  m_lastHomeMode = home;
+
+  const QVector<int> tops = Menu::topLevelIndices();
+  if (idx < 0 || idx >= tops.size())
+    return;
+
+  int top = tops[idx];
+
+  if (home) {
+    setActivePage(-1);
+    setExpanded(-1);
+    setSelectedIndex(top);
+    return;
+  }
+
+  switch (Menu::get(top).type) {
+  case Menu::Type::Category:
+    setActivePage(-1);
+    expand(top);
+    break;
+  case Menu::Type::Action:
+    setActivePage(-1);
+    setExpanded(-1);
+    setSelectedIndex(top);
+    break;
+  default:
+    setExpanded(-1);
+    setSelectedIndex(top);
+    setActivePage(top);
+    break;
+  }
+}
 
 void NavigationController::buttonUpdate() {
+  if (m_expanded < 0)
+    return;
   if (!m_pageIndices.contains(m_model->currentPageIndex))
     return;
 
-  std::optional<bool> home = m_model->getHomeButtonPressed();
-  if (!home.has_value())
-    return;
-
-  if (*home) {
-    homeButtonPressed();
-    std::optional<int> mode = m_model->getModeIndex();
-    if (mode.has_value() && *mode >= 0 && *mode < m_navOrder.size()) {
-      setSelectedIndex(m_navOrder[*mode]);
-    }
-    return;
-  }
-
-  if (!isPageActive()) {
-    if (m_model->getEnterButtonPressed() == true)
-      enterButtonPressed();
-    if (m_model->getLeftButtonPressed() == true)
-      leftButtonPressed();
-    if (m_model->getRightButtonPressed() == true)
-      rightButtonPressed();
-    if (m_model->getUpRegenButtonPressed() == true)
-      upButtonPressed();
-    if (m_model->getDownRegenButtonPressed() == true)
-      downButtonPressed();
-  }
+  if (m_model->getLeftButtonPressed() == true)
+    movePrev();
+  if (m_model->getRightButtonPressed() == true)
+    moveNext();
+  if (m_model->getEnterButtonPressed() == true)
+    activate();
 }

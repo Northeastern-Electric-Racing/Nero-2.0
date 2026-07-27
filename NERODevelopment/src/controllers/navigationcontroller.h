@@ -106,6 +106,9 @@ public:
   Q_INVOKABLE QVariantList getTopLevelItems() const;
   Q_INVOKABLE QVariantList getChildrenOf(int parent) const;
 
+  // Jump to a top-level page or HOME by label, dev screenshot harness only
+  Q_INVOKABLE bool jumpToPage(const QString &label);
+
   void collapse();
 
 public slots:
@@ -115,12 +118,6 @@ public slots:
   void moveNext();
   void movePrev();
 
-  void enterButtonPressed() override;
-  void downButtonPressed() override;
-  void upButtonPressed() override;
-  void leftButtonPressed() override;
-  void rightButtonPressed() override;
-  void homeButtonPressed() override;
   void buttonUpdate() override;
 
 signals:
@@ -139,10 +136,14 @@ private:
   void rebuildNavOrder();
   QVariantMap buildItem(int i) const;
 
+  void syncModeFromVcu();
+
   int m_selected = 0;
   int m_activePage = -1;
   int m_expanded = -1;
   bool m_isTsOn = false;
+  int m_lastModeIndex = -999;
+  bool m_lastHomeMode = false;
   QVector<int> m_navOrder;
 };
 

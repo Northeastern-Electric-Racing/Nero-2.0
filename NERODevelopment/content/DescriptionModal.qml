@@ -1,6 +1,6 @@
 import QtQuick
 import QtQuick.Controls
-import Qt5Compat.GraphicalEffects
+import QtQuick.Effects
 import NERO
 
 Rectangle {
@@ -35,11 +35,10 @@ Rectangle {
             fillMode: Image.PreserveAspectCrop
 
             layer.enabled: true
-            layer.effect: OpacityMask {
-                maskSource: Item {
-                    width: modalPic.width
-                    height: modalPic.height
-                    Rectangle {
+            layer.effect: MultiEffect {
+                maskEnabled: true
+                maskSource: ShaderEffectSource {
+                    sourceItem: Rectangle {
                         width: modalPic.width
                         height: modalPic.height
                         radius: modalPic.radius
