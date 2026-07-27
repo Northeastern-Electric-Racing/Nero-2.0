@@ -24,6 +24,9 @@ int main(int argc, char *argv[]) {
   set_qt_environment();
 
   QGuiApplication app(argc, argv);
+  QGuiApplication::setOrganizationName("NER");
+  QGuiApplication::setApplicationName("NERO");
+  QGuiApplication::setApplicationVersion("2.0");
 
   QQmlApplicationEngine engine;
 

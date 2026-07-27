@@ -88,6 +88,7 @@ set(PROJECT_SOURCES
     src/utils/server_data.h
     src/utils/attributestatus.h
     src/utils/descriptioninfo.h
+    src/utils/high_scores.h
     src/utils/screenshottool.h
 
     # Implementation - Controllers
