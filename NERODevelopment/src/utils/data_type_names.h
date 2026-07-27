@@ -3,7 +3,7 @@
 
 #define PACKTEMP "BMS/Status/Temp_Average"
 #define MOTORTEMP "DTI/Temps/Motor_Temperature"
-#define STATEOFCHARGE "BMS/Pack/SOC"
+#define STATEOFCHARGE "BMS/Pack/SoC"
 #define CURRENT "DTI/Power/DC_Current"
 #define BALANCINGCELLS "BMS/Status/Balancing"
 #define PACKVOLTAGE "BMS/Pack/Voltage"
