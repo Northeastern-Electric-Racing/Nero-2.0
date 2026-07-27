@@ -1,28 +1,26 @@
 #ifndef HIGH_SCORES_H
 #define HIGH_SCORES_H
 
-#include <QDir>
 #include <QSettings>
-#include <QStandardPaths>
 #include <QString>
 
-inline QString highScoresPath() {
-  QString dir = qEnvironmentVariable("NERO_DATA_DIR");
-  if (dir.isEmpty())
-    dir = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
-  QDir().mkpath(dir);
-  return dir + "/highscores.ini";
+namespace HighScores {
+
+inline QSettings settings() {
+  const QString dir = qEnvironmentVariable("NERO_DATA_DIR");
+  return dir.isEmpty()
+             ? QSettings()
+             : QSettings(dir + "/highscores.ini", QSettings::IniFormat);
 }
 
-inline int loadHighScore(const QString &key) {
-  QSettings s(highScoresPath(), QSettings::IniFormat);
-  return s.value(key, 0).toInt();
-}
+inline int load(const QString &key) { return settings().value(key, 0).toInt(); }
 
-inline void saveHighScore(const QString &key, int score) {
-  QSettings s(highScoresPath(), QSettings::IniFormat);
+inline void save(const QString &key, int score) {
+  QSettings s = settings();
   s.setValue(key, score);
   s.sync();
 }
+
+} // namespace HighScores
 
 #endif // HIGH_SCORES_H
