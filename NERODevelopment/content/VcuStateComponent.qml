@@ -15,7 +15,36 @@ Item {
     readonly property bool rejected: navigationController ? navigationController.stateRejectionActive : false
     readonly property var rejectionReasons: navigationController ? navigationController.stateRejectionReasons : []
 
-    readonly property string reasonText: root.rejectionReasons.join("  |  ")
+    readonly property int reasonFontSize: 14
+    readonly property int reasonLineCount: 2
+    readonly property string reasonSeparator: "  |  "
+
+    readonly property string reasonText: {
+        const all = root.rejectionReasons;
+        if (all.length === 0)
+            return "";
+        const budget = root.width * root.reasonLineCount;
+        let shown = all[0];
+        let count = 1;
+        while (count < all.length) {
+            const merged = shown + root.reasonSeparator + all[count];
+            const hidden = all.length - count - 1;
+            const trial = hidden > 0 ? merged + root.reasonSeparator + "+" + hidden : merged;
+            if (reasonMetrics.advanceWidth(trial) > budget)
+                break;
+            shown = merged;
+            count += 1;
+        }
+        if (count === all.length)
+            return shown;
+        return shown + root.reasonSeparator + "+" + (all.length - count);
+    }
+
+    FontMetrics {
+        id: reasonMetrics
+        font.family: webFont.name
+        font.pixelSize: root.reasonFontSize
+    }
 
     implicitHeight: reasonLine.visible ? reasonLine.y + reasonLine.height : stateText.height
 
@@ -38,9 +67,10 @@ Item {
         width: parent.width
         horizontalAlignment: Text.AlignRight
         elide: Text.ElideRight
-        wrapMode: Text.NoWrap
+        wrapMode: Text.WordWrap
+        maximumLineCount: 2
         text: root.reasonText
-        font.pixelSize: 14
+        font.pixelSize: root.reasonFontSize
         color: root.cautionColor
         visible: root.rejected
     }
