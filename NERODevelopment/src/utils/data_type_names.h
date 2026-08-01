@@ -75,6 +75,8 @@
   "VCU/CarState/nero_index" // '0' = OFF, '1' = PIT, '2' = REVERSE, '3' =
                             // PERFORMANCE, '4' = EFFICIENCY, '5' = GAMES, '6' =
                             // THEMES, '7' = EXIT
+#define FUNCTIONALSTATE "VCU/CarState/functional_state"
+#define STATEREJECTIONERROR "VCU/CarState/state_rejection_error"
 #define MOTORPOWER                                                             \
   "VCU/eFuses/MC/Current" // Current (A) flowing through motor controller eFuse.
 #define FANPOWER                                                               \

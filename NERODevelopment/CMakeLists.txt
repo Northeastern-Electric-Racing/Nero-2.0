@@ -59,6 +59,7 @@ set_source_files_properties(${DOOM_SOURCES} PROPERTIES COMPILE_FLAGS "-w")
 set(PROJECT_SOURCES
     # Headers - Constants
     src/constants/fault_statuses.h
+    src/constants/vcu_state_labels.h
 
     # Headers - Controllers
     src/controllers/chargingcontroller.h
