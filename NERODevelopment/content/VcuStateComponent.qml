@@ -11,7 +11,6 @@ Item {
 
     readonly property string stateLabel: navigationController ? navigationController.functionalStateLabel : ""
     readonly property bool stateKnown: navigationController ? navigationController.functionalStateKnown : false
-    readonly property bool stateActive: navigationController ? navigationController.functionalStateActive : false
     readonly property bool stateFaulted: navigationController ? navigationController.functionalStateFaulted : false
     readonly property bool rejected: navigationController ? navigationController.stateRejectionActive : false
     readonly property var rejectionReasons: navigationController ? navigationController.stateRejectionReasons : []
@@ -29,7 +28,7 @@ Item {
         elide: Text.ElideRight
         text: root.stateLabel
         font.pixelSize: 20
-        color: root.stateFaulted ? root.faultColor : root.rejected ? root.cautionColor : root.stateActive ? root.activeColor : root.stateKnown ? root.cautionColor : root.absentColor
+        color: root.stateFaulted ? root.faultColor : root.rejected ? root.cautionColor : root.stateKnown ? root.activeColor : root.absentColor
     }
 
     LabelText {
