@@ -94,8 +94,6 @@ class NavigationController : public ButtonController {
                  functionalStateChanged)
   Q_PROPERTY(bool functionalStateKnown READ functionalStateKnown NOTIFY
                  functionalStateChanged)
-  Q_PROPERTY(bool functionalStateActive READ functionalStateActive NOTIFY
-                 functionalStateChanged)
   Q_PROPERTY(bool functionalStateFaulted READ functionalStateFaulted NOTIFY
                  functionalStateChanged)
   Q_PROPERTY(QList<QString> stateRejectionReasons READ stateRejectionReasons
@@ -117,9 +115,6 @@ public:
   }
   bool functionalStateKnown() const {
     return functionalStateIsKnown(m_functionalState);
-  }
-  bool functionalStateActive() const {
-    return functionalStateIsActive(m_functionalState);
   }
   bool functionalStateFaulted() const {
     return functionalStateIsFaulted(m_functionalState);

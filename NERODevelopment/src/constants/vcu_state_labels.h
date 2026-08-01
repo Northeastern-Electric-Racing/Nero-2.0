@@ -89,20 +89,6 @@ inline bool functionalStateIsKnown(std::optional<int> wire) {
   return carStateLookup(FUNCTIONAL_STATE_LABELS, wire).has_value();
 }
 
-inline bool functionalStateIsActive(std::optional<int> wire) {
-  if (!wire.has_value() || !functionalStateIsKnown(wire))
-    return false;
-  switch (static_cast<FunctionalState>(*wire)) {
-  case FunctionalState::Pit:
-  case FunctionalState::Reverse:
-  case FunctionalState::Performance:
-  case FunctionalState::Efficiency:
-    return true;
-  default:
-    return false;
-  }
-}
-
 inline bool functionalStateIsFaulted(std::optional<int> wire) {
   if (!wire.has_value() || !functionalStateIsKnown(wire))
     return false;
