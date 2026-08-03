@@ -97,6 +97,8 @@ void RaspberryModel::connectToMQTT() {
       BUTTONID,
       HOMEBUTTON,
       MODEINDEX,
+      FUNCTIONALSTATE,
+      STATEREJECTIONERROR,
       DIRECTION,
   };
 
@@ -474,6 +476,14 @@ std::optional<bool> RaspberryModel::getHomeButtonPressed() {
 
 std::optional<float> RaspberryModel::getModeIndex() {
   return this->getById(MODEINDEX);
+}
+
+std::optional<float> RaspberryModel::getFunctionalState() {
+  return this->getById(FUNCTIONALSTATE);
+}
+
+std::optional<float> RaspberryModel::getStateRejectionError() {
+  return this->getById(STATEREJECTIONERROR);
 }
 
 void RaspberryModel::updateCurrentData() { emit this->onCurrentDataChange(); }

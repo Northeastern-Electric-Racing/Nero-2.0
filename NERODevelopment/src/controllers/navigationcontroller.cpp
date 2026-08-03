@@ -42,6 +42,8 @@ NavigationController::NavigationController(Model *model, QObject *parent)
   });
   connect(m_model, &Model::onCurrentDataChange, this,
           &NavigationController::syncModeFromVcu);
+  connect(m_model, &Model::onCurrentDataChange, this,
+          &NavigationController::updateCarStateReadout);
   rebuildNavOrder();
 }
 
@@ -250,6 +252,25 @@ void NavigationController::syncModeFromVcu() {
     setActivePage(top);
     break;
   }
+}
+
+void NavigationController::setFunctionalState(std::optional<int> state) {
+  if (m_functionalState == state)
+    return;
+  m_functionalState = state;
+  emit functionalStateChanged();
+}
+
+void NavigationController::setStateRejection(std::optional<int> mask) {
+  if (m_stateRejection == mask)
+    return;
+  m_stateRejection = mask;
+  emit stateRejectionChanged();
+}
+
+void NavigationController::updateCarStateReadout() {
+  setFunctionalState(carStateWireValue(m_model->getFunctionalState()));
+  setStateRejection(carStateWireValue(m_model->getStateRejectionError()));
 }
 
 void NavigationController::buttonUpdate() {

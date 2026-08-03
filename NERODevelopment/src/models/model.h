@@ -91,6 +91,8 @@ public:
 
   virtual std::optional<bool> getHomeButtonPressed() = 0;
   virtual std::optional<float> getModeIndex() = 0;
+  virtual std::optional<float> getFunctionalState() = 0;
+  virtual std::optional<float> getStateRejectionError() = 0;
   virtual std::optional<float> getGForceX() = 0;
   virtual std::optional<float> getGForceY() = 0;
   virtual std::optional<float> getGForceZ() = 0;

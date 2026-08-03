@@ -86,6 +86,8 @@ public:
 
   std::optional<bool> getHomeButtonPressed() override;
   std::optional<float> getModeIndex() override;
+  std::optional<float> getFunctionalState() override;
+  std::optional<float> getStateRejectionError() override;
   std::optional<float> getGForceX() override;
   std::optional<float> getGForceY() override;
   std::optional<float> getGForceZ() override;
