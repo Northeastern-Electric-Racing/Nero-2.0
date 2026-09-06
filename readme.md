@@ -144,18 +144,25 @@ NERO_SCREENSHOT_WATCH=1 NERO_SCREENSHOT_WATCH_PATH=/tmp/nero-shot ./NEROApp &
 # Saves performance.png next to the trigger file
 echo PERFORMANCE > /tmp/nero-shot
 
-# An optional trailing path (one with a slash/backslash, or a file extension
-# like .png) sets the output; multi-word labels work because only that trailing
-# path is split off
+# One field per line — PAGE, then an optional output path, then an optional
+# request id — so a label or a path containing spaces is taken verbatim
+printf 'PIT - DRIVE\n/tmp/pit shots/drive.png\n' > /tmp/nero-shot
+
+# A one-line "PAGE OUT" still works: a trailing path (one with a slash/backslash,
+# or a file extension like .png) is split off and the rest is the label, so
+# multi-word labels survive. Use the form above for a path containing a space
 echo "ENDURANCE /tmp/out.png" > /tmp/nero-shot
 echo "PIT - DRIVE /tmp/pit.png" > /tmp/nero-shot
 
 # Each capture reports completion: a `NERO_SHOT_DONE ok "<path>"` line in the
 # app's log (stderr), plus a `<trigger>.done` sentinel file for callers not
-# reading the log
+# reading the log. A request id, when given, is echoed after the path so a
+# caller can skip a late reply to an earlier request
 ```
 
-Page labels match the top-level menu and are case-insensitive. Use HOME to capture the menu screen. The render settle delay before each grab defaults to 500 ms; override it with `NERO_SCREENSHOT_DELAY_MS`.
+Watch mode also writes its pid to `<trigger>.pid`, so a caller can tell a live app from a trigger file left behind by a dead one. It is cleared on a clean exit; after a kill it lingers, and the pid is simply dead.
+
+Page labels match the top-level menu and are case-insensitive. Use HOME to capture the menu screen. The render settle delay before each grab defaults to 500 ms; override it with `NERO_SCREENSHOT_DELAY_MS`. A grab that comes back blank fails rather than saving an empty PNG — if a screen is legitimately one flat color, set `NERO_SCREENSHOT_ALLOW_UNIFORM=1`.
 
 For scripting, `.claude/skills/nero-shot/scripts/nero-shot.sh PAGE [OUT]` drives a running watch-mode app and blocks until the capture lands, printing the saved path — it waits on the sentinel, so there is no guessing at timing:
 

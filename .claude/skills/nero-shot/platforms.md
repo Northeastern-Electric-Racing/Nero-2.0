@@ -44,6 +44,11 @@ it, force the software renderer:
 QT_QUICK_BACKEND=software QT_QPA_PLATFORM=offscreen NERO_SCREENSHOT_WATCH=1 "$BIN"
 ```
 
+The check treats a grab whose pixels are all one color as a failed render. That
+holds for every NERO page today — each draws the header plus content — but if a
+screen is ever legitimately one flat color, set `NERO_SCREENSHOT_ALLOW_UNIFORM=1`
+to skip it. A truly empty grab still fails either way.
+
 **Windows:** WSL is the clean path — the `scripts/nero-shot.sh` wrapper needs a
 POSIX shell, and under WSL the shell and a WSL build share one pathspace, so the
 paths line up. A native-Windows build has no `/tmp`, so set

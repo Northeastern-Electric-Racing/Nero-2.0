@@ -34,6 +34,7 @@ private:
   NavigationController *m_nav;
   QFileSystemWatcher m_watcher;
   QString m_triggerPath;
+  QString m_requestId; // echoed back so a caller can match reply to request
 };
 
 #endif // SCREENSHOTTOOL_H

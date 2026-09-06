@@ -10,6 +10,7 @@
 #include <QQmlApplicationEngine>
 #include <QQuickWindow>
 #include <QRegularExpression>
+#include <QStringList>
 #include <QTextStream>
 #include <QTimer>
 
@@ -59,6 +60,18 @@ void ScreenshotTool::setupWatch() {
   }
   connect(&m_watcher, &QFileSystemWatcher::fileChanged, this,
           &ScreenshotTool::onTriggerFileChanged);
+
+  // A trigger file outlives the app that created it, so its presence alone says
+  // nothing about liveness. Drop a pid next to it so a caller can spot a dead
+  // app instead of waiting out its whole timeout. Cleared on a clean exit; a
+  // killed app leaves it behind, which a caller reads as the dead pid it is.
+  const QString pidPath = m_triggerPath + ".pid";
+  QFile pid(pidPath);
+  if (pid.open(QIODevice::WriteOnly | QIODevice::Truncate))
+    pid.write(QByteArray::number(QCoreApplication::applicationPid()) + '\n');
+  connect(qApp, &QCoreApplication::aboutToQuit, this,
+          [pidPath]() { QFile::remove(pidPath); });
+
   qInfo() << "NERO_SCREENSHOT_WATCH: watching" << m_triggerPath;
 }
 
@@ -75,23 +88,38 @@ void ScreenshotTool::onTriggerFileChanged() {
   f.close();
   if (request.isEmpty()) // the truncation below re-fires into this branch
     return;
-  f.open(QIODevice::WriteOnly); // truncate so the same page can re-fire
+  if (!f.open(QIODevice::WriteOnly)) // truncate so the same page can re-fire
+    qWarning() << "NERO_SCREENSHOT_WATCH: cannot truncate trigger, this request"
+               << "may fire again" << m_triggerPath;
 
-  // Format is "PAGE [OUT]". Split on the last whitespace, but only when the
-  // trailing token looks like a filename — a path separator ('/' or '\') or a
-  // trailing extension (.png, .jpg, ...) — so multi-word labels ("PIT - DRIVE")
-  // stay intact while an optional output path is still honored.
+  // Preferred format is one field per line, "PAGE\nOUT\nID", so a label or an
+  // output path containing spaces survives verbatim. OUT and ID are optional
+  // and may be blank; ID is echoed back in the completion signal.
   QString page = request;
   QString out;
-  static const QRegularExpression wsRe(QStringLiteral("\\s"));
-  static const QRegularExpression fileExtRe(QStringLiteral("\\.[A-Za-z0-9]+$"));
-  const int lastWs = request.lastIndexOf(wsRe);
-  if (lastWs >= 0) {
-    const QString tail = request.mid(lastWs + 1);
-    if (tail.contains('/') || tail.contains('\\') ||
-        fileExtRe.match(tail).hasMatch()) {
-      page = request.left(lastWs).trimmed();
-      out = tail;
+  m_requestId.clear();
+  if (request.contains('\n')) {
+    const QStringList lines = request.split('\n');
+    page = lines.value(0).trimmed();
+    out = lines.value(1).trimmed();
+    m_requestId = lines.value(2).trimmed();
+  } else {
+    // One-line "PAGE [OUT]": split on the last whitespace, but only when the
+    // trailing token looks like a filename — a path separator ('/' or '\') or
+    // a trailing extension (.png, .jpg, ...) — so multi-word labels
+    // ("PIT - DRIVE") stay intact while an optional output path is honored.
+    // An output path containing a space needs the line-per-field form above.
+    static const QRegularExpression wsRe(QStringLiteral("\\s"));
+    static const QRegularExpression fileExtRe(
+        QStringLiteral("\\.[A-Za-z0-9]+$"));
+    const int lastWs = request.lastIndexOf(wsRe);
+    if (lastWs >= 0) {
+      const QString tail = request.mid(lastWs + 1);
+      if (tail.contains('/') || tail.contains('\\') ||
+          fileExtRe.match(tail).hasMatch()) {
+        page = request.left(lastWs).trimmed();
+        out = tail;
+      }
     }
   }
   if (out.isEmpty()) // default next to the trigger file
@@ -130,8 +158,12 @@ void ScreenshotTool::capture(const QString &page, const QString &out,
 // Quick scene. Real NERO screens always have UI on them, so treat a uniform
 // (or null) grab as a failed capture rather than silently saving a blank PNG.
 static bool isBlankGrab(const QImage &image) {
-  if (image.isNull())
+  if (image.isNull() || image.width() <= 0 || image.height() <= 0)
     return true;
+  // Escape hatch for the day a screen legitimately is one flat color — none is
+  // today, every page draws the header plus content. A null grab still fails.
+  if (qEnvironmentVariableIntValue("NERO_SCREENSHOT_ALLOW_UNIFORM") == 1)
+    return false;
   const QImage img = image.convertToFormat(QImage::Format_RGB32);
   const QRgb first = *reinterpret_cast<const QRgb *>(img.constScanLine(0));
   for (int y = 0; y < img.height(); ++y) {
@@ -171,9 +203,13 @@ void ScreenshotTool::grabAndSave(const QString &out, bool quitAfter) {
 // (qInfo, which Qt sends to stderr) in both modes; in watch mode also drops a
 // "<trigger>.done" sentinel for callers that don't read the log.
 void ScreenshotTool::signalDone(bool ok, const QString &detail) {
-  const QString payload =
+  QString payload =
       QStringLiteral("%1 \"%2\"")
           .arg(ok ? QStringLiteral("ok") : QStringLiteral("fail"), detail);
+  // Echo the request id so a caller can tell its own reply from a late one left
+  // by an earlier, timed-out request sharing this sentinel.
+  if (!m_requestId.isEmpty())
+    payload += QStringLiteral(" ") + m_requestId;
   qInfo().noquote() << "NERO_SHOT_DONE" << payload;
 
   if (m_triggerPath.isEmpty())

@@ -15,9 +15,12 @@
 # Env:
 #   NERO_SHOT_TRIGGER  trigger file the app watches (default /tmp/nero-shot)
 #   NERO_SHOT_TIMEOUT  whole seconds to wait for a capture (default 15)
+#
+# Exit: 0 saved | 1 capture failed | 2 usage | 3 no live watch-mode app
+#       | 4 timed out
 set -euo pipefail
 
-if [ "$#" -lt 1 ]; then
+if [ "$#" -lt 1 ] || [ -z "$1" ]; then
   echo "usage: $(basename "$0") PAGE [OUT]" >&2
   exit 2
 fi
@@ -33,36 +36,64 @@ fi
 trigger=${NERO_SHOT_TRIGGER:-/tmp/nero-shot}
 timeout=${NERO_SHOT_TIMEOUT:-15}
 done_file="$trigger.done"
+pid_file="$trigger.pid"
 
 if [ ! -e "$trigger" ]; then
   echo "nero-shot: trigger '$trigger' not found — is NEROApp running in watch mode?" >&2
   exit 3
 fi
 
-# Fresh handshake: drop any stale sentinel, then fire the request.
+# A trigger file outlives the app that created it, so the check above proves
+# nothing about liveness. Watch mode drops its pid alongside the trigger; if
+# that process is gone, say so now instead of waiting out the whole timeout. No
+# pid file means an app that predates it (or a hand-rolled setup) — let it pass.
+if [ -s "$pid_file" ]; then
+  app_pid=$(cat "$pid_file")
+  if ! kill -0 "$app_pid" 2>/dev/null; then
+    echo "nero-shot: watch-mode app (pid $app_pid) is gone — relaunch it" >&2
+    exit 3
+  fi
+fi
+
+# Correlate request and reply. A call that timed out (or was killed) can still
+# have its capture land later, into the sentinel the next call is waiting on;
+# the id comes back in the payload so that stale reply is skipped, not returned.
+req_id="$$-$(date +%s)"
+
+# Fresh handshake: drop any stale sentinel, then fire the request. One field per
+# line, so a page label or output path containing spaces survives verbatim.
 rm -f "$done_file"
-printf '%s %s\n' "$page" "$out" >"$trigger"
+printf '%s\n%s\n%s\n' "$page" "$out" "$req_id" >"$trigger"
 
 # Poll for the sentinel NEROApp writes once the grab (or failure) completes.
-# Wait for it to be non-empty (-s): the app creates the file on open and then
-# writes the payload, so -f alone could catch it in the empty instant between.
+# Require it non-empty (-s) and carrying our id: the app creates the file on
+# open and then writes the payload, so -f alone could catch it in the empty
+# instant between, and a foreign id means a late reply to an earlier request.
 tries=$((timeout * 10))
 i=0
-while [ ! -s "$done_file" ]; do
+result=
+while :; do
+  if [ -s "$done_file" ]; then
+    result=$(cat "$done_file")
+    if [ "${result##* }" = "$req_id" ]; then
+      break
+    fi
+  fi
   i=$((i + 1))
   if [ "$i" -ge "$tries" ]; then
     echo "nero-shot: timed out after ${timeout}s waiting for $done_file" >&2
-    exit 1
+    exit 4
   fi
   sleep 0.1
 done
 
-# Sentinel format: <status> "<path>"  (status is ok|fail)
-result=$(cat "$done_file")
-status=${result%% *}
-path=${result#* }
-path=${path#\"}
-path=${path%\"}
+# Sentinel format: <status> "<path>" <id>  (status is ok|fail)
+if [[ ! $result =~ ^([a-z]+)\ \"(.*)\"\ (.*)$ ]]; then
+  echo "nero-shot: unparseable sentinel for '$page': $result" >&2
+  exit 1
+fi
+status=${BASH_REMATCH[1]}
+path=${BASH_REMATCH[2]}
 
 if [ "$status" != "ok" ]; then
   echo "nero-shot: capture failed for '$page' ($result)" >&2

@@ -69,8 +69,9 @@ LOG=/tmp/nero-shot.log
    "$NERO/.claude/skills/nero-shot/scripts/nero-shot.sh" "PERFORMANCE" /tmp/performance.png
    ```
    Give `PAGE` alone to save to `<trigger dir>/<page>.png`, or `PAGE OUT` for an
-   explicit path. Quote multi-word labels: `nero-shot.sh "PIT - DRIVE"`. Exits
-   non-zero (no hang) on an unknown page or timeout.
+   explicit path. Quote multi-word labels: `nero-shot.sh "PIT - DRIVE"`. Spaces
+   in `OUT` are fine. Never hangs — exit `1` capture failed, `2` usage, `3` no
+   live watch-mode app, `4` timed out.
 
 3. Leave the app running for reuse; stop it with `pkill -x NEROApp`.
 
@@ -89,3 +90,5 @@ LOG=/tmp/nero-shot.log
 - A blank capture on headless Linux means the scene did not render — the tool
   fails loudly (a `grab is blank` warning + `fail` sentinel) rather than saving
   an empty PNG. Relaunch with `QT_QUICK_BACKEND=software` (see platforms.md).
+  If a page is legitimately one flat color, `NERO_SCREENSHOT_ALLOW_UNIFORM=1`
+  turns that check off; no NERO page is today.
