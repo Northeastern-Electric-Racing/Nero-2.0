@@ -274,15 +274,20 @@ void NavigationController::updateCarStateReadout() {
 }
 
 void NavigationController::buttonUpdate() {
-  if (m_expanded < 0)
-    return;
   if (!m_pageIndices.contains(m_model->currentPageIndex))
     return;
 
-  if (m_model->getLeftButtonPressed() == true)
+  bool left = m_model->getLeftButtonPressed() == true;
+  bool right = m_model->getRightButtonPressed() == true;
+  bool enter = m_model->getEnterButtonPressed() == true;
+
+  if (m_expanded < 0)
+    return;
+
+  if (left)
     movePrev();
-  if (m_model->getRightButtonPressed() == true)
+  if (right)
     moveNext();
-  if (m_model->getEnterButtonPressed() == true)
+  if (enter)
     activate();
 }
