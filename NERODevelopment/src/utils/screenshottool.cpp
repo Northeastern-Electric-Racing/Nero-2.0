@@ -19,10 +19,12 @@ ScreenshotTool::ScreenshotTool(QQmlApplicationEngine *engine,
     : QObject(parent), m_engine(engine), m_nav(nav) {
   // Capture the named page once, then quit
   if (qEnvironmentVariableIsSet("NERO_SCREENSHOT")) {
-    const QString page = qEnvironmentVariable("NERO_SCREENSHOT");
-    const QString out = qEnvironmentVariable("NERO_SCREENSHOT_OUT", "shot.png");
-    QTimer::singleShot(2000, this, [this, page, out]() { // wait for data + UI
-      capture(page, out, /*quitAfter=*/true);
+    Request req;
+    req.page = qEnvironmentVariable("NERO_SCREENSHOT");
+    req.out = qEnvironmentVariable("NERO_SCREENSHOT_OUT", "shot.png");
+    req.quitAfter = true;
+    QTimer::singleShot(2000, this, [this, req]() { // wait for data + UI
+      startCapture(req);
     });
   }
 
@@ -97,12 +99,12 @@ void ScreenshotTool::onTriggerFileChanged() {
   // and may be blank; ID is echoed back in the completion signal.
   QString page = request;
   QString out;
-  m_requestId.clear();
+  QString id;
   if (request.contains('\n')) {
     const QStringList lines = request.split('\n');
     page = lines.value(0).trimmed();
     out = lines.value(1).trimmed();
-    m_requestId = lines.value(2).trimmed();
+    id = lines.value(2).trimmed();
   } else {
     // One-line "PAGE [OUT]": split on the last whitespace, but only when the
     // trailing token looks like a filename — a path separator ('/' or '\') or
@@ -124,16 +126,25 @@ void ScreenshotTool::onTriggerFileChanged() {
   }
   if (out.isEmpty()) // default next to the trigger file
     out = QFileInfo(m_triggerPath).dir().filePath(page.toLower() + ".png");
-  capture(page, out, /*quitAfter=*/false);
+
+  Request req;
+  req.page = page;
+  req.out = out;
+  req.id = id;
+  // Serialize: starting this one now would jump the window away mid-settle and
+  // spoil the grab already pending, so wait for that one to report first.
+  if (m_capturing) {
+    m_pending.append(req);
+    return;
+  }
+  startCapture(req);
 }
 
-void ScreenshotTool::capture(const QString &page, const QString &out,
-                             bool quitAfter) {
-  if (!m_nav->jumpToPage(page)) {
-    qWarning() << "NERO_SCREENSHOT: unknown page" << page;
-    signalDone(false, page); // let a waiting caller learn it failed
-    if (quitAfter)
-      QCoreApplication::quit();
+void ScreenshotTool::startCapture(const Request &req) {
+  m_capturing = true;
+  if (!m_nav->jumpToPage(req.page)) {
+    qWarning() << "NERO_SCREENSHOT: unknown page" << req.page;
+    finishCapture(false, req.page, req); // let a waiting caller learn it failed
     return;
   }
   // Settle delay is tunable so bulk captures aren't stuck at 500ms; warn on a
@@ -148,8 +159,8 @@ void ScreenshotTool::capture(const QString &page, const QString &out,
       qWarning() << "NERO_SCREENSHOT_DELAY_MS ignored, want a positive integer:"
                  << qEnvironmentVariable("NERO_SCREENSHOT_DELAY_MS");
   }
-  QTimer::singleShot(delayMs, this, [this, out, quitAfter]() { // let it render
-    grabAndSave(out, quitAfter);
+  QTimer::singleShot(delayMs, this, [this, req]() { // let it render
+    grabAndSave(req);
   });
 }
 
@@ -175,7 +186,8 @@ static bool isBlankGrab(const QImage &image) {
   return true;
 }
 
-void ScreenshotTool::grabAndSave(const QString &out, bool quitAfter) {
+void ScreenshotTool::grabAndSave(const Request &req) {
+  const QString &out = req.out;
   const QList<QObject *> roots = m_engine->rootObjects();
   bool ok = false;
   if (auto *w = roots.isEmpty() ? nullptr
@@ -193,23 +205,35 @@ void ScreenshotTool::grabAndSave(const QString &out, bool quitAfter) {
   } else {
     qWarning() << "NERO_SCREENSHOT: no root window to grab";
   }
-  signalDone(ok, out);
-  if (quitAfter)
+  finishCapture(ok, out, req);
+}
+
+// Report a finished capture to its own caller, then let the next one start.
+void ScreenshotTool::finishCapture(bool ok, const QString &detail,
+                                   const Request &req) {
+  signalDone(ok, detail, req.id);
+  if (req.quitAfter) {
     QCoreApplication::quit();
+    return;
+  }
+  m_capturing = false;
+  if (!m_pending.isEmpty())
+    startCapture(m_pending.takeFirst());
 }
 
 // Announce a finished capture so callers can await it instead of polling the
 // output file (which races the write). Emits a parseable line to the app's log
 // (qInfo, which Qt sends to stderr) in both modes; in watch mode also drops a
 // "<trigger>.done" sentinel for callers that don't read the log.
-void ScreenshotTool::signalDone(bool ok, const QString &detail) {
+void ScreenshotTool::signalDone(bool ok, const QString &detail,
+                                const QString &requestId) {
   QString payload =
       QStringLiteral("%1 \"%2\"")
           .arg(ok ? QStringLiteral("ok") : QStringLiteral("fail"), detail);
-  // Echo the request id so a caller can tell its own reply from a late one left
-  // by an earlier, timed-out request sharing this sentinel.
-  if (!m_requestId.isEmpty())
-    payload += QStringLiteral(" ") + m_requestId;
+  // Echo the id of the request this reply belongs to — the sentinel is shared,
+  // so that is how a caller tells its own reply from another call's.
+  if (!requestId.isEmpty())
+    payload += QStringLiteral(" ") + requestId;
   qInfo().noquote() << "NERO_SHOT_DONE" << payload;
 
   if (m_triggerPath.isEmpty())

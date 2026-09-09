@@ -156,9 +156,11 @@ echo "PIT - DRIVE /tmp/pit.png" > /tmp/nero-shot
 
 # Each capture reports completion: a `NERO_SHOT_DONE ok "<path>"` line in the
 # app's log (stderr), plus a `<trigger>.done` sentinel file for callers not
-# reading the log. A request id, when given, is echoed after the path so a
-# caller can skip a late reply to an earlier request
+# reading the log. A request id, when given, is echoed after the path, and the
+# sentinel is shared, so that is how a caller picks out its own reply
 ```
+
+Captures run one at a time: a request arriving while another is mid-capture waits its turn rather than navigating the window away under the pending grab. Callers share the one trigger file, so writes that land together can still overwrite each other — write requests one at a time if every capture has to happen.
 
 Watch mode also writes its pid to `<trigger>.pid`, so a caller can tell a live app from a trigger file left behind by a dead one. It is cleared on a clean exit; after a kill it lingers, and the pid is simply dead.
 

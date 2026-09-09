@@ -16,6 +16,13 @@
 #   NERO_SHOT_TRIGGER  trigger file the app watches (default /tmp/nero-shot)
 #   NERO_SHOT_TIMEOUT  whole seconds to wait for a capture (default 15)
 #
+# Concurrent calls against one app never cross wires — each reply is tagged with
+# its requester, so a call only ever returns its own screenshot, and the app
+# captures one at a time rather than navigating out from under a pending grab.
+# They are not all guaranteed to be served though: callers share one trigger
+# file, so near-simultaneous writes can overwrite each other and the losers time
+# out (exit 4). Serialize the calls if every capture has to land.
+#
 # Exit: 0 saved | 1 capture failed | 2 usage | 3 no live watch-mode app
 #       | 4 timed out
 set -euo pipefail
@@ -55,20 +62,22 @@ if [ -s "$pid_file" ]; then
   fi
 fi
 
-# Correlate request and reply. A call that timed out (or was killed) can still
-# have its capture land later, into the sentinel the next call is waiting on;
-# the id comes back in the payload so that stale reply is skipped, not returned.
-req_id="$$-$(date +%s)"
+# Correlate request and reply: every caller shares one sentinel, so the app
+# echoes this id in the payload and we ignore any reply that isn't ours — a
+# capture from a call that timed out, was killed, or is simply someone else's.
+# Random suffix because pid plus second alone can repeat across quick calls.
+req_id="$$-$(date +%s)-$RANDOM"
 
-# Fresh handshake: drop any stale sentinel, then fire the request. One field per
-# line, so a page label or output path containing spaces survives verbatim.
-rm -f "$done_file"
+# Fire the request, one field per line so a page label or output path containing
+# spaces survives verbatim. The stale sentinel sitting there is left alone: the
+# id check below already rejects it, and deleting it would throw away a reply a
+# concurrently waiting caller has not read yet.
 printf '%s\n%s\n%s\n' "$page" "$out" "$req_id" >"$trigger"
 
 # Poll for the sentinel NEROApp writes once the grab (or failure) completes.
 # Require it non-empty (-s) and carrying our id: the app creates the file on
 # open and then writes the payload, so -f alone could catch it in the empty
-# instant between, and a foreign id means a late reply to an earlier request.
+# instant between, and any other id belongs to another request.
 tries=$((timeout * 10))
 i=0
 result=

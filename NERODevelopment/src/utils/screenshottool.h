@@ -2,7 +2,9 @@
 #define SCREENSHOTTOOL_H
 
 #include <QFileSystemWatcher>
+#include <QList>
 #include <QObject>
+#include <QString>
 
 class QQmlApplicationEngine;
 class NavigationController;
@@ -21,20 +23,33 @@ public:
   ScreenshotTool(QQmlApplicationEngine *engine, NavigationController *nav,
                  QObject *parent = nullptr);
 
-  // Navigate to a top-level page and save it as a PNG
-  void capture(const QString &page, const QString &out, bool quitAfter);
-
 private:
+  // One capture: the page to navigate to, where to save it, and the id the
+  // caller wants echoed back (blank in one-shot mode, which has no waiter).
+  struct Request {
+    QString page;
+    QString out;
+    QString id;
+    bool quitAfter = false;
+  };
+
   void setupWatch();
   void onTriggerFileChanged();
-  void grabAndSave(const QString &out, bool quitAfter);
-  void signalDone(bool ok, const QString &detail);
+  // Navigate to a top-level page and save it as a PNG
+  void startCapture(const Request &req);
+  void grabAndSave(const Request &req);
+  void finishCapture(bool ok, const QString &detail, const Request &req);
+  void signalDone(bool ok, const QString &detail, const QString &requestId);
 
   QQmlApplicationEngine *m_engine;
   NavigationController *m_nav;
   QFileSystemWatcher m_watcher;
   QString m_triggerPath;
-  QString m_requestId; // echoed back so a caller can match reply to request
+  // Captures run one at a time. A second request arriving during the first
+  // one's settle delay would navigate the window out from under that grab and
+  // have its reply stamped with the wrong id, so it queues here instead.
+  bool m_capturing = false;
+  QList<Request> m_pending;
 };
 
 #endif // SCREENSHOTTOOL_H
