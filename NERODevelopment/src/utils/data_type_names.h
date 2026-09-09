@@ -113,5 +113,6 @@
 #define IMD "VCU/Shutdown/IMD_GPIO"
 #define HVDINTRLK "VCU/Shutdown/HVD_GPIO"
 #define HVCNCTR "VCU/Shutdown/HV_C_GPIO"
+#define LEDMODE "Control/Mode"
 
 #endif // DATATYPENAMES_H

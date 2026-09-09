@@ -100,6 +100,7 @@ public:
   std::optional<float> getLowVoltage() override;
 
   void sendMessage(const QString topic, const float value) override;
+  void sendMessage(const QString topic, const QList<float> values) override;
 
 private slots:
   void updateCurrentData() override;

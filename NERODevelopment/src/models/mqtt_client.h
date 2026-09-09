@@ -43,6 +43,7 @@ public slots:
    * @param msg, the message to send
    */
   void sendMessage(const QString topic, const float value);
+  void sendMessage(const QString topic, const QList<float> values);
 
 signals:
   /**
