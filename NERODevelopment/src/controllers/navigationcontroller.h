@@ -137,6 +137,7 @@ public:
   Q_INVOKABLE bool jumpToPage(const QString &label);
 
   void collapse();
+  void sendLedMode(QList<float> values);
 
 public slots:
   void setSelectedIndex(int i);

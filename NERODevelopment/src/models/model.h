@@ -103,6 +103,7 @@ public:
   virtual QList<QString> getCriticalFaults() = 0;
   virtual QList<QString> getNonCriticalFaults() = 0;
   virtual void sendMessage(QString topic, float value) = 0;
+  virtual void sendMessage(QString topic, QList<float> values) = 0;
   virtual std::optional<float> getLowVoltage() = 0;
 
   std::optional<int> getTime();
