@@ -1,6 +1,7 @@
 #ifndef NAVIGATIONCONTROLLER_H
 #define NAVIGATIONCONTROLLER_H
 
+#include "../constants/vcu_state_labels.h"
 #include "../controllers/buttoncontroller.h"
 #include "../models/model.h"
 
@@ -89,6 +90,16 @@ class NavigationController : public ButtonController {
   Q_PROPERTY(int expandedIndex READ expandedIndex NOTIFY expandedChanged)
   Q_PROPERTY(bool isPageActive READ isPageActive NOTIFY activePageChanged)
   Q_PROPERTY(bool isTsOn READ isTsOn NOTIFY isTsOnChanged)
+  Q_PROPERTY(QString functionalStateLabel READ functionalStateLabel NOTIFY
+                 functionalStateChanged)
+  Q_PROPERTY(bool functionalStateKnown READ functionalStateKnown NOTIFY
+                 functionalStateChanged)
+  Q_PROPERTY(bool functionalStateFaulted READ functionalStateFaulted NOTIFY
+                 functionalStateChanged)
+  Q_PROPERTY(QList<QString> stateRejectionReasons READ stateRejectionReasons
+                 NOTIFY stateRejectionChanged)
+  Q_PROPERTY(bool stateRejectionActive READ stateRejectionActive NOTIFY
+                 stateRejectionChanged)
 
 public:
   explicit NavigationController(Model *model, QObject *parent = nullptr);
@@ -98,6 +109,22 @@ public:
   int expandedIndex() const { return m_expanded; }
   bool isPageActive() const { return m_activePage >= 0; }
   bool isTsOn() const { return m_isTsOn; }
+
+  QString functionalStateLabel() const {
+    return functionalStateText(m_functionalState);
+  }
+  bool functionalStateKnown() const {
+    return functionalStateIsKnown(m_functionalState);
+  }
+  bool functionalStateFaulted() const {
+    return functionalStateIsFaulted(m_functionalState);
+  }
+  QList<QString> stateRejectionReasons() const {
+    return stateRejectionTexts(m_stateRejection);
+  }
+  bool stateRejectionActive() const {
+    return stateRejectionIsActive(m_stateRejection);
+  }
 
   Q_INVOKABLE QString labelFor(int i) const { return Menu::label(i); }
   Q_INVOKABLE QString iconFor(int i) const { return Menu::icon(i); }
@@ -125,6 +152,8 @@ signals:
   void activePageChanged();
   void expandedChanged();
   void isTsOnChanged(bool);
+  void functionalStateChanged();
+  void stateRejectionChanged();
   void themeChanged(const QString &theme);
   void exitRequested();
 
@@ -138,10 +167,16 @@ private:
 
   void syncModeFromVcu();
 
+  void updateCarStateReadout();
+  void setFunctionalState(std::optional<int> state);
+  void setStateRejection(std::optional<int> mask);
+
   int m_selected = 0;
   int m_activePage = -1;
   int m_expanded = -1;
   bool m_isTsOn = false;
+  std::optional<int> m_functionalState;
+  std::optional<int> m_stateRejection;
   int m_lastModeIndex = -999;
   bool m_lastHomeMode = false;
   QVector<int> m_navOrder;

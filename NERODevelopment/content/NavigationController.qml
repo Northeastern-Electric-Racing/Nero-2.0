@@ -48,6 +48,19 @@ Item {
         color: navigationController.isTsOn ? Theme.goodStatus : Theme.criticalStatus
     }
 
+    VcuStateComponent {
+        id: vcuStateComponent
+        anchors {
+            top: parent.top
+            topMargin: parent.height * 0.01
+            left: parent.left
+            leftMargin: parent.width * 0.61
+            right: parent.right
+            rightMargin: parent.width * 0.05
+        }
+        visible: !navigationController.isPageActive
+    }
+
     ColumnLayout {
         id: navContainer
         anchors {

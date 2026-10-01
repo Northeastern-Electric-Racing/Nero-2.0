@@ -10,8 +10,7 @@ class Game2048Controller : public ButtonController {
   Q_PROPERTY(bool gameOver READ gameOver WRITE setGameOver NOTIFY
                  gameOverChanged FINAL)
   Q_PROPERTY(int score READ score WRITE setScore NOTIFY scoreChanged FINAL)
-  Q_PROPERTY(int bestScore READ bestScore WRITE setBestScore NOTIFY
-                 bestScoreChanged FINAL)
+  Q_PROPERTY(int bestScore READ bestScore NOTIFY bestScoreChanged FINAL)
 
 public:
   explicit Game2048Controller(Model *model, QObject *parent = nullptr);
@@ -28,7 +27,6 @@ public:
 public slots:
   void setGameOver(bool gameOver);
   void setScore(int score);
-  void setBestScore(int bestScore);
   void enterButtonPressed() override;
   void upButtonPressed() override;
   void downButtonPressed() override;

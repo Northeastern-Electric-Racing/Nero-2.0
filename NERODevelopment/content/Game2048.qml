@@ -250,8 +250,7 @@ Rectangle {
 
         slotMap = newSlotMap;
         score += totalMergeScore;
-        if (score > game2048Controller.bestScore)
-            game2048Controller.setBestScore(score);
+        game2048Controller.saveScore(score);
 
         animTimer.toRelease = toRelease;
         animTimer.start();

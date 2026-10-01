@@ -27,8 +27,8 @@ class SpeedController : public ButtonController {
                  setCurrentDischarge NOTIFY currentDischargeChanged)
   Q_PROPERTY(float maxCurrentDischarge READ maxCurrentDischarge WRITE
                  setMaxCurrentDischarge NOTIFY maxCurrentDischargeChanged)
-  Q_PROPERTY(float regenPercentage READ regenPercentage NOTIFY
-                 regenPercentageChanged)
+  Q_PROPERTY(
+      float regenPercentage READ regenPercentage NOTIFY regenPercentageChanged)
   Q_PROPERTY(float maxRegenCapacity READ maxRegenCapacity WRITE
                  setMaxRegenCapacity NOTIFY maxRegenCapacityChanged)
   Q_PROPERTY(int powerDrawPercent READ powerDrawPercent WRITE

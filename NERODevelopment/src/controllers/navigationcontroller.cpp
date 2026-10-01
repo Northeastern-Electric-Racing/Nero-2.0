@@ -42,6 +42,8 @@ NavigationController::NavigationController(Model *model, QObject *parent)
   });
   connect(m_model, &Model::onCurrentDataChange, this,
           &NavigationController::syncModeFromVcu);
+  connect(m_model, &Model::onCurrentDataChange, this,
+          &NavigationController::updateCarStateReadout);
   rebuildNavOrder();
 }
 
@@ -252,16 +254,40 @@ void NavigationController::syncModeFromVcu() {
   }
 }
 
-void NavigationController::buttonUpdate() {
-  if (m_expanded < 0)
+void NavigationController::setFunctionalState(std::optional<int> state) {
+  if (m_functionalState == state)
     return;
+  m_functionalState = state;
+  emit functionalStateChanged();
+}
+
+void NavigationController::setStateRejection(std::optional<int> mask) {
+  if (m_stateRejection == mask)
+    return;
+  m_stateRejection = mask;
+  emit stateRejectionChanged();
+}
+
+void NavigationController::updateCarStateReadout() {
+  setFunctionalState(carStateWireValue(m_model->getFunctionalState()));
+  setStateRejection(carStateWireValue(m_model->getStateRejectionError()));
+}
+
+void NavigationController::buttonUpdate() {
   if (!m_pageIndices.contains(m_model->currentPageIndex))
     return;
 
-  if (m_model->getLeftButtonPressed() == true)
+  bool left = m_model->getLeftButtonPressed() == true;
+  bool right = m_model->getRightButtonPressed() == true;
+  bool enter = m_model->getEnterButtonPressed() == true;
+
+  if (m_expanded < 0)
+    return;
+
+  if (left)
     movePrev();
-  if (m_model->getRightButtonPressed() == true)
+  if (right)
     moveNext();
-  if (m_model->getEnterButtonPressed() == true)
+  if (enter)
     activate();
 }

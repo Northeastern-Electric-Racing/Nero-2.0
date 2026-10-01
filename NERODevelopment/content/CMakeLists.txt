@@ -49,6 +49,7 @@ qt6_add_qml_module(content
         HomeIcon.qml
         SubMenuIcon.qml
         DoomView.qml
+        VcuStateComponent.qml
 
     RESOURCES
         fonts/fonts.txt
