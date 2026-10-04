@@ -1,0 +1,47 @@
+name: Dev work
+description: Implementation work of any kind (feature, bug, or task). Set the issue type to match.
+labels: [dev work]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        One template for all implementation work. Set the issue **type** (Feature, Bug, or Task) instead of picking a different template.
+        If this belongs to an epic, add it as a sub-issue of the epic.
+        After filing, add a written-by label (`by: human`, `by: ai`, `by: ai-assisted`) and area labels (`view`, `controller`, `model`, `devops`).
+  - type: textarea
+    id: what
+    attributes:
+      label: What
+      description: |
+        The change in a few sentences.
+        For a bug: what happens, what should happen, and steps to reproduce.
+    validations:
+      required: true
+  - type: textarea
+    id: diagram
+    attributes:
+      label: Diagram
+      description: Optional. Illustrate the change. Mermaid (in a mermaid code block), ASCII, or an uploaded image.
+  - type: textarea
+    id: requirements
+    attributes:
+      label: Requirements
+      description: What must be true for this to be done. Checkboxes, each one testable.
+      value: "- [ ] "
+    validations:
+      required: true
+  - type: textarea
+    id: notes
+    attributes:
+      label: Notes
+      description: Optional. Anything that helps whoever picks this up, such as links to spikes, PRs or docs, gotchas, and constraints.
+  - type: textarea
+    id: context-transfer
+    attributes:
+      label: Context transfer
+      description: Optional. A dump of context for whoever picks this up (person or agent). Start with a short summary, then the raw context.
+      value: |
+        SUMMARY
+
+        CONTEXT
+      render: text
