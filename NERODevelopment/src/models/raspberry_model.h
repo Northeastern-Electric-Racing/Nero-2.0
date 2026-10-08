@@ -2,8 +2,9 @@
 #define RASPBERRY_MODEL_H
 
 #include "model.h"
-#include "mqtt_client.h"
 #include <serverdata.qpb.h>
+
+class MqttClient;
 /**
  * @brief The RaspberryModel class
  * The Production Model that is used when running on the car
@@ -101,9 +102,11 @@ public:
 
   void sendMessage(const QString topic, const float value) override;
 
+public slots:
+  void receiveServerData(const serverdata::v2::ServerData, const QString topic);
+
 private slots:
   void updateCurrentData() override;
-  void receiveServerData(const serverdata::v2::ServerData, const QString topic);
 
 private:
   void processData(const std::string &data);

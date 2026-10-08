@@ -36,6 +36,16 @@ REM Build NERO
 call "%~dp0compile-qt-windows.bat"
 if %errorlevel% neq 0 exit /b %errorlevel%
 
+REM Dev-only WASM build for Playwright; emsdk needs a real Python on Windows, not the Store alias
+set WASM_READY=0
+where npm >nul 2>nul && python --version >nul 2>nul && if exist C:\Qt\6.8.3\wasm_singlethread\ set WASM_READY=1
+if %WASM_READY%==1 (
+    call npm ci --prefix "%~dp0..\playwright" || exit /b 1
+    call "%~dp0compile-qt-wasm.bat" || exit /b 1
+) else (
+    echo "Skipping the Playwright WASM build: needs Qt 6.8.3 WebAssembly (single-threaded), Node 20+, and Python 3"
+)
+
 echo "Setup complete. Restart Qt Creator to pick up the new PATH."
 
 REM Return to the caller's directory.
