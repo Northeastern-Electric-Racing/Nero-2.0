@@ -120,35 +120,19 @@ Then, change the option from Build Enviornment to System Enviornment.
 
 Finally, save and run it.
 
-### Headless Screenshots (Dev)
+### Playwright (Dev)
 
-Capture any page as a PNG without a display. Both modes do nothing unless their env vars are set.
+Automated QA and Claude drive a dev-only WebAssembly build; the car and desktop builds are unchanged. Tests and the view start the Docker mock (`compose.nero-dev.yml`) and feed its data into the app. Each test injects only what the mock doesn't simulate or what it is testing, such as VCU navigation or a fault, through `window.nero.publish(topic, values)`. Cases live in `playwright/tests/screens.spec.ts`, one line each.
 
-Commands are bash. On Windows use Git Bash or the Qt Creator run config.
-
-Capture a single page and exit
+The setup script installs Emscripten 3.1.56 and Playwright and does the first build (`build-scripts/compile-qt-wasm.sh` or `.bat`). It needs the Qt 6.8.3 WebAssembly (single-threaded) kit, Node 20+, Docker, and Google Chrome, plus Python 3 on Windows. Then, from `playwright/`:
 
 ```bash
-QT_QPA_PLATFORM=offscreen NERO_SCREENSHOT=PERFORMANCE NERO_SCREENSHOT_OUT=perf.png ./NEROApp
+npm test         # rebuild, compare against the baselines
+npm run update   # rebuild, accept new baselines
+npm run view     # rebuild, open the 800x480 display in Chrome
 ```
 
-Keep the app running and capture on demand
-
-```bash
-# Enable watch mode, trigger file defaults to /tmp/nero-shot
-NERO_SCREENSHOT_WATCH=1 ./NEROApp &
-
-# Or point it at a specific trigger file
-NERO_SCREENSHOT_WATCH=1 NERO_SCREENSHOT_WATCH_PATH=/tmp/nero-shot ./NEROApp &
-
-# Saves performance.png next to the trigger file
-echo PERFORMANCE > /tmp/nero-shot
-
-# Optional second word picks the output path
-echo "ENDURANCE /tmp/out.png" > /tmp/nero-shot
-```
-
-Page labels match the top-level menu and are case-insensitive. Use HOME to capture the menu screen.
+Baselines are local and git-ignored. In a new worktree, run `npm run update` before changing the UI.
 
 ### Testing Out Enviornment Variables (On the Car)
 

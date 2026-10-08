@@ -1,8 +1,9 @@
 #include "raspberry_model.h"
 #include "../utils/data_type_names.h"
-#include "mqtt_client.h"
 #include <QDebug>
-#include <QtMqtt/QMqttClient>
+#ifndef __EMSCRIPTEN__
+#include "mqtt_client.h"
+#endif
 #include <bitset>
 #include <cmath>
 #include <cstdlib>
@@ -31,6 +32,11 @@ QList<QString> RaspberryModel::getVcuFault() {
   return faults;
 }
 
+#ifdef __EMSCRIPTEN__
+void RaspberryModel::connectToMQTT() {}
+
+void RaspberryModel::sendMessage(const QString, const float) {}
+#else
 void RaspberryModel::connectToMQTT() {
   // Determine MQTT broker hostname based on environment
   // Priority: 1. MQTT_HOST env var, 2. Default localhost for development
@@ -103,10 +109,10 @@ void RaspberryModel::connectToMQTT() {
   };
 
   const char *client1_port_str = getenv("CLIENT1_PORT");
-  //const char *client2_port_str = getenv("CLIENT2_PORT");
+  // const char *client2_port_str = getenv("CLIENT2_PORT");
 
   int client1_port = client1_port_str ? atoi(client1_port_str) : 1883;
-  //int client2_port = client2_port_str ? atoi(client2_port_str) : 1882;
+  // int client2_port = client2_port_str ? atoi(client2_port_str) : 1882;
 
   MqttClient *client_1 =
       new MqttClient(nullptr, client1_port, client_1_topics, mqttHost);
@@ -128,6 +134,7 @@ void RaspberryModel::connectToMQTT() {
 void RaspberryModel::sendMessage(const QString topic, const float value) {
   this->m_client->sendMessage(topic, value);
 }
+#endif
 
 void RaspberryModel::receiveServerData(const serverdata::v2::ServerData data,
                                        const QString topic) {
