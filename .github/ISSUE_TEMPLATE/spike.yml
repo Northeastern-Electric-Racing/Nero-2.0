@@ -1,38 +1,35 @@
 name: Spike
-description: For any research or investigation into a feature or our current architecture
-title: '[Area] - Short Description'
+description: Explore one approach to an idea, or try a small standalone improvement. Draft PRs welcome.
+type: Task
 labels: [spike]
 body:
   - type: markdown
     attributes:
-      value: For a spike ticket, please make sure to remember to add links to the resources you are pulling information from so others who are reviewing and giving feedback can also take a look at the same information you are looking at.
-  - type: dropdown
-    id: spike-type
-    attributes:
-      label: Spike Type
-      description: Is this spike about the product (functional) or the implementation of the product (technical)?
-      multiple: true
-      options:
-        - Functional
-        - Technical
+      value: |
+        A spike lays out what to explore and what we expect. It does **not** hold answers: post findings as comments and link draft PRs.
+        Under an idea, each spike is usually a separate implementation of it; add it as a sub-issue of the idea. A small improvement can be a standalone spike.
+        After filing, add a written-by label (`by: human`, `by: ai`, `by: ai-assisted`) and area labels (`view`, `controller`, `model`, `devops`).
   - type: textarea
-    id: goal
+    id: exploring
     attributes:
-      label: Goal
-      description: What is this spike ticket looking into/trying to solve? Is this about enhancing something we currently do or looking into a new feature?
+      label: Exploring
+      description: The approach or implementation being explored, broadly. Say what it is, not how the exploration will be run.
     validations:
       required: true
   - type: textarea
-    id: purpose
+    id: hypothesis
     attributes:
-      label: Reason for Spike
-      description: Why is this spike ticket necessary?
+      label: Hypothesis
+      description: What we expect this approach to prove, in one or two sentences. Reviewers judge the draft PRs and findings against it.
     validations:
       required: true
   - type: textarea
-    id: sidenotes
+    id: context-transfer
     attributes:
-      label: Additional notes
-      description: Add any extra comments related to the spike.
-    validations:
-      required: false
+      label: Context transfer
+      description: Optional. A dump of context for whoever picks this up (person or agent). Start with a short summary, then the raw context.
+      value: |
+        SUMMARY
+
+        CONTEXT
+      render: text
