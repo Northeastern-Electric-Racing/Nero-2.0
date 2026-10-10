@@ -1,0 +1,16 @@
+<!doctype html>
+<html>
+  <body style="margin: 0">
+    <div id="screen" style="width: 800px; height: 480px"></div>
+    <script src="NEROApp.js"></script>
+    <script src="qtloader.js"></script>
+    <script>
+      qtLoad({
+        qt: {
+          entryFunction: window.NEROApp_entry,
+          containerElements: [document.getElementById("screen")],
+        },
+      }).then((instance) => (window.nero = instance));
+    </script>
+  </body>
+</html>
