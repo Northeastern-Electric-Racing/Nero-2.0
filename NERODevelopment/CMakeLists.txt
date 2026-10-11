@@ -2,23 +2,13 @@ cmake_minimum_required(VERSION 3.21.1)
 
 project(NEROApp LANGUAGES CXX C)
 
-# ============================================================
-# Build acceleration — ccache (opt-in)
-# Enable with -DNERO_USE_CCACHE=ON (or via CMakePresets.json).
-# Set before any targets / subprojects so everything is cached,
-# including the Qt Design Studio components from qmlcomponents.
-# If ccache isn't installed, a note is printed and the build continues without it.
-# ============================================================
-option(NERO_USE_CCACHE "Use ccache if available" OFF)
-if(NERO_USE_CCACHE)
-  find_program(CCACHE_PROGRAM ccache)
-  if(CCACHE_PROGRAM)
+# Use ccache when available so rebuilds reuse cached objects (-DNERO_USE_CCACHE=OFF to disable)
+option(NERO_USE_CCACHE "Use ccache to speed up rebuilds" ON)
+find_program(CCACHE_PROGRAM ccache)
+if(NERO_USE_CCACHE AND CCACHE_PROGRAM)
     message(STATUS "Using ccache: ${CCACHE_PROGRAM}")
     set(CMAKE_C_COMPILER_LAUNCHER ${CCACHE_PROGRAM})
     set(CMAKE_CXX_COMPILER_LAUNCHER ${CCACHE_PROGRAM})
-  else()
-    message(STATUS "NERO_USE_CCACHE is ON but ccache was not found; building without it")
-  endif()
 endif()
 
 # Find Qt6 first before version checks
