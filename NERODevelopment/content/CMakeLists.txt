@@ -67,6 +67,7 @@ qt6_add_qml_module(content
         images/darkNeroLogo.png
         images/lightNeroLogo.png
         images/themes.png
+        images/profile.png
         images/bots.jpg
         images/bspd.jpg
         images/cockpitBrb.jpg

@@ -5,7 +5,7 @@ const NERO_INDEX = "VCU/CarState/nero_index";
 const HOME_MODE = "VCU/CarState/home_mode";
 const BUTTON_ID = "Wheel/Buttons/button_id";
 // Top-level menu slots, and wheel button ids from readme "Button Layout"
-const PAGE = { OFF: 0, PIT_DRIVE: 1, PERFORMANCE: 3, ENDURANCE: 4, GAMES: 5, THEMES: 6 };
+const PAGE = { OFF: 0, PIT_DRIVE: 1, PERFORMANCE: 3, ENDURANCE: 4, GAMES: 5, THEMES: 6, PROFILE: 7 };
 const BUTTON = { ENTER: 5, RIGHT: 6 };
 
 type Topics = Record<string, number[]>;
@@ -39,6 +39,8 @@ const cases: Record<string, { steps: Topics[]; tolerance?: number }> = {
     tolerance: LIVE_DATA,
   },
   "themes-next": { steps: [open(PAGE.THEMES), { [BUTTON_ID]: [BUTTON.RIGHT] }] },
+  "profile-open": { steps: [open(PAGE.PROFILE)] },
+  "profile-select": { steps: [open(PAGE.PROFILE), { [BUTTON_ID]: [BUTTON.ENTER] }] },
 };
 
 for (const [name, { steps, tolerance = MENU }] of Object.entries(cases)) {

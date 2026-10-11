@@ -20,6 +20,13 @@ const std::vector<Item> &getPages() {
        [](NavigationController *c) { emit c->themeChanged("light"); }},
       {"DARK", Type::SubAction, nullptr, nullptr,
        [](NavigationController *c) { emit c->themeChanged("dark"); }},
+      {"PROFILE", Type::Category, "profile.png", nullptr, nullptr},
+      {"SOFTWARE", Type::SubAction, nullptr, nullptr,
+       [](NavigationController *c) { c->setProfile("SOFTWARE"); }},
+      {"HARDWARE", Type::SubAction, nullptr, nullptr,
+       [](NavigationController *c) { c->setProfile("HARDWARE"); }},
+      {"DRIVER", Type::SubAction, nullptr, nullptr,
+       [](NavigationController *c) { c->setProfile("DRIVER"); }},
       {"EXIT", Type::Action, "exit.png", nullptr,
        [](NavigationController *c) { emit c->exitRequested(); }},
   };
@@ -51,6 +58,13 @@ void NavigationController::setSelectedIndex(int i) {
   if (m_selected != i) {
     m_selected = i;
     emit selectionChanged();
+  }
+}
+
+void NavigationController::setProfile(const QString &profile) {
+  if (m_profile != profile) {
+    m_profile = profile;
+    emit profileChanged();
   }
 }
 

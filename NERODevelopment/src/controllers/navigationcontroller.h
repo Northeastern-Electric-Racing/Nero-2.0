@@ -90,6 +90,7 @@ class NavigationController : public ButtonController {
   Q_PROPERTY(int expandedIndex READ expandedIndex NOTIFY expandedChanged)
   Q_PROPERTY(bool isPageActive READ isPageActive NOTIFY activePageChanged)
   Q_PROPERTY(bool isTsOn READ isTsOn NOTIFY isTsOnChanged)
+  Q_PROPERTY(QString currentProfile READ currentProfile NOTIFY profileChanged)
   Q_PROPERTY(QString functionalStateLabel READ functionalStateLabel NOTIFY
                  functionalStateChanged)
   Q_PROPERTY(bool functionalStateKnown READ functionalStateKnown NOTIFY
@@ -109,6 +110,7 @@ public:
   int expandedIndex() const { return m_expanded; }
   bool isPageActive() const { return m_activePage >= 0; }
   bool isTsOn() const { return m_isTsOn; }
+  QString currentProfile() const { return m_profile; }
 
   QString functionalStateLabel() const {
     return functionalStateText(m_functionalState);
@@ -134,6 +136,7 @@ public:
   Q_INVOKABLE QVariantList getChildrenOf(int parent) const;
 
   void collapse();
+  void setProfile(const QString &profile);
 
 public slots:
   void setSelectedIndex(int i);
@@ -149,6 +152,7 @@ signals:
   void activePageChanged();
   void expandedChanged();
   void isTsOnChanged(bool);
+  void profileChanged();
   void functionalStateChanged();
   void stateRejectionChanged();
   void themeChanged(const QString &theme);
@@ -172,6 +176,7 @@ private:
   int m_activePage = -1;
   int m_expanded = -1;
   bool m_isTsOn = false;
+  QString m_profile = "DRIVER";
   std::optional<int> m_functionalState;
   std::optional<int> m_stateRejection;
   int m_lastModeIndex = -999;

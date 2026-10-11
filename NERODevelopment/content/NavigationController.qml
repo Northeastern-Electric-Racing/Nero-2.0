@@ -38,6 +38,7 @@ Item {
     HeaderView {
         id: header
         ownsDialog: true
+        profileTitle: navigationController.currentProfile
     }
 
     LabelText {

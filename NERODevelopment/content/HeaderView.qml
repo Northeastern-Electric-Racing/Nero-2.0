@@ -12,6 +12,7 @@ Item {
     property bool faultAlertsEnabled: headerController.faultAlertsEnabled
     property bool ownsDialog: false
     property string modeTitle: ""
+    property string profileTitle: ""
     property real titleHorizontalCenterOffset: 0
 
     Timer {
@@ -43,9 +44,19 @@ Item {
     onNonCriticalFaultsChanged: refreshFaultDialog()
     onFaultAlertsEnabledChanged: refreshFaultDialog()
 
+    LabelText {
+        id: profileLabel
+        visible: profileTitle !== ""
+        text: profileTitle
+        anchors.left: parent.left
+        anchors.top: parent.top
+        anchors.leftMargin: 15
+        font.bold: true
+    }
+
     NonCriticalWarning {
         id: nonCriticalWarning
-        anchors.left: parent.left
+        anchors.left: profileLabel.visible ? profileLabel.right : parent.left
         anchors.top: parent.top
         dimension: parent.height / 2
         anchors.leftMargin: nonCriticalWarning.width / 10
