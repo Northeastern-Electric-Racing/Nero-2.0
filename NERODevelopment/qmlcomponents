@@ -15,18 +15,16 @@ FetchContent_Declare(
 FetchContent_GetProperties(ds)
 FetchContent_Populate(ds)
 
+# Only the Studio modules our QML imports are linked; EXCLUDE_FROM_ALL skips building
+# the rest. To use another module, add its plugin here and in
+# src/import_qml_components_plugins.h.
 target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE
-    QuickStudioComponentsplugin
-    QuickStudioEffectsplugin
     QuickStudioApplicationplugin
-    FlowViewplugin
-    QuickStudioLogicHelperplugin
-    QuickStudioMultiTextplugin
     QuickStudioEventSimulatorplugin
     QuickStudioEventSystemplugin
 )
 
-add_subdirectory(${ds_SOURCE_DIR} ${ds_BINARY_DIR})
+add_subdirectory(${ds_SOURCE_DIR} ${ds_BINARY_DIR} EXCLUDE_FROM_ALL)
 
 target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE
   BULD_QDS_COMPONENTS=true

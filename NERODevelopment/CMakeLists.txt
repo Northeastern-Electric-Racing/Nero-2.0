@@ -7,6 +7,15 @@ endif()
 
 project(NEROApp LANGUAGES CXX C)
 
+# Use ccache when available so rebuilds reuse cached objects (-DNERO_USE_CCACHE=OFF to disable)
+option(NERO_USE_CCACHE "Use ccache to speed up rebuilds" ON)
+find_program(CCACHE_PROGRAM ccache)
+if(NERO_USE_CCACHE AND CCACHE_PROGRAM)
+    message(STATUS "Using ccache: ${CCACHE_PROGRAM}")
+    set(CMAKE_C_COMPILER_LAUNCHER ${CCACHE_PROGRAM})
+    set(CMAKE_CXX_COMPILER_LAUNCHER ${CCACHE_PROGRAM})
+endif()
+
 # Find Qt6 first before version checks
 find_package(Qt6 REQUIRED COMPONENTS Core Gui Qml Quick Network Protobuf)
 
