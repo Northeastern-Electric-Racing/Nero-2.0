@@ -1,5 +1,10 @@
 cmake_minimum_required(VERSION 3.21.1)
 
+# Lets `npm run build` re-run CMake for the WASM build without the emsdk environment
+if(DEFINED EMSDK_DIR)
+    set(ENV{EMSDK} "${EMSDK_DIR}")
+endif()
+
 project(NEROApp LANGUAGES CXX C)
 
 # Use ccache when available so rebuilds reuse cached objects (-DNERO_USE_CCACHE=OFF to disable)
@@ -12,7 +17,7 @@ if(NERO_USE_CCACHE AND CCACHE_PROGRAM)
 endif()
 
 # Find Qt6 first before version checks
-find_package(Qt6 REQUIRED COMPONENTS Core Gui Qml Quick Network Mqtt Protobuf)
+find_package(Qt6 REQUIRED COMPONENTS Core Gui Qml Quick Network Protobuf)
 
 qt_standard_project_setup(REQUIRES 6.8)
 
@@ -88,7 +93,6 @@ set(PROJECT_SOURCES
     # Headers - Models
     src/models/model.h
     src/models/raspberry_model.h
-    src/models/mqtt_client.h
 
     # Headers - Debug Mode
     src/modes/debug_mode/debug_utils.h
@@ -99,7 +103,6 @@ set(PROJECT_SOURCES
     src/utils/attributestatus.h
     src/utils/descriptioninfo.h
     src/utils/high_scores.h
-    src/utils/screenshottool.h
 
     # Implementation - Controllers
     src/controllers/endurancecontroller.cpp
@@ -119,7 +122,6 @@ set(PROJECT_SOURCES
     # Implementation - Models
     src/models/model.cpp
     src/models/raspberry_model.cpp
-    src/models/mqtt_client.cpp
 
     # Implementation - Debug Mode
     src/modes/debug_mode/debug_utils.cpp
@@ -127,7 +129,6 @@ set(PROJECT_SOURCES
     # Implementation - Utils
     src/utils/server_data.cpp
     src/utils/descriptioninfo.cpp
-    src/utils/screenshottool.cpp
 
     # Main
     src/main.cpp
@@ -157,10 +158,19 @@ target_link_libraries(NEROApp PRIVATE
     Qt6::Gui
     Qt6::Qml
     Qt6::Network
-    Qt6::Mqtt
     Qt6::Quick
     Qt6::Protobuf
 )
+
+# The dev-only WASM build has no broker; Playwright feeds the model through the VCU sim
+if(EMSCRIPTEN)
+    target_sources(NEROApp PRIVATE src/utils/vcu_sim.cpp)
+    configure_file(../playwright/index.html index.html COPYONLY)
+else()
+    find_package(Qt6 REQUIRED COMPONENTS Mqtt)
+    target_sources(NEROApp PRIVATE src/models/mqtt_client.h src/models/mqtt_client.cpp)
+    target_link_libraries(NEROApp PRIVATE Qt6::Mqtt)
+endif()
 
 set(CMAKE_OBJECT_PATH_MAX 500)
 

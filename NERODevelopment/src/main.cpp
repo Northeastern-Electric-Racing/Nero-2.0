@@ -15,7 +15,6 @@
 #include "import_qml_components_plugins.h"
 #include "import_qml_plugins.h"
 #include "models/raspberry_model.h"
-#include "utils/screenshottool.h"
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
@@ -31,6 +30,8 @@ int main(int argc, char *argv[]) {
   QQmlApplicationEngine engine;
 
   Model *model = new RaspberryModel();
+  // The WASM build's vcu_sim.cpp finds the model through the app's QObject tree
+  model->setParent(&app);
   model->connectToMQTT();
 
   HomeController homeController(model);
@@ -84,9 +85,6 @@ int main(int argc, char *argv[]) {
       &engine, &QQmlApplicationEngine::objectCreationFailed, &app,
       []() { QCoreApplication::exit(-1); }, Qt::QueuedConnection);
   engine.loadFromModule("content", "App");
-
-  // Dev screenshot harness, inert unless its env vars are set
-  ScreenshotTool screenshotTool(&engine, &navigationController);
 
   return app.exec();
 }

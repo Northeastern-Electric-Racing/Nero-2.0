@@ -1,0 +1,37 @@
+name: Idea
+description: A feature or direction worth exploring. Ideas are explored through spikes and, once settled, become an epic.
+type: Feature
+labels: [idea]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Pipeline:** idea → spikes (sub-issues) → epic → dev work.
+        Keep an idea short. If it is small enough to just try, file a spike instead.
+        After filing, add a written-by label (`by: human`, `by: ai`, `by: ai-assisted`) and area labels (`view`, `controller`, `model`, `devops`).
+  - type: textarea
+    id: idea
+    attributes:
+      label: Idea
+      description: One or two sentences. What could we build, and for whom? Describe the outcome, not the implementation.
+      placeholder: Have the server send each client only the telemetry it is displaying.
+    validations:
+      required: true
+  - type: textarea
+    id: rationale
+    attributes:
+      label: Rationale
+      description: Why this idea is good and worth exploring. The reasoning behind it, not a history of the problem.
+    validations:
+      required: true
+  - type: textarea
+    id: approaches
+    attributes:
+      label: Approaches to explore
+      description: |
+        The range of possible solutions worth exploring. Each bullet is an area and the options in it.
+        List areas that need real exploration or design decisions, not questions with quick answers. Each one should be big enough to become a spike.
+      value: |
+        - **Area:** option, option, or option.
+    validations:
+      required: true

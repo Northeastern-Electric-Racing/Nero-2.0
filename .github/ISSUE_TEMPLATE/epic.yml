@@ -1,71 +1,62 @@
 name: Epic
-description: A collection of many tasks
-title: '[Area] - Short Description'
+description: A settled idea, broken into dev work tickets.
+type: Feature
 labels: [epic]
 body:
-  - type: textarea
-    id: overview
+  - type: markdown
     attributes:
-      label: Overview
-      description: Provide a brief summary of this epic
-    validations:
-      required: true
-  - type: textarea
-    id: stakeholders
-    attributes:
-      label: Stakeholders
-      description: Who to contact for this epic?
       value: |
-        Product Stakeholder:
-        Software Stakeholder:
-        Reference Users:
-  - type: textarea
-    id: user-story
+        An epic is a finished idea: the approach is decided. Link its dev work tickets as sub-issues.
+        If the idea came through spikes, link the idea below and close it as completed.
+        After filing, add a written-by label (`by: human`, `by: ai`, `by: ai-assisted`) and area labels (`view`, `controller`, `model`, `devops`).
+  - type: input
+    id: from-idea
     attributes:
-      label: User Story
-      value: 'As a _____, I want _____, so that _____.'
+      label: From idea
+      description: The idea issue this epic came from, if any.
+      placeholder: "#123"
+  - type: textarea
+    id: goal
+    attributes:
+      label: Goal
+      description: What this delivers, and for whom, in a few sentences.
     validations:
       required: true
   - type: textarea
-    id: metrics
+    id: approach
     attributes:
-      label: Success Metrics
-      description: What are the metrics we will use to determine if this is successful?
+      label: Approach
+      description: The chosen approach, and the spike or decision it came from.
     validations:
       required: true
   - type: textarea
-    id: rollout
+    id: diagram
     attributes:
-      label: Rollout Plan
-      description: How will this be released? All at once? In parts?
+      label: Diagram
+      description: Illustrate the change, ideally before and after. Mermaid (in a mermaid code block), ASCII, or an uploaded image.
     validations:
       required: true
   - type: textarea
-    id: scope
+    id: out-of-scope
     attributes:
-      label: Out of Scope
-      description: What is not included in this epic?
+      label: Out of scope
+      description: What this epic deliberately does not cover.
+      value: "- "
+  - type: textarea
+    id: requirements
+    attributes:
+      label: Requirements
+      description: What must be true for the epic to be done. Checkboxes.
+      value: "- [ ] "
     validations:
       required: true
   - type: textarea
-    id: background-context
+    id: context-transfer
     attributes:
-      label: Background / Context
-      description: What is the context for this epic? What already exists?
-    validations:
-      required: true
-  - type: textarea
-    id: acceptance
-    attributes:
-      label: Acceptance Criteria & Mock-ups
-      description: Each UI change needs a detailed mock-up. All business logic and cases should be accounted for as well.
-    validations:
-      required: true
-  - type: textarea
-    id: tickets
-    attributes:
-      label: Tickets
-      description: What tickets will be a part of this epic?
-      value: " - [ ] #\n - [ ] #"
-    validations:
-      required: true
+      label: Context transfer
+      description: Optional. A dump of context for whoever picks this up (person or agent). Start with a short summary, then the raw context.
+      value: |
+        SUMMARY
+
+        CONTEXT
+      render: text

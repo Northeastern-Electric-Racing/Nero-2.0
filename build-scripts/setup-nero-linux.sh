@@ -34,4 +34,12 @@ grep -qF "$QT_PATH_LINE" "$SHELL_RC" 2>/dev/null || echo "$QT_PATH_LINE" >> "$SH
 # Build NERO
 "$SCRIPT_DIR/compile-qt-linux.sh"
 
+# Dev-only WASM build for Playwright
+if [ -d "$HOME/Qt/6.8.3/wasm_singlethread" ] && command -v npm &>/dev/null; then
+    npm ci --prefix playwright
+    "$SCRIPT_DIR/compile-qt-wasm.sh"
+else
+    echo "Skipping the Playwright WASM build: needs Qt 6.8.3 WebAssembly (single-threaded) and Node 20+"
+fi
+
 echo "Setup complete. Restart Qt Creator to pick up the new PATH."

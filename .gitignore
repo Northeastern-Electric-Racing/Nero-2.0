@@ -77,3 +77,8 @@ build*
 # Claude Code local config
 .claude/
 CLAUDE.md
+
+# Playwright
+playwright/node_modules/
+playwright/test-results/
+playwright/tests/__screenshots__/
