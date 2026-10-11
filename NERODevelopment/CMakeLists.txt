@@ -7,7 +7,7 @@ project(NEROApp LANGUAGES CXX C)
 # Enable with -DNERO_USE_CCACHE=ON (or via CMakePresets.json).
 # Set before any targets / subprojects so everything is cached,
 # including the Qt Design Studio components from qmlcomponents.
-# If ccache isn't installed, this is silently skipped.
+# If ccache isn't installed, a note is printed and the build continues without it.
 # ============================================================
 option(NERO_USE_CCACHE "Use ccache if available" OFF)
 if(NERO_USE_CCACHE)
