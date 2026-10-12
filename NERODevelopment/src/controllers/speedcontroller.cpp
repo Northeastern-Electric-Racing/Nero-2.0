@@ -84,6 +84,7 @@ void SpeedController::setCurrent(float current) {
   if (current != m_current) {
     m_current = current;
     emit currentChanged(current);
+    emit regenPercentageChanged(regenPercentage());
   }
 }
 float SpeedController::maxCurrent() const { return m_maxCurrent; }

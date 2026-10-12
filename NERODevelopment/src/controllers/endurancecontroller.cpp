@@ -138,6 +138,9 @@ void EnduranceController::currentDataDidChange() {
   if (maxRegen) {
     setMaxRegenCapacity(*maxRegen);
   }
+  if (dcCurrent) {
+    emit currentRegenPercentageChanged(currentRegenPercentage());
+  }
   if (dcCurrent && maxDCTarget && std::abs(*maxDCTarget) > 0) {
     int percent = static_cast<int>(
         std::round(std::abs(*dcCurrent) / std::abs(*maxDCTarget) * 100.0f));
