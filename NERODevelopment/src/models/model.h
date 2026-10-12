@@ -21,7 +21,7 @@ public:
   explicit Model();
   virtual ~Model() {}
 
-  virtual void connectToMQTT() = 0;
+  virtual void connectToZenoh() = 0;
   virtual std::optional<float> getMph() = 0;
   virtual std::optional<float> getStatus() = 0;
   virtual std::optional<float> getDir() = 0;

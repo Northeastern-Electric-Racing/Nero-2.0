@@ -168,7 +168,7 @@ private:
 
   // Auto-release timer: sends keyup after a brief delay so DOOM
   // registers a tap instead of an infinite hold. Needed because
-  // the wheel hardware does not send release events to MQTT.
+  // the wheel hardware does not send release events to Zenoh.
   QTimer *m_releaseTimer;
 };
 
