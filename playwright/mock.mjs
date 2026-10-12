@@ -7,8 +7,13 @@ const GAP_FILL = {
   "VCU/CarState/state_rejection_error": [0],
 };
 
-// Tests drive navigation; calypso's random values would jump between pages
-const TEST_OWNED = ["VCU/CarState/nero_index", "VCU/CarState/home_mode", "Wheel/Buttons/button_id"];
+// Tests own these; calypso's random values would change the page or car state
+const TEST_OWNED = [
+  "VCU/CarState/nero_index",
+  "VCU/CarState/home_mode",
+  "VCU/CarState/functional_state",
+  "Wheel/Buttons/button_id",
+];
 
 // Feeds the page calypso's Docker mock data, except topics that have been injected
 export async function connectMock(page) {
@@ -29,6 +34,12 @@ export async function connectMock(page) {
       .catch(() => {});
   }, 100);
 
+  // Like the VCU, re-send a READY car state every 200 ms, even while frozen
+  const sendReady = () =>
+    page.evaluate(() => window.nero.publish("VCU/CarState/functional_state", [0])).catch(() => {});
+  const heartbeat = setInterval(sendReady, 200);
+  await sendReady();
+
   const inject = (topics) => {
     for (const topic of Object.keys(topics)) {
       injected.add(topic);
@@ -48,8 +59,10 @@ export async function connectMock(page) {
       await new Promise((resolve) => setTimeout(resolve, 500));
       paused = true;
     },
+    vcuLost: () => clearInterval(heartbeat),
     close: () => {
       clearInterval(timer);
+      clearInterval(heartbeat);
       return broker.endAsync();
     },
   };

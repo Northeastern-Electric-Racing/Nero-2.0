@@ -89,9 +89,10 @@ public slots:
   void setPowerDrawPercent(int);
   void setMaxDCCurrentTarget(int);
 
-  void rightButtonPressed() override;
-
   void update();
+
+protected:
+  void rightButtonPressed() override;
 
 private:
   bool m_tractionControl = false;

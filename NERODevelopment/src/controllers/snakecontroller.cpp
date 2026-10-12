@@ -1,7 +1,7 @@
 #include "snakecontroller.h"
 
 SnakeController::SnakeController(Model *model, QObject *parent)
-    : ButtonController{model, 7, parent} {}
+    : ButtonController{model, parent} {}
 
 bool SnakeController::didStart() const { return m_didStart; }
 void SnakeController::setDidStart(bool didStart) {

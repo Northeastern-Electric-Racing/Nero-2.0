@@ -27,11 +27,6 @@ public:
 public slots:
   void setGameOver(bool gameOver);
   void setScore(int score);
-  void enterButtonPressed() override;
-  void upButtonPressed() override;
-  void downButtonPressed() override;
-  void leftButtonPressed() override;
-  void rightButtonPressed() override;
   void saveScore(int score);
 
 signals:
@@ -40,6 +35,13 @@ signals:
   void bestScoreChanged();
   void moveMade(int direction);
   void restartRequested();
+
+protected:
+  void enterButtonPressed() override;
+  void upButtonPressed() override;
+  void downButtonPressed() override;
+  void leftButtonPressed() override;
+  void rightButtonPressed() override;
 
 private:
   bool m_gameOver = true;

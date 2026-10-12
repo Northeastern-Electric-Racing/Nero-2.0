@@ -2,7 +2,7 @@
 #include <cmath>
 
 SpeedController::SpeedController(Model *model, QObject *parent)
-    : ButtonController{model, 3, parent} {
+    : ButtonController{model, parent} {
   connect(m_model, &Model::onCurrentDataChange, this, &SpeedController::update);
 }
 

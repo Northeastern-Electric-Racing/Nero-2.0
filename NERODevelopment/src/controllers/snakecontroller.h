@@ -20,11 +20,6 @@ public:
   bool gameOver() const;
 
 public slots:
-  void enterButtonPressed() override;
-  void upButtonPressed() override;
-  void downButtonPressed() override;
-  void rightButtonPressed() override;
-  void leftButtonPressed() override;
   void saveScore(int);
   void setDidStart(bool);
   void setDirection(int);
@@ -35,6 +30,13 @@ signals:
   void didStartChanged();
   void directionChanged();
   void gameOverChanged();
+
+protected:
+  void enterButtonPressed() override;
+  void upButtonPressed() override;
+  void downButtonPressed() override;
+  void rightButtonPressed() override;
+  void leftButtonPressed() override;
 
 private:
   bool isSameOrOppositeDirection(int newDirection);

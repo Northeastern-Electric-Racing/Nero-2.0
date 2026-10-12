@@ -2,7 +2,7 @@
 #include <cmath>
 
 EnduranceController::EnduranceController(Model *model, QObject *parent)
-    : ButtonController{model, 4, parent}, m_updateTimer(new QTimer(this)),
+    : ButtonController{model, parent}, m_updateTimer(new QTimer(this)),
       m_timerRunning(false) {
   connect(m_model, &Model::onCurrentDataChange, this,
           &EnduranceController::currentDataDidChange);
