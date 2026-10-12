@@ -31,6 +31,8 @@
  *     - DoomController is destroyed (destructor calls stopGame)
  */
 
+#include <atomic>
+
 #include <QObject>
 #include <QThread>
 #include <QImage>
@@ -70,7 +72,7 @@ private:
  *
  * Created by DoomController::startGame(), destroyed automatically when the
  * thread finishes (via QThread::finished → deleteLater connection).
- * The game loop in start() blocks until stop() sets m_running to false.
+ * The game loop in start() blocks until stop() sets m_stopRequested.
  */
 class DoomWorker : public QObject
 {
@@ -94,7 +96,8 @@ signals:
 
 private:
     QString m_wadPath;
-    volatile bool m_running;
+    // One-way flag: each worker runs one game, so it is never reset.
+    std::atomic<bool> m_stopRequested;
     QQueue<DoomKeyEvent> m_keyQueue;
     QMutex m_keyMutex;
 };

@@ -29,7 +29,10 @@ else()
     FetchContent_Declare(
         doomgeneric
         GIT_REPOSITORY https://github.com/ozkl/doomgeneric.git
-        GIT_SHALLOW TRUE
+        # Keep in sync with the src/third_party/doomgeneric submodule commit.
+        # Commits before e257a09 make boolean 1 byte on macOS/Linux, which
+        # crashes the status bar once the player owns a second weapon.
+        GIT_TAG e257a09527062bfb986b6e5e0780839b6cbd5b71
     )
     FetchContent_MakeAvailable(doomgeneric)
     set(DOOMGENERIC_DIR ${doomgeneric_SOURCE_DIR}/doomgeneric)

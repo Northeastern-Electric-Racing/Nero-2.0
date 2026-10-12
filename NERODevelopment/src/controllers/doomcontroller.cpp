@@ -454,7 +454,7 @@ void DoomImageProvider::updateFrame(const QImage &frame)
 DoomWorker::DoomWorker(const QString &wadPath, QObject *parent)
     : QObject(parent)
     , m_wadPath(wadPath)
-    , m_running(false)
+    , m_stopRequested(false)
 {
 }
 
@@ -485,8 +485,6 @@ int DoomWorker::dequeueKey(unsigned char *pressed, unsigned char *doomKey)
 
 void DoomWorker::start()
 {
-    if (m_running) return;
-
     g_doomWorker = this;
 
     QByteArray wadPathUtf8 = m_wadPath.toUtf8();
@@ -506,15 +504,18 @@ void DoomWorker::start()
     // Enable autorun (tricks engine into always run)
     joybspeed = 29;
 
-    m_running = true;
-    emit started();
+    // stop() may already have been called before or during loading (e.g. Esc
+    // right after opening DOOM) — in that case skip the game loop entirely.
+    if (!m_stopRequested) {
+        emit started();
 
-    qInfo() << "[DOOM] Engine running, entering game loop";
+        qInfo() << "[DOOM] Engine running, entering game loop";
 
-    // This loop blocks the worker thread until m_running is set to false
-    // by stop(), which is called from DoomController::stopGame()
-    while (m_running) {
-        doomgeneric_Tick();
+        // This loop blocks the worker thread until stop() is called
+        // from DoomController::stopGame()
+        while (!m_stopRequested) {
+            doomgeneric_Tick();
+        }
     }
 
     qInfo() << "[DOOM] Game loop exited";
@@ -524,7 +525,7 @@ void DoomWorker::start()
 
 void DoomWorker::stop()
 {
-    m_running = false;
+    m_stopRequested = true;
 }
 
 /* ============================================================
@@ -600,7 +601,11 @@ DoomImageProvider *DoomController::createImageProvider()
 
 void DoomController::startGame()
 {
-    if (m_running) return;
+    // The engine is built on global state, so only one instance may exist.
+    // m_running only turns true once loading finishes, so also check the
+    // thread — otherwise a second start during loading (e.g. the focus-change
+    // start plus an Enter press) runs two engines at once and crashes.
+    if (m_running || (m_gameThread && m_gameThread->isRunning())) return;
 
     if (m_wadPath.isEmpty()) {
         m_statusText = "Cannot start: DOOM1.WAD not found";
@@ -636,7 +641,9 @@ void DoomController::startGame()
 
 void DoomController::stopGame()
 {
-    if (!m_running || !m_worker) return;
+    // Check the thread rather than m_running so a stop during loading
+    // (e.g. Esc before the first frame) still shuts the engine down.
+    if (!m_gameThread || !m_gameThread->isRunning()) return;
 
     qInfo() << "[DOOM] Stopping game...";
 

@@ -30,9 +30,8 @@ Item {
                 doomController.startGame()
             }
         } else {
-            if (doomController.running) {
-                doomController.stopGame()
-            }
+            // stopGame() also handles a game that is still loading
+            doomController.stopGame()
         }
     }
 
@@ -106,9 +105,7 @@ Item {
                 event.accepted = true
                 break
             case Qt.Key_Escape:
-                if (doomController.running) {
-                    doomController.stopGame()
-                }
+                doomController.stopGame()
                 navigationController.goHome()
                 event.accepted = true
                 break
@@ -155,8 +152,6 @@ Item {
     }
 
     Component.onDestruction: {
-        if (doomController.running) {
-            doomController.stopGame()
-        }
+        doomController.stopGame()
     }
 }
