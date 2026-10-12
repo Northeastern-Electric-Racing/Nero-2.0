@@ -25,7 +25,7 @@
 // LAUNCHCONTROL and TRACTIONCONTROL
 #define INVERTERTEMP "DTI/Temps/Controller_Temperature"
 #define BMSSTATE "BMS/Status/State"
-#define BMSFAULT "BMS/Faults/Critical/#"
+#define BMSFAULT "BMS/Faults/Critical/**"
 #define DCL "BMS/Commands/Max_DC_Current_Target"
 #define CCL "BMS/Commands/Max_DC_Brake_Current_Target"
 // Single wheel-button topic. The int payload is a 0-indexed button ordinal
@@ -40,8 +40,8 @@
 // EFUSE_SHUTDOWN_ENABLED and EFUSE_SHUTDOWN_FAULTED #define MPU
 // "MPU/Shutdown/MC_STAT" // OUTDATED - see EFUSE_MC_ENABLED and
 // EFUSE_MC_FAULTED
-#define CRITICALFAULTS "BMS/Faults/Critical/#"
-#define NONCRITICALFAULTS "BMS/Faults/Non-Critical/#"
+#define CRITICALFAULTS "BMS/Faults/Critical/**"
+#define NONCRITICALFAULTS "BMS/Faults/Non-Critical/**"
 #define LVVOLTAGE "VCU/LV/voltage"
 
 /* VCU Topics */
@@ -66,8 +66,8 @@
                                   // enabled. '0' indicates that traction
                                   // control is disabled.
 #define VCUFAULT                                                               \
-  "VCU/Faults/#" // '1' indicates that the fault is active, '0' indicates that
-                 // the fault is inactive.
+  "VCU/Faults/**" // '1' indicates that the fault is active, '0' indicates that
+                  // the fault is inactive.
 #define HOMEBUTTON                                                             \
   "VCU/CarState/home_mode" // '1' indicates that VCU is in home mode. '0'
                            // indicates that VCU is not in home mode.
@@ -82,26 +82,26 @@
 #define FANPOWER                                                               \
   "VCU/eFuses/Fanbatt/Current" // Current (A) flowing through battbox fan eFuse.
 #define EFUSE_SHUTDOWN_ENABLED                                                 \
-  "VCU/eFuses/Shutdown/Enabled?" // '1' if the Shutdown eFuse is enabled (i.e.,
-                                 // current is allowed to flow through it). '0'
-                                 // if the Shutdown eFuse is disabled (i.e.,
-                                 // current can't flow through it).
+  "VCU/eFuses/Shutdown/Enabled" // '1' if the Shutdown eFuse is enabled (i.e.,
+                                // current is allowed to flow through it). '0'
+                                // if the Shutdown eFuse is disabled (i.e.,
+                                // current can't flow through it).
 #define EFUSE_SHUTDOWN_FAULTED                                                 \
-  "VCU/eFuses/Shutdown/Faulted?" // '1' if the Shutdown eFuse has been tripped
-                                 // (i.e., it detected overcurrent and is now
-                                 // blocking all current from flowing through
-                                 // it). '0' if the Shutdown eFuse is not
-                                 // faulted.
+  "VCU/eFuses/Shutdown/Faulted" // '1' if the Shutdown eFuse has been tripped
+                                // (i.e., it detected overcurrent and is now
+                                // blocking all current from flowing through
+                                // it). '0' if the Shutdown eFuse is not
+                                // faulted.
 #define EFUSE_MC_ENABLED                                                       \
-  "VCU/eFuses/MC/Enabled?" // '1' if the Motor Controller eFuse is enabled
-                           // (i.e., current is allowed to flow through it). '0'
-                           // if the Motor Controller eFuse is disabled (i.e.,
-                           // current can't flow through it).
+  "VCU/eFuses/MC/Enabled" // '1' if the Motor Controller eFuse is enabled
+                          // (i.e., current is allowed to flow through it). '0'
+                          // if the Motor Controller eFuse is disabled (i.e.,
+                          // current can't flow through it).
 #define EFUSE_MC_FAULTED                                                       \
-  "VCU/eFuses/MC/Faulted?" // '1' if the Motor Controller eFuse has been tripped
-                           // (i.e., it detected overcurrent and is now blocking
-                           // all current from flowing through it). '0' if the
-                           // Motor Controller eFuse is not faulted.
+  "VCU/eFuses/MC/Faulted" // '1' if the Motor Controller eFuse has been tripped
+                          // (i.e., it detected overcurrent and is now blocking
+                          // all current from flowing through it). '0' if the
+                          // Motor Controller eFuse is not faulted.
 #define SHUTDOWN_EFUSE "VCU/eFuses/Shutdown"
 #define MC_EFUSE "VCU/eFuses/MC"
 #define BMS "VCU/Shutdown/BMS_GPIO"

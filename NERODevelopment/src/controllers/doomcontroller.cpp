@@ -54,18 +54,18 @@ extern void D_PostEvent(event_t *ev);
 }
 
 /* ============================================================
- * NERO button values from "Wheel/Buttons/button_id" MQTT topic.
+ * NERO button values from "Wheel/Buttons/button_id" Zenoh key.
  *
- * MQTT value = physical button number - 1 (0-indexed).
+ * Zenoh value = physical button number - 1 (0-indexed).
  * Physical buttons on the wheel PCB:
- *   Phys 1 (Escape)       → MQTT 0
- *   Phys 2 (Left)         → MQTT 1
- *   Phys 3 (Middle Left)  → MQTT 2
- *   Phys 4 (Up)           → MQTT 3
- *   Phys 5 (Down)         → MQTT 4
- *   Phys 6 (Enter)        → MQTT 5
- *   Phys 7 (Right)        → MQTT 6
- *   Phys 8 (Middle Right) → MQTT 7
+ *   Phys 1 (Escape)       → Zenoh 0
+ *   Phys 2 (Left)         → Zenoh 1
+ *   Phys 3 (Middle Left)  → Zenoh 2
+ *   Phys 4 (Up)           → Zenoh 3
+ *   Phys 5 (Down)         → Zenoh 4
+ *   Phys 6 (Enter)        → Zenoh 5
+ *   Phys 7 (Right)        → Zenoh 6
+ *   Phys 8 (Middle Right) → Zenoh 7
  * ============================================================ */
 static constexpr int BUTTON_VALUE_ESCAPE = 0; // physical 1 — escape
 static constexpr int BUTTON_VALUE_LEFT = 1;   // physical 2 — turn left
@@ -519,7 +519,7 @@ DoomController::DoomController(Model *model, QObject *parent)
           &DoomController::onDataChanged);
 
   // Auto-release timer: the wheel hardware does NOT send button release
-  // events to MQTT. Without this timer, keys would stay held in DOOM
+  // events to Zenoh. Without this timer, keys would stay held in DOOM
   // forever after a single press. The timer sends keyup after 100ms,
   // giving DOOM a few frames to register the press as a tap.
   m_releaseTimer = new QTimer(this);
@@ -617,23 +617,23 @@ void DoomController::sendKey(int doomKeyCode, bool pressed) {
 }
 
 /* ============================================================
- * Hardware button handling via MQTT
+ * Hardware button handling via Zenoh
  *
  * The wheel hardware sends button presses but NOT releases.
- * The MQTT value stays at the pressed button ID forever.
+ * The Zenoh value stays at the pressed button ID forever.
  *
  * Approach:
  *   1. Detect value change → send DOOM keydown + start 100ms timer
  *   2. Timer fires → send DOOM keyup (auto-release)
  *   3. m_lastButtonValue stays at the button value to prevent
- *      phantom re-presses from the stale MQTT value
+ *      phantom re-presses from the stale Zenoh value
  *
  * To press the same button twice: press any other button first,
- * which changes the MQTT value, then press the original button.
+ * which changes the Zenoh value, then press the original button.
  * This is a hardware limitation — without release events, we
  * cannot distinguish a stale value from a new press of the same button.
  *
- * MQTT values (physical button - 1):
+ * Zenoh values (physical button - 1):
  *   0=esc, 1=left, 2=mid-left, 3=up, 4=down, 5=enter, 6=right, 7=mid-right
  * ============================================================ */
 
@@ -684,13 +684,13 @@ void DoomController::onDataChanged() {
 /**
  * Auto-release timer callback.
  * Sends keyup for the currently held button.
- * Does NOT reset m_lastButtonValue — the stale MQTT value must
+ * Does NOT reset m_lastButtonValue — the stale Zenoh value must
  * not be re-detected as a new press.
  */
 void DoomController::autoRelease() {
   releaseCurrentButton();
   // m_lastButtonValue intentionally NOT reset.
-  // It stays at the button value so the stale MQTT value
+  // It stays at the button value so the stale Zenoh value
   // doesn't trigger phantom re-presses.
 }
 
@@ -722,7 +722,7 @@ void DoomController::pressButton(int value) {
 }
 
 /**
- * Maps raw MQTT button values to DOOM key codes.
+ * Maps raw Zenoh button values to DOOM key codes.
  * Values come from "Wheel/Buttons/button_id" topic.
  */
 unsigned char DoomController::mapButtonValueToDoomKey(int value) {

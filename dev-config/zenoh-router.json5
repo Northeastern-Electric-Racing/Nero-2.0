@@ -1,0 +1,17 @@
+// The dev stack's Zenoh router, standing in for the one the car runs on the
+// TPU. Only settings that differ from zenohd's defaults are here; the full set
+// is at https://github.com/eclipse-zenoh/zenoh/blob/main/DEFAULT_CONFIG.json5
+{
+  mode: "router",
+  metadata: { name: "NERO dev siren" },
+  listen: { endpoints: ["tcp/[::]:7447"] },
+
+  // Dev machines share a LAN with the car and each other, so every link in
+  // this stack is an explicit endpoint rather than whatever multicast finds.
+  scouting: { multicast: { enabled: false } },
+
+  // The REST plugin is how playwright/mock.mjs reads samples from Node, and it
+  // makes the live data curl-able. zenohd loads no plugins unless asked.
+  plugins_loading: { enabled: true },
+  plugins: { rest: { http_port: 8000 } },
+}

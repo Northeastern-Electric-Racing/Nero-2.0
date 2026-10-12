@@ -1,0 +1,17 @@
+// Calypso's side of the dev stack: a client that dials the router, the same
+// shape every other Zenoh client in the fleet uses.
+{
+  mode: "client",
+  metadata: { name: "NERO dev calypso" },
+
+  connect: {
+    endpoints: ["tcp/siren-dev:7447"],
+    // Compose starts the router first but does not wait for it to listen, so
+    // wait here however long that takes instead of exiting
+    timeout_ms: -1,
+    exit_on_failure: false,
+    retry: { period_init_ms: 1000, period_max_ms: 4000, period_increase_factor: 2 },
+  },
+
+  scouting: { multicast: { enabled: false } },
+}

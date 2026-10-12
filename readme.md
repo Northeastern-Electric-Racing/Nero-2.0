@@ -20,6 +20,10 @@ Select the kit for your respective desktop and press build and run
 
 ### Quick Start
 
+The stack is a Zenoh router plus Calypso in simulation mode, the same pair the
+car runs. The router also exposes its REST plugin on port 8000, which is how
+the Playwright mock reads samples and how you can `curl` the live data.
+
 1. Start mock telemetry (Docker required)
 
 ```bash
@@ -93,9 +97,10 @@ for /f %f in ('git ls-files "*.cpp" "*.h" ":!deps/*"') do clang-format -i "%f"
 for /f %f in ('git ls-files "*.qml" ":!deps/*"') do C:\Qt\6.8.3\mingw_64\bin\qmlformat.exe -i "%f"
 ```
 
+
 ## Button Layout
 
-MQTT topic `Wheel/Buttons/button_id` carries the 0-indexed button ordinal,
+Zenoh key `Wheel/Buttons/button_id` carries the 0-indexed button ordinal,
 matching the VCU `button_t` enum in `Cerberus-2.0/Core/Inc/u_buttons.h`.
 
 | 0 | ESC                     |
@@ -114,7 +119,7 @@ https://nerdocs.atlassian.net/wiki/spaces/NER/pages/1526988828/Button+IO+25
 
 ### Testing out Enviornment Variables (Locally)
 
-Go into Projects, go into Run, go into Enviornment, and add variables named `ClIENT1_PORT` and `CLIENT2_PORT`.
+Go into Projects, go into Run, go into Enviornment, and add variables named `HOST` and `ZENOH_PORT`.
 
 Then, change the option from Build Enviornment to System Enviornment.
 
@@ -144,8 +149,8 @@ After it's updated, exit out and ssh into the car: `ssh root@192.168.100.12, use
 
 Then, nano into the ENV variables: `nano /etc/init.d/S99nero2`
 
-Then, go to the ENV variables and change `CLIENT1_PORT`, `CLIENT2_PORT`, and `HOST`.
-(Correct: `CLIENT1_PORT=1883, CLIENT2_PORT=1882, HOST="92.168.100.12"`)
+Then, go to the ENV variables and change `HOST` and `ZENOH_PORT`.
+(Correct: `HOST="localhost", ZENOH_PORT=7447` — the router runs on the same board as NERO.)
 
 After, exit out and save all the changed variables.
 
