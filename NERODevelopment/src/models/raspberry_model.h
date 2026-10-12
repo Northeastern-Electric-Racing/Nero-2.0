@@ -101,6 +101,7 @@ public:
   std::optional<float> getLowVoltage() override;
 
   void sendMessage(const QString topic, const float value) override;
+  void sendMessage(const QString topic, const QList<float> values) override;
 
 public slots:
   void receiveServerData(const serverdata::v2::ServerData, const QString topic);

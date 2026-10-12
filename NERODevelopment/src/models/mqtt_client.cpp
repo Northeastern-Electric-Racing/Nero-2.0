@@ -96,9 +96,13 @@ void MqttClient::updateMessage(const QMqttMessage &msg) {
 }
 
 void MqttClient::sendMessage(const QString topic, const float value) {
+  sendMessage(topic, QList<float>{value});
+}
+
+void MqttClient::sendMessage(const QString topic, const QList<float> values) {
   serverdata::v2::ServerData serverData;
   serverData.setUnit("");
-  serverData.setValues({value});
+  serverData.setValues(values);
 
   auto now = std::chrono::system_clock::now();
   auto microseconds = std::chrono::duration_cast<std::chrono::microseconds>(
