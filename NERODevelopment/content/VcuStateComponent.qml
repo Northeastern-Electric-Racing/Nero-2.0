@@ -9,18 +9,12 @@ Item {
     readonly property color cautionColor: Theme.cautionStatus
     readonly property color faultColor: Theme.criticalStatus
 
-    readonly property string stateLabel: navigationController ? navigationController.functionalStateLabel : ""
-    readonly property bool stateKnown: navigationController ? navigationController.functionalStateKnown : false
-    readonly property bool stateFaulted: navigationController ? navigationController.functionalStateFaulted : false
-    readonly property bool rejected: navigationController ? navigationController.stateRejectionActive : false
-    readonly property var rejectionReasons: navigationController ? navigationController.stateRejectionReasons : []
-
     readonly property int reasonFontSize: 14
     readonly property int reasonLineCount: 2
     readonly property string reasonSeparator: "  |  "
 
     readonly property string reasonText: {
-        const all = root.rejectionReasons;
+        const all = vcu.stateRejectionReasons;
         if (all.length === 0)
             return "";
         const budget = root.width * root.reasonLineCount;
@@ -55,9 +49,9 @@ Item {
         width: parent.width
         horizontalAlignment: Text.AlignRight
         elide: Text.ElideRight
-        text: root.stateLabel
+        text: vcu.functionalStateLabel
         font.pixelSize: 20
-        color: root.stateFaulted ? root.faultColor : root.rejected ? root.cautionColor : root.stateKnown ? root.activeColor : root.absentColor
+        color: vcu.functionalStateFaulted ? root.faultColor : vcu.stateRejectionActive ? root.cautionColor : vcu.functionalStateKnown ? root.activeColor : root.absentColor
     }
 
     LabelText {
@@ -68,10 +62,10 @@ Item {
         horizontalAlignment: Text.AlignRight
         elide: Text.ElideRight
         wrapMode: Text.WordWrap
-        maximumLineCount: 2
+        maximumLineCount: root.reasonLineCount
         text: root.reasonText
         font.pixelSize: root.reasonFontSize
         color: root.cautionColor
-        visible: root.rejected
+        visible: vcu.stateRejectionActive
     }
 }

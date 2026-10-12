@@ -67,6 +67,8 @@ public slots:
   void setSelectedUrl(QString);
 
   void update();
+
+protected:
   void enterButtonPressed() override;
   void downButtonPressed() override;
   void leftButtonPressed() override;

@@ -5,10 +5,8 @@ Rectangle {
     id: snakeGame
 
     anchors.fill: parent
-    focus: snakeGame.isFocused
     visible: true
     property bool directionCooldown: false
-    property bool isFocused: false
 
     width: 800
     height: 480
@@ -170,26 +168,11 @@ Rectangle {
         cooldownTimer.start();
     }
 
-    Keys.onSpacePressed: {
-        if (gameOver) {
-            snakeController.enterButtonPressed();
+    Connections {
+        target: buttons
+        function onPressed(button) {
+            snakeController.press(button);
         }
-    }
-
-    Keys.onLeftPressed: {
-        snakeController.leftButtonPressed();
-    }
-
-    Keys.onRightPressed: {
-        snakeController.rightButtonPressed();
-    }
-
-    Keys.onUpPressed: {
-        snakeController.upButtonPressed();
-    }
-
-    Keys.onDownPressed: {
-        snakeController.downButtonPressed();
     }
 
     ListModel {

@@ -20,3 +20,8 @@ services:
       - "simulate"
       - "--disable-topic"
       - ".*Fault.*"
+      # Navigation comes from the keyboard and playwright/dev-vcu.mjs
+      - "--disable-topic"
+      - "VCU/CarState/(nero_index|home_mode)"
+      - "--disable-topic"
+      - "Wheel/Buttons/.*"

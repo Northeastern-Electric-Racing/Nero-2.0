@@ -28,7 +28,13 @@ docker compose -f compose.nero-dev.yml up -d
 
 2. Run NERO in Qt Creator
 
-3. Stop when mock data when done
+3. To navigate with the keyboard (arrows, Enter, Esc), run the stand-in VCU from `playwright/` (after `npm ci`). Keys do nothing without it, or in the WebAssembly build.
+
+```bash
+npm run vcu
+```
+
+4. Stop mock data when done
 
 ```bash
 docker compose -f compose.nero-dev.yml down

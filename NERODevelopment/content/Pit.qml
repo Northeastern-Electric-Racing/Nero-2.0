@@ -26,9 +26,10 @@ Rectangle {
     height: 480
     width: 800
 
-    Keys.onPressed: event => {
-        if (event.key === Qt.Key_Right) {
-            headerController.toggleFaultAlerts();
+    Connections {
+        target: buttons
+        function onPressed(button) {
+            homeController.press(button);
         }
     }
 

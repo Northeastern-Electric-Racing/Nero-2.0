@@ -4,7 +4,7 @@
 static const QString kHighScoreKey = "scores/2048";
 
 Game2048Controller::Game2048Controller(Model *model, QObject *parent)
-    : ButtonController{model, 8, parent} {
+    : ButtonController{model, parent} {
   m_bestScore = HighScores::load(kHighScoreKey);
 }
 
