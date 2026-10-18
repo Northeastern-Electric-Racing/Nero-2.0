@@ -124,7 +124,7 @@ Finally, save and run it.
 
 ### Playwright (Dev)
 
-Automated QA and Claude drive a dev-only WebAssembly build; the car and desktop builds are unchanged. Tests and the view start the Docker mock (`compose.nero-dev.yml`) and feed its data into the app. Each test presses wheel buttons through a stand-in VCU (`dev-config/dev-vcu.mjs`) and injects only what neither the mock nor the VCU sends, such as a fault, through `window.nero.publish(topic, values)`. Cases live in `playwright/tests/screens.spec.ts`, one line each.
+Automated QA and Claude drive a dev-only WebAssembly build; the car and desktop builds are unchanged. Tests and the view start the Docker mock (`compose.nero-dev.yml`) and feed its data into the app. Each test presses wheel buttons through its own stand-in VCU in the Docker mock (`dev-config/dev-vcu.mjs`) and injects only what neither the mock nor the VCU sends, such as a fault, through `window.nero.publish(topic, values)`. Cases live in `playwright/tests/screens.spec.ts`, one line each.
 
 The setup script installs Emscripten 3.1.56 and Playwright and does the first build (`build-scripts/compile-qt-wasm.sh` or `.bat`). It needs the Qt 6.8.3 WebAssembly (single-threaded) kit, Node 20+, Docker, and Google Chrome, plus Python 3 on Windows. Then, from `playwright/`:
 

@@ -1,5 +1,4 @@
 import mqtt from "mqtt";
-import { vcu } from "../dev-config/dev-vcu.mjs";
 
 // Calypso doesn't simulate these, so they are always injected
 const GAP_FILL = {
@@ -8,7 +7,7 @@ const GAP_FILL = {
   "VCU/CarState/state_rejection_error": [0],
 };
 
-// Each page runs its own stand-in VCU, so the Docker mock's dev-vcu output is ignored
+// The native app's stand-in VCU topics; each page uses its own under its prefix instead
 const VCU_TOPICS = [
   "VCU/CarState/nero_index",
   "VCU/CarState/home_mode",
@@ -16,14 +15,43 @@ const VCU_TOPICS = [
   "Wheel/Buttons/button_id",
 ];
 
-// Feeds the page calypso's Docker mock data and a stand-in VCU that answers NERO's presses
+// ServerData with values = [v]
+const serverData = (v) => {
+  const payload = Buffer.from([0x22, 4, 0, 0, 0, 0]);
+  payload.writeFloatLE(v, 2);
+  return payload;
+};
+
+// The WASM build has no MQTT client, so this is it: it feeds the page calypso's Docker mock data
+// and connects it to its own stand-in VCU in the Docker mock (dev-config/dev-vcu.mjs)
 export async function connectMock(page) {
+  const prefix = `sim/${Math.random().toString(36).slice(2, 10)}/`;
   const injected = new Set();
   const latest = new Map();
   let paused = false;
+  let delivered = Promise.resolve();
+  let onReady = () => {};
+  let pressed = false; // after a press, only the car state that follows its echo counts
+  const deliver = (topic, payload) =>
+    (delivered = delivered.then(() =>
+      page.evaluate(([topic, payload]) => window.nero.publishPayload(topic, payload), [topic, [...payload]]).catch(() => {}),
+    ));
+
+  // The VCU gets its own connection so its replies never queue behind telemetry
+  const vcuLink = await mqtt.connectAsync("mqtt://localhost:1883");
+  vcuLink.on("message", (topic, payload) => {
+    // The VCU's replies, in order and unbatched: each press is an event
+    const name = topic.slice(prefix.length);
+    if (name.startsWith("NERO/") || injected.has(name)) return;
+    deliver(name, payload);
+    if (name === "Wheel/Buttons/button_id") pressed = false;
+    if (name === "VCU/CarState/functional_state" && !pressed) delivered.then(onReady);
+  });
+  await vcuLink.subscribeAsync(`${prefix}#`, { qos: 1 });
+
   const broker = await mqtt.connectAsync("mqtt://localhost:1883");
   broker.on("message", (topic, payload) => {
-    if (!VCU_TOPICS.includes(topic) && !injected.has(topic)) latest.set(topic, [...payload]);
+    if (!topic.startsWith("sim/") && !VCU_TOPICS.includes(topic) && !injected.has(topic)) latest.set(topic, [...payload]);
   });
   await broker.subscribeAsync("#");
 
@@ -37,12 +65,14 @@ export async function connectMock(page) {
       .catch(() => {});
   }, 100);
 
-  const publish = (topic, value) =>
-    page.evaluate(([topic, value]) => window.nero.publish(topic, [value]), [topic, value]).catch(() => {});
-  // An injected topic overrides the stand-in VCU, e.g. a nero_index firmware doesn't have yet
-  const pageVcu = vcu((topic, value) => injected.has(topic) || publish(topic, value));
+  // Resolves once the VCU's next car state reaches the page
+  const nextState = () => new Promise((resolve) => (onReady = resolve));
+  const send = (message, value = 0) => vcuLink.publishAsync(`${prefix}NERO/${message}`, serverData(value), { qos: 1 });
   // NERO's own presses (the keyboard) arrive through wasm_bridge.cpp
-  await page.exposeFunction("neroSend", (topic, value) => topic === "Wheel/Buttons/button_id" && pageVcu.press(value));
+  await page.exposeFunction("neroSend", (topic, value) => send(topic, value));
+  const started = nextState();
+  await send("start");
+  await started;
 
   const inject = (topics) => {
     for (const topic of Object.keys(topics)) {
@@ -58,18 +88,25 @@ export async function connectMock(page) {
 
   return {
     inject,
+    // Press wheel buttons like NERO would, each waiting for the VCU's answer
     press: async (...buttons) => {
-      for (const button of buttons) await pageVcu.press(button);
+      for (const button of buttons) {
+        const answered = nextState();
+        pressed = true;
+        await send("Wheel/Buttons/button_id", button);
+        await answered;
+      }
     },
     // Calypso cycles through every topic in ~300 ms; let a full set arrive, then hold still for a screenshot
     freeze: async () => {
       await new Promise((resolve) => setTimeout(resolve, 500));
       paused = true;
     },
-    vcuLost: pageVcu.stop,
-    close: () => {
+    vcuLost: () => send("stop"),
+    close: async () => {
       clearInterval(timer);
-      pageVcu.stop();
+      await send("stop");
+      await vcuLink.endAsync();
       return broker.endAsync();
     },
   };
