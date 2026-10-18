@@ -122,6 +122,7 @@ set(PROJECT_SOURCES
     # Implementation - Utils
     src/utils/server_data.cpp
     src/utils/descriptioninfo.cpp
+    src/utils/wasm_bridge.cpp
 
     # Main
     src/main.cpp
@@ -158,9 +159,8 @@ target_link_libraries(NEROApp PRIVATE
     Qt6::Protobuf
 )
 
-# The dev-only WASM build has no broker; Playwright feeds the model through the VCU sim
+# The dev-only WASM build has no broker; Playwright feeds the model through utils/wasm_bridge.cpp
 if(EMSCRIPTEN)
-    target_sources(NEROApp PRIVATE src/utils/vcu_sim.cpp)
     configure_file(../playwright/index.html index.html COPYONLY)
 else()
     find_package(Qt6 REQUIRED COMPONENTS Mqtt)

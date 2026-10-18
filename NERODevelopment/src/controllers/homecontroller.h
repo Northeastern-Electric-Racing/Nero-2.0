@@ -53,8 +53,6 @@ public slots:
   void currentDataDidChange();
   void setStateOfCharge(int);
   void setLowVoltage(float);
-
-protected:
   void rightButtonPressed() override;
 
 private:

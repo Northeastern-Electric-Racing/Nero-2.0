@@ -9,12 +9,18 @@ Item {
     readonly property color cautionColor: Theme.cautionStatus
     readonly property color faultColor: Theme.criticalStatus
 
+    readonly property string stateLabel: vcu.functionalStateLabel
+    readonly property bool stateKnown: vcu.functionalStateKnown
+    readonly property bool stateFaulted: vcu.functionalStateFaulted
+    readonly property bool rejected: vcu.stateRejectionActive
+    readonly property var rejectionReasons: vcu.stateRejectionReasons
+
     readonly property int reasonFontSize: 14
     readonly property int reasonLineCount: 2
     readonly property string reasonSeparator: "  |  "
 
     readonly property string reasonText: {
-        const all = vcu.stateRejectionReasons;
+        const all = root.rejectionReasons;
         if (all.length === 0)
             return "";
         const budget = root.width * root.reasonLineCount;
@@ -49,9 +55,9 @@ Item {
         width: parent.width
         horizontalAlignment: Text.AlignRight
         elide: Text.ElideRight
-        text: vcu.functionalStateLabel
+        text: root.stateLabel
         font.pixelSize: 20
-        color: vcu.functionalStateFaulted ? root.faultColor : vcu.stateRejectionActive ? root.cautionColor : vcu.functionalStateKnown ? root.activeColor : root.absentColor
+        color: root.stateFaulted ? root.faultColor : root.rejected ? root.cautionColor : root.stateKnown ? root.activeColor : root.absentColor
     }
 
     LabelText {
@@ -62,10 +68,10 @@ Item {
         horizontalAlignment: Text.AlignRight
         elide: Text.ElideRight
         wrapMode: Text.WordWrap
-        maximumLineCount: root.reasonLineCount
+        maximumLineCount: 2
         text: root.reasonText
         font.pixelSize: root.reasonFontSize
         color: root.cautionColor
-        visible: vcu.stateRejectionActive
+        visible: root.rejected
     }
 }

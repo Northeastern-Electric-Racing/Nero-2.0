@@ -32,11 +32,8 @@ QList<QString> RaspberryModel::getVcuFault() {
   return faults;
 }
 
-#ifdef __EMSCRIPTEN__
-void RaspberryModel::connectToMQTT() {}
-
-void RaspberryModel::sendMessage(const QString, const float) {}
-#else
+// The WASM build's connectToMQTT and sendMessage are in utils/wasm_bridge.cpp
+#ifndef __EMSCRIPTEN__
 void RaspberryModel::connectToMQTT() {
   // Determine MQTT broker hostname based on environment
   // Priority: 1. MQTT_HOST env var, 2. Default localhost for development

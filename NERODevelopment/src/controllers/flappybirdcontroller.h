@@ -17,14 +17,12 @@ public:
 
 public slots:
   void setDidJump(bool);
+  void enterButtonPressed() override;
   void saveScore(int);
 
 signals:
   void didJumpChanged();
   void bestScoreChanged();
-
-protected:
-  void enterButtonPressed() override;
 
 private:
   bool m_didJump = false;

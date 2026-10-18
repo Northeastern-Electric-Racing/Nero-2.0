@@ -4,9 +4,8 @@
     "postinstall": "playwright install chromium",
     "build": "cmake --build ../NERODevelopment/build-wasm",
     "test": "npm run build && playwright test",
-    "update": "npm test -- --update-snapshots",
-    "view": "npm run build && node view.mjs",
-    "vcu": "node dev-vcu.mjs"
+    "update": "npm test -- --update-snapshots=all",
+    "view": "npm run build && node view.mjs"
   },
   "devDependencies": {
     "@playwright/test": "^1.63.0",

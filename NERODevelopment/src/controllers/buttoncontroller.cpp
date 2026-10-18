@@ -27,10 +27,10 @@ void ButtonController::press(Buttons::Button button) {
 
 void ButtonController::enterButtonPressed() {}
 
-void ButtonController::upButtonPressed() {}
-
 void ButtonController::downButtonPressed() {}
 
-void ButtonController::rightButtonPressed() {}
+void ButtonController::upButtonPressed() {}
 
 void ButtonController::leftButtonPressed() {}
+
+void ButtonController::rightButtonPressed() {}

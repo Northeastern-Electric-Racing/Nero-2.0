@@ -1,10 +1,12 @@
 import QtQuick 2.15
+import QtQuick.Controls 2.15
 
 Item {
     id: doomView
     anchors.fill: parent
+    visible: true
 
-    Component.onCompleted: doomController.resume()
+    Component.onCompleted: doomController.startGame()
 
     Rectangle {
         anchors.fill: parent
@@ -28,7 +30,7 @@ Item {
             return 400 * scale;
         }
 
-        source: doomController.frameCounter > 0 ? "image://doom/frame?" + doomController.frameCounter : ""
+        source: doomController.running ? "image://doom/frame?" + doomController.frameCounter : ""
 
         // nearest-neighbor scaling preserves DOOM's original pixel art look
         smooth: false
@@ -40,7 +42,7 @@ Item {
         // instead of calling DoomImageProvider::requestImage() for the latest frame.
         cache: false
 
-        visible: doomController.frameCounter > 0
+        visible: doomController.running
     }
 
     Connections {
@@ -50,5 +52,9 @@ Item {
         }
     }
 
-    Component.onDestruction: doomController.pause()
+    Component.onDestruction: {
+        if (doomController.running) {
+            doomController.stopGame();
+        }
+    }
 }

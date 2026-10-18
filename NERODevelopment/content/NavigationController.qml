@@ -1,3 +1,5 @@
+pragma ComponentBehavior: Bound
+
 import QtQuick
 import QtQuick.Layouts
 import Main
@@ -18,10 +20,10 @@ Item {
     // the tile, and a row with neither keeps the menu up.
     readonly property var pages: [
         { index: 0, title: "OFF", icon: "zzz.png", page: "OffScreen2.qml" },
-        { index: 1, title: "PIT", icon: "flag.png", page: "Pit.qml" },
-        { index: 2, title: "REVERSE", icon: "kevin.jpg", page: "Pit.qml" },
+        { index: 1, title: "PIT - DRIVE", icon: "flag.png", page: "Pit.qml" },
+        { index: 2, title: "PIT - KEVIN", icon: "kevin.jpg", page: "Pit.qml" },
         { index: 3, title: "PERFORMANCE", icon: "hare.png", page: "SpeedMode.qml" },
-        { index: 4, title: "EFFICIENCY", icon: "turtle.png", page: "EnduranceScreen.qml" },
+        { index: 4, title: "ENDURANCE", icon: "turtle.png", page: "EnduranceScreen.qml" },
         {
             index: 5, title: "GAMES", icon: "game.png", entries: [
                 { title: "FLAPPY BIRD", page: "FlappyBird.qml" },
@@ -57,7 +59,7 @@ Item {
         })
 
     // Deferred so the list isn't destroyed inside its own handler; skipped if the VCU moved meanwhile
-    function openLater(page) {
+    function openLater(page: string) {
         const index = vcu.navIndex;
         Qt.callLater(() => {
             if (vcu.navIndex === index && !vcu.homeMenu)

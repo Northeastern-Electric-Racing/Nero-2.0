@@ -28,8 +28,10 @@ int main(int argc, char *argv[]) {
   QGuiApplication::setApplicationName("NERO");
   QGuiApplication::setApplicationVersion("2.0");
 
+  QQmlApplicationEngine engine;
+
   Model *model = new RaspberryModel();
-  // The WASM build's vcu_sim.cpp finds the model through the app's QObject tree
+  // WASM's wasm_bridge.cpp finds the model through the app's QObject tree
   model->setParent(&app);
   model->connectToMQTT();
 
@@ -44,9 +46,6 @@ int main(int argc, char *argv[]) {
   Game2048Controller game2048Controller(model);
   EnduranceController enduranceController(model);
   SpeedController speedController(model);
-
-  // Declared after the controllers so QML is torn down while they still exist
-  QQmlApplicationEngine engine;
 
   // Register DOOM's custom image provider with the QML engine.
   // Unlike other controllers which just expose properties/methods to QML,

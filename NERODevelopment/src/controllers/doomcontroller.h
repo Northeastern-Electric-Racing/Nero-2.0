@@ -10,20 +10,25 @@
  *
  * This header defines the NERO-specific wrapper classes:
  *   - DoomImageProvider: Serves DOOM frames to QML via "image://doom/..."
- *   - DoomWorker: Ticks the engine on a dedicated QThread
- *   - DoomController: QML-facing controller
+ *   - DoomWorker: Runs the DOOM game loop on a dedicated QThread
+ *   - DoomController: QML-facing controller (same pattern as SnakeController)
  *
  * Button input:
- *   DOOM needs both press and release (hold forward to walk, release to
- *   stop). The wheel only sends presses, so movement stays held until the next
- *   press and Enter auto-releases after a short delay.
+ *   Unlike FlappyBird/Snake which only need press events, DOOM requires both
+ *   press AND release (hold forward to walk, release to stop). DoomView.qml
+ *   forwards each wheel press to press(), which releases the previous button
+ *   and presses the new one.
  *
- * Engine lifetime:
- *   doomgeneric can only be created once per process, so the engine starts on
- *   the first resume() and lives until the app exits. Leaving the page only
- *   pauses it, and coming back continues the same game.
+ * Thread lifecycle:
+ *   startGame() creates a QThread + DoomWorker, moves worker to thread, starts
+ * it. stopGame() sets m_running=false → game loop exits → thread quits → worker
+ * deleted. The thread is guaranteed to be stopped when:
+ *     - DoomView.qml is destroyed, e.g. Esc takes the VCU home
+ *       (Component.onDestruction calls stopGame)
+ *     - DoomController is destroyed (destructor calls stopGame)
  */
 
+#include <QElapsedTimer>
 #include <QImage>
 #include <QMutex>
 #include <QObject>
@@ -31,9 +36,6 @@
 #include <QQuickImageProvider>
 #include <QThread>
 #include <QTimer>
-#include <optional>
-
-#include "buttons.h"
 
 struct DoomKeyEvent {
   unsigned char pressed;
@@ -60,69 +62,98 @@ private:
 };
 
 /**
- * @brief Ticks from its thread's event loop, so pause and resume are queued
- * calls.
+ * @brief Worker that runs the DOOM game loop on a separate thread.
+ *
+ * Created by DoomController::startGame(), destroyed automatically when the
+ * thread finishes (via QThread::finished → deleteLater connection).
+ * The game loop in start() blocks until stop() sets m_running to false.
  */
 class DoomWorker : public QObject {
   Q_OBJECT
 
 public:
-  explicit DoomWorker(const QString &wadPath);
+  explicit DoomWorker(const QString &wadPath, QObject *parent = nullptr);
+  ~DoomWorker();
 
   void enqueueKey(const DoomKeyEvent &event);
   int dequeueKey(unsigned char *pressed, unsigned char *doomKey);
 
 public slots:
   void start();
-  void setPaused(bool paused);
+  void stop();
 
 signals:
   void frameReady(const QImage &frame);
+  void started();
+  void stopped();
 
 private:
   QString m_wadPath;
-  QTimer *m_tickTimer = nullptr;
+  volatile bool m_running;
   QQueue<DoomKeyEvent> m_keyQueue;
   QMutex m_keyMutex;
 };
 
+/**
+ * @brief Main controller for DOOM in the NERO dashboard.
+ *        Same pattern as FlappyBirdController and SnakeController.
+ */
 class DoomController : public QObject {
   Q_OBJECT
 
+  Q_PROPERTY(bool running READ running NOTIFY runningChanged)
   Q_PROPERTY(int frameCounter READ frameCounter NOTIFY frameCounterChanged)
+  Q_PROPERTY(QString statusText READ statusText NOTIFY statusTextChanged)
 
 public:
   explicit DoomController(QObject *parent = nullptr);
   ~DoomController();
 
+  bool running() const { return m_running; }
   int frameCounter() const { return m_frameCounter; }
+  QString statusText() const { return m_statusText; }
 
   DoomImageProvider *createImageProvider();
 
-  Q_INVOKABLE void resume();
-  Q_INVOKABLE void pause();
-  Q_INVOKABLE void press(Buttons::Button button);
+  Q_INVOKABLE void startGame();
+  Q_INVOKABLE void stopGame();
+  Q_INVOKABLE void sendKey(int doomKeyCode, bool pressed);
+  Q_INVOKABLE void press(int button);
 
 signals:
+  void runningChanged();
   void frameCounterChanged();
+  void statusTextChanged();
 
 private slots:
   void onFrameReady(const QImage &frame);
+  void onWorkerStarted();
+  void onWorkerStopped();
 
 private:
-  void sendButton(Buttons::Button button, bool pressed);
+  unsigned char mapButtonValueToDoomKey(int value);
   void releaseCurrentButton();
+  void pressButton(int value);
 
-  DoomWorker *m_worker = nullptr;
-  QThread m_gameThread;
-  DoomImageProvider *m_imageProvider = nullptr;
+  /** Auto-releases the held key after a short delay */
+  void autoRelease();
 
-  int m_frameCounter = 0;
+  DoomWorker *m_worker;
+  QThread *m_gameThread;
+  DoomImageProvider *m_imageProvider;
+
+  bool m_running;
+  int m_frameCounter;
+  QString m_statusText;
   QString m_wadPath;
 
-  std::optional<Buttons::Button> m_heldButton;
+  // The last button pressed, released on the next press.
+  int m_lastButtonValue;
 
-  QTimer m_releaseTimer;
+  // Auto-release timer: sends keyup after a brief delay so DOOM
+  // registers a tap instead of an infinite hold. Needed because
+  // the wheel hardware does not send release events to MQTT.
+  QTimer *m_releaseTimer;
 };
 
 #endif // DOOMCONTROLLER_H

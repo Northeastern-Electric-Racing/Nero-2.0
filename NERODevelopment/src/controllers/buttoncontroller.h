@@ -12,13 +12,14 @@ public:
 
   Q_INVOKABLE void press(Buttons::Button button);
 
-protected:
+public slots:
   virtual void enterButtonPressed();
   virtual void upButtonPressed();
   virtual void downButtonPressed();
   virtual void rightButtonPressed();
   virtual void leftButtonPressed();
 
+protected:
   Model *m_model;
 };
 

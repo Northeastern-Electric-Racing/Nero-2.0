@@ -86,11 +86,9 @@ public slots:
   void setMaxDCCurrentTarget(int);
   void setMaxRegenCapacity(float);
 
-  void updateCurrentTime();
-
-protected:
   void enterButtonPressed() override;
   void rightButtonPressed() override;
+  void updateCurrentTime();
 
 private:
   int m_currentMaxTorque = 0;     // torque percentage [0,100]

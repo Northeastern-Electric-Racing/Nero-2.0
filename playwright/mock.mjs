@@ -1,4 +1,5 @@
 import mqtt from "mqtt";
+import { vcu } from "../dev-config/dev-vcu.mjs";
 
 // Calypso doesn't simulate these, so they are always injected
 const GAP_FILL = {
@@ -7,21 +8,23 @@ const GAP_FILL = {
   "VCU/CarState/state_rejection_error": [0],
 };
 
-// Tests own these; calypso's random values would change the page or car state
-const TEST_OWNED = [
+// Each page runs its own stand-in VCU, so the Docker mock's dev-vcu output is ignored
+const VCU_TOPICS = [
   "VCU/CarState/nero_index",
   "VCU/CarState/home_mode",
   "VCU/CarState/functional_state",
   "Wheel/Buttons/button_id",
 ];
 
-// Feeds the page calypso's Docker mock data, except topics that have been injected
+// Feeds the page calypso's Docker mock data and a stand-in VCU that answers NERO's presses
 export async function connectMock(page) {
-  const injected = new Set(TEST_OWNED);
+  const injected = new Set();
   const latest = new Map();
   let paused = false;
   const broker = await mqtt.connectAsync("mqtt://localhost:1883");
-  broker.on("message", (topic, payload) => injected.has(topic) || latest.set(topic, [...payload]));
+  broker.on("message", (topic, payload) => {
+    if (!VCU_TOPICS.includes(topic) && !injected.has(topic)) latest.set(topic, [...payload]);
+  });
   await broker.subscribeAsync("#");
 
   // Calypso publishes every 5 ms, so forward only the latest value per topic in batches
@@ -34,11 +37,12 @@ export async function connectMock(page) {
       .catch(() => {});
   }, 100);
 
-  // Like the VCU, re-send a READY car state every 200 ms, even while frozen
-  const sendReady = () =>
-    page.evaluate(() => window.nero.publish("VCU/CarState/functional_state", [0])).catch(() => {});
-  const heartbeat = setInterval(sendReady, 200);
-  await sendReady();
+  const publish = (topic, value) =>
+    page.evaluate(([topic, value]) => window.nero.publish(topic, [value]), [topic, value]).catch(() => {});
+  // An injected topic overrides the stand-in VCU, e.g. a nero_index firmware doesn't have yet
+  const pageVcu = vcu((topic, value) => injected.has(topic) || publish(topic, value));
+  // NERO's own presses (the keyboard) arrive through wasm_bridge.cpp
+  await page.exposeFunction("neroSend", (topic, value) => topic === "Wheel/Buttons/button_id" && pageVcu.press(value));
 
   const inject = (topics) => {
     for (const topic of Object.keys(topics)) {
@@ -54,15 +58,18 @@ export async function connectMock(page) {
 
   return {
     inject,
+    press: async (...buttons) => {
+      for (const button of buttons) await pageVcu.press(button);
+    },
     // Calypso cycles through every topic in ~300 ms; let a full set arrive, then hold still for a screenshot
     freeze: async () => {
       await new Promise((resolve) => setTimeout(resolve, 500));
       paused = true;
     },
-    vcuLost: () => clearInterval(heartbeat),
+    vcuLost: pageVcu.stop,
     close: () => {
       clearInterval(timer);
-      clearInterval(heartbeat);
+      pageVcu.stop();
       return broker.endAsync();
     },
   };

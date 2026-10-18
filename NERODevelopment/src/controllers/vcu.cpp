@@ -1,8 +1,8 @@
 #include "vcu.h"
 #include "../utils/data_type_names.h"
 
-// The VCU sends car state every 200 ms, so three missed beats means it's gone
-static constexpr int LOST_AFTER_MS = 600;
+// The VCU sends car state every 200 ms; five missed messages means it's gone
+static constexpr int LOST_AFTER_MS = 1000;
 
 Vcu::Vcu(Model *model, QObject *parent) : QObject{parent} {
   m_lostTimer.setSingleShot(true);
