@@ -45,8 +45,7 @@ Item {
     property string entryPage: ""
     readonly property string openPage: vcu.homeMenu || current === undefined ? "" : (current.page ?? entryPage)
     readonly property bool expanded: !vcu.homeMenu && current?.entries !== undefined && entryPage === ""
-    readonly property bool unknownPage: !vcu.homeMenu && current === undefined
-    readonly property bool showingPage: unknownPage || openPage !== ""
+    readonly property bool showingPage: openPage !== ""
 
     readonly property var keyButtons: ({
             [Qt.Key_Escape]: Buttons.Esc,
@@ -107,6 +106,8 @@ Item {
             rightMargin: parent.width * 0.05
         }
         visible: !navigation.showingPage
+        // An index firmware has but this table doesn't yet keeps the menu up
+        notice: navigation.current === undefined ? "NO PAGE " + vcu.navIndex : ""
     }
 
     ColumnLayout {
@@ -171,11 +172,5 @@ Item {
         anchors.fill: parent
         active: navigation.openPage !== ""
         source: active ? "/qt/qml/content/" + navigation.openPage : ""
-    }
-
-    LabelText {
-        anchors.centerIn: parent
-        visible: navigation.unknownPage
-        text: "PAGE " + vcu.navIndex
     }
 }

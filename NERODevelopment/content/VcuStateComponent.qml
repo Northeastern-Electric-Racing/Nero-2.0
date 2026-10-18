@@ -13,7 +13,8 @@ Item {
     readonly property bool stateKnown: vcu.functionalStateKnown
     readonly property bool stateFaulted: vcu.functionalStateFaulted
     readonly property bool rejected: vcu.stateRejectionActive
-    readonly property var rejectionReasons: vcu.stateRejectionReasons
+    property string notice: ""
+    readonly property var rejectionReasons: notice ? vcu.stateRejectionReasons.concat(notice) : vcu.stateRejectionReasons
 
     readonly property int reasonFontSize: 14
     readonly property int reasonLineCount: 2
@@ -72,6 +73,6 @@ Item {
         text: root.reasonText
         font.pixelSize: root.reasonFontSize
         color: root.cautionColor
-        visible: root.rejected
+        visible: root.rejected || root.notice !== ""
     }
 }

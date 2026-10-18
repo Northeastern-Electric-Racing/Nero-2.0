@@ -51,7 +51,7 @@ const cases: Record<string, { steps: Step[]; tolerance?: number }> = {
   "themes-light": { steps: [open(PAGE.THEMES), [ENTER, ESC]] },
   // EXIT has no page, so the menu stays up
   exit: { steps: [open(PAGE.EXIT)] },
-  // A nero_index firmware has but NERO doesn't
+  // A nero_index firmware has but NERO doesn't: the menu stays up with a notice
   "unknown-page": { steps: [{ "VCU/CarState/nero_index": [9], "VCU/CarState/home_mode": [0] }] },
 };
 
