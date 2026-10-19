@@ -2,11 +2,10 @@
 #include "../utils/data_type_names.h"
 #include <QDebug>
 #ifndef __EMSCRIPTEN__
-#include "mqtt_client.h"
+#include "zenoh_client.h"
 #endif
 #include <bitset>
 #include <cmath>
-#include <cstdlib>
 
 #ifndef _WIN32
 #include <sys/socket.h>
@@ -33,19 +32,14 @@ QList<QString> RaspberryModel::getVcuFault() {
 }
 
 #ifdef __EMSCRIPTEN__
-void RaspberryModel::connectToMQTT() {}
+void RaspberryModel::connectToZenoh() {}
 
 void RaspberryModel::sendMessage(const QString, const float) {}
 #else
-void RaspberryModel::connectToMQTT() {
-  // Determine MQTT broker hostname based on environment
-  // Priority: 1. MQTT_HOST env var, 2. Default localhost for development
-  QString mqttHost =
-      getenv("HOST") ? QString(getenv("HOST")) : QString("localhost");
-
-  qInfo() << "RaspberryModel connecting to MQTT broker:" << mqttHost;
-
-  QList<QString> client_1_topics = {
+void RaspberryModel::connectToZenoh() {
+  // Key expressions NERO reads. Everything else on the router — the rest of
+  // the ~500 topics Calypso decodes — is somebody else's business.
+  QList<QString> key_exprs = {
       MPH,
       STATUS,
       PACKTEMP,
@@ -108,27 +102,12 @@ void RaspberryModel::connectToMQTT() {
       DIRECTION,
   };
 
-  const char *client1_port_str = getenv("CLIENT1_PORT");
-  // const char *client2_port_str = getenv("CLIENT2_PORT");
-
-  int client1_port = client1_port_str ? atoi(client1_port_str) : 1883;
-  // int client2_port = client2_port_str ? atoi(client2_port_str) : 1882;
-
-  MqttClient *client_1 =
-      new MqttClient(nullptr, client1_port, client_1_topics, mqttHost);
-  connect(client_1, &MqttClient::emitServerData, this,
+  ZenohClient *client = new ZenohClient(this, key_exprs);
+  connect(client, &ZenohClient::emitServerData, this,
           &RaspberryModel::receiveServerData);
-  client_1->connectToHost();
+  client->connectToRouter();
 
-  // QList<QString> client_2_topics = {
-
-  // };
-  // MqttClient *client_2 =
-  //     new MqttClient(nullptr, client2_port, client_2_topics, mqttHost);
-  // connect(client_2, &MqttClient::emitServerData, this,
-  //         &RaspberryModel::receiveServerData);
-  // client_2->connectToHost();
-  this->m_client = client_1;
+  this->m_client = client;
 }
 
 void RaspberryModel::sendMessage(const QString topic, const float value) {
@@ -389,7 +368,7 @@ bool RaspberryModel::buttonNum9Pressed() {
 }
 
 // Sentinel value written to BUTTONID to latch "this press has been consumed"
-// so the next tick doesn't re-fire on stale MQTT data. 10 is outside the
+// so the next tick doesn't re-fire on stale Zenoh data. 10 is outside the
 // valid 0..9 ordinal range.
 static constexpr float BUTTON_CONSUMED_SENTINEL = 10;
 

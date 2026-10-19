@@ -11,22 +11,8 @@ set PATH=%QTDIR%\bin;%MINGW%\bin;%CMAKE_PATH%;%NINJA_PATH%;%PATH%
 
 echo "PATH=%PATH%"
 
-REM Fetch the Qt MQTT submodule
-git submodule update --init deps/qtmqtt
-
-REM Build and install Qt MQTT into the Qt kit
-cd deps\qtmqtt
-if exist build\ (
-    rd /S /Q build
-)
-for %%c in (Release Debug) do (
-    mkdir build\%%c
-    pushd build\%%c
-    call "%QTDIR%\bin\qt-cmake.bat" ..\.. -GNinja -DCMAKE_BUILD_TYPE=%%c -DCMAKE_INSTALL_PREFIX=%QTDIR% || exit /b 1
-    ninja || exit /b 1
-    ninja install || exit /b 1
-    popd
-)
+REM Zenoh needs no toolchain of its own: CMake downloads the zenoh-c release
+REM for this machine the first time it configures.
 
 REM Add Qt tools to PATH permanently
 set ADD=%QTDIR%\bin;%MINGW%\bin;%CMAKE_PATH%;%NINJA_PATH%

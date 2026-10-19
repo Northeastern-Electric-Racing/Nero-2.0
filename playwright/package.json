@@ -9,7 +9,6 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.63.0",
-    "http-server": "^14.1.1",
-    "mqtt": "^5.16.0"
+    "http-server": "^14.1.1"
   }
 }

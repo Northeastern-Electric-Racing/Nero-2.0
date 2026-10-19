@@ -153,14 +153,14 @@ target_link_libraries(NEROApp PRIVATE
     Qt6::Protobuf
 )
 
-# The dev-only WASM build has no broker; Playwright feeds the model through the VCU sim
+# The dev-only WASM build has no router; Playwright feeds the model through the VCU sim
 if(EMSCRIPTEN)
     target_sources(NEROApp PRIVATE src/utils/vcu_sim.cpp)
     configure_file(../playwright/index.html index.html COPYONLY)
 else()
-    find_package(Qt6 REQUIRED COMPONENTS Mqtt)
-    target_sources(NEROApp PRIVATE src/models/mqtt_client.h src/models/mqtt_client.cpp)
-    target_link_libraries(NEROApp PRIVATE Qt6::Mqtt)
+    include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/zenoh.cmake)
+    target_sources(NEROApp PRIVATE src/models/zenoh_client.h src/models/zenoh_client.cpp)
+    target_link_libraries(NEROApp PRIVATE zenoh::cxx)
 endif()
 
 set(CMAKE_OBJECT_PATH_MAX 500)

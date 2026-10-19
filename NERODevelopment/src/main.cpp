@@ -32,7 +32,7 @@ int main(int argc, char *argv[]) {
   Model *model = new RaspberryModel();
   // The WASM build's vcu_sim.cpp finds the model through the app's QObject tree
   model->setParent(&app);
-  model->connectToMQTT();
+  model->connectToZenoh();
 
   HomeController homeController(model);
   HeaderController headerController(model);

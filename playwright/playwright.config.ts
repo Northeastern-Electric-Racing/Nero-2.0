@@ -15,7 +15,8 @@ export default defineConfig({
     },
     {
       command: "docker compose -f ../compose.nero-dev.yml up",
-      port: 1883,
+      // The router answers on its REST plugin once it is listening on 7447 too
+      url: "http://127.0.0.1:8000/@/local/router",
       reuseExistingServer: true,
       timeout: 180_000,
     },

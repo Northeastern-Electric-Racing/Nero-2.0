@@ -4,7 +4,7 @@
 #include "model.h"
 #include <serverdata.qpb.h>
 
-class MqttClient;
+class ZenohClient;
 /**
  * @brief The RaspberryModel class
  * The Production Model that is used when running on the car
@@ -23,7 +23,7 @@ public:
   ~RaspberryModel();
 
   // Implementations of virtual functions from the Model class
-  void connectToMQTT() override;
+  void connectToZenoh() override;
   std::optional<float> getMph() override;
   std::optional<float> getStatus() override;
   std::optional<float> getDir() override;
@@ -111,6 +111,6 @@ private slots:
 private:
   void processData(const std::string &data);
   int totalNumberOfOnesIn(float value);
-  MqttClient *m_client;
+  ZenohClient *m_client;
 };
 #endif
