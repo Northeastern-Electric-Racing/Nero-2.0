@@ -29,8 +29,8 @@ body:
     attributes:
       label: Areas to explore
       description: |
-        The areas to improve or problems to solve. Each bullet names an area and a few approaches worth trying.
-        Each spike tries one approach to one area. It doesn't have to cover the whole area, and several spikes can take on the same area in different ways.
+        The areas to improve or problems to solve, each one for one or more spikes to explore. Each bullet names an area and a few approaches worth trying.
+        Each spike tries one approach to its area. It doesn't have to cover the whole area, and an area can have several spikes, each trying a different approach.
         List areas that need real exploration or design decisions, not questions with quick answers. Name approaches to weigh, not a plan or a recommended pick.
       value: |
         - **Area:** approach, approach, or approach.
