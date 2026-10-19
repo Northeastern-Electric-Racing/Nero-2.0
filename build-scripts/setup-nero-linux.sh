@@ -3,7 +3,7 @@ set -e
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 cd "$SCRIPT_DIR/.."
 
-QTDIR="$HOME/Qt/6.8.3/gcc_64"
+QTDIR="$HOME/Qt/6.12.0/gcc_64"
 
 # Install system dependencies
 sudo apt update
