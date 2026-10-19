@@ -25,13 +25,14 @@ body:
     validations:
       required: true
   - type: textarea
-    id: approaches
+    id: areas
     attributes:
-      label: Approaches to explore
+      label: Areas to explore
       description: |
-        The range of possible solutions worth exploring. Each bullet is an area and the options in it.
-        List areas that need real exploration or design decisions, not questions with quick answers. Each one should be big enough to become a spike.
+        The open questions to explore before building. Each bullet is an area (an open question) and the directions worth trying in it; each spike tries one direction in one area.
+        List areas that need real exploration or design decisions, not questions with quick answers. Each direction should be big enough to become its own spike.
+        Name directions to weigh, not a plan or a recommended pick.
       value: |
-        - **Area:** option, option, or option.
+        - **Area:** direction, direction, or direction.
     validations:
       required: true
