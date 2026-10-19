@@ -1,0 +1,44 @@
+{
+  "version": 3,
+  "cmakeMinimumRequired": { "major": 3, "minor": 21, "patch": 0 },
+  "configurePresets": [
+    {
+      "name": "base",
+      "hidden": true,
+      "binaryDir": "${sourceDir}/build/${presetName}",
+      "cacheVariables": { "CMAKE_BUILD_TYPE": "Debug" }
+    },
+    {
+      "name": "ninja-ccache",
+      "displayName": "Ninja + ccache (recommended)",
+      "description": "Fastest option. Requires ninja and ccache; falls back to no ccache if it isn't found.",
+      "inherits": "base",
+      "generator": "Ninja",
+      "cacheVariables": { "NERO_USE_CCACHE": "ON" }
+    },
+    {
+      "name": "ninja",
+      "displayName": "Ninja",
+      "description": "Ninja without ccache.",
+      "inherits": "base",
+      "generator": "Ninja"
+    },
+    {
+      "name": "make",
+      "displayName": "Unix Makefiles (legacy)",
+      "description": "Same as the previous default build. Not available on Windows.",
+      "inherits": "base",
+      "generator": "Unix Makefiles",
+      "condition": { "type": "notEquals", "lhs": "${hostSystemName}", "rhs": "Windows" }
+    }
+  ],
+  "buildPresets": [
+    { "name": "ninja-ccache", "configurePreset": "ninja-ccache" },
+    { "name": "ninja", "configurePreset": "ninja" },
+    {
+      "name": "make",
+      "configurePreset": "make",
+      "condition": { "type": "notEquals", "lhs": "${hostSystemName}", "rhs": "Windows" }
+    }
+  ]
+}

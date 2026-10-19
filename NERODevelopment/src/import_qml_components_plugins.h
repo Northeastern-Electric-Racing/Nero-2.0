@@ -7,12 +7,8 @@
 
 #ifdef BULD_QDS_COMPONENTS
 
-Q_IMPORT_QML_PLUGIN(QtQuick_Studio_ComponentsPlugin)
-Q_IMPORT_QML_PLUGIN(QtQuick_Studio_EffectsPlugin)
+// Must match the plugins linked in qmlcomponents
 Q_IMPORT_QML_PLUGIN(QtQuick_Studio_ApplicationPlugin)
-Q_IMPORT_QML_PLUGIN(FlowViewPlugin)
-Q_IMPORT_QML_PLUGIN(QtQuick_Studio_LogicHelperPlugin)
-Q_IMPORT_QML_PLUGIN(QtQuick_Studio_MultiTextPlugin)
 Q_IMPORT_QML_PLUGIN(QtQuick_Studio_EventSimulatorPlugin)
 Q_IMPORT_QML_PLUGIN(QtQuick_Studio_EventSystemPlugin)
 
