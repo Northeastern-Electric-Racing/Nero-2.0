@@ -1,5 +1,5 @@
 name: Idea
-description: A feature or direction worth exploring. Ideas are explored through spikes and, once settled, become an epic.
+description: A feature or improvement worth exploring. Ideas are explored through spikes and, once settled, become an epic.
 type: Feature
 labels: [idea]
 body:
@@ -29,10 +29,10 @@ body:
     attributes:
       label: Areas to explore
       description: |
-        The open questions to explore before building. Each bullet is an area (an open question) and the directions worth trying in it; each spike tries one direction in one area.
-        List areas that need real exploration or design decisions, not questions with quick answers. Each direction should be big enough to become its own spike.
-        Name directions to weigh, not a plan or a recommended pick.
+        The areas to improve or problems to solve. Each bullet names an area and a few approaches worth trying.
+        Each spike tries one approach to one area. It doesn't have to cover the whole area, and several spikes can take on the same area in different ways.
+        List areas that need real exploration or design decisions, not questions with quick answers. Name approaches to weigh, not a plan or a recommended pick.
       value: |
-        - **Area:** direction, direction, or direction.
+        - **Area:** approach, approach, or approach.
     validations:
       required: true
