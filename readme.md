@@ -16,6 +16,16 @@ It should generate the project
 
 Select the kit for your respective desktop and press build and run
 
+### Setting Up Git Hooks
+
+After cloning the repository, run the following command to enable automatic code formatting on commit:
+
+```bash
+git config core.hooksPath hooks
+```
+
+Windows users: run this command in Git Bash, not Command Prompt.
+
 ## Development with Mock Telemetry
 
 ### Quick Start
