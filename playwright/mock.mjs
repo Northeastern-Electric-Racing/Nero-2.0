@@ -37,8 +37,11 @@ export async function connectMock(page) {
       page.evaluate(([topic, payload]) => window.nero.publishPayload(topic, payload), [topic, [...payload]]).catch(() => {}),
     ));
 
-  // The VCU gets its own connection so its replies never queue behind telemetry
-  const vcuLink = await mqtt.connectAsync("mqtt://localhost:1883");
+  // The VCU gets its own connection so its replies never queue behind telemetry. If this process
+  // ends without close(), the broker sends the stop itself, so the VCU doesn't run on
+  const vcuLink = await mqtt.connectAsync("mqtt://localhost:1883", {
+    will: { topic: `${prefix}NERO/stop`, payload: serverData(0), qos: 1 },
+  });
   vcuLink.on("message", (topic, payload) => {
     // The VCU's replies, in order and unbatched: each press is an event
     const name = topic.slice(prefix.length);
@@ -70,9 +73,11 @@ export async function connectMock(page) {
   const send = (message, value = 0) => vcuLink.publishAsync(`${prefix}NERO/${message}`, serverData(value), { qos: 1 });
   // NERO's own presses (the keyboard) arrive through wasm_bridge.cpp
   await page.exposeFunction("neroSend", (topic, value) => send(topic, value));
+  // A start sent before dev-vcu subscribes is lost, so repeat it until the VCU answers
   const started = nextState();
+  const retry = setInterval(() => send("start"), 500);
   await send("start");
-  await started;
+  await started.finally(() => clearInterval(retry));
 
   const inject = (topics) => {
     for (const topic of Object.keys(topics)) {

@@ -36,6 +36,9 @@
 #include <QQuickImageProvider>
 #include <QThread>
 #include <QTimer>
+#include <atomic>
+
+#include "buttons.h"
 
 struct DoomKeyEvent {
   unsigned char pressed;
@@ -66,7 +69,7 @@ private:
  *
  * Created by DoomController::startGame(), destroyed automatically when the
  * thread finishes (via QThread::finished → deleteLater connection).
- * The game loop in start() blocks until stop() sets m_running to false.
+ * The game loop in start() blocks until stop() sets m_stopRequested.
  */
 class DoomWorker : public QObject {
   Q_OBJECT
@@ -89,7 +92,8 @@ signals:
 
 private:
   QString m_wadPath;
-  volatile bool m_running;
+  // Set from the GUI thread, possibly before the engine finishes loading
+  std::atomic<bool> m_stopRequested{false};
   QQueue<DoomKeyEvent> m_keyQueue;
   QMutex m_keyMutex;
 };
@@ -118,7 +122,7 @@ public:
   Q_INVOKABLE void startGame();
   Q_INVOKABLE void stopGame();
   Q_INVOKABLE void sendKey(int doomKeyCode, bool pressed);
-  Q_INVOKABLE void press(int button);
+  Q_INVOKABLE void press(Buttons::Button button);
 
 signals:
   void runningChanged();

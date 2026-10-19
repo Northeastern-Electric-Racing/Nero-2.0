@@ -16,10 +16,13 @@ Vcu::Vcu(Model *model, QObject *parent) : QObject{parent} {
 
 void Vcu::onTopic(const QString &topic, float value) {
   if (topic == MODEINDEX) {
-    const int navIndex = carStateWireValue(value).value_or(m_navIndex);
-    if (navIndex != m_navIndex) {
+    const std::optional<int> navIndex = carStateWireValue(value);
+    if (navIndex && navIndex != m_navIndex) {
+      const bool first = !m_navIndex;
       m_navIndex = navIndex;
       emit navIndexChanged();
+      if (first)
+        emit homeMenuChanged();
     }
   } else if (topic == HOMEBUTTON) {
     const bool homeMenu = value == 1;

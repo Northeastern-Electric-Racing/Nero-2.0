@@ -31,8 +31,10 @@ function vcu(prefix) {
     press(button) {
       if (button === ESC) home = true;
       if (button === ENTER) home = false;
-      if (home && button === RIGHT) index = (index + 1) % 8; // firmware MAX_NERO_STATES
-      if (home && button === LEFT) index = Math.max(index - 1, 0);
+      // Both wrap, over firmware MAX_NERO_STATES: Left at OFF underflows the firmware's unsigned
+      // index, which it then clamps to the last slot, EXIT
+      if (home && button === RIGHT) index = (index + 1) % 8;
+      if (home && button === LEFT) index = (index + 7) % 8;
       // The wheel sends each press to NERO as well
       send("Wheel/Buttons/button_id", button);
       sync();
@@ -46,13 +48,18 @@ const vcus = new Map([["", vcu("")]]);
 // NERO publishes presses under NERO/ (values is serialized last); a page's start and stop
 // create and end its VCU
 broker.on("message", (topic, payload) => {
-  const [, prefix, message] = topic.match(/^((?:sim\/[^/]+\/)?)NERO\/(.+)$/);
+  // sim/+/NERO/# also matches sim/<id>/NERO itself
+  const match = topic.match(/^((?:sim\/[^/]+\/)?)NERO\/(.+)$/);
+  if (!match) return;
+  const [, prefix, message] = match;
   if (message === "stop") {
     vcus.get(prefix)?.stop();
     vcus.delete(prefix);
     return;
   }
   if (!vcus.has(prefix)) vcus.set(prefix, vcu(prefix));
-  if (message === "Wheel/Buttons/button_id") vcus.get(prefix).press(payload.readFloatLE(payload.length - 4));
+  if (message === "Wheel/Buttons/button_id" && payload.length >= 4) {
+    vcus.get(prefix).press(payload.readFloatLE(payload.length - 4));
+  }
 });
 await broker.subscribeAsync(["NERO/Wheel/Buttons/button_id", "sim/+/NERO/#"], { qos: 1 });

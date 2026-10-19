@@ -52,9 +52,6 @@ Item {
         }
     }
 
-    Component.onDestruction: {
-        if (doomController.running) {
-            doomController.stopGame();
-        }
-    }
+    // Also while DOOM is still loading, when running is false
+    Component.onDestruction: doomController.stopGame()
 }

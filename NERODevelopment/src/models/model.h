@@ -99,9 +99,6 @@ private slots:
   virtual void updateCurrentData() = 0;
   void updateStoredValues();
 
-protected slots:
-  void setValue(QString topic, float value);
-
 protected:
   QMap<QString, DataInfo> currentData;
   QMap<QString, DebugPlotValue> pinnedData;

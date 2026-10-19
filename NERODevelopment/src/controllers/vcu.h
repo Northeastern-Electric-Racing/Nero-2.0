@@ -28,8 +28,10 @@ class Vcu : public QObject {
 public:
   explicit Vcu(Model *model, QObject *parent = nullptr);
 
-  int navIndex() const { return m_navIndex; }
-  bool homeMenu() const { return m_homeMenu; }
+  int navIndex() const { return m_navIndex.value_or(0); }
+  // The VCU sends home_mode before nero_index, so on the first car state a
+  // page would open at the default index; stay on the menu until both arrive
+  bool homeMenu() const { return m_homeMenu || !m_navIndex; }
   bool tsOn() const { return m_tsOn; }
   QString functionalStateLabel() const {
     return functionalStateText(m_functionalState);
@@ -59,7 +61,7 @@ private:
   void setFunctionalState(std::optional<int> state);
   void setStateRejection(std::optional<int> mask);
 
-  int m_navIndex = 0;
+  std::optional<int> m_navIndex;
   bool m_homeMenu = true;
   bool m_tsOn = false;
   std::optional<int> m_functionalState;

@@ -28,6 +28,8 @@ const LIVE_DATA = 0.12;
 
 const cases: Record<string, { steps: Step[]; tolerance?: number }> = {
   home: { steps: [select(PAGE.PERFORMANCE)] },
+  // Left at OFF wraps to EXIT, like the firmware
+  "home-wrap": { steps: [[LEFT]] },
   off: { steps: [open(PAGE.OFF)], tolerance: LIVE_DATA },
   "pit-drive": { steps: [open(PAGE.PIT_DRIVE)], tolerance: LIVE_DATA },
   performance: { steps: [open(PAGE.PERFORMANCE)], tolerance: LIVE_DATA },

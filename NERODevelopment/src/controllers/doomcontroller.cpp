@@ -52,53 +52,35 @@ extern void D_PostEvent(event_t *ev);
 }
 
 /* ============================================================
- * NERO button values from "Wheel/Buttons/button_id" MQTT topic.
- *
- * MQTT value = physical button number - 1 (0-indexed).
- * Physical buttons on the wheel PCB:
- *   Phys 1 (Escape)       → MQTT 0
- *   Phys 2 (Left)         → MQTT 1
- *   Phys 3 (Middle Left)  → MQTT 2
- *   Phys 4 (Up)           → MQTT 3
- *   Phys 5 (Down)         → MQTT 4
- *   Phys 6 (Enter)        → MQTT 5
- *   Phys 7 (Right)        → MQTT 6
- *   Phys 8 (Middle Right) → MQTT 7
+ * Wheel buttons are Buttons::Button values (buttons.h has the layout).
+ * DOOM uses the eight face buttons, Esc through TractionControl.
  * ============================================================ */
-static constexpr int BUTTON_VALUE_ESCAPE = 0; // physical 1 — escape
-static constexpr int BUTTON_VALUE_LEFT = 1;   // physical 2 — turn left
-static constexpr int BUTTON_VALUE_MIDDLE_LEFT =
-    2;                                       // physical 3 — also turn left
-static constexpr int BUTTON_VALUE_UP = 3;    // physical 4 — move forward
-static constexpr int BUTTON_VALUE_DOWN = 4;  // physical 5 — move backward
-static constexpr int BUTTON_VALUE_ENTER = 5; // physical 6 — fire+use+menu
-static constexpr int BUTTON_VALUE_RIGHT = 6; // physical 7 — turn right
-static constexpr int BUTTON_VALUE_MIDDLE_RIGHT =
-    7; // physical 8 — also turn right
 
 /**
  * Returns true if the value corresponds to a known DOOM-mapped button.
- * Any value NOT in this set (e.g. -1, 10, 255) is treated as a release.
+ * Any value NOT in this set (e.g. -1, 8, 9) is treated as a release.
  */
-static bool isKnownDoomButton(int value) { return value >= 0 && value <= 7; }
+static bool isKnownDoomButton(int value) {
+  return value >= Buttons::Esc && value <= Buttons::TractionControl;
+}
 
 /**
  * Returns true if the button should be a brief tap (auto-release after timer).
  * These buttons send keydown then keyup after 100ms:
- *   - Middle Left (2): small left nudge
- *   - Middle Right (7): small right nudge
- *   - Enter (5): shoot once / use once / menu select
+ *   - LaunchControl (middle left): small left nudge
+ *   - TractionControl (middle right): small right nudge
+ *   - Enter: shoot once / use once / menu select
  *
  * All other buttons are TOGGLE — they stay held until a different
  * button is pressed:
- *   - Left (1): continuous turn left
- *   - Right (6): continuous turn right
- *   - Up (3): continuous move forward
- *   - Down (4): continuous move backward
+ *   - Left: continuous turn left
+ *   - Right: continuous turn right
+ *   - UpRegen: continuous move forward
+ *   - DownRegen: continuous move backward
  */
 static bool isTapButton(int value) {
-  return value == BUTTON_VALUE_MIDDLE_LEFT ||
-         value == BUTTON_VALUE_MIDDLE_RIGHT || value == BUTTON_VALUE_ENTER;
+  return value == Buttons::LaunchControl || value == Buttons::TractionControl ||
+         value == Buttons::Enter;
 }
 
 /* ============================================================
@@ -400,9 +382,10 @@ void DoomImageProvider::updateFrame(const QImage &frame) {
  *
  * Thread lifecycle:
  *   - Created and started in DoomController::startGame()
- *   - The game loop runs in start() until m_running is set to false
- *   - DoomController::stopGame() sets m_running = false, causing the
- *     game loop to exit, which emits stopped() → triggers QThread::quit()
+ *   - The game loop runs in start() until m_stopRequested is set
+ *   - DoomController::stopGame() sets m_stopRequested, even while the
+ *     engine is still loading, so the game loop exits (or never starts),
+ *     which emits stopped() → triggers QThread::quit()
  *   - The QThread::finished signal triggers deleteLater() on this worker
  *   - DoomView.qml also calls stopGame() on destruction (e.g. Esc takes
  *     the VCU home)
@@ -412,7 +395,7 @@ void DoomImageProvider::updateFrame(const QImage &frame) {
  * ============================================================ */
 
 DoomWorker::DoomWorker(const QString &wadPath, QObject *parent)
-    : QObject(parent), m_wadPath(wadPath), m_running(false) {}
+    : QObject(parent), m_wadPath(wadPath) {}
 
 DoomWorker::~DoomWorker() { stop(); }
 
@@ -435,9 +418,6 @@ int DoomWorker::dequeueKey(unsigned char *pressed, unsigned char *doomKey) {
 }
 
 void DoomWorker::start() {
-  if (m_running)
-    return;
-
   g_doomWorker = this;
 
   QByteArray wadPathUtf8 = m_wadPath.toUtf8();
@@ -453,14 +433,15 @@ void DoomWorker::start() {
   // Enable autorun (tricks engine into always run)
   joybspeed = 29;
 
-  m_running = true;
-  emit started();
+  // stop() may already have been called while the engine loaded
+  if (!m_stopRequested) {
+    emit started();
+    qInfo() << "[DOOM] Engine running, entering game loop";
+  }
 
-  qInfo() << "[DOOM] Engine running, entering game loop";
-
-  // This loop blocks the worker thread until m_running is set to false
-  // by stop(), which is called from DoomController::stopGame()
-  while (m_running) {
+  // This loop blocks the worker thread until stop(), which is called from
+  // DoomController::stopGame()
+  while (!m_stopRequested) {
     doomgeneric_Tick();
   }
 
@@ -469,15 +450,17 @@ void DoomWorker::start() {
   emit stopped();
 }
 
-void DoomWorker::stop() { m_running = false; }
+void DoomWorker::stop() { m_stopRequested = true; }
 
 /* ============================================================
  * DoomController — Main QML-facing controller
  *
  * Thread cleanup guarantees:
- *   1. stopGame() sets m_running=false → game loop exits → emits stopped()
+ *   1. stopGame() acts whenever a thread exists, loading or running, and
+ *      asks the worker to stop → game loop exits → emits stopped()
  *   2. stopped() signal is connected to QThread::quit() → event loop ends
- *   3. QThread::finished is connected to worker->deleteLater() → worker freed
+ *   3. QThread::finished is connected to deleteLater() on the worker and the
+ *      thread → both freed
  *   4. stopGame() also calls m_gameThread->wait(3000) as a safety net
  *   5. If the thread still hasn't stopped after 3s, terminate() is called
  * ============================================================ */
@@ -526,7 +509,8 @@ DoomImageProvider *DoomController::createImageProvider() {
 }
 
 void DoomController::startGame() {
-  if (m_running)
+  // One game thread at a time, including while it loads
+  if (m_gameThread)
     return;
 
   if (m_wadPath.isEmpty()) {
@@ -549,7 +533,7 @@ void DoomController::startGame() {
   // Wire up thread lifecycle:
   //   thread started → worker starts game loop
   //   worker stopped → thread quits its event loop
-  //   thread finished → worker is deleted
+  //   thread finished → worker and thread are deleted
   connect(m_gameThread, &QThread::started, m_worker, &DoomWorker::start);
   connect(m_worker, &DoomWorker::frameReady, this,
           &DoomController::onFrameReady, Qt::QueuedConnection);
@@ -560,12 +544,16 @@ void DoomController::startGame() {
 
   connect(m_worker, &DoomWorker::stopped, m_gameThread, &QThread::quit);
   connect(m_gameThread, &QThread::finished, m_worker, &QObject::deleteLater);
+  connect(m_gameThread, &QThread::finished, m_gameThread,
+          &QObject::deleteLater);
 
   m_gameThread->start();
 }
 
 void DoomController::stopGame() {
-  if (!m_running || !m_worker)
+  // Not `running`: that only turns true once the engine has loaded, and a
+  // thread still loading must be stopped too
+  if (!m_gameThread)
     return;
 
   qInfo() << "[DOOM] Stopping game...";
@@ -573,20 +561,23 @@ void DoomController::stopGame() {
   // Signal the game loop to exit
   m_worker->stop();
 
-  if (m_gameThread) {
-    // Ask the thread's event loop to quit
-    m_gameThread->quit();
+  // Ask the thread's event loop to quit
+  m_gameThread->quit();
 
-    // Wait up to 3 seconds for the game loop to finish
-    m_gameThread->wait(3000);
+  // Wait up to 3 seconds for the game loop to finish
+  m_gameThread->wait(3000);
 
-    // If still running after 3s, force kill as a last resort
-    if (m_gameThread->isRunning()) {
-      qWarning() << "[DOOM] Force terminating game thread";
-      m_gameThread->terminate();
-      m_gameThread->wait(1000);
-    }
+  // If still running after 3s, force kill as a last resort
+  if (m_gameThread->isRunning()) {
+    qWarning() << "[DOOM] Force terminating game thread";
+    m_gameThread->terminate();
+    m_gameThread->wait(1000);
   }
+
+  // Both delete themselves once the thread finishes; deleting a thread that
+  // is somehow still running would abort NERO
+  m_gameThread = nullptr;
+  m_worker = nullptr;
 
   m_running = false;
   m_lastButtonValue = -1;
@@ -612,12 +603,9 @@ void DoomController::sendKey(int doomKeyCode, bool pressed) {
  * The wheel sends presses but NOT releases, so each press releases the
  * previous button first. Tap buttons auto-release after 100ms; toggle
  * buttons stay held until the next press.
- *
- * Values (physical button - 1):
- *   0=esc, 1=left, 2=mid-left, 3=up, 4=down, 5=enter, 6=right, 7=mid-right
  * ============================================================ */
 
-void DoomController::press(int button) {
+void DoomController::press(Buttons::Button button) {
   if (!m_running)
     return;
 
@@ -626,7 +614,7 @@ void DoomController::press(int button) {
   m_lastButtonValue = button;
 
   // Esc belongs to the VCU: it goes home, which closes the page and stops DOOM
-  if (!isKnownDoomButton(button) || button == BUTTON_VALUE_ESCAPE)
+  if (!isKnownDoomButton(button) || button == Buttons::Esc)
     return;
 
   pressButton(button);
@@ -641,7 +629,7 @@ void DoomController::releaseCurrentButton() {
   if (!isKnownDoomButton(m_lastButtonValue))
     return;
 
-  if (m_lastButtonValue == BUTTON_VALUE_ENTER) {
+  if (m_lastButtonValue == Buttons::Enter) {
     sendKey(KEY_ENTER, false);
     sendKey(KEY_FIRE, false);
     sendKey(KEY_USE, false);
@@ -653,7 +641,7 @@ void DoomController::releaseCurrentButton() {
 }
 
 void DoomController::pressButton(int value) {
-  if (value == BUTTON_VALUE_ENTER) {
+  if (value == Buttons::Enter) {
     sendKey(KEY_ENTER, true);
     sendKey(KEY_FIRE, true);
     sendKey(KEY_USE, true);
@@ -665,25 +653,24 @@ void DoomController::pressButton(int value) {
 }
 
 /**
- * Maps raw MQTT button values to DOOM key codes.
- * Values come from "Wheel/Buttons/button_id" topic.
+ * Maps wheel buttons to DOOM key codes.
  */
 unsigned char DoomController::mapButtonValueToDoomKey(int value) {
   switch (value) {
-  case BUTTON_VALUE_LEFT:
-    return KEY_LEFTARROW; // phys 2 — turn left
-  case BUTTON_VALUE_MIDDLE_LEFT:
-    return KEY_LEFTARROW; // phys 3 — also turn left
-  case BUTTON_VALUE_UP:
-    return KEY_UPARROW; // phys 4 — move forward
-  case BUTTON_VALUE_DOWN:
-    return KEY_DOWNARROW; // phys 5 — move backward
-  case BUTTON_VALUE_ENTER:
-    return KEY_ENTER; // phys 6 — handled specially
-  case BUTTON_VALUE_RIGHT:
-    return KEY_RIGHTARROW; // phys 7 — turn right
-  case BUTTON_VALUE_MIDDLE_RIGHT:
-    return KEY_RIGHTARROW; // phys 8 — also turn right
+  case Buttons::Left:
+    return KEY_LEFTARROW; // turn left
+  case Buttons::LaunchControl:
+    return KEY_LEFTARROW; // middle left — also turn left
+  case Buttons::UpRegen:
+    return KEY_UPARROW; // move forward
+  case Buttons::DownRegen:
+    return KEY_DOWNARROW; // move backward
+  case Buttons::Enter:
+    return KEY_ENTER; // handled specially
+  case Buttons::Right:
+    return KEY_RIGHTARROW; // turn right
+  case Buttons::TractionControl:
+    return KEY_RIGHTARROW; // middle right — also turn right
   default:
     return 0;
   }

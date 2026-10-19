@@ -14,7 +14,10 @@ class Buttons : public QObject {
   QML_UNCREATABLE("Use the buttons context property")
 
 public:
-  // Same order as button_t in Cerberus-2.0 Core/Inc/u_buttons.h
+  // Same order as button_t in Cerberus-2.0 Core/Inc/u_buttons.h. These are the
+  // 0-indexed wire values; the wheel silkscreen is 1-indexed, so silkscreen
+  // n = wire n - 1. Layout: readme "Button Layout" and Confluence "Button IO
+  // 25", https://nerdocs.atlassian.net/wiki/spaces/NER/pages/1526988828
   enum Button {
     Esc,
     Left,
