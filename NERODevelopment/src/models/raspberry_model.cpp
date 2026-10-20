@@ -32,11 +32,8 @@ QList<QString> RaspberryModel::getVcuFault() {
   return faults;
 }
 
-#ifdef __EMSCRIPTEN__
-void RaspberryModel::connectToMQTT() {}
-
-void RaspberryModel::sendMessage(const QString, const float) {}
-#else
+// The WASM build's connectToMQTT and sendMessage are in utils/wasm_bridge.cpp
+#ifndef __EMSCRIPTEN__
 void RaspberryModel::connectToMQTT() {
   // Determine MQTT broker hostname based on environment
   // Priority: 1. MQTT_HOST env var, 2. Default localhost for development
@@ -141,6 +138,8 @@ void RaspberryModel::receiveServerData(const serverdata::v2::ServerData data,
   // qDebug() << "Topic: " << topic << "Data" << data.values();
   this->currentData[topic] = DataInfo(topic, data.unit(), data.values());
   emit this->onCurrentDataChange();
+  if (!data.values().isEmpty())
+    emit this->topicReceived(topic, data.values().first());
 }
 
 std::optional<float> RaspberryModel::getMph() {
@@ -355,142 +354,6 @@ QList<QString> RaspberryModel::getBmsFault() {
     }
   }
   return faults;
-}
-
-bool RaspberryModel::buttonNum0Pressed() {
-  return this->getById(BUTTONID) == 0;
-}
-bool RaspberryModel::buttonNum1Pressed() {
-  return this->getById(BUTTONID) == 1;
-}
-bool RaspberryModel::buttonNum2Pressed() {
-  return this->getById(BUTTONID) == 2;
-}
-bool RaspberryModel::buttonNum3Pressed() {
-  return this->getById(BUTTONID) == 3;
-}
-bool RaspberryModel::buttonNum4Pressed() {
-  return this->getById(BUTTONID) == 4;
-}
-bool RaspberryModel::buttonNum5Pressed() {
-  return this->getById(BUTTONID) == 5;
-}
-bool RaspberryModel::buttonNum6Pressed() {
-  return this->getById(BUTTONID) == 6;
-}
-bool RaspberryModel::buttonNum7Pressed() {
-  return this->getById(BUTTONID) == 7;
-}
-bool RaspberryModel::buttonNum8Pressed() {
-  return this->getById(BUTTONID) == 8;
-}
-bool RaspberryModel::buttonNum9Pressed() {
-  return this->getById(BUTTONID) == 9;
-}
-
-// Sentinel value written to BUTTONID to latch "this press has been consumed"
-// so the next tick doesn't re-fire on stale MQTT data. 10 is outside the
-// valid 0..9 ordinal range.
-static constexpr float BUTTON_CONSUMED_SENTINEL = 10;
-
-std::optional<bool> RaspberryModel::getEscButtonPressed() {
-  if (buttonNum0Pressed()) {
-    this->setValue(BUTTONID, BUTTON_CONSUMED_SENTINEL);
-    return true;
-  }
-  return std::nullopt;
-}
-
-std::optional<bool> RaspberryModel::getLeftButtonPressed() {
-  if (buttonNum1Pressed()) {
-    this->setValue(BUTTONID, BUTTON_CONSUMED_SENTINEL);
-    return true;
-  }
-  return std::nullopt;
-}
-
-std::optional<bool> RaspberryModel::getLaunchControlToggleButtonPressed() {
-  if (buttonNum2Pressed()) {
-    this->setValue(BUTTONID, BUTTON_CONSUMED_SENTINEL);
-    return true;
-  }
-  return std::nullopt;
-}
-
-std::optional<bool> RaspberryModel::getUpRegenButtonPressed() {
-  if (buttonNum3Pressed()) {
-    this->setValue(BUTTONID, BUTTON_CONSUMED_SENTINEL);
-    return true;
-  }
-  return std::nullopt;
-}
-
-std::optional<bool> RaspberryModel::getDownRegenButtonPressed() {
-  if (buttonNum4Pressed()) {
-    this->setValue(BUTTONID, BUTTON_CONSUMED_SENTINEL);
-    return true;
-  }
-  return std::nullopt;
-}
-
-std::optional<bool> RaspberryModel::getEnterButtonPressed() {
-  if (buttonNum5Pressed()) {
-    this->setValue(BUTTONID, BUTTON_CONSUMED_SENTINEL);
-    return true;
-  }
-  return std::nullopt;
-}
-
-std::optional<bool> RaspberryModel::getRightButtonPressed() {
-  if (buttonNum6Pressed()) {
-    this->setValue(BUTTONID, BUTTON_CONSUMED_SENTINEL);
-    return true;
-  }
-  return std::nullopt;
-}
-
-std::optional<bool> RaspberryModel::getTractionControlToggleButtonPressed() {
-  if (buttonNum7Pressed()) {
-    this->setValue(BUTTONID, BUTTON_CONSUMED_SENTINEL);
-    return true;
-  }
-  return std::nullopt;
-}
-
-std::optional<bool> RaspberryModel::getUpTorqueButtonPressed() {
-  if (buttonNum8Pressed()) {
-    this->setValue(BUTTONID, BUTTON_CONSUMED_SENTINEL);
-    return true;
-  }
-  return std::nullopt;
-}
-
-std::optional<bool> RaspberryModel::getDownTorqueButtonPressed() {
-  if (buttonNum9Pressed()) {
-    this->setValue(BUTTONID, BUTTON_CONSUMED_SENTINEL);
-    return true;
-  }
-  return std::nullopt;
-}
-
-std::optional<bool> RaspberryModel::getHomeButtonPressed() {
-  std::optional<float> value = this->getById(HOMEBUTTON);
-  if (value) {
-    return *value == 1;
-  }
-  return std::nullopt;
-}
-
-std::optional<float> RaspberryModel::getModeIndex() {
-  return this->getById(MODEINDEX);
-}
-
-std::optional<float> RaspberryModel::getFunctionalState() {
-  return this->getById(FUNCTIONALSTATE);
-}
-
-std::optional<float> RaspberryModel::getStateRejectionError() {
-  return this->getById(STATEREJECTIONERROR);
 }
 
 void RaspberryModel::updateCurrentData() { emit this->onCurrentDataChange(); }

@@ -6,35 +6,7 @@ Item {
     anchors.fill: parent
     visible: true
 
-    // isFocused is set externally by the navigation system (NavigationController).
-    // When this page becomes the active page, isFocused is set to true, granting
-    // keyboard focus. This matches the pattern used by FlappyBird.qml and Snake.qml.
-    property bool isFocused: false
-    focus: doomView.isFocused
-
-    // DOOM key codes from doomgeneric's doomkeys.h
-    // (https://github.com/ozkl/doomgeneric/blob/master/doomgeneric/doomkeys.h)
-    // These must match the values defined in the library — they are NOT arbitrary.
-    readonly property int doomKeyUp: 0xAD  // KEY_UPARROW
-    readonly property int doomKeyDown: 0xAF  // KEY_DOWNARROW
-    readonly property int doomKeyLeft: 0xAC  // KEY_LEFTARROW
-    readonly property int doomKeyRight: 0xAE  // KEY_RIGHTARROW
-    readonly property int doomKeyEnter: 0x0D  // KEY_ENTER
-    readonly property int doomKeyFire: 0x9D  // KEY_FIRE (ctrl)
-    readonly property int doomKeyUse: 0x20  // KEY_USE (space — open doors, switches)
-    readonly property int doomKeyEscape: 0x1B  // KEY_ESCAPE
-
-    onIsFocusedChanged: {
-        if (isFocused) {
-            if (!doomController.running) {
-                doomController.startGame();
-            }
-        } else {
-            if (doomController.running) {
-                doomController.stopGame();
-            }
-        }
-    }
+    Component.onCompleted: doomController.startGame()
 
     Rectangle {
         anchors.fill: parent
@@ -73,88 +45,13 @@ Item {
         visible: doomController.running
     }
 
-    Keys.onPressed: function (event) {
-        if (event.isAutoRepeat)
-            return;
-        switch (event.key) {
-        case Qt.Key_Up:
-            doomController.sendKey(doomKeyUp, true);
-            event.accepted = true;
-            break;
-        case Qt.Key_Down:
-            doomController.sendKey(doomKeyDown, true);
-            event.accepted = true;
-            break;
-        case Qt.Key_Left:
-            doomController.sendKey(doomKeyLeft, true);
-            event.accepted = true;
-            break;
-        case Qt.Key_Right:
-            doomController.sendKey(doomKeyRight, true);
-            event.accepted = true;
-            break;
-        case Qt.Key_Return:
-            if (!doomController.running) {
-                doomController.startGame();
-            } else {
-                doomController.sendKey(doomKeyEnter, true);
-                doomController.sendKey(doomKeyFire, true);
-                doomController.sendKey(doomKeyUse, true);
-            }
-            event.accepted = true;
-            break;
-        case Qt.Key_Escape:
-            if (doomController.running) {
-                doomController.stopGame();
-            }
-            navigationController.goHome();
-            event.accepted = true;
-            break;
-        }
-    }
-
-    Keys.onReleased: function (event) {
-        if (event.isAutoRepeat)
-            return;
-        switch (event.key) {
-        case Qt.Key_Up:
-            doomController.sendKey(doomKeyUp, false);
-            event.accepted = true;
-            break;
-        case Qt.Key_Down:
-            doomController.sendKey(doomKeyDown, false);
-            event.accepted = true;
-            break;
-        case Qt.Key_Left:
-            doomController.sendKey(doomKeyLeft, false);
-            event.accepted = true;
-            break;
-        case Qt.Key_Right:
-            doomController.sendKey(doomKeyRight, false);
-            event.accepted = true;
-            break;
-        case Qt.Key_Return:
-            doomController.sendKey(doomKeyEnter, false);
-            doomController.sendKey(doomKeyFire, false);
-            doomController.sendKey(doomKeyUse, false);
-            event.accepted = true;
-            break;
-        }
-    }
-
-    // When the hardware escape button (button 1) is pressed,
-    // DoomController emits escapeRequested after stopping DOOM.
-    // This navigates back to the home screen.
     Connections {
-        target: doomController
-        function onEscapeRequested() {
-            navigationController.goHome();
+        target: buttons
+        function onPressed(button) {
+            doomController.press(button);
         }
     }
 
-    Component.onDestruction: {
-        if (doomController.running) {
-            doomController.stopGame();
-        }
-    }
+    // Also while DOOM is still loading, when running is false
+    Component.onDestruction: doomController.stopGame()
 }

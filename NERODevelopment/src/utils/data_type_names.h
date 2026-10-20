@@ -30,7 +30,8 @@
 #define CCL "BMS/Commands/Max_DC_Brake_Current_Target"
 // Single wheel-button topic. The int payload is a 0-indexed button ordinal
 // (0..9) matching the VCU-side `button_t` enum in
-// Cerberus-2.0/Core/Inc/u_buttons.h. See raspberry_model.h for the full layout.
+// Cerberus-2.0/Core/Inc/u_buttons.h. See Buttons::Button in
+// controllers/buttons.h for the full layout.
 #define BUTTONID "Wheel/Buttons/button_id"
 #define SEGMENTTEMP1 "BMS/Segment_Temp/1"
 #define SEGMENTTEMP2 "BMS/Segment_Temp/2"

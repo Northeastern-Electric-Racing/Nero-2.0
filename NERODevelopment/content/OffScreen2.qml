@@ -9,7 +9,6 @@ Rectangle {
     width: parent.width
     height: parent.height
     visible: true
-    focus: true
     color: Theme.background
 
     property variant attributeStatusMap: offViewController.attributeStatus
@@ -40,25 +39,10 @@ Rectangle {
     property int labelFontSize: Math.min(height / 20, width / 20)
     property int radialUnitFontSize: valueFontSize / 3
 
-    Keys.onPressed: event => {
-        switch (event.key) {
-        case Qt.Key_Up:
-            offViewController.upButtonPressed();
-            break;
-        case Qt.Key_Left:
-            offViewController.leftButtonPressed();
-            break;
-        case Qt.Key_Right:
-            offViewController.rightButtonPressed();
-            break;
-        case Qt.Key_Down:
-            offViewController.downButtonPressed();
-            break;
-        case Qt.Key_Return:
-            offViewController.enterButtonPressed();
-            break;
-        default:
-            break;
+    Connections {
+        target: buttons
+        function onPressed(button) {
+            offViewController.press(button);
         }
     }
 

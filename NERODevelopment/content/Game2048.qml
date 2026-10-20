@@ -4,9 +4,7 @@ Rectangle {
     id: game2048
 
     anchors.fill: parent
-    focus: game2048.isFocused
 
-    property bool isFocused: false
     property var board: []
     property int score: 0
     property int bestScore: game2048Controller.bestScore
@@ -603,11 +601,12 @@ Rectangle {
         game2048Controller.setGameOver(false);
     }
 
-    Keys.onUpPressed: game2048Controller.upButtonPressed()
-    Keys.onDownPressed: game2048Controller.downButtonPressed()
-    Keys.onLeftPressed: game2048Controller.leftButtonPressed()
-    Keys.onRightPressed: game2048Controller.rightButtonPressed()
-    Keys.onReturnPressed: game2048Controller.enterButtonPressed()
+    Connections {
+        target: buttons
+        function onPressed(button) {
+            game2048Controller.press(button);
+        }
+    }
 
     Connections {
         target: game2048Controller
