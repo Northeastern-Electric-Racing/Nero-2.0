@@ -29,6 +29,13 @@ inline int count() { return static_cast<int>(getPages().size()); }
 inline bool valid(int i) { return i >= 0 && i < count(); }
 inline const Item &get(int i) { return getPages()[i]; }
 
+inline int indexOf(const QString &label) {
+  for (int i = 0; i < count(); ++i)
+    if (label.compare(QString::fromUtf8(get(i).label)) == 0)
+      return i;
+  return -1;
+}
+
 inline bool isSubItem(int i) {
   return valid(i) &&
          (get(i).type == Type::SubPage || get(i).type == Type::SubAction);

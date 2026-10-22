@@ -80,6 +80,7 @@ set(PROJECT_SOURCES
     src/controllers/game2048controller.h
     src/controllers/tankcontroller.h
     src/controllers/doomcontroller.h
+    src/controllers/profilecontroller.h
 
     # Headers - Models
     src/models/model.h
@@ -109,6 +110,7 @@ set(PROJECT_SOURCES
     src/controllers/game2048controller.cpp
     src/controllers/tankcontroller.cpp
     src/controllers/doomcontroller.cpp
+    src/controllers/profilecontroller.cpp
 
     # Implementation - Models
     src/models/model.cpp

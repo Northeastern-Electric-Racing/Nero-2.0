@@ -10,6 +10,7 @@
 #include "controllers/homecontroller.h"
 #include "controllers/navigationcontroller.h"
 #include "controllers/offviewcontroller.h"
+#include "controllers/profilecontroller.h"
 #include "controllers/snakecontroller.h"
 #include "controllers/speedcontroller.h"
 #include "import_qml_components_plugins.h"
@@ -44,6 +45,7 @@ int main(int argc, char *argv[]) {
   Game2048Controller game2048Controller(model);
   EnduranceController enduranceController(model);
   SpeedController speedController(model);
+  ProfileController profileController(model, &navigationController);
 
   // Register DOOM's custom image provider with the QML engine.
   // Unlike other controllers which just expose properties/methods to QML,
@@ -71,6 +73,8 @@ int main(int argc, char *argv[]) {
   engine.rootContext()->setContextProperty("enduranceController",
                                            &enduranceController);
   engine.rootContext()->setContextProperty("speedController", &speedController);
+  engine.rootContext()->setContextProperty("profileController",
+                                           &profileController);
 
   QObject::connect(&homeController, &HomeController::toggleFaultAlertsRequested,
                    &headerController, &HeaderController::toggleFaultAlerts);

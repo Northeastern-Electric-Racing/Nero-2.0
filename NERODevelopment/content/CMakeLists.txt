@@ -49,6 +49,7 @@ qt6_add_qml_module(content
         HomeIcon.qml
         SubMenuIcon.qml
         DoomView.qml
+        ProfilePreview.qml
         VcuStateComponent.qml
 
     RESOURCES
@@ -68,6 +69,9 @@ qt6_add_qml_module(content
         images/lightNeroLogo.png
         images/themes.png
         images/profile.png
+        images/previews/driver-pit.png
+        images/previews/driver-performance.png
+        images/previews/driver-endurance.png
         images/bots.jpg
         images/bspd.jpg
         images/cockpitBrb.jpg

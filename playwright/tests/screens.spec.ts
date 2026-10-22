@@ -6,7 +6,7 @@ const HOME_MODE = "VCU/CarState/home_mode";
 const BUTTON_ID = "Wheel/Buttons/button_id";
 // Top-level menu slots, and wheel button ids from readme "Button Layout"
 const PAGE = { OFF: 0, PIT_DRIVE: 1, PERFORMANCE: 3, ENDURANCE: 4, GAMES: 5, THEMES: 6, PROFILE: 7 };
-const BUTTON = { ENTER: 5, RIGHT: 6 };
+const BUTTON = { LEFT: 1, UP: 3, DOWN: 4, ENTER: 5, RIGHT: 6 };
 
 type Topics = Record<string, number[]>;
 
@@ -40,7 +40,11 @@ const cases: Record<string, { steps: Topics[]; tolerance?: number }> = {
   },
   "themes-next": { steps: [open(PAGE.THEMES), { [BUTTON_ID]: [BUTTON.RIGHT] }] },
   "profile-open": { steps: [open(PAGE.PROFILE)] },
-  "profile-select": { steps: [open(PAGE.PROFILE), { [BUTTON_ID]: [BUTTON.ENTER] }] },
+  "profile-browse": { steps: [open(PAGE.PROFILE), { [BUTTON_ID]: [BUTTON.UP] }] },
+  "profile-driver-scroll": { steps: [open(PAGE.PROFILE), { [BUTTON_ID]: [BUTTON.RIGHT] }] },
+  "profile-select": {
+    steps: [open(PAGE.PROFILE), { [BUTTON_ID]: [BUTTON.UP] }, { [BUTTON_ID]: [BUTTON.ENTER] }],
+  },
 };
 
 for (const [name, { steps, tolerance = MENU }] of Object.entries(cases)) {
@@ -50,6 +54,15 @@ for (const [name, { steps, tolerance = MENU }] of Object.entries(cases)) {
     await expect(page).toHaveScreenshot(`${name}.png`, { maxDiffPixelRatio: tolerance });
   });
 }
+
+// Escape leaves the preview without switching profiles
+test("profile-escape", async ({ page, mock }) => {
+  await mock.inject(open(PAGE.PROFILE));
+  await mock.inject({ [BUTTON_ID]: [BUTTON.UP] });
+  await page.keyboard.press("Escape");
+  await mock.freeze();
+  await expect(page).toHaveScreenshot("profile-escape.png", { maxDiffPixelRatio: MENU });
+});
 
 // Games animate on their own, so check the game opens and the app keeps responding
 test("flappy-bird", async ({ page, mock }) => {
