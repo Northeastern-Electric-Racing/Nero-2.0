@@ -2,7 +2,7 @@
 #include <QKeyEvent>
 
 TankController::TankController(Model *model, QObject *parent)
-    : ButtonController{model, 8, parent}, m_barrelAngle(0), m_position(0) {}
+    : ButtonController{model, parent}, m_barrelAngle(0), m_position(0) {}
 
 void TankController::handleKeyPress(int key) {
   switch (key) {

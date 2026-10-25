@@ -20,3 +20,20 @@ services:
       - "simulate"
       - "--disable-topic"
       - ".*Fault.*"
+      # The dev-vcu service owns navigation and car state
+      - "--disable-topic"
+      - "VCU/CarState/(nero_index|home_mode|functional_state)"
+      - "--disable-topic"
+      - "Wheel/Buttons/.*"
+
+  dev-vcu:
+    container_name: nero-dev-vcu
+    image: node:22-alpine
+    depends_on:
+      - siren-dev
+    environment:
+      - MQTT_URL=mqtt://siren-dev:1883
+    volumes:
+      - ./dev-config/dev-vcu.mjs:/app/dev-vcu.mjs:ro
+    working_dir: /app
+    command: sh -c "npm install --silent --no-save mqtt@5 && node dev-vcu.mjs"

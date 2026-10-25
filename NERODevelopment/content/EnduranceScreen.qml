@@ -32,11 +32,10 @@ Item {
     width: 800
     height: 480
 
-    Keys.onPressed: event => {
-        if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
-            enduranceController.enterButtonPressed();
-        } else if (event.key === Qt.Key_Right) {
-            headerController.toggleFaultAlerts();
+    Connections {
+        target: buttons
+        function onPressed(button) {
+            enduranceController.press(button);
         }
     }
 
