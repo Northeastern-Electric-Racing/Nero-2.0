@@ -4,7 +4,7 @@
 static const QString kHighScoreKey = "scores/flappybird";
 
 FlappyBirdController::FlappyBirdController(Model *model, QObject *parent)
-    : ButtonController{model, 6, parent} {
+    : ButtonController{model, parent} {
   m_bestScore = HighScores::load(kHighScoreKey);
 }
 

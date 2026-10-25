@@ -1,14 +1,12 @@
 import QtQuick
 import QtQuick.Window
+import Main
 import NERO
 
 Item {
     id: flappyBird
     anchors.fill: parent
-    focus: flappyBird.isFocused
     visible: true
-
-    property bool isFocused: false
 
     property int xBallValue: 150
     property int yBallValue: 250
@@ -83,7 +81,7 @@ Item {
         }
 
         interval: flappyBird.frameRate
-        running: flappyBird.focus
+        running: true
         repeat: true
         onTriggered: {
             if (flappyBird.gameOver) {
@@ -189,9 +187,13 @@ Item {
         source: pipeSrc
     }
 
-    Keys.onSpacePressed: {
-        flappyBirdController.enterButtonPressed();
-        birdFlapAnimation.running = true;
+    Connections {
+        target: buttons
+        function onPressed(button) {
+            flappyBirdController.press(button);
+            if (button === Buttons.Enter)
+                birdFlapAnimation.running = true;
+        }
     }
 
     NumberAnimation on yBallValue {

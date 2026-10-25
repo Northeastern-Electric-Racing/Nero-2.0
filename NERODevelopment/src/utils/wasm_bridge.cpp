@@ -1,3 +1,7 @@
+// Browser-only: the dev WASM build has no MQTT client, so Playwright's mock.mjs
+// feeds the model (window.nero.publish) and receives NERO's presses
+// (window.neroSend). Compiles to nothing on desktop and on the car.
+#ifdef __EMSCRIPTEN__
 #include "../models/raspberry_model.h"
 #include <QCoreApplication>
 #include <QProtobufSerializer>
@@ -27,7 +31,16 @@ static void publishPayload(const std::string &topic,
   }
 }
 
-EMSCRIPTEN_BINDINGS(vcu_sim) {
+void RaspberryModel::connectToMQTT() {}
+
+void RaspberryModel::sendMessage(const QString topic, const float value) {
+  const emscripten::val send = emscripten::val::global("neroSend");
+  if (send.typeOf().as<std::string>() == "function")
+    send(topic.toStdString(), value);
+}
+
+EMSCRIPTEN_BINDINGS(wasm_bridge) {
   emscripten::function("publish", &publish);
   emscripten::function("publishPayload", &publishPayload);
 }
+#endif

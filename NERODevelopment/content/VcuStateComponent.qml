@@ -9,11 +9,12 @@ Item {
     readonly property color cautionColor: Theme.cautionStatus
     readonly property color faultColor: Theme.criticalStatus
 
-    readonly property string stateLabel: navigationController ? navigationController.functionalStateLabel : ""
-    readonly property bool stateKnown: navigationController ? navigationController.functionalStateKnown : false
-    readonly property bool stateFaulted: navigationController ? navigationController.functionalStateFaulted : false
-    readonly property bool rejected: navigationController ? navigationController.stateRejectionActive : false
-    readonly property var rejectionReasons: navigationController ? navigationController.stateRejectionReasons : []
+    readonly property string stateLabel: vcu.functionalStateLabel
+    readonly property bool stateKnown: vcu.functionalStateKnown
+    readonly property bool stateFaulted: vcu.functionalStateFaulted
+    readonly property bool rejected: vcu.stateRejectionActive
+    property string notice: ""
+    readonly property var rejectionReasons: notice ? vcu.stateRejectionReasons.concat(notice) : vcu.stateRejectionReasons
 
     readonly property int reasonFontSize: 14
     readonly property int reasonLineCount: 2
@@ -72,6 +73,6 @@ Item {
         text: root.reasonText
         font.pixelSize: root.reasonFontSize
         color: root.cautionColor
-        visible: root.rejected
+        visible: root.rejected || root.notice !== ""
     }
 }

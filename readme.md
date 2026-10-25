@@ -20,15 +20,15 @@ Select the kit for your respective desktop and press build and run
 
 ### Quick Start
 
-1. Start mock telemetry (Docker required)
+1. Start mock telemetry and the stand-in VCU (Docker required)
 
 ```bash
 docker compose -f compose.nero-dev.yml up -d
 ```
 
-2. Run NERO in Qt Creator
+2. Run NERO in Qt Creator, then navigate with the keyboard (see Button Layout). The top-right label shows READY while the stand-in VCU is running and NO VCU when it isn't.
 
-3. Stop when mock data when done
+3. Stop mock data when done
 
 ```bash
 docker compose -f compose.nero-dev.yml down
@@ -98,16 +98,18 @@ for /f %f in ('git ls-files "*.qml" ":!deps/*"') do C:\Qt\6.8.3\mingw_64\bin\qml
 MQTT topic `Wheel/Buttons/button_id` carries the 0-indexed button ordinal,
 matching the VCU `button_t` enum in `Cerberus-2.0/Core/Inc/u_buttons.h`.
 
-| 0 | ESC                     |
-| 1 | LEFT                    |
-| 2 | LAUNCH_CONTROL_TOGGLE   |
-| 3 | UP_REGEN                |
-| 4 | DOWN_REGEN              |
-| 5 | ENTER                   |
-| 6 | RIGHT                   |
-| 7 | TRACTION_CONTROL_TOGGLE |
-| 8 | UP_TORQUE               |
-| 9 | DOWN_TORQUE             |
+| ID | Button                  | Desktop key |
+|----|-------------------------|-------------|
+| 0  | ESC                     | Esc         |
+| 1  | LEFT                    | Left        |
+| 2  | LAUNCH_CONTROL_TOGGLE   |             |
+| 3  | UP_REGEN                | Up          |
+| 4  | DOWN_REGEN              | Down        |
+| 5  | ENTER                   | Enter       |
+| 6  | RIGHT                   | Right       |
+| 7  | TRACTION_CONTROL_TOGGLE |             |
+| 8  | UP_TORQUE               |             |
+| 9  | DOWN_TORQUE             |             |
 
 Confluence reference (silkscreen is 1-indexed; wire = silkscreen − 1):
 https://nerdocs.atlassian.net/wiki/spaces/NER/pages/1526988828/Button+IO+25
@@ -122,7 +124,7 @@ Finally, save and run it.
 
 ### Playwright (Dev)
 
-Automated QA and Claude drive a dev-only WebAssembly build; the car and desktop builds are unchanged. Tests and the view start the Docker mock (`compose.nero-dev.yml`) and feed its data into the app. Each test injects only what the mock doesn't simulate or what it is testing, such as VCU navigation or a fault, through `window.nero.publish(topic, values)`. Cases live in `playwright/tests/screens.spec.ts`, one line each.
+Automated QA and Claude drive a dev-only WebAssembly build; the car and desktop builds are unchanged. Tests and the view start the Docker mock (`compose.nero-dev.yml`) and feed its data into the app. Each test presses wheel buttons through its own stand-in VCU in the Docker mock (`dev-config/dev-vcu.mjs`) and injects only what neither the mock nor the VCU sends, such as a fault, through `window.nero.publish(topic, values)`. Cases live in `playwright/tests/screens.spec.ts`, one line each.
 
 The setup script installs Emscripten 3.1.56 and Playwright and does the first build (`build-scripts/compile-qt-wasm.sh` or `.bat`). It needs the Qt 6.8.3 WebAssembly (single-threaded) kit, Node 20+, Docker, and Google Chrome, plus Python 3 on Windows. Then, from `playwright/`:
 

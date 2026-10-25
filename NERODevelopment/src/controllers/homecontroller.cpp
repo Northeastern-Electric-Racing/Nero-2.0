@@ -1,7 +1,7 @@
 #include "homecontroller.h"
 
 HomeController::HomeController(Model *model, QObject *parent)
-    : ButtonController{model, {1, 2}, parent}, m_speed(0), m_status(false),
+    : ButtonController{model, parent}, m_speed(0), m_status(false),
       m_direction(true), m_packTemp(0.0), m_motorTemp(0.0),
       m_stateOfCharge(0.0) {
   connect(m_model, &Model::onCurrentDataChange, this,
@@ -74,13 +74,11 @@ void HomeController::setLowVoltage(float voltage) {
 void HomeController::rightButtonPressed() { emit toggleFaultAlertsRequested(); }
 
 void HomeController::currentDataDidChange() {
-  if (this->m_pageIndices.contains(this->m_model->currentPageIndex)) {
-    setPackTemp(*m_model->getPackTemp());
-    setMotorTemp(*m_model->getMotorTemp());
-    setDirection(*m_model->getDir());
-    setStateOfCharge(*m_model->getStateOfCharge());
-    setSpeed(*m_model->getMph());
-    setStatus(*m_model->getStatus());
-    setLowVoltage(*m_model->getLowVoltage());
-  }
+  setPackTemp(m_model->getPackTemp().value_or(0));
+  setMotorTemp(m_model->getMotorTemp().value_or(0));
+  setDirection(m_model->getDir().value_or(1));
+  setStateOfCharge(m_model->getStateOfCharge().value_or(0));
+  setSpeed(m_model->getMph().value_or(0));
+  setStatus(m_model->getStatus().value_or(0));
+  setLowVoltage(m_model->getLowVoltage().value_or(0));
 }
