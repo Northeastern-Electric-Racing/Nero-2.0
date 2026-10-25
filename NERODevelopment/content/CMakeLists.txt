@@ -50,9 +50,17 @@ qt6_add_qml_module(content
         SubMenuIcon.qml
         DoomView.qml
         VcuStateComponent.qml
+        FaultDialog.qml
+)
         MenuList.qml
 
-    RESOURCES
+# Images and fonts use BIG_RESOURCES so rcc writes them straight into an object file
+# rather than a huge C++ array that dominates build time. The prefix matches the QML
+# module, so qrc:/qt/qml/content/... paths are unchanged.
+qt_add_resources(content "content_assets"
+    PREFIX "/qt/qml/content"
+    BIG_RESOURCES
+    FILES
         fonts/fonts.txt
         fonts/Roboto-Black.ttf
         images/bg.png
@@ -77,9 +85,7 @@ qt6_add_qml_module(content
         images/interlocks.jpg
         images/sidebrb.jpg
         images/tsms.jpg
-	images/flappy-bird.png
-	images/yellowbird-upflap.png
-	images/yellowbird-midflap.png
-	images/yellowbird-downflap.png
-        QML_FILES FaultDialog.qml
+        images/yellowbird-upflap.png
+        images/yellowbird-midflap.png
+        images/yellowbird-downflap.png
 )
