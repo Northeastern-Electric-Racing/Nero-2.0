@@ -183,7 +183,7 @@ private:
   int m_activePage = -1;
   int m_expanded = -1;
   bool m_isTsOn = false;
-  QString m_profile = "DRIVER";
+  QString m_profile = "SOFTWARE";
   std::optional<int> m_functionalState;
   std::optional<int> m_stateRejection;
   int m_lastModeIndex = -999;

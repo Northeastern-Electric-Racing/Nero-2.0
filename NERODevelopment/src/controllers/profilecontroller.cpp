@@ -7,9 +7,7 @@ ProfileController::ProfileController(Model *model,
       m_navigation(navigation) {}
 
 QStringList ProfileController::previewImages() const {
-  if (m_profiles[m_highlighted] == "DRIVER")
-    return m_driverImages;
-  return {};
+  return m_previewImages.value(m_profiles[m_highlighted]);
 }
 
 void ProfileController::reset() {

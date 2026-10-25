@@ -40,10 +40,13 @@ const cases: Record<string, { steps: Topics[]; tolerance?: number }> = {
   },
   "themes-next": { steps: [open(PAGE.THEMES), { [BUTTON_ID]: [BUTTON.RIGHT] }] },
   "profile-open": { steps: [open(PAGE.PROFILE)] },
-  "profile-browse": { steps: [open(PAGE.PROFILE), { [BUTTON_ID]: [BUTTON.UP] }] },
-  "profile-driver-scroll": { steps: [open(PAGE.PROFILE), { [BUTTON_ID]: [BUTTON.RIGHT] }] },
+  "profile-scroll": { steps: [open(PAGE.PROFILE), { [BUTTON_ID]: [BUTTON.RIGHT] }] },
+  "profile-hardware": { steps: [open(PAGE.PROFILE), { [BUTTON_ID]: [BUTTON.DOWN] }] },
+  "profile-driver": {
+    steps: [open(PAGE.PROFILE), { [BUTTON_ID]: [BUTTON.DOWN] }, { [BUTTON_ID]: [BUTTON.DOWN] }],
+  },
   "profile-select": {
-    steps: [open(PAGE.PROFILE), { [BUTTON_ID]: [BUTTON.UP] }, { [BUTTON_ID]: [BUTTON.ENTER] }],
+    steps: [open(PAGE.PROFILE), { [BUTTON_ID]: [BUTTON.DOWN] }, { [BUTTON_ID]: [BUTTON.ENTER] }],
   },
 };
 
@@ -58,7 +61,7 @@ for (const [name, { steps, tolerance = MENU }] of Object.entries(cases)) {
 // Escape leaves the preview without switching profiles
 test("profile-escape", async ({ page, mock }) => {
   await mock.inject(open(PAGE.PROFILE));
-  await mock.inject({ [BUTTON_ID]: [BUTTON.UP] });
+  await mock.inject({ [BUTTON_ID]: [BUTTON.DOWN] });
   await page.keyboard.press("Escape");
   await mock.freeze();
   await expect(page).toHaveScreenshot("profile-escape.png", { maxDiffPixelRatio: MENU });
