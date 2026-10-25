@@ -51,8 +51,8 @@ qt6_add_qml_module(content
         DoomView.qml
         VcuStateComponent.qml
         FaultDialog.qml
-)
         MenuList.qml
+)
 
 # Images and fonts use BIG_RESOURCES so rcc writes them straight into an object file
 # rather than a huge C++ array that dominates build time. The prefix matches the QML
