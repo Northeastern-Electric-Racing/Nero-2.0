@@ -2,7 +2,7 @@ import { test as base, expect } from "@playwright/test";
 import { connectMock } from "../mock.mjs";
 
 // Top-level menu slots, and wheel button ids from readme "Button Layout"
-const PAGE = { OFF: 0, PIT_DRIVE: 1, PERFORMANCE: 3, ENDURANCE: 4, GAMES: 5, THEMES: 6, EXIT: 7 };
+const PAGE = { OFF: 0, PIT_DRIVE: 1, PERFORMANCE: 3, ENDURANCE: 4, GAMES: 5, THEMES: 6, PROFILE: 7, EXIT: 8 };
 const [ESC, LEFT, UP, DOWN, ENTER, RIGHT] = [0, 1, 3, 4, 5, 6];
 
 // A step presses wheel buttons through the page's stand-in VCU, or injects topics no VCU sends
@@ -55,6 +55,14 @@ const cases: Record<string, { steps: Step[]; tolerance?: number }> = {
   exit: { steps: [open(PAGE.EXIT)] },
   // A nero_index firmware has but NERO doesn't: the menu stays up with a notice
   "unknown-page": { steps: [{ "VCU/CarState/nero_index": [9], "VCU/CarState/home_mode": [0] }] },
+  "profile-open": { steps: [open(PAGE.PROFILE)] },
+  "profile-scroll": { steps: [open(PAGE.PROFILE), [RIGHT]] },
+  "profile-hardware": { steps: [open(PAGE.PROFILE), [DOWN]] },
+  "profile-driver": { steps: [open(PAGE.PROFILE), [DOWN, DOWN]] },
+  // Enter switches the profile, then Escape shows it in the header
+  "profile-select": { steps: [open(PAGE.PROFILE), [DOWN, ENTER, ESC]] },
+  // Escape leaves the preview without switching profiles
+  "profile-escape": { steps: [open(PAGE.PROFILE), [DOWN, ESC]] },
 };
 
 const run = (mock: Awaited<ReturnType<typeof connectMock>>, steps: Step[]) =>

@@ -4,6 +4,8 @@ import mqtt from "mqtt";
 // service in compose.nero-dev.yml. The native app uses plain topics; each Playwright page gets
 // its own VCU under a "sim/<id>/" topic prefix, so pages never share state.
 const [ESC, LEFT, ENTER, RIGHT] = [0, 1, 5, 6];
+// Firmware MAX_NERO_STATES is 8; NERO shows PROFILE in firmware's EXIT slot and EXIT in a 9th
+const NERO_STATES = 9;
 
 // ServerData with values = [v]
 const serverData = (v) => {
@@ -31,10 +33,10 @@ function vcu(prefix) {
     press(button) {
       if (button === ESC) home = true;
       if (button === ENTER) home = false;
-      // Both wrap, over firmware MAX_NERO_STATES: Left at OFF underflows the firmware's unsigned
-      // index, which it then clamps to the last slot, EXIT
-      if (home && button === RIGHT) index = (index + 1) % 8;
-      if (home && button === LEFT) index = (index + 7) % 8;
+      // Both wrap, over NERO_STATES: Left at OFF underflows the firmware's unsigned index, which
+      // it then clamps to the last slot
+      if (home && button === RIGHT) index = (index + 1) % NERO_STATES;
+      if (home && button === LEFT) index = (index + NERO_STATES - 1) % NERO_STATES;
       // The wheel sends each press to NERO as well
       send("Wheel/Buttons/button_id", button);
       sync();

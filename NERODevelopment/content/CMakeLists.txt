@@ -49,6 +49,7 @@ qt6_add_qml_module(content
         HomeIcon.qml
         SubMenuIcon.qml
         DoomView.qml
+        ProfilePreview.qml
         VcuStateComponent.qml
         FaultDialog.qml
         MenuList.qml
@@ -76,6 +77,16 @@ qt_add_resources(content "content_assets"
         images/darkNeroLogo.png
         images/lightNeroLogo.png
         images/themes.png
+        images/profile.png
+        images/previews/driver-pit.png
+        images/previews/driver-performance.png
+        images/previews/driver-endurance.png
+        images/previews/software-home.png
+        images/previews/software-off.png
+        images/previews/software-pit.png
+        images/previews/hardware-off.png
+        images/previews/hardware-endurance.png
+        images/previews/hardware-performance.png
         images/bots.jpg
         images/bspd.jpg
         images/cockpitBrb.jpg

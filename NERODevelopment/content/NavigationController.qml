@@ -38,7 +38,10 @@ Item {
                 { title: "DARK", theme: "dark" }
             ]
         },
-        { index: 7, title: "EXIT", icon: "exit.png" }
+        // PROFILE takes firmware's EXIT slot, so EXIT moves to 8, which only dev-vcu.mjs reaches
+        // until Cerberus-2.0 has 9 slots
+        { index: 7, title: "PROFILE", icon: "profile.png", page: "ProfilePreview.qml" },
+        { index: 8, title: "EXIT", icon: "exit.png" }
     ]
     readonly property var current: pages.find(p => p.index === vcu.navIndex)
 
@@ -85,6 +88,7 @@ Item {
     HeaderView {
         id: header
         ownsDialog: true
+        profileTitle: profileController.currentProfile
     }
 
     LabelText {
