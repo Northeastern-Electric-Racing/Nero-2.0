@@ -7,6 +7,15 @@ endif()
 
 project(NEROApp LANGUAGES CXX C)
 
+# Use ccache when available so rebuilds reuse cached objects (-DNERO_USE_CCACHE=OFF to disable)
+option(NERO_USE_CCACHE "Use ccache to speed up rebuilds" ON)
+find_program(CCACHE_PROGRAM ccache)
+if(NERO_USE_CCACHE AND CCACHE_PROGRAM)
+    message(STATUS "Using ccache: ${CCACHE_PROGRAM}")
+    set(CMAKE_C_COMPILER_LAUNCHER ${CCACHE_PROGRAM})
+    set(CMAKE_CXX_COMPILER_LAUNCHER ${CCACHE_PROGRAM})
+endif()
+
 # Find Qt6 first before version checks
 find_package(Qt6 REQUIRED COMPONENTS Core Gui Qml Quick Network Protobuf)
 
@@ -73,7 +82,8 @@ set(PROJECT_SOURCES
     src/controllers/endurancecontroller.h
     src/controllers/headercontroller.h
     src/controllers/buttoncontroller.h
-    src/controllers/navigationcontroller.h
+    src/controllers/vcu.h
+    src/controllers/buttons.h
     src/controllers/flappybirdcontroller.h
     src/controllers/speedcontroller.h
     src/controllers/snakecontroller.h
@@ -103,7 +113,8 @@ set(PROJECT_SOURCES
     src/controllers/headercontroller.cpp
     src/controllers/offviewcontroller.cpp
     src/controllers/buttoncontroller.cpp
-    src/controllers/navigationcontroller.cpp
+    src/controllers/vcu.cpp
+    src/controllers/buttons.cpp
     src/controllers/flappybirdcontroller.cpp
     src/controllers/speedcontroller.cpp
     src/controllers/snakecontroller.cpp
@@ -122,6 +133,7 @@ set(PROJECT_SOURCES
     # Implementation - Utils
     src/utils/server_data.cpp
     src/utils/descriptioninfo.cpp
+    src/utils/wasm_bridge.cpp
 
     # Main
     src/main.cpp
@@ -139,6 +151,9 @@ qt_add_executable(NEROApp ${PROJECT_SOURCES} ${DOOM_SOURCES})
 # Add doomgeneric headers to include path
 target_include_directories(NEROApp PRIVATE ${DOOMGENERIC_DIR})
 
+# QML type registration includes QML_ELEMENT headers by file name
+target_include_directories(NEROApp PRIVATE src/controllers)
+
 # Add protobuf
 qt_add_protobuf(NEROApp
     PROTO_FILES
@@ -155,9 +170,8 @@ target_link_libraries(NEROApp PRIVATE
     Qt6::Protobuf
 )
 
-# The dev-only WASM build has no broker; Playwright feeds the model through the VCU sim
+# The dev-only WASM build has no broker; Playwright feeds the model through utils/wasm_bridge.cpp
 if(EMSCRIPTEN)
-    target_sources(NEROApp PRIVATE src/utils/vcu_sim.cpp)
     configure_file(../playwright/index.html index.html COPYONLY)
 else()
     find_package(Qt6 REQUIRED COMPONENTS Mqtt)

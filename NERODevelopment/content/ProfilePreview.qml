@@ -2,7 +2,7 @@ import QtQuick
 import QtQuick.Layouts
 import NERO
 
-// Previews the highlighted profile, Escape falls through to NavigationController to go home
+// Previews the highlighted profile, Escape goes home through the VCU
 Rectangle {
     id: profilePreview
     color: "black"
@@ -14,28 +14,10 @@ Rectangle {
     Component.onCompleted: profileController.reset()
 
     // Up and down switch profiles, left and right scroll that profile's images
-    Keys.onPressed: event => {
-        switch (event.key) {
-        case Qt.Key_Up:
-            profileController.upButtonPressed();
-            event.accepted = true;
-            break;
-        case Qt.Key_Down:
-            profileController.downButtonPressed();
-            event.accepted = true;
-            break;
-        case Qt.Key_Left:
-            profileController.leftButtonPressed();
-            event.accepted = true;
-            break;
-        case Qt.Key_Right:
-            profileController.rightButtonPressed();
-            event.accepted = true;
-            break;
-        case Qt.Key_Return:
-            profileController.enterButtonPressed();
-            event.accepted = true;
-            break;
+    Connections {
+        target: buttons
+        function onPressed(button) {
+            profileController.press(button);
         }
     }
 

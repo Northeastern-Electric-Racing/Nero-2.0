@@ -1,5 +1,8 @@
+pragma ComponentBehavior: Bound
+
 import QtQuick
 import QtQuick.Layouts
+import Main
 import NERO
 
 Item {
@@ -13,40 +16,87 @@ Item {
     property int boxSize: Math.min(height / 3, width / 6)
     property int itemSpacing: 15
 
-    Keys.onPressed: event => {
-        switch (event.key) {
-        case Qt.Key_Escape:
-            navigationController.goHome();
-            break;
-        case Qt.Key_Right:
-        case Qt.Key_Down:
-            if (!navigationController.isPageActive)
-                navigationController.moveNext();
-            break;
-        case Qt.Key_Left:
-        case Qt.Key_Up:
-            if (!navigationController.isPageActive)
-                navigationController.movePrev();
-            break;
-        case Qt.Key_Return:
-            if (!navigationController.isPageActive)
-                navigationController.activate();
-            break;
+    // One row per VCU nero_index (Cerberus-2.0 nero_menu_t). A page opens full screen, entries expand
+    // the tile, and a row with neither keeps the menu up.
+    readonly property var pages: [
+        { index: 0, title: "OFF", icon: "zzz.png", page: "OffScreen2.qml" },
+        { index: 1, title: "PIT - DRIVE", icon: "flag.png", page: "Pit.qml" },
+        { index: 2, title: "PIT - KEVIN", icon: "kevin.jpg", page: "Pit.qml" },
+        { index: 3, title: "PERFORMANCE", icon: "hare.png", page: "SpeedMode.qml" },
+        { index: 4, title: "ENDURANCE", icon: "turtle.png", page: "EnduranceScreen.qml" },
+        {
+            index: 5, title: "GAMES", icon: "game.png", entries: [
+                { title: "FLAPPY BIRD", page: "FlappyBird.qml" },
+                { title: "SNAKE", page: "Snake.qml" },
+                { title: "2048", page: "Game2048.qml" },
+                { title: "DOOM", page: "DoomView.qml" }
+            ]
+        },
+        {
+            index: 6, title: "THEMES", icon: "themes.png", entries: [
+                { title: "LIGHT", theme: "light" },
+                { title: "DARK", theme: "dark" }
+            ]
+        },
+        // PROFILE takes firmware's EXIT slot, so EXIT moves to 8, which only dev-vcu.mjs reaches
+        // until Cerberus-2.0 has 9 slots
+        { index: 7, title: "PROFILE", icon: "profile.png", page: "ProfilePreview.qml" },
+        { index: 8, title: "EXIT", icon: "exit.png" }
+    ]
+    readonly property var current: pages.find(p => p.index === vcu.navIndex)
+
+    property string entryPage: ""
+    readonly property string openPage: vcu.homeMenu || current === undefined ? "" : (current.page ?? entryPage)
+    readonly property bool expanded: !vcu.homeMenu && current?.entries !== undefined && entryPage === ""
+    readonly property bool showingPage: openPage !== ""
+
+    readonly property var keyButtons: ({
+            [Qt.Key_Escape]: Buttons.Esc,
+            [Qt.Key_Left]: Buttons.Left,
+            [Qt.Key_Right]: Buttons.Right,
+            [Qt.Key_Up]: Buttons.UpRegen,
+            [Qt.Key_Down]: Buttons.DownRegen,
+            [Qt.Key_Return]: Buttons.Enter,
+            [Qt.Key_Enter]: Buttons.Enter
+        })
+
+    // Deferred so the list isn't destroyed inside its own handler; skipped if the VCU moved meanwhile
+    function openLater(page: string) {
+        const index = vcu.navIndex;
+        Qt.callLater(() => {
+            if (vcu.navIndex === index && !vcu.homeMenu)
+                entryPage = page;
+        });
+    }
+
+    Connections {
+        target: vcu
+        function onNavIndexChanged() {
+            navigation.entryPage = "";
         }
+        function onHomeMenuChanged() {
+            navigation.entryPage = "";
+        }
+    }
+
+    Keys.onPressed: event => {
+        const button = keyButtons[event.key];
+        if (button !== undefined && !event.isAutoRepeat)
+            buttons.press(button);
     }
 
     HeaderView {
         id: header
         ownsDialog: true
-        profileTitle: navigationController.currentProfile
+        profileTitle: profileController.currentProfile
     }
 
     LabelText {
         id: tsmsIndicator
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.topMargin: parent.height * 0.1
-        text: navigationController.isTsOn ? "TSMS - ON" : "TSMS - OFF"
-        color: navigationController.isTsOn ? Theme.goodStatus : Theme.criticalStatus
+        text: vcu.tsOn ? "TSMS - ON" : "TSMS - OFF"
+        color: vcu.tsOn ? Theme.goodStatus : Theme.criticalStatus
     }
 
     VcuStateComponent {
@@ -59,7 +109,9 @@ Item {
             right: parent.right
             rightMargin: parent.width * 0.05
         }
-        visible: !navigationController.isPageActive
+        visible: !navigation.showingPage
+        // An index firmware has but this table doesn't yet keeps the menu up
+        notice: navigation.current === undefined ? "NO PAGE " + vcu.navIndex : ""
     }
 
     ColumnLayout {
@@ -72,70 +124,46 @@ Item {
             margins: parent.width * 0.02
             bottomMargin: parent.height * 0.1
         }
-        visible: !navigationController.isPageActive
+        visible: !navigation.showingPage
         spacing: itemSpacing
 
-        property var allItems: navigationController.getTopLevelItems()
         property int maxPerRow: Math.max(1, Math.floor((width + itemSpacing) / (navigation.boxSize + itemSpacing)))
 
-        function getRowItems(rowIndex) {
-            var start = rowIndex * maxPerRow;
-            var end = Math.min(start + maxPerRow, allItems.length);
-            var items = [];
-            for (var i = start; i < end; i++) {
-                items.push(allItems[i]);
-            }
-            return items;
-        }
-
-        function getRowCount() {
-            return Math.ceil(allItems.length / maxPerRow);
-        }
-
         Repeater {
-            id: rowRepeater
-            model: navContainer.getRowCount()
+            model: Math.ceil(navigation.pages.length / navContainer.maxPerRow)
 
             RowLayout {
-                id: rowItem
+                id: row
+                required property int index
                 Layout.fillHeight: true
                 Layout.fillWidth: true
-                spacing: itemSpacing
                 Layout.alignment: Qt.AlignHCenter
-
-                property int rowIndex: index
-                property var rowItems: navContainer.getRowItems(rowIndex)
+                spacing: itemSpacing
 
                 Repeater {
-                    model: rowItem.rowItems
+                    model: navigation.pages.slice(row.index * navContainer.maxPerRow, (row.index + 1) * navContainer.maxPerRow)
 
                     Item {
-                        width: navigation.boxSize
-                        height: navigation.boxSize
-
-                        property int itemIndex: modelData.index
-                        property bool isItemExpanded: navigationController.expandedIndex === itemIndex
+                        id: tile
+                        required property var modelData
+                        readonly property bool open: navigation.expanded && vcu.navIndex === modelData.index
+                        Layout.preferredWidth: navigation.boxSize
+                        Layout.preferredHeight: navigation.boxSize
 
                         HomeIcon {
                             anchors.fill: parent
-                            visible: !isItemExpanded
-                            highlighted: navigationController.selectedIndex === itemIndex
-                            text: modelData.label
-                            source: modelData.icon || "/qt/qml/content/images/zzz.png"
+                            visible: !tile.open
+                            highlighted: vcu.navIndex === tile.modelData.index
+                            text: tile.modelData.title
+                            source: "/qt/qml/content/images/" + tile.modelData.icon
                         }
 
-                        ColumnLayout {
+                        Loader {
                             anchors.centerIn: parent
-                            visible: isItemExpanded
-                            spacing: 10
-
-                            Repeater {
-                                model: isItemExpanded ? navigationController.getChildrenOf(itemIndex) : []
-
-                                SubMenuIcon {
-                                    highlighted: navigationController.selectedIndex === modelData.index
-                                    text: modelData.label
-                                }
+                            active: tile.open
+                            sourceComponent: MenuList {
+                                entries: tile.modelData.entries
+                                onChosen: entry => entry.page ? navigation.openLater(entry.page) : Theme.setTheme(entry.theme)
                             }
                         }
                     }
@@ -145,46 +173,8 @@ Item {
     }
 
     Loader {
-        id: pageLoader
         anchors.fill: parent
-        active: navigationController.isPageActive
-
-        source: {
-            if (!navigationController.isPageActive)
-                return "";
-            var qmlFile = navigationController.qmlFor(navigationController.activePageIndex);
-            return qmlFile ? "/qt/qml/content/" + qmlFile : "";
-        }
-
-        onLoaded: {
-            if (item) {
-                item.forceActiveFocus();
-                if (typeof item.isFocused !== "undefined") {
-                    item.isFocused = true;
-                }
-            }
-        }
-    }
-
-    Connections {
-        target: navigationController
-
-        function onActivePageChanged() {
-            if (!navigationController.isPageActive) {
-                navigation.forceActiveFocus();
-            }
-        }
-
-        function onThemeChanged(theme) {
-            Theme.setTheme(theme);
-        }
-
-        function onExitRequested() {
-            Qt.quit();
-        }
-
-        function onExpandedChanged() {
-            navContainer.allItems = navigationController.getTopLevelItems();
-        }
+        active: navigation.openPage !== ""
+        source: active ? "/qt/qml/content/" + navigation.openPage : ""
     }
 }

@@ -1,10 +1,7 @@
 #include "profilecontroller.h"
 
-ProfileController::ProfileController(Model *model,
-                                     NavigationController *navigation,
-                                     QObject *parent)
-    : ButtonController{model, Menu::indexOf("PROFILE"), parent},
-      m_navigation(navigation) {}
+ProfileController::ProfileController(Model *model, QObject *parent)
+    : ButtonController{model, parent} {}
 
 QStringList ProfileController::previewImages() const {
   return m_previewImages.value(m_profiles[m_highlighted]);
@@ -12,8 +9,7 @@ QStringList ProfileController::previewImages() const {
 
 void ProfileController::reset() {
   setHighlightedIndex(
-      std::max(0, static_cast<int>(
-                      m_profiles.indexOf(m_navigation->currentProfile()))));
+      std::max(0, static_cast<int>(m_profiles.indexOf(m_currentProfile))));
   setImageIndex(0);
 }
 
@@ -53,7 +49,10 @@ void ProfileController::rightButtonPressed() {
   setImageIndex(std::max(0, std::min(last, m_imageIndex + 1)));
 }
 
+// Escape goes home through the VCU, so Enter only switches the profile
 void ProfileController::enterButtonPressed() {
-  m_navigation->setProfile(m_profiles[m_highlighted]);
-  m_navigation->goHome();
+  if (m_currentProfile != m_profiles[m_highlighted]) {
+    m_currentProfile = m_profiles[m_highlighted];
+    emit currentProfileChanged();
+  }
 }

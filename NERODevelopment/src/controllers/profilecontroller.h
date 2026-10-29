@@ -2,13 +2,14 @@
 #define PROFILECONTROLLER_H
 
 #include "buttoncontroller.h"
-#include "navigationcontroller.h"
 #include <QMap>
 #include <QObject>
 
 class ProfileController : public ButtonController {
   Q_OBJECT
   Q_PROPERTY(QStringList profiles READ profiles CONSTANT)
+  Q_PROPERTY(
+      QString currentProfile READ currentProfile NOTIFY currentProfileChanged)
   Q_PROPERTY(int highlightedIndex READ highlightedIndex NOTIFY
                  highlightedIndexChanged)
   Q_PROPERTY(int imageIndex READ imageIndex NOTIFY imageIndexChanged)
@@ -16,10 +17,10 @@ class ProfileController : public ButtonController {
                  highlightedIndexChanged)
 
 public:
-  explicit ProfileController(Model *model, NavigationController *navigation,
-                             QObject *parent = nullptr);
+  explicit ProfileController(Model *model, QObject *parent = nullptr);
 
   QStringList profiles() const { return m_profiles; }
+  QString currentProfile() const { return m_currentProfile; }
   int highlightedIndex() const { return m_highlighted; }
   int imageIndex() const { return m_imageIndex; }
   // Static screenshots for the highlighted profile, empty if it has none yet
@@ -37,6 +38,7 @@ public slots:
   void downButtonPressed() override;
 
 signals:
+  void currentProfileChanged();
   void highlightedIndexChanged();
   void imageIndexChanged();
 
@@ -44,8 +46,8 @@ private:
   void setHighlightedIndex(int i);
   void setImageIndex(int i);
 
-  NavigationController *m_navigation;
   const QStringList m_profiles = {"SOFTWARE", "HARDWARE", "DRIVER"};
+  QString m_currentProfile = "SOFTWARE";
   const QMap<QString, QStringList> m_previewImages = {
       {"SOFTWARE",
        {"/qt/qml/content/images/previews/software-home.png",

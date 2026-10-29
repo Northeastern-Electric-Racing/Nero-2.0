@@ -15,19 +15,16 @@
  *
  * Button input:
  *   Unlike FlappyBird/Snake which only need press events, DOOM requires both
- *   press AND release (hold forward to walk, release to stop). The existing
- *   ButtonController pattern is consume-on-read (fire-and-forget presses),
- *   so DoomController connects directly to Model::onCurrentDataChange and
- *   reads the raw button value from "Wheel/Buttons/button_id" to do edge
- *   detection — tracking transitions to generate press/release pairs.
+ *   press AND release (hold forward to walk, release to stop). DoomView.qml
+ *   forwards each wheel press to press(), which releases the previous button
+ *   and presses the new one.
  *
  * Thread lifecycle:
  *   startGame() creates a QThread + DoomWorker, moves worker to thread, starts
  * it. stopGame() sets m_running=false → game loop exits → thread quits → worker
  * deleted. The thread is guaranteed to be stopped when:
- *     - User presses Esc (DoomView.qml calls stopGame + goHome)
- *     - User navigates away (DoomView.qml onIsFocusedChanged calls stopGame)
- *     - DoomView.qml is destroyed (Component.onDestruction calls stopGame)
+ *     - DoomView.qml is destroyed, e.g. Esc takes the VCU home
+ *       (Component.onDestruction calls stopGame)
  *     - DoomController is destroyed (destructor calls stopGame)
  */
 
@@ -39,8 +36,9 @@
 #include <QQuickImageProvider>
 #include <QThread>
 #include <QTimer>
+#include <atomic>
 
-#include "../models/model.h"
+#include "buttons.h"
 
 struct DoomKeyEvent {
   unsigned char pressed;
@@ -71,7 +69,7 @@ private:
  *
  * Created by DoomController::startGame(), destroyed automatically when the
  * thread finishes (via QThread::finished → deleteLater connection).
- * The game loop in start() blocks until stop() sets m_running to false.
+ * The game loop in start() blocks until stop() sets m_stopRequested.
  */
 class DoomWorker : public QObject {
   Q_OBJECT
@@ -94,7 +92,8 @@ signals:
 
 private:
   QString m_wadPath;
-  volatile bool m_running;
+  // Set from the GUI thread, possibly before the engine finishes loading
+  std::atomic<bool> m_stopRequested{false};
   QQueue<DoomKeyEvent> m_keyQueue;
   QMutex m_keyMutex;
 };
@@ -111,7 +110,7 @@ class DoomController : public QObject {
   Q_PROPERTY(QString statusText READ statusText NOTIFY statusTextChanged)
 
 public:
-  explicit DoomController(Model *model, QObject *parent = nullptr);
+  explicit DoomController(QObject *parent = nullptr);
   ~DoomController();
 
   bool running() const { return m_running; }
@@ -123,26 +122,17 @@ public:
   Q_INVOKABLE void startGame();
   Q_INVOKABLE void stopGame();
   Q_INVOKABLE void sendKey(int doomKeyCode, bool pressed);
+  Q_INVOKABLE void press(Buttons::Button button);
 
 signals:
   void runningChanged();
   void frameCounterChanged();
   void statusTextChanged();
-  void escapeRequested();
 
 private slots:
   void onFrameReady(const QImage &frame);
   void onWorkerStarted();
   void onWorkerStopped();
-
-  /**
-   * @brief Called on every Model::onCurrentDataChange.
-   *
-   * Reads the raw value from "Wheel/Buttons/button_id" and compares
-   * against m_lastButtonValue to detect edges (press/release).
-   * Only processes buttons when DOOM is actively running.
-   */
-  void onDataChanged();
 
 private:
   unsigned char mapButtonValueToDoomKey(int value);
@@ -152,7 +142,6 @@ private:
   /** Auto-releases the held key after a short delay */
   void autoRelease();
 
-  Model *m_model;
   DoomWorker *m_worker;
   QThread *m_gameThread;
   DoomImageProvider *m_imageProvider;
@@ -162,8 +151,7 @@ private:
   QString m_statusText;
   QString m_wadPath;
 
-  // Edge detection for hardware buttons.
-  // Tracks the last raw value from "Wheel/Buttons/button_id".
+  // The last button pressed, released on the next press.
   int m_lastButtonValue;
 
   // Auto-release timer: sends keyup after a brief delay so DOOM

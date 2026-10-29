@@ -2,17 +2,18 @@
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
 
 #include "app_environment.h"
+#include "controllers/buttons.h"
 #include "controllers/doomcontroller.h"
 #include "controllers/endurancecontroller.h"
 #include "controllers/flappybirdcontroller.h"
 #include "controllers/game2048controller.h"
 #include "controllers/headercontroller.h"
 #include "controllers/homecontroller.h"
-#include "controllers/navigationcontroller.h"
 #include "controllers/offviewcontroller.h"
 #include "controllers/profilecontroller.h"
 #include "controllers/snakecontroller.h"
 #include "controllers/speedcontroller.h"
+#include "controllers/vcu.h"
 #include "import_qml_components_plugins.h"
 #include "import_qml_plugins.h"
 #include "models/raspberry_model.h"
@@ -31,21 +32,22 @@ int main(int argc, char *argv[]) {
   QQmlApplicationEngine engine;
 
   Model *model = new RaspberryModel();
-  // The WASM build's vcu_sim.cpp finds the model through the app's QObject tree
+  // WASM's wasm_bridge.cpp finds the model through the app's QObject tree
   model->setParent(&app);
   model->connectToMQTT();
 
   HomeController homeController(model);
   HeaderController headerController(model);
   OffViewController offViewController(model);
-  NavigationController navigationController(model);
+  Vcu vcu(model);
+  Buttons buttons(model);
   FlappyBirdController flappyBirdController(model);
   SnakeController snakeController(model);
-  DoomController doomController(model);
+  DoomController doomController;
   Game2048Controller game2048Controller(model);
   EnduranceController enduranceController(model);
   SpeedController speedController(model);
-  ProfileController profileController(model, &navigationController);
+  ProfileController profileController(model);
 
   // Register DOOM's custom image provider with the QML engine.
   // Unlike other controllers which just expose properties/methods to QML,
@@ -62,8 +64,8 @@ int main(int argc, char *argv[]) {
                                            &headerController);
   engine.rootContext()->setContextProperty("offViewController",
                                            &offViewController);
-  engine.rootContext()->setContextProperty("navigationController",
-                                           &navigationController);
+  engine.rootContext()->setContextProperty("vcu", &vcu);
+  engine.rootContext()->setContextProperty("buttons", &buttons);
   engine.rootContext()->setContextProperty("flappyBirdController",
                                            &flappyBirdController);
   engine.rootContext()->setContextProperty("snakeController", &snakeController);
