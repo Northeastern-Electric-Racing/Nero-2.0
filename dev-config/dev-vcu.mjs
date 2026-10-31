@@ -20,8 +20,9 @@ function vcu(prefix) {
   // Pages' VCUs use QoS 1 so replies survive a test run's telemetry load
   const send = (topic, value) => broker.publish(prefix + topic, serverData(value), { qos: prefix ? 1 : 0 });
   const sync = () => {
-    send("VCU/CarState/nero_index", index);
+    // Calypso publishes the car state's home_mode before its nero_index
     send("VCU/CarState/home_mode", home ? 1 : 0);
+    send("VCU/CarState/nero_index", index);
     send("VCU/CarState/functional_state", 0); // READY
   };
   const heartbeat = setInterval(sync, 200);

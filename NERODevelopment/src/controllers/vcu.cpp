@@ -24,9 +24,17 @@ void Vcu::onTopic(const QString &topic, float value) {
       if (first)
         emit homeMenuChanged();
     }
+    // A frame's nero_index follows its home_mode, so the slot is known now
+    if (navIndex.has_value() && m_opening) {
+      m_opening = false;
+      emit opened();
+    }
   } else if (topic == HOMEBUTTON) {
     const bool homeMenu = value == 1;
     if (homeMenu != m_homeMenu) {
+      // Only leaving a home menu the VCU reported opens a slot; the first
+      // home_mode heard is just its current state
+      m_opening = !homeMenu && m_homeMenu.has_value();
       m_homeMenu = homeMenu;
       emit homeMenuChanged();
     }
