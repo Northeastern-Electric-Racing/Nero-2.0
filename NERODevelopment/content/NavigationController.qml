@@ -17,7 +17,7 @@ Item {
     property int itemSpacing: 15
 
     // One row per VCU nero_index (Cerberus-2.0 nero_menu_t). A page opens full screen, entries expand
-    // the tile, and a row with neither keeps the menu up.
+    // the tile, and quit closes NERO.
     readonly property var pages: [
         { index: 0, title: "OFF", icon: "zzz.png", page: "OffScreen2.qml" },
         { index: 1, title: "PIT - DRIVE", icon: "flag.png", page: "Pit.qml" },
@@ -38,7 +38,7 @@ Item {
                 { title: "DARK", theme: "dark" }
             ]
         },
-        { index: 7, title: "EXIT", icon: "exit.png" }
+        { index: 7, title: "EXIT", icon: "exit.png", quit: true }
     ]
     readonly property var current: pages.find(p => p.index === vcu.navIndex)
 
@@ -73,6 +73,10 @@ Item {
         }
         function onHomeMenuChanged() {
             navigation.entryPage = "";
+        }
+        function onOpened() {
+            if (navigation.current?.quit)
+                Qt.quit();
         }
     }
 

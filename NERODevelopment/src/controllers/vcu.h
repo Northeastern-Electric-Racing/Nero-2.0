@@ -31,7 +31,7 @@ public:
   int navIndex() const { return m_navIndex.value_or(0); }
   // The VCU sends home_mode before nero_index, so on the first car state a
   // page would open at the default index; stay on the menu until both arrive
-  bool homeMenu() const { return m_homeMenu || !m_navIndex; }
+  bool homeMenu() const { return m_homeMenu.value_or(true) || !m_navIndex; }
   bool tsOn() const { return m_tsOn; }
   QString functionalStateLabel() const {
     return functionalStateText(m_functionalState);
@@ -52,6 +52,7 @@ public:
 signals:
   void navIndexChanged();
   void homeMenuChanged();
+  void opened();
   void tsOnChanged();
   void functionalStateChanged();
   void stateRejectionChanged();
@@ -62,7 +63,8 @@ private:
   void setStateRejection(std::optional<int> mask);
 
   std::optional<int> m_navIndex;
-  bool m_homeMenu = true;
+  std::optional<bool> m_homeMenu;
+  bool m_opening = false;
   bool m_tsOn = false;
   std::optional<int> m_functionalState;
   std::optional<int> m_stateRejection;
