@@ -1,4 +1,4 @@
-import { test as base, expect } from "@playwright/test";
+import { test as base, expect, type Page } from "@playwright/test";
 import { connectMock } from "../mock.mjs";
 
 // Top-level menu slots, and wheel button ids from readme "Button Layout"
@@ -51,10 +51,16 @@ const cases: Record<string, { steps: Step[]; tolerance?: number }> = {
   // Leaving a game and reopening GAMES shows the list, not the game
   "game-cleared": { steps: [open(PAGE.GAMES), [ENTER, ESC, ENTER]] },
   "themes-light": { steps: [open(PAGE.THEMES), [ENTER, ESC]] },
-  // EXIT has no page, so the menu stays up
-  exit: { steps: [open(PAGE.EXIT)] },
   // A nero_index firmware has but NERO doesn't: the menu stays up with a notice
   "unknown-page": { steps: [{ "VCU/CarState/nero_index": [9], "VCU/CarState/home_mode": [0] }] },
+  // After missed frames, the next frame opens the slot it names (OFF), not the one heard last (EXIT)
+  "exit-after-missed-frames": {
+    steps: [
+      { "VCU/CarState/home_mode": [1], "VCU/CarState/nero_index": [PAGE.EXIT] },
+      { "VCU/CarState/home_mode": [0], "VCU/CarState/nero_index": [PAGE.OFF] },
+    ],
+    tolerance: LIVE_DATA,
+  },
 };
 
 const run = (mock: Awaited<ReturnType<typeof connectMock>>, steps: Step[]) =>
@@ -67,6 +73,31 @@ for (const [name, { steps, tolerance = MENU }] of Object.entries(cases)) {
     await expect(page).toHaveScreenshot(`${name}.png`, { maxDiffPixelRatio: tolerance });
   });
 }
+
+// NERO has quit once its window is gone and the page renders like an empty one
+const closed = async (page: Page) => {
+  const empty = await page.context().newPage();
+  const expected = await empty.screenshot();
+  await empty.close();
+  return (await page.screenshot()).equals(expected);
+};
+
+test("exit", async ({ page, mock }) => {
+  await mock.press(...open(PAGE.EXIT));
+  await expect.poll(() => closed(page)).toBe(true);
+});
+
+// A NERO started while the VCU already sits on EXIT stays up until the VCU opens EXIT again
+test("exit-at-startup", async ({ page, mock }) => {
+  await mock.press(...open(PAGE.EXIT));
+  await page.reload();
+  await page.waitForFunction(() => (window as any).nero);
+  await mock.freeze();
+  await expect(page).toHaveScreenshot("exit-at-startup.png", { maxDiffPixelRatio: MENU });
+  expect(await closed(page)).toBe(false);
+  await mock.press(ESC, ENTER);
+  await expect.poll(() => closed(page)).toBe(true);
+});
 
 // The state label falls back to NO VCU once car state stops
 test("vcu-lost", async ({ page, mock }) => {
