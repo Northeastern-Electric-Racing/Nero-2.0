@@ -3,7 +3,7 @@ set -e
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 cd "$SCRIPT_DIR/.."
 
-QTDIR="$HOME/Qt/6.8.3/macos"
+QTDIR="$HOME/Qt/6.12.0/macos"
 
 # Install protobuf via Homebrew if not present
 if ! command -v protoc &>/dev/null; then

@@ -2,7 +2,7 @@
 set -e
 cd "$(dirname "$0")/.."
 
-QTDIR="$HOME/Qt/6.8.3/macos"
+QTDIR="$HOME/Qt/6.12.0/macos"
 export PATH="$QTDIR/bin:$PATH"
 
 cd NERODevelopment

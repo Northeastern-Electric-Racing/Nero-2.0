@@ -82,7 +82,7 @@ git ls-files "*.cpp" "*.h" ":!deps/*" | xargs clang-format -i
 ```
 #### Mac/Linux Format QML files
 ```bash
-git ls-files "*.qml" ":!deps/*" | xargs ~/Qt/6.8.3/macos/bin/qmlformat -i
+git ls-files "*.qml" ":!deps/*" | xargs ~/Qt/6.12.0/macos/bin/qmlformat -i
 ```
 #### Windows Format C++ files
 ```bash
@@ -90,7 +90,7 @@ for /f %f in ('git ls-files "*.cpp" "*.h" ":!deps/*"') do clang-format -i "%f"
 ```
 #### Windows Format QML files
 ```bash
-for /f %f in ('git ls-files "*.qml" ":!deps/*"') do C:\Qt\6.8.3\mingw_64\bin\qmlformat.exe -i "%f"
+for /f %f in ('git ls-files "*.qml" ":!deps/*"') do C:\Qt\6.12.0\mingw_64\bin\qmlformat.exe -i "%f"
 ```
 
 ## Button Layout
