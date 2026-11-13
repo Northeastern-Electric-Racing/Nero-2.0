@@ -16,7 +16,6 @@ qt6_add_qml_module(content
         LabelText.qml
         DirectionView.qml
         DetailDisplay.qml
-        OffScreen.qml
 
         ThermometerValueComponent.qml
         BatteryValueComponent.qml
